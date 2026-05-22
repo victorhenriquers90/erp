@@ -1,0 +1,203 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function hasVerifiedEmail() {
+      return isAuth() && request.auth.token.email_verified == true;
+    }
+
+    function familyRef(familyId) {
+      return /databases/$(database)/documents/families/$(familyId);
+    }
+
+    function isFamilyAdmin(familyId) {
+      return isAuth()
+        && exists(familyRef(familyId))
+        && get(familyRef(familyId)).data.adminUid == request.auth.uid;
+    }
+
+    function isFamilyMember(familyId) {
+      return isAuth()
+        && (
+          isFamilyAdmin(familyId)
+          || exists(/databases/$(database)/documents/families/$(familyId)/members/$(request.auth.uid))
+        );
+    }
+
+    function validPlanData(data) {
+      return (!('plan' in data) || data.plan in ['free', 'basico', 'pro', 'familia', 'anual'])
+        && (!('plano' in data) || data.plano in ['free', 'basico', 'pro', 'familia', 'anual']);
+    }
+
+    function createsOwnFamily() {
+      return hasVerifiedEmail()
+        && request.resource.data.adminUid == request.auth.uid
+        && request.resource.data.membros is list
+        && request.resource.data.membros.size() > 0
+        && validPlanData(request.resource.data);
+    }
+
+    function safeFamilyAdminUpdate() {
+      return request.resource.data.adminUid == resource.data.adminUid
+        && validPlanData(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nome',
+          'membros',
+          'membrosNomes',
+          'currency',
+          'moeda',
+          'freeLimits',
+          'updatedAt'
+        ]);
+    }
+
+    match /users/{userId} {
+      allow create: if hasVerifiedEmail() && request.auth.uid == userId;
+      allow read, update, delete: if isAuth() && request.auth.uid == userId;
+      allow update: if isAuth()
+        && resource.data.familyId is string
+        && isFamilyAdmin(resource.data.familyId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'familyId',
+          'role',
+          'updatedAt'
+        ]);
+    }
+
+    match /families/{familyId} {
+      allow read: if isFamilyMember(familyId);
+      allow create: if createsOwnFamily();
+      allow update: if isFamilyAdmin(familyId) && safeFamilyAdminUpdate();
+      allow delete: if isFamilyAdmin(familyId);
+
+      match /members/{memberId} {
+        allow read: if isFamilyMember(familyId);
+        allow create, update, delete: if isFamilyAdmin(familyId);
+      }
+
+      match /config/{configId} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /expenses/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /incomes/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /bills/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /debts/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /financiamentos/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /acpag/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /fixedBills/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /fixedBillTypes/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /investments/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /trips/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /foodVouchers/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /creditCardAdjustments/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /monthClosings/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /recurringIncomes/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /recurringExpenses/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /cardProfiles/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /activityLogs/{id} {
+        allow read, create: if isFamilyMember(familyId);
+        allow update, delete: if false;
+      }
+
+      match /categories/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+
+      match /categoryItems/{id} {
+        allow read, write: if isFamilyMember(familyId);
+      }
+    }
+
+    match /subscriptions/{id} {
+      allow read: if isAuth()
+        && (
+          resource.data.userId == request.auth.uid
+          || (resource.data.familyId is string && isFamilyAdmin(resource.data.familyId))
+        );
+      allow write: if false;
+    }
+
+    match /plans/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /familyCodes/{code} {
+      allow get: if isAuth();
+      allow list, write: if false;
+    }
+
+    match /emailVerificationTokens/{id} {
+      allow read, write: if false;
+    }
+
+    match /mailLogs/{id} {
+      allow read, write: if false;
+    }
+
+    match /auditLog/{id} {
+      allow read, write: if false;
+    }
+
+    match /rateLimits/{id} {
+      allow read, write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

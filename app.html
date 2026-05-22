@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lavínia - Gestão Financeira Familiar</title>
+  <style>
+    :root {
+      --bg: #101512;
+      --panel: #17211c;
+      --panel-2: #1f2b24;
+      --text: #f5f0e8;
+      --muted: #b9b2a6;
+      --line: rgba(245, 240, 232, .12);
+      --green: #6fcf97;
+      --orange: #c46a28;
+      --red: #e66a5f;
+      --blue: #6aa6ff;
+      --gold: #d7a84d;
+      --radius: 8px;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        linear-gradient(135deg, rgba(111, 207, 151, .11), transparent 35%),
+        linear-gradient(225deg, rgba(196, 106, 40, .12), transparent 32%),
+        var(--bg);
+      min-height: 100vh;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      background: var(--panel-2);
+      border-radius: var(--radius);
+      min-height: 42px;
+    }
+
+    button:hover { filter: brightness(1.08); }
+    .app { max-width: 1180px; margin: 0 auto; padding: 20px 18px 92px; }
+    header { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 18px; }
+    .brand { display: flex; gap: 12px; align-items: center; }
+    .brand-logo {
+      width: min(206px, 58vw);
+      height: auto;
+      display: block;
+    }
+    .logo {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 24px;
+      background: linear-gradient(145deg, #e7c46b, #8f5f23);
+      color: #21180c; font-weight: 900;
+    }
+    h1 { margin: 0; font-size: 24px; letter-spacing: 0; }
+    .subtitle { margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tabs button { padding: 0 14px; background: rgba(255,255,255,.07); }
+    .tabs button.active { background: var(--green); color: #0c1710; font-weight: 800; }
+
+    .toolbar, .grid, .two, .three { display: grid; gap: 12px; }
+    .toolbar { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 14px; }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 14px; }
+    .two { grid-template-columns: 1.3fr .7fr; }
+    .grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+    .card, .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    }
+    .metric { min-height: 118px; display: flex; flex-direction: column; justify-content: space-between; }
+    .metric .label, .small { color: var(--muted); font-size: 13px; }
+    .metric .value { font-size: 28px; font-weight: 900; margin-top: 8px; overflow-wrap: anywhere; }
+    .income { border-color: rgba(111,207,151,.35); }
+    .expense { border-color: rgba(230,106,95,.35); }
+    .balance { border-color: rgba(106,166,255,.35); }
+
+    label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    input, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.26);
+      color: var(--text);
+      min-height: 42px;
+      padding: 9px 10px;
+      outline: none;
+    }
+    input:focus, select:focus { border-color: rgba(111,207,151,.65); }
+    option { color: #111; }
+    .form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-items: end; }
+    .form .wide { grid-column: span 2; }
+    .primary { background: var(--green); color: #0c1710; font-weight: 900; }
+    .danger { background: rgba(230,106,95,.18); color: #ffd2cd; border: 1px solid rgba(230,106,95,.35); }
+    .orange { background: var(--orange); color: #fff7ee; font-weight: 900; }
+    .ghost { background: rgba(255,255,255,.07); border: 1px solid var(--line); }
+
+    .list { display: grid; gap: 8px; margin-top: 12px; }
+    .row {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+    }
+    .icon {
+      width: 36px; height: 36px; display: grid; place-items: center;
+      border-radius: 50%; background: rgba(255,255,255,.08);
+    }
+    .amount { font-weight: 900; white-space: nowrap; }
+    .negative { color: #ffb2aa; }
+    .positive { color: #9ef0bc; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .chip { padding: 7px 10px; border-radius: 999px; background: rgba(255,255,255,.08); color: var(--muted); font-size: 13px; }
+    .progress { height: 10px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; }
+    .progress span { display: block; height: 100%; background: var(--orange); width: 0; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      width: min(680px, calc(100vw - 24px));
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      background: rgba(16,21,18,.92);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 8px;
+      backdrop-filter: blur(16px);
+    }
+    .bottom-nav button { min-height: 50px; font-size: 12px; display: grid; place-items: center; gap: 2px; }
+    .bottom-nav .main-action { background: var(--orange); transform: translateY(-8px); min-height: 58px; font-weight: 900; }
+    .hidden { display: none !important; }
+    .section-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 8px 0 10px; }
+    .section-title h2 { margin: 0; font-size: 18px; }
+    .muted { color: var(--muted); }
+
+    dialog {
+      width: min(760px, calc(100vw - 28px));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--text);
+      background: var(--panel);
+      padding: 0;
+    }
+    dialog::backdrop { background: rgba(0,0,0,.58); }
+    .modal-body { padding: 16px; }
+
+    @media (max-width: 760px) {
+      header { align-items: flex-start; flex-direction: column; }
+      .brand-logo { width: 154px; }
+      .toolbar, .three, .two, .form { grid-template-columns: 1fr; }
+      .form .wide { grid-column: span 1; }
+      .metric .value { font-size: 24px; }
+      .row { grid-template-columns: 38px 1fr; }
+      .row .amount { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">
+        <img class="brand-logo" src="laviapp-logo.svg" alt="LaviApp - Gestão Financeira Familiar" />
+      </div>
+      <div class="tabs" id="topTabs"></div>
+    </header>
+
+    <section class="toolbar">
+      <label>Mês
+        <input id="filterMonth" type="month" />
+      </label>
+      <label>Membro
+        <select id="filterMember"></select>
+      </label>
+      <label>Categoria
+        <select id="filterCategory"></select>
+      </label>
+      <label>Pagamento
+        <select id="filterPayment">
+          <option value="todos">Todos</option>
+          <option>Crédito</option>
+          <option>Débito</option>
+          <option>Pix</option>
+          <option>Boleto</option>
+          <option>Dinheiro</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="three">
+      <button class="card metric income" id="incomeCard">
+        <span class="label">Renda do mês</span>
+        <span class="value positive" id="incomeTotal">R$ 0,00</span>
+        <span class="small">Entradas filtradas</span>
+      </button>
+      <button class="card metric expense" id="expenseCard">
+        <span class="label">Gastos do mês</span>
+        <span class="value negative" id="expenseTotal">R$ 0,00</span>
+        <span class="small">Tocar para ver detalhes</span>
+      </button>
+      <div class="card metric balance">
+        <span class="label">Saldo</span>
+        <span class="value" id="balanceTotal">R$ 0,00</span>
+        <span class="small">Renda menos gastos</span>
+      </div>
+    </section>
+
+    <section id="viewDashboard">
+      <div class="two">
+        <div class="panel">
+          <div class="section-title">
+            <h2>Gastos recentes</h2>
+            <span class="muted" id="recentHint"></span>
+          </div>
+          <div class="list" id="recentExpenses"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title"><h2>Resumo por categoria</h2></div>
+          <div class="list" id="categorySummary"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewExpense" class="hidden">
+      <div class="panel">
+        <div class="section-title"><h2>Novo gasto</h2></div>
+        <form class="form" id="expenseForm">
+          <label>Descrição<input id="expenseDesc" required placeholder="Mercado, passeio, combustível" /></label>
+          <label>Valor<input id="expenseValue" required type="number" step="0.01" min="0" /></label>
+          <label>Data<input id="expenseDate" required type="date" /></label>
+          <label>Pessoa<select id="expenseMember"></select></label>
+          <label>Categoria<select id="expenseCategory"></select></label>
+          <label>Item / produto<input id="expenseItem" list="itemSuggestions" placeholder="lanche, perfume, gasolina" /></label>
+          <label>Local da compra<input id="expensePlace" placeholder="shopping, mercado, parque" /></label>
+          <label>Pagamento<select id="expensePayment"></select></label>
+          <label>Passeio<select id="expenseTrip"></select></label>
+          <button class="orange" type="submit">Adicionar gasto</button>
+        </form>
+        <datalist id="itemSuggestions"></datalist>
+      </div>
+    </section>
+
+    <section id="viewIncome" class="hidden">
+      <div class="panel">
+        <div class="section-title"><h2>Nova renda</h2></div>
+        <form class="form" id="incomeForm">
+          <label>Descrição<input id="incomeDesc" required placeholder="Salário, extra, venda" /></label>
+          <label>Valor<input id="incomeValue" required type="number" step="0.01" min="0" /></label>
+          <label>Data<input id="incomeDate" required type="date" /></label>
+          <label>Pessoa<select id="incomeMember"></select></label>
+          <button class="primary" type="submit">Adicionar renda</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="viewTrips" class="hidden">
+      <div class="grid">
+        <div class="panel">
+          <div class="section-title"><h2>Despesas do passeio</h2></div>
+          <form class="form" id="tripForm">
+            <label>Nome<input id="tripName" required placeholder="Passeio no parque" /></label>
+            <label>Data inicial<input id="tripStart" required type="date" /></label>
+            <label>Dias<input id="tripDays" required type="number" min="1" value="1" /></label>
+            <label>Limite em R$<input id="tripLimit" required type="number" step="0.01" min="0" /></label>
+            <button class="primary" type="submit">Criar passeio</button>
+          </form>
+        </div>
+        <div class="panel">
+          <div class="section-title"><h2>Passeios cadastrados</h2></div>
+          <div class="list" id="tripList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewFamily" class="hidden">
+      <div class="grid">
+        <div class="panel">
+          <div class="section-title"><h2>Cadastro de membros</h2></div>
+          <form class="form" id="memberForm">
+            <label class="wide">Nome<input id="memberName" required placeholder="Novo membro" /></label>
+            <button class="primary" type="submit">Adicionar membro</button>
+          </form>
+          <div class="chips" id="memberChips"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title"><h2>Novas categorias futuras</h2></div>
+          <form class="form" id="categoryForm">
+            <label>Nome<input id="categoryName" required placeholder="Pets" /></label>
+            <label>Ícone<input id="categoryIcon" required value="✨" /></label>
+            <label>Cor<input id="categoryColor" required type="color" value="#6fcf97" /></label>
+            <button class="primary" type="submit">Criar categoria</button>
+          </form>
+          <div class="list" id="categoryManager"></div>
+        </div>
+        <div class="panel">
+          <div class="section-title"><h2>Itens dentro das categorias</h2></div>
+          <form class="form" id="itemForm">
+            <label>Categoria<select id="itemCategory"></select></label>
+            <label class="wide">Item<input id="itemName" required placeholder="perfume, roupa, pedágio" /></label>
+            <button class="primary" type="submit">Adicionar item</button>
+          </form>
+          <div class="list" id="itemManager"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viewReports" class="hidden">
+      <div class="panel">
+        <div class="section-title"><h2>Relatórios avançados</h2></div>
+        <div class="form">
+          <label>Tipo
+            <select id="reportMode">
+              <option value="mensal">Mensal</option>
+              <option value="diario">Dia / passeio</option>
+            </select>
+          </label>
+          <label>Data inicial<input id="reportStart" type="date" /></label>
+          <label>Data final<input id="reportEnd" type="date" /></label>
+          <button class="primary" id="generateReport">Gerar relatório</button>
+        </div>
+        <div class="panel" id="reportOutput" style="margin-top:12px"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" id="bottomNav"></nav>
+
+  <dialog id="detailModal">
+    <div class="modal-body">
+      <div class="section-title">
+        <h2 id="modalTitle">Detalhes</h2>
+        <button class="ghost" onclick="detailModal.close()">Fechar</button>
+      </div>
+      <div id="modalContent"></div>
+    </div>
+  </dialog>
+
+  <script>
+    const today = new Date().toISOString().slice(0, 10);
+    const monthNow = today.slice(0, 7);
+    const payments = ["Crédito", "Débito", "Pix", "Boleto", "Dinheiro"];
+    const defaultMembers = ["Victor", "Marisa", "Lavínia", "Outros"];
+    const defaultCategories = [
+      { id: "alimentacao", name: "Alimentação", icon: "🍔", color: "#6fcf97", fixed: true },
+      { id: "moradia", name: "Moradia", icon: "🏠", color: "#6aa6ff", fixed: true },
+      { id: "transporte", name: "Transporte", icon: "🚗", color: "#d7a84d", fixed: true },
+      { id: "combustivel", name: "Combustível", icon: "⛽", color: "#c46a28", fixed: true },
+      { id: "saude", name: "Saúde", icon: "💊", color: "#e66a5f", fixed: true },
+      { id: "educacao", name: "Educação", icon: "📚", color: "#9c7cff", fixed: true },
+      { id: "lazer", name: "Lazer", icon: "🎉", color: "#ef85b5", fixed: true },
+      { id: "beleza", name: "Beleza", icon: "✨", color: "#d77bc8", fixed: true },
+      { id: "shopee", name: "Shopee", icon: "🛒", color: "#f07f3c", fixed: true },
+      { id: "outros", name: "Outros", icon: "🔧", color: "#b9b2a6", fixed: true }
+    ];
+    const defaultItems = {
+      alimentacao: ["mercado", "lanche", "restaurante"],
+      beleza: ["perfume", "unha", "cabelo"],
+      shopee: ["roupa", "brinquedo", "acessório"],
+      combustivel: ["gasolina", "etanol", "diesel"]
+    };
+
+    const store = {
+      members: defaultMembers,
+      categories: defaultCategories,
+      categoryItems: defaultItems,
+      expenses: [],
+      incomes: [],
+      trips: []
+    };
+
+    const state = JSON.parse(localStorage.getItem("lavinia-data") || "null") || store;
+    const tabs = [
+      ["dashboard", "Painel", "🏠"],
+      ["income", "Renda", "💚"],
+      ["expense", "Gasto", "💸"],
+      ["trips", "Passeio", "🎒"],
+      ["reports", "Relatórios", "📄"],
+      ["family", "Família", "👨‍👩‍👧"]
+    ];
+    let active = "dashboard";
+
+    const $ = id => document.getElementById(id);
+    const money = value => Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    const id = prefix => `${prefix}_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    const save = () => localStorage.setItem("lavinia-data", JSON.stringify(state));
+    const categoryById = cid => state.categories.find(c => c.id === cid) || state.categories[0];
+    const filtered = () => {
+      const m = $("filterMonth").value;
+      const member = $("filterMember").value;
+      const category = $("filterCategory").value;
+      const payment = $("filterPayment").value;
+      const inMonth = x => !m || x.date.slice(0, 7) === m;
+      return {
+        expenses: state.expenses.filter(e => inMonth(e) && (member === "Família" || e.member === member) && (category === "todos" || e.category === category) && (payment === "todos" || e.payment === payment)),
+        incomes: state.incomes.filter(e => inMonth(e) && (member === "Família" || e.member === member))
+      };
+    };
+
+    function fillSelect(select, items, valueField = null, labelField = null, first = null) {
+      const current = select.value;
+      select.innerHTML = "";
+      if (first) select.add(new Option(first.label, first.value));
+      items.forEach(item => select.add(new Option(labelField ? item[labelField] : item, valueField ? item[valueField] : item)));
+      if ([...select.options].some(o => o.value === current)) select.value = current;
+    }
+
+    function renderNav() {
+      const make = container => {
+        container.innerHTML = "";
+        tabs.forEach(([key, label, icon]) => {
+          const b = document.createElement("button");
+          b.className = active === key ? "active" : "";
+          if (key === "expense" && container.id === "bottomNav") b.classList.add("main-action");
+          b.innerHTML = `<span>${icon}</span><span>${label}</span>`;
+          b.onclick = () => setView(key);
+          container.appendChild(b);
+        });
+      };
+      make($("topTabs"));
+      make($("bottomNav"));
+    }
+
+    function setView(view) {
+      active = view;
+      ["Dashboard", "Expense", "Income", "Trips", "Family", "Reports"].forEach(name => $("view" + name).classList.add("hidden"));
+      $("view" + view[0].toUpperCase() + view.slice(1)).classList.remove("hidden");
+      render();
+    }
+
+    function renderControls() {
+      $("filterMonth").value ||= monthNow;
+      fillSelect($("filterMember"), state.members, null, null, { label: "Família", value: "Família" });
+      fillSelect($("filterCategory"), state.categories, "id", "name", { label: "Todas", value: "todos" });
+      fillSelect($("expenseMember"), state.members);
+      fillSelect($("incomeMember"), state.members);
+      fillSelect($("expenseCategory"), state.categories, "id", "name");
+      fillSelect($("itemCategory"), state.categories, "id", "name");
+      fillSelect($("expensePayment"), payments);
+      fillSelect($("expenseTrip"), state.trips, "id", "name", { label: "Sem passeio", value: "" });
+      ["expenseDate", "incomeDate", "tripStart", "reportStart", "reportEnd"].forEach(x => $(x).value ||= today);
+      $("itemSuggestions").innerHTML = (state.categoryItems[$("expenseCategory").value] || []).map(x => `<option value="${x}"></option>`).join("");
+    }
+
+    function renderSummary() {
+      const data = filtered();
+      const totalExp = data.expenses.reduce((s, e) => s + Number(e.value), 0);
+      const totalInc = data.incomes.reduce((s, e) => s + Number(e.value), 0);
+      $("expenseTotal").textContent = money(totalExp);
+      $("incomeTotal").textContent = money(totalInc);
+      $("balanceTotal").textContent = money(totalInc - totalExp);
+      $("balanceTotal").className = "value " + (totalInc - totalExp >= 0 ? "positive" : "negative");
+      $("recentHint").textContent = `${data.expenses.length} lançamento(s)`;
+
+      $("recentExpenses").innerHTML = data.expenses.slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0, 10).map(expenseRow).join("") || `<div class="muted">Nenhum gasto no filtro atual.</div>`;
+      $("categorySummary").innerHTML = state.categories.map(c => {
+        const total = data.expenses.filter(e => e.category === c.id).reduce((s, e) => s + Number(e.value), 0);
+        return total ? `<div class="row"><div class="icon" style="color:${c.color}">${c.icon}</div><div><b>${c.name}</b><div class="small">${data.expenses.filter(e => e.category === c.id).length} gasto(s)</div></div><div class="amount negative">${money(total)}</div></div>` : "";
+      }).join("") || `<div class="muted">Sem gastos por categoria.</div>`;
+    }
+
+    function expenseRow(e) {
+      const c = categoryById(e.category);
+      return `<button class="row" onclick="showExpense('${e.id}')">
+        <div class="icon" style="color:${c.color}">${c.icon}</div>
+        <div><b>${e.desc}</b><div class="small">${e.item || "Sem item"} · ${e.place || "Sem local"} · ${e.member} · ${e.date}</div></div>
+        <div class="amount negative">${money(e.value)}</div>
+      </button>`;
+    }
+
+    function renderTrips() {
+      $("tripList").innerHTML = state.trips.map(t => {
+        const spent = state.expenses.filter(e => e.tripId === t.id).reduce((s, e) => s + Number(e.value), 0);
+        const pct = t.limit ? Math.min(100, spent / t.limit * 100) : 0;
+        return `<div class="card">
+          <div class="section-title"><h2>${t.name}</h2><button class="danger" onclick="removeTrip('${t.id}')">Apagar</button></div>
+          <div class="small">${t.start} · ${t.days} dia(s)</div>
+          <div class="chips"><span class="chip">Limite ${money(t.limit)}</span><span class="chip">Gasto ${money(spent)}</span><span class="chip">Sobra ${money(t.limit - spent)}</span></div>
+          <div class="progress" style="margin-top:10px"><span style="width:${pct}%"></span></div>
+          <div class="list">${state.expenses.filter(e => e.tripId === t.id).map(expenseRow).join("") || `<div class="muted">Sem gastos vinculados.</div>`}</div>
+        </div>`;
+      }).join("") || `<div class="muted">Nenhum passeio cadastrado.</div>`;
+    }
+
+    function renderFamily() {
+      $("memberChips").innerHTML = state.members.map(m => `<span class="chip">${m} <button class="danger" onclick="removeMember('${m}')" title="Remover">x</button></span>`).join("");
+      $("categoryManager").innerHTML = state.categories.map(c => `<div class="row"><div class="icon" style="color:${c.color}">${c.icon}</div><div><b>${c.name}</b><div class="small">${c.fixed ? "Categoria fixa" : "Categoria criada"}</div></div>${c.fixed ? "" : `<button class="danger" onclick="removeCategory('${c.id}')">Apagar</button>`}</div>`).join("");
+      $("itemManager").innerHTML = Object.entries(state.categoryItems).map(([cid, items]) => {
+        const c = categoryById(cid);
+        return `<div class="card"><b>${c.icon} ${c.name}</b><div class="chips">${items.map(item => `<span class="chip">${item} <button class="danger" onclick="removeItem('${cid}','${item}')">x</button></span>`).join("")}</div></div>`;
+      }).join("");
+    }
+
+    function renderReport() {
+      const data = filtered();
+      const start = $("reportStart").value;
+      const end = $("reportEnd").value;
+      const mode = $("reportMode").value;
+      const inRange = e => mode === "mensal" || (e.date >= start && e.date <= end);
+      const expenses = data.expenses.filter(inRange);
+      const incomes = mode === "diario" ? data.incomes : data.incomes.filter(inRange);
+      const totalExp = expenses.reduce((s,e)=>s+Number(e.value),0);
+      const totalInc = incomes.reduce((s,e)=>s+Number(e.value),0);
+      $("reportOutput").innerHTML = `
+        <div class="section-title"><h2>${mode === "diario" ? "Relatório diário / passeio" : "Relatório mensal"}</h2><button class="ghost" onclick="window.print()">Imprimir / PDF</button></div>
+        <div class="three">
+          <div class="card"><div class="small">Renda de referência</div><div class="value positive">${money(totalInc)}</div></div>
+          <div class="card"><div class="small">Gastos</div><div class="value negative">${money(totalExp)}</div></div>
+          <div class="card"><div class="small">Saldo</div><div class="value">${money(totalInc - totalExp)}</div></div>
+        </div>
+        <div class="chips">
+          <span class="chip">${$("filterMember").value}</span>
+          <span class="chip">${$("filterPayment").value}</span>
+          <span class="chip">${expenses.length} gasto(s)</span>
+        </div>
+        <div class="list">${expenses.map(expenseRow).join("") || `<div class="muted">Sem gastos neste relatório.</div>`}</div>`;
+    }
+
+    function showExpense(expenseId) {
+      const e = state.expenses.find(x => x.id === expenseId);
+      if (!e) return;
+      const c = categoryById(e.category);
+      $("modalTitle").textContent = e.desc;
+      $("modalContent").innerHTML = `
+        <div class="grid">
+          <div class="card"><div class="small">Valor</div><div class="value negative">${money(e.value)}</div></div>
+          <div class="card"><div class="small">Categoria</div><div>${c.icon} ${c.name}</div></div>
+          <div class="card"><div class="small">Data</div><div>${e.date}</div></div>
+          <div class="card"><div class="small">Pessoa</div><div>${e.member}</div></div>
+          <div class="card"><div class="small">Pagamento</div><div>${e.payment}</div></div>
+          <div class="card"><div class="small">Item e local</div><div>${e.item || "-"} · ${e.place || "-"}</div></div>
+        </div>
+        <div class="chips"><button class="danger" onclick="removeExpense('${e.id}'); detailModal.close()">Apagar gasto</button></div>`;
+      detailModal.showModal();
+    }
+
+    window.showExpense = showExpense;
+    window.removeExpense = expenseId => { state.expenses = state.expenses.filter(e => e.id !== expenseId); save(); render(); };
+    window.removeTrip = tripId => { state.trips = state.trips.filter(t => t.id !== tripId); save(); render(); };
+    window.removeMember = name => { state.members = state.members.filter(m => m !== name); save(); render(); };
+    window.removeCategory = cid => { state.categories = state.categories.filter(c => c.id !== cid || c.fixed); delete state.categoryItems[cid]; save(); render(); };
+    window.removeItem = (cid, item) => { state.categoryItems[cid] = (state.categoryItems[cid] || []).filter(x => x !== item); save(); render(); };
+
+    $("expenseForm").onsubmit = ev => {
+      ev.preventDefault();
+      state.expenses.push({
+        id: id("exp"), desc: $("expenseDesc").value, value: Number($("expenseValue").value), date: $("expenseDate").value,
+        member: $("expenseMember").value, category: $("expenseCategory").value, item: $("expenseItem").value,
+        place: $("expensePlace").value, payment: $("expensePayment").value, tripId: $("expenseTrip").value
+      });
+      ev.target.reset(); $("expenseDate").value = today; save(); render(); setView("dashboard");
+    };
+    $("incomeForm").onsubmit = ev => {
+      ev.preventDefault();
+      state.incomes.push({ id: id("inc"), desc: $("incomeDesc").value, value: Number($("incomeValue").value), date: $("incomeDate").value, member: $("incomeMember").value });
+      ev.target.reset(); $("incomeDate").value = today; save(); render(); setView("dashboard");
+    };
+    $("tripForm").onsubmit = ev => {
+      ev.preventDefault();
+      state.trips.push({ id: id("trip"), name: $("tripName").value, start: $("tripStart").value, days: Number($("tripDays").value), limit: Number($("tripLimit").value) });
+      ev.target.reset(); $("tripStart").value = today; $("tripDays").value = 1; save(); render();
+    };
+    $("memberForm").onsubmit = ev => {
+      ev.preventDefault();
+      const name = $("memberName").value.trim();
+      if (name && !state.members.includes(name)) state.members.push(name);
+      ev.target.reset(); save(); render();
+    };
+    $("categoryForm").onsubmit = ev => {
+      ev.preventDefault();
+      const name = $("categoryName").value.trim();
+      const cid = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-");
+      if (name && !state.categories.some(c => c.id === cid)) state.categories.push({ id: cid, name, icon: $("categoryIcon").value, color: $("categoryColor").value, fixed: false });
+      ev.target.reset(); $("categoryIcon").value = "✨"; $("categoryColor").value = "#6fcf97"; save(); render();
+    };
+    $("itemForm").onsubmit = ev => {
+      ev.preventDefault();
+      const cid = $("itemCategory").value;
+      const item = $("itemName").value.trim();
+      state.categoryItems[cid] ||= [];
+      if (item && !state.categoryItems[cid].includes(item)) state.categoryItems[cid].push(item);
+      ev.target.reset(); save(); render();
+    };
+    ["filterMonth", "filterMember", "filterCategory", "filterPayment", "expenseCategory", "reportMode"].forEach(id => $(id).onchange = render);
+    $("generateReport").onclick = renderReport;
+    $("expenseCard").onclick = () => {
+      $("modalTitle").textContent = "Gastos do mês";
+      $("modalContent").innerHTML = `<div class="list">${filtered().expenses.map(expenseRow).join("") || `<div class="muted">Nenhum gasto no mês.</div>`}</div>`;
+      detailModal.showModal();
+    };
+
+    function render() {
+      renderControls();
+      renderNav();
+      renderSummary();
+      renderTrips();
+      renderFamily();
+      renderReport();
+    }
+
+    render();
+  </script>
+</body>
+</html>

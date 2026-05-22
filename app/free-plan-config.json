@@ -1,0 +1,14 @@
+{
+  "id": "free",
+  "nome": "Free",
+  "preco": "R$ 0,00",
+  "periodo": "teste",
+  "ativo": true,
+  "aplicar_apos_cadastro": true,
+  "limites": {
+    "familias": 1,
+    "membros": 2,
+    "lancamentos_mes": 30,
+    "relatorios_pdf": false
+  }
+}

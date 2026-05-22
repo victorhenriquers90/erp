@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reset LaviApp</title>
+<style>
+body{font-family:Arial,sans-serif;background:#06111F;color:white;display:grid;place-items:center;min-height:100vh;margin:0;padding:20px;text-align:center}
+.card{max-width:460px;background:#10243C;border:1px solid rgba(255,255,255,.16);border-radius:24px;padding:24px}
+button,a{display:inline-flex;align-items:center;justify-content:center;min-height:50px;border-radius:14px;padding:0 18px;background:#2DD4BF;color:#06111F;font-weight:800;text-decoration:none;border:0;margin-top:12px}
+p{color:#CBD5E1;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Limpar atualização antiga</h1>
+<p>Isso remove service workers e caches antigos que podem estar causando o loop.</p>
+<button onclick="reset()">Limpar e abrir app</button>
+<p><a href="/app.html?v=1.2.42">Abrir sem limpar</a></p>
+</div>
+<script>
+async function reset(){
+  try{
+    if("serviceWorker" in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(const reg of regs){ await reg.unregister(); }
+    }
+    if("caches" in window){
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+    }
+    localStorage.removeItem("laviapp-force-app");
+  }catch(e){ console.error(e); }
+  location.href = "/app.html?v=1.2.42&clean=1";
+}
+</script>
+</body>
+</html>

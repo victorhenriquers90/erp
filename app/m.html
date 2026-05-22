@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#07111F"/>
+  <meta name="description" content="LaviApp - Finanças Familiar. Site mobile."/>
+  <title>LaviApp - Finanças Familiar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/png" href="/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png"/>
+
+  <style>
+    :root{
+      --bg:#07111F;
+      --bg2:#0B1728;
+      --card:#111C2E;
+      --card2:#16243A;
+      --line:rgba(255,255,255,.10);
+      --text:#F8FAFC;
+      --muted:#9AA8BA;
+      --muted2:#64748B;
+      --teal:#2DD4BF;
+      --gold:#F6C768;
+      --red:#FB7185;
+      --green:#34D399;
+      --blue:#60A5FA;
+      --shadow:0 18px 50px rgba(0,0,0,.34);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;background:var(--bg);overflow-x:hidden}
+    body{
+      width:100%;
+      max-width:100%;
+      min-height:100vh;
+      overflow-x:hidden;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(45,212,191,.22), transparent 32%),
+        radial-gradient(circle at 95% 18%, rgba(246,199,104,.16), transparent 32%),
+        linear-gradient(180deg,#07111F 0%, #08101D 45%, #060B14 100%);
+      padding-bottom:92px;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+
+    .page{
+      width:100%;
+      max-width:480px;
+      margin:0 auto;
+      padding:14px 14px 0;
+    }
+
+    .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:8px 0 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      min-width:0;
+    }
+
+    .brand img{
+      width:58px;
+      height:58px;
+      border-radius:17px;
+      box-shadow:0 14px 36px rgba(0,0,0,.32);
+      flex:0 0 auto;
+    }
+
+    .brand-title{
+      font-size:27px;
+      font-weight:950;
+      letter-spacing:-.07em;
+      line-height:.95;
+      white-space:nowrap;
+    }
+
+    .brand-title span{color:#00C4A7}
+    .brand-sub{
+      margin-top:6px;
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      font-weight:900;
+      color:#8EA1B8;
+      white-space:nowrap;
+    }
+
+    .menu-dot{
+      width:44px;height:44px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.055);
+      display:grid;
+      place-items:center;
+      color:var(--text);
+      font-weight:900;
+      flex:0 0 auto;
+    }
+
+    .hero{
+      margin-top:6px;
+      padding:20px 16px 18px;
+      border-radius:30px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(45,212,191,.22), transparent 42%),
+        linear-gradient(180deg, rgba(17,28,46,.92), rgba(10,20,34,.80));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:160px;height:160px;
+      right:-72px;top:-72px;
+      border-radius:999px;
+      background:radial-gradient(circle,rgba(246,199,104,.25),transparent 72%);
+      pointer-events:none;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      border-radius:999px;
+      padding:8px 11px;
+      background:linear-gradient(135deg,#2DD4BF,#F6C768);
+      color:#06111F;
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:16px;
+    }
+
+    h1{
+      position:relative;
+      z-index:2;
+      max-width:100%;
+      font-size:clamp(30px, 9vw, 40px);
+      line-height:1.04;
+      letter-spacing:-.07em;
+      margin-bottom:12px;
+      color:#F4F9E7;
+      text-wrap:balance;
+    }
+
+    .lead{
+      position:relative;
+      z-index:2;
+      color:#CFD8E6;
+      font-size:14.5px;
+      line-height:1.55;
+      margin-bottom:16px;
+    }
+
+    .cta-grid{
+      display:grid;
+      gap:10px;
+      position:relative;
+      z-index:2;
+    }
+
+    .btn{
+      min-height:54px;
+      border:none;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      font-weight:950;
+      font-size:14px;
+      text-align:center;
+      box-shadow:0 14px 34px rgba(0,0,0,.20);
+    }
+
+    .btn-primary{
+      color:#06111F;
+      background:linear-gradient(135deg,#2DD4BF,#F6C768);
+    }
+
+    .btn-secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.065);
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .mini-strip{
+      margin:14px 0;
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding-bottom:4px;
+      scrollbar-width:none;
+    }
+
+    .mini-strip::-webkit-scrollbar{display:none}
+
+    .chip{
+      flex:0 0 auto;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.055);
+      color:#CBD5E1;
+      font-size:12px;
+      font-weight:850;
+      white-space:nowrap;
+    }
+
+    .bank-card{
+      margin-top:14px;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        linear-gradient(145deg,rgba(17,28,46,.96),rgba(10,20,34,.90)),
+        radial-gradient(circle at top right,rgba(45,212,191,.20),transparent 34%);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .bank-head{
+      padding:16px 16px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .bank-head small{
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .balance{
+      font-size:30px;
+      font-weight:950;
+      letter-spacing:-.07em;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      color:#99F6E4;
+      background:rgba(45,212,191,.12);
+      border:1px solid rgba(45,212,191,.24);
+      font-size:11px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      padding:0 16px 14px;
+    }
+
+    .kpi{
+      border-radius:18px;
+      background:rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.08);
+      padding:12px;
+    }
+
+    .kpi span{
+      display:block;
+      color:var(--muted);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:900;
+      margin-bottom:7px;
+    }
+
+    .kpi strong{
+      display:block;
+      font-size:17px;
+      font-weight:950;
+      letter-spacing:-.04em;
+    }
+
+    .progress{
+      height:10px;
+      margin:0 16px 14px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.08);
+    }
+
+    .progress i{
+      display:block;
+      height:100%;
+      width:68%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,#2DD4BF,#F6C768);
+    }
+
+    .bank-list{
+      padding:0 16px 16px;
+      display:grid;
+      gap:9px;
+    }
+
+    .bank-row{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      border-radius:15px;
+      background:rgba(7,17,31,.52);
+      border:1px solid rgba(255,255,255,.06);
+      padding:11px;
+      color:#E2E8F0;
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .bank-row em{
+      font-style:normal;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:850;
+      white-space:nowrap;
+    }
+
+    section{
+      padding:28px 0 0;
+    }
+
+    .sec-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:13px;
+    }
+
+    .sec-title h2{
+      font-size:23px;
+      line-height:1.08;
+      letter-spacing:-.055em;
+    }
+
+    .sec-title p{
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.45;
+      max-width:190px;
+      text-align:right;
+    }
+
+    .module-grid{
+      display:grid;
+      gap:11px;
+    }
+
+    .module{
+      display:flex;
+      gap:13px;
+      align-items:flex-start;
+      min-width:0;
+      border-radius:22px;
+      background:linear-gradient(180deg,rgba(17,28,46,.88),rgba(13,23,39,.78));
+      border:1px solid rgba(255,255,255,.09);
+      padding:14px;
+      box-shadow:0 12px 34px rgba(0,0,0,.18);
+    }
+
+    .module-icon{
+      width:43px;
+      height:43px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.065);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:21px;
+      flex:0 0 auto;
+    }
+
+    .module h3{
+      font-size:15px;
+      margin-bottom:5px;
+      letter-spacing:-.02em;
+    }
+
+    .module p{
+      color:var(--muted);
+      font-size:12.2px;
+      line-height:1.45;
+    }
+
+    .plans{
+      display:grid;
+      gap:12px;
+    }
+
+    .plan{
+      position:relative;
+      border-radius:25px;
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(180deg,rgba(17,28,46,.92),rgba(13,23,39,.82));
+      padding:16px;
+      box-shadow:0 14px 38px rgba(0,0,0,.22);
+      overflow:hidden;
+    }
+
+    .plan.featured{
+      border-color:rgba(45,212,191,.42);
+      background:
+        radial-gradient(circle at top right,rgba(45,212,191,.18),transparent 42%),
+        linear-gradient(180deg,rgba(17,28,46,.94),rgba(13,23,39,.84));
+    }
+
+    .tag{
+      position:absolute;
+      top:14px;
+      right:14px;
+      border-radius:999px;
+      background:#2DD4BF;
+      color:#06111F;
+      padding:6px 9px;
+      font-size:9px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .plan-icon{font-size:24px;margin-bottom:8px}
+    .plan h3{font-size:20px;margin-bottom:4px}
+    .price{
+      margin:10px 0 2px;
+      font-size:29px;
+      font-weight:950;
+      letter-spacing:-.065em;
+    }
+    .period{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+      margin-bottom:12px;
+    }
+
+    .plan ul{
+      list-style:none;
+      display:grid;
+      gap:7px;
+      margin:12px 0 15px;
+      color:#CBD5E1;
+      font-size:12.5px;
+      line-height:1.35;
+    }
+
+    .plan li::before{
+      content:"✓";
+      color:var(--teal);
+      font-weight:950;
+      margin-right:7px;
+    }
+
+    .cta-final{
+      margin:28px 0 22px;
+      padding:18px;
+      border-radius:26px;
+      border:1px solid rgba(45,212,191,.26);
+      background:linear-gradient(135deg,rgba(45,212,191,.14),rgba(246,199,104,.10));
+      box-shadow:var(--shadow);
+    }
+
+    .cta-final h2{
+      font-size:23px;
+      line-height:1.1;
+      letter-spacing:-.055em;
+      margin-bottom:8px;
+    }
+
+    .cta-final p{
+      color:#CBD5E1;
+      font-size:13px;
+      line-height:1.5;
+      margin-bottom:14px;
+    }
+
+    footer{
+      padding:18px 0 22px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.5;
+      display:grid;
+      gap:4px;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      width:calc(100% - 24px);
+      max-width:456px;
+      z-index:30;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      padding:8px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(8,16,29,.86);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 60px rgba(0,0,0,.38);
+    }
+
+    .bottom-nav a{
+      min-height:46px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      gap:2px;
+      color:#CBD5E1;
+      font-size:10px;
+      font-weight:850;
+    }
+
+    .bottom-nav a strong{
+      display:block;
+      font-size:17px;
+      line-height:1;
+    }
+
+    .bottom-nav a.primary-mini{
+      color:#06111F;
+      background:linear-gradient(135deg,#2DD4BF,#F6C768);
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(18px);
+      transition:opacity .55s ease, transform .55s ease;
+    }
+
+    .reveal.in{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width:360px){
+      .brand img{width:50px;height:50px}
+      .brand-title{font-size:23px}
+      .brand-sub{font-size:10px}
+      h1{font-size:28px}
+      .sec-title{display:block}
+      .sec-title p{text-align:left;max-width:100%;margin-top:6px}
+      .kpis{grid-template-columns:1fr}
+      .bottom-nav{grid-template-columns:repeat(4,1fr);width:calc(100% - 14px)}
+      .bottom-nav a{font-size:9px}
+    }
+  
+/* ─────────────────────────────────────────────────────────────
+   LaviApp - interações dinâmicas desktop/mobile
+   ───────────────────────────────────────────────────────────── */
+.lavi-motion-layer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  overflow:hidden;
+}
+
+.lavi-motion-layer::before,
+.lavi-motion-layer::after{
+  content:"";
+  position:absolute;
+  width:380px;
+  height:380px;
+  border-radius:999px;
+  filter:blur(18px);
+  opacity:.22;
+  animation:laviOrbMove 12s ease-in-out infinite;
+}
+
+.lavi-motion-layer::before{
+  left:-120px;
+  top:18%;
+  background:radial-gradient(circle, rgba(45,212,191,.55), transparent 68%);
+}
+
+.lavi-motion-layer::after{
+  right:-120px;
+  top:44%;
+  background:radial-gradient(circle, rgba(246,199,104,.42), transparent 68%);
+  animation-delay:3s;
+}
+
+@keyframes laviOrbMove{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(24px,-34px,0) scale(1.12)}
+}
+
+.lavi-live-info{
+  margin-top:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(45,212,191,.18), transparent 32%),
+    linear-gradient(180deg, rgba(17,24,39,.78), rgba(15,23,42,.72));
+  border-radius:24px;
+  padding:13px;
+  overflow:hidden;
+  box-shadow:0 18px 44px rgba(0,0,0,.20);
+}
+
+.lavi-live-track{
+  display:flex;
+  gap:12px;
+  width:max-content;
+  animation:laviLiveSlide 26s linear infinite;
+}
+
+.lavi-live-info:hover .lavi-live-track{
+  animation-play-state:paused;
+}
+
+@keyframes laviLiveSlide{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+.lavi-live-card{
+  width:250px;
+  flex:0 0 auto;
+  padding:13px;
+  border-radius:19px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(8,16,29,.74);
+  color:#E2E8F0;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:11px;
+  align-items:center;
+  transition:transform .22s ease, border-color .22s ease, background .22s ease;
+}
+
+.lavi-live-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(45,212,191,.42);
+  background:rgba(15,23,42,.94);
+}
+
+.lavi-live-icon{
+  width:42px;
+  height:42px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg, rgba(45,212,191,.22), rgba(246,199,104,.16));
+  border:1px solid rgba(255,255,255,.12);
+  font-size:21px;
+}
+
+.lavi-live-card strong{
+  display:block;
+  font-size:13px;
+  margin-bottom:4px;
+}
+
+.lavi-live-card span{
+  display:block;
+  color:#94A3B8;
+  font-size:11.5px;
+  line-height:1.35;
+}
+
+.lavi-ticker-item,
+.chip,
+.module,
+.plan,
+.bottom-nav a{
+  cursor:pointer;
+}
+
+.lavi-ticker-item[data-feature],
+.chip[data-feature]{
+  position:relative;
+  isolation:isolate;
+}
+
+.lavi-ticker-item[data-feature]::after,
+.chip[data-feature]::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  border:1px solid rgba(45,212,191,.0);
+  transition:border-color .2s ease, box-shadow .2s ease;
+  pointer-events:none;
+}
+
+.lavi-ticker-item[data-feature]:hover::after,
+.chip[data-feature]:hover::after{
+  border-color:rgba(45,212,191,.45);
+  box-shadow:0 0 28px rgba(45,212,191,.16);
+}
+
+.lavi-feature-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(2,6,12,.72);
+  backdrop-filter:blur(18px);
+}
+
+.lavi-feature-modal.open{
+  display:flex;
+  animation:laviFadeIn .22s ease both;
+}
+
+@keyframes laviFadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.lavi-feature-dialog{
+  width:min(960px, 100%);
+  max-height:min(88vh, 760px);
+  overflow:auto;
+  border-radius:34px;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(45,212,191,.22), transparent 34%),
+    radial-gradient(circle at 95% 10%, rgba(246,199,104,.18), transparent 32%),
+    linear-gradient(180deg, rgba(17,24,39,.98), rgba(8,16,29,.98));
+  box-shadow:0 34px 110px rgba(0,0,0,.55);
+  transform:translateY(14px) scale(.98);
+  animation:laviDialogIn .28s cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes laviDialogIn{
+  to{transform:translateY(0) scale(1)}
+}
+
+.lavi-feature-head{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  padding:22px 22px 0;
+}
+
+.lavi-feature-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border-radius:999px;
+  padding:7px 11px;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  color:#06111F;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.lavi-feature-title{
+  font-size:clamp(28px, 4vw, 46px);
+  line-height:1;
+  letter-spacing:-.07em;
+  margin:0 0 10px;
+  color:#F8FAFC;
+}
+
+.lavi-feature-sub{
+  color:#CBD5E1;
+  line-height:1.6;
+  font-size:15px;
+  max-width:620px;
+}
+
+.lavi-feature-close{
+  flex:0 0 auto;
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:#fff;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.lavi-feature-body{
+  display:grid;
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+  gap:20px;
+  padding:22px;
+}
+
+.lavi-feature-visual{
+  min-height:330px;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    radial-gradient(circle at 20% 8%, var(--lavi-visual-a, rgba(45,212,191,.35)), transparent 36%),
+    radial-gradient(circle at 85% 75%, var(--lavi-visual-b, rgba(246,199,104,.24)), transparent 38%),
+    linear-gradient(145deg, rgba(15,23,42,.92), rgba(7,17,31,.88));
+  position:relative;
+  overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 20px 60px rgba(0,0,0,.28);
+}
+
+.lavi-phone-mock{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:210px;
+  height:292px;
+  transform:translate(-50%,-50%) rotate(-4deg);
+  border-radius:32px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(8,16,29,.88);
+  box-shadow:0 26px 80px rgba(0,0,0,.42);
+  padding:16px;
+}
+
+.lavi-phone-top{
+  width:72px;
+  height:7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.16);
+  margin:0 auto 18px;
+}
+
+.lavi-screen-row{
+  height:36px;
+  border-radius:14px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.08);
+  animation:laviScreenPulse 2.4s ease-in-out infinite;
+}
+
+.lavi-screen-row:nth-child(3){width:78%;animation-delay:.3s}
+.lavi-screen-row:nth-child(4){width:92%;animation-delay:.6s}
+.lavi-screen-row:nth-child(5){width:62%;animation-delay:.9s}
+
+@keyframes laviScreenPulse{
+  0%,100%{opacity:.72;transform:translateX(0)}
+  50%{opacity:1;transform:translateX(5px)}
+}
+
+.lavi-floating-mini{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  border-radius:999px;
+  padding:9px 11px;
+  background:rgba(15,23,42,.82);
+  border:1px solid rgba(255,255,255,.12);
+  color:#E2E8F0;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 16px 42px rgba(0,0,0,.28);
+  animation:laviMiniFloat 4s ease-in-out infinite;
+}
+
+.lavi-floating-mini.one{left:18px;top:28px}
+.lavi-floating-mini.two{right:16px;top:42% ;animation-delay:.8s}
+.lavi-floating-mini.three{left:24px;bottom:24px;animation-delay:1.4s}
+
+@keyframes laviMiniFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+.lavi-feature-list{
+  display:grid;
+  gap:12px;
+}
+
+.lavi-feature-item{
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+  padding:14px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.lavi-feature-item i{
+  font-style:normal;
+  width:36px;
+  height:36px;
+  border-radius:13px;
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  background:rgba(45,212,191,.12);
+  border:1px solid rgba(45,212,191,.20);
+}
+
+.lavi-feature-item strong{
+  display:block;
+  margin-bottom:4px;
+  color:#F8FAFC;
+}
+
+.lavi-feature-item span{
+  display:block;
+  color:#94A3B8;
+  line-height:1.45;
+  font-size:13px;
+}
+
+.lavi-feature-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.lavi-feature-btn{
+  min-height:46px;
+  border-radius:16px;
+  border:none;
+  padding:12px 15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-weight:950;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.lavi-feature-btn.primary{
+  color:#06111F;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+}
+
+.lavi-feature-btn.secondary{
+  color:#fff;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+@media (max-width:760px){
+  .lavi-motion-layer::before,
+  .lavi-motion-layer::after{
+    width:260px;
+    height:260px;
+    opacity:.18;
+  }
+
+  .lavi-live-info{
+    border-radius:22px;
+    padding:10px;
+    margin-top:12px;
+  }
+
+  .lavi-live-track{
+    animation:laviLiveSlide 18s linear infinite;
+  }
+
+  .lavi-live-card{
+    width:218px;
+    padding:11px;
+    grid-template-columns:38px 1fr;
+    border-radius:17px;
+  }
+
+  .lavi-live-icon{
+    width:38px;
+    height:38px;
+    font-size:19px;
+  }
+
+  .lavi-live-card strong{
+    font-size:12px;
+  }
+
+  .lavi-live-card span{
+    font-size:10.8px;
+  }
+
+  .lavi-feature-modal{
+    padding:12px;
+    align-items:flex-end;
+  }
+
+  .lavi-feature-dialog{
+    width:100%;
+    max-height:92vh;
+    border-radius:28px 28px 18px 18px;
+  }
+
+  .lavi-feature-head{
+    padding:18px 18px 0;
+  }
+
+  .lavi-feature-title{
+    font-size:28px;
+    line-height:1.04;
+  }
+
+  .lavi-feature-sub{
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .lavi-feature-body{
+    grid-template-columns:1fr;
+    padding:18px;
+  }
+
+  .lavi-feature-visual{
+    min-height:245px;
+  }
+
+  .lavi-phone-mock{
+    width:162px;
+    height:218px;
+    border-radius:25px;
+    padding:13px;
+  }
+
+  .lavi-floating-mini{
+    font-size:10.5px;
+    padding:7px 9px;
+  }
+
+  .lavi-feature-actions{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+
+  .lavi-feature-btn{
+    width:100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .lavi-motion-layer::before,
+  .lavi-motion-layer::after,
+  .lavi-live-track,
+  .lavi-screen-row,
+  .lavi-floating-mini{
+    animation:none!important;
+  }
+}
+
+
+/* ── Alternância das imagens enviadas pelo Victor ───────────── */
+:root{
+  --lavi-hero-bg: url("/hero-family-1.jpg");
+  --lavi-hero-bg-next: url("/hero-family-1.jpg");
+  --lavi-hero-mobile-bg: url("/hero-family-1.jpg");
+}
+
+/* Desktop */
+.site::before{
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-hero-bg) right center / auto 100% no-repeat !important;
+  transition:filter .9s ease, transform 1.2s ease;
+}
+
+.site{
+  position:relative;
+}
+
+.lavi-hero-fade-layer{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-hero-bg-next) right center / auto 100% no-repeat;
+  opacity:0;
+  transition:opacity 1.15s ease;
+}
+
+.lavi-hero-fade-layer.show{
+  opacity:1;
+}
+
+.lavi-hero-dots{
+  position:absolute;
+  right:42px;
+  top:116px;
+  z-index:20;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.lavi-hero-dot{
+  width:9px;
+  height:9px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.50);
+  background:rgba(255,255,255,.20);
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.lavi-hero-dot.active{
+  width:30px;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  border-color:transparent;
+}
+
+/* Remove camadas antigas que criavam sobreposição */
+.lavi-live-info,
+.lavi-ticker,
+.lavi-bank-tabs,
+.lavi-bank-tab{
+  display:none !important;
+}
+
+/* Mobile próprio /m */
+body.lavi-mobile-page .hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    linear-gradient(180deg,rgba(17,28,46,.78),rgba(10,20,34,.88)),
+    var(--lavi-hero-mobile-bg) center center / cover no-repeat !important;
+}
+
+body.lavi-mobile-page .hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(7,17,31,.48),rgba(7,17,31,.90)),
+    var(--lavi-hero-mobile-bg) center center / cover no-repeat;
+  opacity:.60;
+  transform:scale(1.04);
+  transition:background-image .75s ease, opacity .75s ease;
+}
+
+body.lavi-mobile-page .hero > *{
+  position:relative;
+  z-index:1;
+}
+
+@media (max-width:760px){
+  .site::before{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.28) 0%,rgba(3,9,17,.62) 36%,rgba(3,9,17,.94) 70%,rgba(3,9,17,.99) 100%),
+      var(--lavi-hero-bg) center top / cover no-repeat !important;
+  }
+
+  .lavi-hero-fade-layer{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.28) 0%,rgba(3,9,17,.62) 36%,rgba(3,9,17,.94) 70%,rgba(3,9,17,.99) 100%),
+      var(--lavi-hero-bg-next) center top / cover no-repeat;
+    height:430px;
+    inset:0 0 auto 0;
+  }
+
+  .lavi-hero-dots{
+    top:auto;
+    right:16px;
+    bottom:18px;
+  }
+}
+
+
+/* ── Alternância das imagens familiares anteriores ─────────── */
+:root{
+  --lavi-family-current: url("/laviapp-familia-slide-1.jpg");
+  --lavi-family-next: url("/laviapp-familia-slide-1.jpg");
+}
+
+.site::before{
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-family-current) right center / auto 100% no-repeat !important;
+}
+
+.site{
+  position:relative;
+  isolation:isolate;
+}
+
+.hero-visual{
+  position:relative;
+  isolation:isolate;
+}
+
+.hero-visual::before{
+  content:"";
+  position:absolute;
+  inset:-24px;
+  z-index:-1;
+  border-radius:38px;
+  background:
+    linear-gradient(180deg,rgba(6,17,31,.18),rgba(6,17,31,.70)),
+    var(--lavi-family-current) center / cover no-repeat;
+  opacity:.55;
+  filter:saturate(1.05);
+  box-shadow:0 28px 90px rgba(0,0,0,.32);
+  transition:background-image 1s ease, opacity 1s ease, transform 1.2s ease;
+  animation:laviFamilyVisualMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes laviFamilyVisualMove{
+  from{transform:scale(1)}
+  to{transform:scale(1.035)}
+}
+
+.lavi-family-fade-layer{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-family-next) right center / auto 100% no-repeat;
+  opacity:0;
+  transition:opacity 1.15s ease;
+}
+
+.lavi-family-fade-layer.show{
+  opacity:1;
+}
+
+.lavi-family-dots{
+  position:absolute;
+  right:28px;
+  top:104px;
+  z-index:25;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.lavi-family-dot{
+  width:9px;
+  height:9px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.22);
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.lavi-family-dot.active{
+  width:30px;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  border-color:transparent;
+}
+
+body.lavi-mobile-page .hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+body.lavi-mobile-page .hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(7,17,31,.44),rgba(7,17,31,.90)),
+    var(--lavi-family-current) center center / cover no-repeat;
+  opacity:.62;
+  transform:scale(1.04);
+  transition:background-image .8s ease, opacity .8s ease;
+}
+
+.lavi-live-info,
+.lavi-ticker,
+.lavi-bank-tabs,
+.lavi-bank-tab{
+  display:none !important;
+}
+
+@media (max-width:760px){
+  .site::before{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.25) 0%,rgba(3,9,17,.66) 38%,rgba(3,9,17,.96) 78%,rgba(3,9,17,.99) 100%),
+      var(--lavi-family-current) center top / cover no-repeat !important;
+  }
+
+  .lavi-family-fade-layer{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.25) 0%,rgba(3,9,17,.66) 38%,rgba(3,9,17,.96) 78%,rgba(3,9,17,.99) 100%),
+      var(--lavi-family-next) center top / cover no-repeat;
+    height:430px;
+    inset:0 0 auto 0;
+  }
+
+  .lavi-family-dots{
+    right:16px;
+    top:auto;
+    bottom:18px;
+  }
+
+  .hero-visual::before{
+    opacity:.38;
+  }
+}
+
+</style>
+
+<style id="laviapp-free-plan-style">
+.plano-card-free,.laviapp-free-card{
+  border:1px solid rgba(45,212,191,.34)!important;
+  background:linear-gradient(180deg,rgba(15,23,42,.82),rgba(6,17,31,.76))!important;
+  border-radius:24px!important;
+  padding:20px!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.24)!important;
+}
+.laviapp-free-badge{
+  display:inline-flex;
+  border-radius:999px;
+  padding:6px 10px;
+  background:rgba(45,212,191,.14);
+  color:#5FFFEA;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.laviapp-free-card h3{font-size:22px;margin:0 0 8px}
+.laviapp-free-card strong{display:block;font-size:28px;color:#2DD4BF;margin-bottom:8px}
+.laviapp-free-card p{color:#CBD5E1;font-size:13px;line-height:1.45;margin:0 0 14px}
+</style>
+
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <a href="/m" class="brand">
+        <img src="/icon-192.png" alt="LaviApp"/>
+        <div>
+          <div class="brand-title">Lavi<span>App</span></div>
+          <div class="brand-sub">Finanças Familiar</div>
+        </div>
+      </a>
+      <a class="menu-dot" href="/web?desktop=1" aria-label="Versão desktop">↗</a>
+    </header>
+
+    <section class="hero reveal">
+      <div class="pill">✨ Gestão financeira familiar</div>
+      <h1>Organize as finanças da sua família.</h1>
+      <p class="lead">Registre receitas e despesas, acompanhe metas e veja relatórios de forma simples, clara e segura.</p>
+
+      <div class="cta-grid">
+        <a class="btn btn-primary" href="#planos">Começar agora</a>
+        <a class="btn btn-secondary" href="/dashboard.html">Entrar na conta</a>
+      </div>
+    </section>
+
+    <div class="mini-strip reveal">
+      <span class="chip">📊 Relatórios</span>
+      <span class="chip">🎯 Metas</span>
+      <span class="chip">👨‍👩‍👧‍👦 Família</span>
+      <span class="chip">🔐 Segurança</span>
+      <span class="chip">💰 Gastos</span>
+    </div>
+
+    <section class="bank-card reveal">
+      <div class="bank-head">
+        <div>
+          <small>Resumo familiar</small>
+          <div class="balance">R$ 4.280,00</div>
+        </div>
+        <div class="status">● online</div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi">
+          <span>Receitas</span>
+          <strong style="color:#34D399">R$ 7.500</strong>
+        </div>
+        <div class="kpi">
+          <span>Despesas</span>
+          <strong style="color:#FB7185">R$ 3.220</strong>
+        </div>
+      </div>
+
+      <div class="progress"><i></i></div>
+
+      <div class="bank-list">
+        <div class="bank-row"><span>🛒 Mercado</span><em>R$ 420,00</em></div>
+        <div class="bank-row"><span>🎯 Reserva da família</span><em>68%</em></div>
+        <div class="bank-row"><span>📄 Relatório mensal</span><em>pronto</em></div>
+      </div>
+    </section>
+
+    <section id="modulos">
+      <div class="sec-title reveal">
+        <h2>Módulos do LaviApp</h2>
+        <p>Tudo pensado para organizar a vida financeira familiar.</p>
+      </div>
+
+      <div class="module-grid">
+        <article class="module reveal">
+          <div class="module-icon">💰</div>
+          <div>
+            <h3>Receitas</h3>
+            <p>Cadastre salários, renda extra, benefícios e entradas da família.</p>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <div class="module-icon">🧾</div>
+          <div>
+            <h3>Despesas</h3>
+            <p>Organize gastos fixos, variáveis, contas, compras e compromissos.</p>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <div class="module-icon">🎯</div>
+          <div>
+            <h3>Metas e sonhos</h3>
+            <p>Planeje reserva, viagens, quitação de dívidas e objetivos da casa.</p>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <div class="module-icon">📊</div>
+          <div>
+            <h3>Relatórios</h3>
+            <p>Acompanhe para onde o dinheiro está indo e veja a evolução.</p>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <div class="module-icon">👨‍👩‍👧‍👦</div>
+          <div>
+            <h3>Controle familiar</h3>
+            <p>Permita que membros da família participem da organização.</p>
+          </div>
+        </article>
+
+        <article class="module reveal">
+          <div class="module-icon">🔐</div>
+          <div>
+            <h3>Segurança</h3>
+            <p>Acesso protegido e estrutura preparada para uso no navegador e app.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="planos">
+      <div class="sec-title reveal">
+
+<div class="laviapp-free-card plano-card-free">
+  <span class="laviapp-free-badge">Teste grátis</span>
+  <h3>Free</h3>
+  <strong>R$ 0,00</strong>
+  <p>Ideal para conhecer o LaviApp antes de contratar um plano. Crie sua conta e teste os recursos principais.</p>
+  <a class="btn btn-primary" href="/free-family.html" data-plano="free">Começar grátis</a>
+</div>
+
+        <h2>Escolha seu plano</h2>
+        <p>Comece com o plano ideal para sua família.</p>
+      </div>
+
+      <div class="plans">
+        <article class="plan reveal">
+          <div class="plan-icon">🚀</div>
+          <h3>Pro</h3>
+          <div class="price">R$ 9,90</div>
+          <div class="period">por mês</div>
+          <ul>
+            <li>Receitas e despesas</li>
+            <li>Saldo familiar</li>
+            <li>Planejamento mensal</li>
+            <li>Gráficos e relatórios</li>
+          </ul>
+          <button class="btn btn-secondary" onclick="assinarPlano('pro')">Assinar Pro</button>
+        </article>
+
+        <article class="plan featured reveal">
+          <div class="tag">Melhor escolha</div>
+          <div class="plan-icon">🏆</div>
+          <h3>Anual</h3>
+          <div class="price">R$ 159,00</div>
+          <div class="period">por ano</div>
+          <ul>
+            <li>Acesso por 12 meses</li>
+            <li>Economia anual</li>
+            <li>Todos os módulos principais</li>
+            <li>Planejamento de longo prazo</li>
+          </ul>
+          <button class="btn btn-primary" onclick="assinarPlano('anual')">Assinar Anual</button>
+        </article>
+
+        <article class="plan reveal">
+          <div class="plan-icon">👨‍👩‍👧‍👦</div>
+          <h3>Família</h3>
+          <div class="price">R$ 19,90</div>
+          <div class="period">a cada 3 meses</div>
+          <ul>
+            <li>Tudo do Pro</li>
+            <li>Metas e sonhos</li>
+            <li>Controle familiar completo</li>
+            <li>Ajuda sua família a enriquecer</li>
+          </ul>
+          <button class="btn btn-secondary" onclick="assinarPlano('familia')">Assinar Família</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-final reveal">
+      <h2>Acesse pelo celular ou computador.</h2>
+      <p>Use como site, painel web ou app instalado. Tudo conectado para a sua família.</p>
+      <a class="btn btn-primary" href="/dashboard.html">Entrar no LaviApp</a>
+    </section>
+
+    <footer>© 2026 · AlphaTI - Business Solutions versão 1.0</footer>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="#modulos"><strong>📊</strong>Módulos</a>
+    <a href="#planos" class="primary-mini"><strong>💎</strong>Planos</a>
+    <a href="/dashboard.html"><strong>🔐</strong>Entrar</a>
+    <a href="/app"><strong>📱</strong>App</a>
+  </nav>
+
+  <script>
+    const FUNCTIONS_URL = "https://us-central1-gastos-familiar-46912.cloudfunctions.net";
+
+    async function assinarPlano(plano){
+      try{
+        const response = await fetch(FUNCTIONS_URL + "/createCheckoutSession", {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ plano })
+        });
+
+        const data = await response.json();
+
+        if(data.url){
+          window.location.href = data.url;
+          return;
+        }
+
+        alert(data.error || "Não foi possível iniciar o pagamento.");
+      }catch(error){
+        console.error(error);
+        alert("Erro ao conectar com o pagamento.");
+      }
+    }
+
+    const reveals = document.querySelectorAll(".reveal");
+    if("IntersectionObserver" in window){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add("in");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {threshold:.12});
+      reveals.forEach(el=>obs.observe(el));
+    }else{
+      reveals.forEach(el=>el.classList.add("in"));
+    }
+  </script>
+
+<script id="lavi-feature-interactions">
+(function(){
+  if(window.__laviFeatureInteractions) return;
+  window.__laviFeatureInteractions = true;
+
+  const FEATURES = {
+    relatorios: {
+      icon:"📊",
+      title:"Relatórios inteligentes",
+      kicker:"Análise financeira",
+      subtitle:"Veja para onde o dinheiro da família está indo, identifique categorias que pesam no orçamento e acompanhe a evolução mês a mês.",
+      colorA:"rgba(96,165,250,.42)",
+      colorB:"rgba(45,212,191,.25)",
+      bullets:[
+        ["📈","Visão mensal","Compare receitas, despesas e saldo em uma leitura simples."],
+        ["🧾","Resumo por categoria","Entenda quais áreas consomem mais dinheiro no mês."],
+        ["📄","Exportação","Gere relatórios para guardar, imprimir ou compartilhar."]
+      ]
+    },
+    metas: {
+      icon:"🎯",
+      title:"Metas e sonhos da família",
+      kicker:"Planejamento",
+      subtitle:"Transforme objetivos em metas acompanháveis: reserva de emergência, viagem, quitação de dívidas, reforma ou qualquer sonho da casa.",
+      colorA:"rgba(246,199,104,.42)",
+      colorB:"rgba(45,212,191,.24)",
+      bullets:[
+        ["🎯","Objetivos claros","Crie metas com prazo, valor e acompanhamento."],
+        ["💰","Progresso visual","Veja quanto já foi alcançado e o que ainda falta."],
+        ["👨‍👩‍👧‍👦","Família engajada","Todos acompanham o progresso juntos."]
+      ]
+    },
+    familia: {
+      icon:"👨‍👩‍👧‍👦",
+      title:"Controle familiar completo",
+      kicker:"Família conectada",
+      subtitle:"Organize lançamentos por membro e mantenha todos conectados na mesma visão financeira, com mais clareza e participação.",
+      colorA:"rgba(195,177,225,.42)",
+      colorB:"rgba(96,165,250,.24)",
+      bullets:[
+        ["👤","Lançamentos por pessoa","Filtre gastos por membro da família."],
+        ["🔗","Código de convite","Conecte outros usuários à família."],
+        ["🏠","Visão única da casa","Todos os dados importantes em um só lugar."]
+      ]
+    },
+    seguranca: {
+      icon:"🔐",
+      title:"Segurança e acesso protegido",
+      kicker:"Proteção",
+      subtitle:"O LaviApp usa autenticação do Firebase e estrutura preparada para proteger o acesso da família, tanto no app quanto no painel web.",
+      colorA:"rgba(45,212,191,.38)",
+      colorB:"rgba(52,211,153,.22)",
+      bullets:[
+        ["🔑","Login protegido","Acesso por e-mail e senha."],
+        ["🛡️","Dados por família","Cada família acessa seus próprios registros."],
+        ["📱","App e web","Use no celular, instalado como app ou pelo navegador."]
+      ]
+    },
+    gastos: {
+      icon:"💰",
+      title:"Receitas e despesas",
+      kicker:"Controle diário",
+      subtitle:"Registre tudo que entra e sai da família: mercado, contas, cartões, combustível, renda extra e salários.",
+      colorA:"rgba(251,113,133,.34)",
+      colorB:"rgba(246,199,104,.25)",
+      bullets:[
+        ["🧾","Cadastro rápido","Lance gastos e receitas em poucos segundos."],
+        ["🏷️","Categorias","Organize por alimentação, moradia, transporte e mais."],
+        ["💳","Forma de pagamento","Controle Pix, crédito, débito, dinheiro e outros."]
+      ]
+    }
+  };
+
+  function ready(fn){
+    if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn);
+    else fn();
+  }
+
+  function inferFeature(text){
+    const t = String(text || "").toLowerCase();
+    if(t.includes("relat") || t.includes("gráfico") || t.includes("grafico")) return "relatorios";
+    if(t.includes("meta") || t.includes("sonho")) return "metas";
+    if(t.includes("família") || t.includes("familia")) return "familia";
+    if(t.includes("segurança") || t.includes("seguranca") || t.includes("seguro")) return "seguranca";
+    if(t.includes("gasto") || t.includes("receita") || t.includes("despesa")) return "gastos";
+    return "";
+  }
+
+  function createModal(){
+    if(document.querySelector(".lavi-feature-modal")) return;
+
+    const modal = document.createElement("div");
+    modal.className = "lavi-feature-modal";
+    modal.innerHTML = `
+      <div class="lavi-feature-dialog" role="dialog" aria-modal="true" aria-labelledby="laviFeatureTitle">
+        <div class="lavi-feature-head">
+          <div>
+            <div class="lavi-feature-kicker" id="laviFeatureKicker">LaviApp</div>
+            <h2 class="lavi-feature-title" id="laviFeatureTitle"></h2>
+            <p class="lavi-feature-sub" id="laviFeatureSub"></p>
+          </div>
+          <button class="lavi-feature-close" type="button" aria-label="Fechar">×</button>
+        </div>
+        <div class="lavi-feature-body">
+          <div class="lavi-feature-visual">
+            <div class="lavi-phone-mock">
+              <div class="lavi-phone-top"></div>
+              <div class="lavi-screen-row"></div>
+              <div class="lavi-screen-row"></div>
+              <div class="lavi-screen-row"></div>
+              <div class="lavi-screen-row"></div>
+            </div>
+            <div class="lavi-floating-mini one"></div>
+            <div class="lavi-floating-mini two"></div>
+            <div class="lavi-floating-mini three"></div>
+          </div>
+          <div>
+            <div class="lavi-feature-list"></div>
+            <div class="lavi-feature-actions">
+              <a class="lavi-feature-btn primary" href="/dashboard.html">Entrar no LaviApp</a>
+              <a class="lavi-feature-btn secondary" href="#planos">Ver planos</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", function(ev){
+      if(ev.target === modal || ev.target.classList.contains("lavi-feature-close")){
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", function(ev){
+      if(ev.key === "Escape") closeModal();
+    });
+  }
+
+  function openModal(key){
+    const data = FEATURES[key];
+    if(!data) return;
+
+    createModal();
+
+    const modal = document.querySelector(".lavi-feature-modal");
+    const visual = modal.querySelector(".lavi-feature-visual");
+
+    modal.querySelector("#laviFeatureKicker").textContent = data.icon + " " + data.kicker;
+    modal.querySelector("#laviFeatureTitle").textContent = data.title;
+    modal.querySelector("#laviFeatureSub").textContent = data.subtitle;
+
+    visual.style.setProperty("--lavi-visual-a", data.colorA);
+    visual.style.setProperty("--lavi-visual-b", data.colorB);
+
+    const minis = modal.querySelectorAll(".lavi-floating-mini");
+    minis[0].textContent = data.icon + " " + data.kicker;
+    minis[1].textContent = "✨ Visual dinâmico";
+    minis[2].textContent = "📱 App + Web";
+
+    modal.querySelector(".lavi-feature-list").innerHTML = data.bullets.map(function(item){
+      return "<div class='lavi-feature-item'><i>" + item[0] + "</i><div><strong>" + item[1] + "</strong><span>" + item[2] + "</span></div></div>";
+    }).join("");
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal(){
+    const modal = document.querySelector(".lavi-feature-modal");
+    if(!modal) return;
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function addLiveInfo(){
+    if(document.querySelector(".lavi-live-info")) return;
+
+    const parent = document.querySelector(".lavi-ticker") || document.querySelector(".mini-strip") || document.querySelector(".trust") || document.querySelector(".hero");
+    if(!parent) return;
+
+    const keys = ["relatorios","metas","familia","seguranca","gastos"];
+    const live = document.createElement("div");
+    live.className = "lavi-live-info";
+    live.innerHTML = "<div class='lavi-live-track'>" + keys.concat(keys).map(function(key){
+      const f = FEATURES[key];
+      return "<div class='lavi-live-card' data-feature='" + key + "'><div class='lavi-live-icon'>" + f.icon + "</div><div><strong>" + f.title + "</strong><span>" + f.subtitle.slice(0,82) + "...</span></div></div>";
+    }).join("") + "</div>";
+
+    parent.insertAdjacentElement("afterend", live);
+  }
+
+  function makeClickable(){
+    const selectors = [
+      ".lavi-ticker-item",
+      ".chip",
+      ".module",
+      ".module h3",
+      ".module p",
+      ".bottom-nav a",
+      ".trust span"
+    ];
+
+    document.querySelectorAll(selectors.join(",")).forEach(function(el){
+      const key = inferFeature(el.textContent);
+      if(!key) return;
+
+      const target = el.closest(".module") || el.closest("a") || el;
+      if(!target.dataset.feature){
+        target.dataset.feature = key;
+        target.setAttribute("role", target.tagName === "A" ? "link" : "button");
+        target.setAttribute("title", "Ver detalhes: " + FEATURES[key].title);
+      }
+    });
+
+    document.querySelectorAll("[data-feature]").forEach(function(el){
+      if(el.__laviFeatureBound) return;
+      el.__laviFeatureBound = true;
+
+      el.addEventListener("click", function(ev){
+        const key = el.dataset.feature;
+        if(!key || !FEATURES[key]) return;
+
+        // No menu inferior, deixa Entrar/App funcionarem normalmente.
+        const href = el.getAttribute("href") || "";
+        if(href === "/dashboard" || href === "/app") return;
+
+        ev.preventDefault();
+        openModal(key);
+      });
+    });
+  }
+
+  function addMotionLayer(){
+    if(document.querySelector(".lavi-motion-layer")) return;
+    const layer = document.createElement("div");
+    layer.className = "lavi-motion-layer";
+    document.body.prepend(layer);
+  }
+
+  ready(function(){
+    addMotionLayer();
+    createModal();
+    addLiveInfo();
+    makeClickable();
+
+    setTimeout(makeClickable, 800);
+    setTimeout(makeClickable, 1600);
+  });
+})();
+</script>
+
+
+
+
+
+<script id="lavi-family-slides-rotator">
+(function(){
+  if(window.__laviFamilySlidesRotator) return;
+  window.__laviFamilySlidesRotator = true;
+
+  const slides = ["/laviapp-familia-slide-1.jpg","/laviapp-familia-slide-2.jpg","/laviapp-familia-slide-3.jpg","/laviapp-familia-slide-4.jpg"];
+  let current = 0;
+  let timer = null;
+
+  function preload(){
+    slides.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }
+
+  function ensureSiteLayer(){
+    const site = document.querySelector(".site");
+    if(!site) return null;
+
+    let layer = document.querySelector(".lavi-family-fade-layer");
+    if(!layer){
+      layer = document.createElement("div");
+      layer.className = "lavi-family-fade-layer";
+      site.prepend(layer);
+    }
+
+    return layer;
+  }
+
+  function createDots(){
+    const site = document.querySelector(".site") || document.querySelector(".hero");
+    if(!site || document.querySelector(".lavi-family-dots")) return;
+
+    const dots = document.createElement("div");
+    dots.className = "lavi-family-dots";
+    dots.innerHTML = slides.map((_, i) => '<button class="lavi-family-dot" type="button" aria-label="Imagem familiar '+(i+1)+'"></button>').join("");
+    site.appendChild(dots);
+
+    dots.querySelectorAll(".lavi-family-dot").forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        apply(index, true);
+        restart();
+      });
+    });
+  }
+
+  function updateDots(){
+    document.querySelectorAll(".lavi-family-dot").forEach((dot, i) => {
+      dot.classList.toggle("active", i === current);
+    });
+  }
+
+  function apply(index, fade){
+    current = ((index % slides.length) + slides.length) % slides.length;
+    const url = 'url("' + slides[current] + '")';
+
+    const layer = ensureSiteLayer();
+
+    if(layer && fade){
+      document.documentElement.style.setProperty("--lavi-family-next", url);
+      layer.classList.add("show");
+
+      setTimeout(() => {
+        document.documentElement.style.setProperty("--lavi-family-current", url);
+        layer.classList.remove("show");
+      }, 1100);
+    }else{
+      document.documentElement.style.setProperty("--lavi-family-current", url);
+      document.documentElement.style.setProperty("--lavi-family-next", url);
+    }
+
+    if(!document.querySelector(".site") && document.querySelector(".hero")){
+      document.body.classList.add("lavi-mobile-page");
+      document.documentElement.style.setProperty("--lavi-family-current", url);
+    }
+
+    updateDots();
+  }
+
+  function next(){
+    apply(current + 1, true);
+  }
+
+  function restart(){
+    if(timer) clearInterval(timer);
+    timer = setInterval(next, 6200);
+  }
+
+  function removeOldLayers(){
+    document.querySelectorAll(".lavi-live-info,.lavi-ticker,.lavi-bank-tabs,.lavi-bank-tab").forEach(el => el.remove());
+  }
+
+  function start(){
+    if(!slides.length) return;
+    removeOldLayers();
+    preload();
+    createDots();
+    apply(0, false);
+    restart();
+
+    const area = document.querySelector(".site") || document.querySelector(".hero");
+    if(area){
+      area.addEventListener("mouseenter", () => timer && clearInterval(timer));
+      area.addEventListener("mouseleave", restart);
+    }
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", start);
+  }else{
+    start();
+  }
+})();
+</script>
+
+
+
+<script id="laviapp-free-to-family-page">
+(function(){
+  if(window.__laviappFreeToFamilyPage) return;
+  window.__laviappFreeToFamilyPage = true;
+
+  function norm(t){
+    return String(t||"").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase();
+  }
+
+  function wire(){
+    document.querySelectorAll("button,a").forEach(function(el){
+      if(el.dataset.freeFamilyWired) return;
+
+      const all = norm(
+        (el.textContent||"") + " " +
+        (el.getAttribute("href")||"") + " " +
+        (el.getAttribute("data-plano")||"") + " " +
+        (el.getAttribute("data-plan")||"")
+      );
+
+      if(all.includes("free") || all.includes("teste gratis") || all.includes("comecar gratis")){
+        el.dataset.freeFamilyWired = "1";
+        el.addEventListener("click", function(ev){
+          ev.preventDefault();
+          ev.stopPropagation();
+          location.href = "/free-family.html";
+        }, true);
+      }
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", function(){ wire(); setTimeout(wire,1200); }, {once:true});
+  }else{
+    wire(); setTimeout(wire,1200);
+  }
+})();
+</script>
+</body>
+</html>

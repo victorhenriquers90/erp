@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="286" height="72" viewBox="0 0 286 72" role="img" aria-labelledby="title desc">
+  <title id="title">LaviApp</title>
+  <desc id="desc">Logo do LaviApp, gestao financeira familiar</desc>
+  <defs>
+    <linearGradient id="gold" x1="10" y1="8" x2="56" y2="62" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6c768"/>
+      <stop offset="1" stop-color="#8f5f23"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="20" y1="18" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9ef0bc"/>
+      <stop offset="1" stop-color="#2dd4bf"/>
+    </linearGradient>
+    <filter id="shadow" x="-18" y="-18" width="100" height="100" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <g filter="url(#shadow)">
+    <circle cx="36" cy="36" r="28" fill="url(#gold)"/>
+    <path d="M27 21h8v24h15v7H27V21Z" fill="#21180c"/>
+    <circle cx="50" cy="23" r="4" fill="url(#mint)"/>
+    <circle cx="56" cy="34" r="3" fill="#6fcf97"/>
+    <path d="M48 46c4-6 9-8 15-7" fill="none" stroke="#21180c" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+  </g>
+  <text x="78" y="34" fill="#f5f0e8" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" font-weight="900" letter-spacing="0">LaviApp</text>
+  <text x="79" y="53" fill="#b9b2a6" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="0">Gestao financeira familiar</text>
+</svg>

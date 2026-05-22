@@ -1,0 +1,58 @@
+{
+  "name": "LaviApp - Financas Familiar",
+  "short_name": "LaviApp",
+  "description": "Aplicativo de gestao financeira familiar.",
+  "start_url": "/app.html?v=1.2.42",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#06111F",
+  "theme_color": "#06111F",
+  "lang": "pt-BR",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icon-192-1778584824271.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512-1778584824271.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Adicionar Gasto",
+      "short_name": "Gasto",
+      "url": "/app.html?v=1.2.42&action=add",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Painel",
+      "short_name": "Painel",
+      "url": "/app.html?v=1.2.42&action=dashboard",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "finance",
+    "utilities"
+  ],
+  "id": "/app.html"
+}

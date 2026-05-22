@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+<meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#06111F"/>
+  <meta name="description" content="LaviApp - Finanças Familiar. Tecnologia para organizar a vida financeira da sua família."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.laviapp.com.br"/>
+  <meta property="og:title" content="LaviApp - Finanças Familiar"/>
+  <meta property="og:description" content="Controle financeiro familiar com app, relatórios, metas e visão compartilhada."/>
+  <meta property="og:image" content="https://www.laviapp.com.br/icon-512.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://www.laviapp.com.br/"/>
+  <title>LaviApp - Finanças Familiar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/png" href="/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png"/>
+  <link rel="manifest" href="/site-manifest.json"/>
+
+  <style>
+    :root{
+      --bg:#06111F;
+      --bg2:#07192D;
+      --surface:#0D1B2E;
+      --surface2:#10243C;
+      --text:#F8FAFC;
+      --muted:#CBD5E1;
+      --muted2:#8EA1B8;
+      --teal:#13D8C3;
+      --teal2:#2DD4BF;
+      --gold:#F6C768;
+      --blue:#60A5FA;
+      --line:rgba(255,255,255,.12);
+      --shadow:0 24px 70px rgba(0,0,0,.34);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{
+      min-height:100vh;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(19,216,195,.18), transparent 34%),
+        radial-gradient(circle at 88% 12%, rgba(96,165,250,.16), transparent 28%),
+        linear-gradient(180deg,#06111F,#07111F 48%,#050B14);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:44px 44px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.70),transparent 72%);
+      z-index:-1;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button,input,textarea{font:inherit}
+
+    .wrap{
+      width:min(1180px,calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(6,17,31,.74);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .nav{
+      min-height:82px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand img{
+      width:52px;
+      height:52px;
+      border-radius:15px;
+      box-shadow:0 12px 32px rgba(0,0,0,.32);
+    }
+
+    .brand-title{
+      font-size:27px;
+      font-weight:950;
+      line-height:.95;
+      letter-spacing:-.07em;
+    }
+
+    .brand-title span{color:#00C4A7}
+
+    .brand-sub{
+      margin-top:6px;
+      color:#B7C3D4;
+      font-size:11px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+
+    .menu{
+      display:flex;
+      gap:26px;
+      align-items:center;
+      color:#E2E8F0;
+      font-size:14px;
+      font-weight:850;
+    }
+
+    .menu a{
+      position:relative;
+      opacity:.92;
+    }
+
+    .menu a::after{
+      content:"";
+      position:absolute;
+      left:0;
+      bottom:-9px;
+      width:0;
+      height:2px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--teal),var(--gold));
+      transition:.22s ease;
+    }
+
+    .menu a:hover::after{width:100%}
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .btn{
+      min-height:48px;
+      border-radius:15px;
+      border:none;
+      padding:0 18px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      font-weight:900;
+      cursor:pointer;
+      transition:.22s ease;
+      white-space:nowrap;
+    }
+
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+
+    .btn-primary{
+      color:#06111F;
+      background:linear-gradient(135deg,var(--teal),var(--gold));
+      box-shadow:0 16px 34px rgba(19,216,195,.20);
+    }
+
+    .btn-secondary{
+      color:#fff;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .hero{
+      position:relative;
+      padding:74px 0 50px;
+      min-height:650px;
+      display:grid;
+      grid-template-columns:1fr .95fr;
+      gap:44px;
+      align-items:center;
+    }
+
+    .hero-copy{
+      position:relative;
+      z-index:3;
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:9px 13px;
+      color:#87FFF0;
+      background:rgba(19,216,195,.12);
+      border:1px solid rgba(19,216,195,.28);
+      font-size:12px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:22px;
+    }
+
+    h1{
+      font-size:clamp(44px,5.4vw,76px);
+      line-height:.98;
+      letter-spacing:-.075em;
+      margin-bottom:22px;
+    }
+
+    h1 span{
+      color:var(--teal);
+      display:block;
+    }
+
+    .lead{
+      max-width:590px;
+      color:#D5DDE8;
+      font-size:17px;
+      line-height:1.65;
+      margin-bottom:30px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .trust{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .trust span{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      border-radius:999px;
+      padding:8px 10px;
+      background:rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.10);
+      color:#CBD5E1;
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:470px;
+    }
+
+    .visual-card{
+      position:relative;
+      border-radius:34px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(circle at 20% 0%,rgba(19,216,195,.18),transparent 34%),
+        linear-gradient(145deg,rgba(16,36,60,.88),rgba(6,17,31,.88));
+      box-shadow:var(--shadow);
+      padding:22px;
+      overflow:hidden;
+      animation:floatCard 6s ease-in-out infinite;
+    }
+
+    @keyframes floatCard{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-10px)}
+    }
+
+    .mock-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .mock-title small{
+      display:block;
+      color:#94A3B8;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mock-title strong{
+      font-size:28px;
+      letter-spacing:-.06em;
+    }
+
+    .screen-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .screen-box{
+      border-radius:18px;
+      padding:14px;
+      background:rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .screen-box span{
+      display:block;
+      color:#94A3B8;
+      font-size:11px;
+      font-weight:850;
+      margin-bottom:6px;
+    }
+
+    .screen-box strong{
+      font-size:17px;
+      color:#fff;
+    }
+
+    .chart{
+      height:170px;
+      border-radius:22px;
+      background:
+        linear-gradient(180deg,rgba(19,216,195,.16),transparent),
+        repeating-linear-gradient(0deg,rgba(255,255,255,.04),rgba(255,255,255,.04) 1px,transparent 1px,transparent 34px);
+      border:1px solid rgba(255,255,255,.08);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .chart::after{
+      content:"";
+      position:absolute;
+      left:5%;
+      right:5%;
+      bottom:38%;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--teal),var(--gold),var(--teal));
+      clip-path:polygon(0% 70%,15% 35%,28% 55%,44% 20%,60% 68%,76% 28%,100% 46%,100% 100%,0 100%);
+      animation:chartMove 3.4s ease-in-out infinite;
+    }
+
+    @keyframes chartMove{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-8px)}
+    }
+
+    .floating{
+      position:absolute;
+      border-radius:20px;
+      padding:14px;
+      background:rgba(7,17,31,.82);
+      border:1px solid rgba(255,255,255,.13);
+      backdrop-filter:blur(16px);
+      box-shadow:0 18px 44px rgba(0,0,0,.30);
+      animation:miniFloat 5s ease-in-out infinite;
+    }
+
+    .floating.one{left:-18px;bottom:56px}
+    .floating.two{right:-14px;top:58px;animation-delay:1s}
+
+    @keyframes miniFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-12px)}
+    }
+
+    .floating strong{display:block;color:var(--teal);font-size:18px}
+    .floating span{display:block;color:#CBD5E1;font-size:12px;margin-top:4px}
+
+    section{
+      padding:70px 0;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-end;
+      margin-bottom:26px;
+    }
+
+    .section-head h2{
+      font-size:42px;
+      line-height:1.05;
+      letter-spacing:-.065em;
+    }
+
+    .section-head p{
+      max-width:440px;
+      color:#CBD5E1;
+      line-height:1.65;
+    }
+
+    .services{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .service-card{
+      position:relative;
+      min-height:250px;
+      border-radius:28px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg,rgba(16,36,60,.72),rgba(9,21,36,.68));
+      padding:24px;
+      overflow:hidden;
+      box-shadow:0 18px 44px rgba(0,0,0,.18);
+      transition:.25s ease;
+    }
+
+    .service-card:hover{
+      transform:translateY(-8px);
+      border-color:rgba(19,216,195,.38);
+      box-shadow:0 28px 74px rgba(0,0,0,.28);
+    }
+
+    .service-card::after{
+      content:"";
+      position:absolute;
+      right:-54px;
+      top:-54px;
+      width:150px;
+      height:150px;
+      border-radius:999px;
+      background:radial-gradient(circle,rgba(19,216,195,.18),transparent 70%);
+    }
+
+    .service-icon{
+      width:54px;
+      height:54px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      font-size:26px;
+      background:rgba(19,216,195,.12);
+      border:1px solid rgba(19,216,195,.24);
+      margin-bottom:18px;
+    }
+
+    .service-card h3{
+      font-size:21px;
+      margin-bottom:10px;
+      letter-spacing:-.035em;
+    }
+
+    .service-card p{
+      color:#CBD5E1;
+      line-height:1.58;
+      font-size:14px;
+    }
+
+    .about{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:22px;
+      align-items:stretch;
+    }
+
+    .about-box{
+      border-radius:32px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(circle at 0% 0%,rgba(246,199,104,.13),transparent 30%),
+        linear-gradient(180deg,rgba(16,36,60,.72),rgba(9,21,36,.68));
+      padding:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.20);
+    }
+
+    .about-box h2{
+      font-size:40px;
+      line-height:1.08;
+      letter-spacing:-.065em;
+      margin-bottom:14px;
+    }
+
+    .about-box p{
+      color:#CBD5E1;
+      line-height:1.7;
+      margin-bottom:16px;
+    }
+
+    .about-list{
+      display:grid;
+      gap:12px;
+    }
+
+    .about-item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .about-item i{
+      font-style:normal;
+      width:38px;
+      height:38px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:rgba(19,216,195,.12);
+      flex:0 0 auto;
+    }
+
+    .about-item strong{display:block;margin-bottom:4px}
+    .about-item span{display:block;color:#94A3B8;font-size:13px;line-height:1.45}
+
+    .contact{
+      display:grid;
+      grid-template-columns:.9fr 1.1fr;
+      gap:22px;
+    }
+
+    .contact-card,
+    .form-card{
+      border-radius:32px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg,rgba(16,36,60,.74),rgba(9,21,36,.70));
+      padding:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.20);
+    }
+
+    .contact-card h2,
+    .form-card h2{
+      font-size:34px;
+      line-height:1.08;
+      letter-spacing:-.055em;
+      margin-bottom:14px;
+    }
+
+    .contact-card p{
+      color:#CBD5E1;
+      line-height:1.65;
+      margin-bottom:20px;
+    }
+
+    .contact-list{
+      display:grid;
+      gap:12px;
+      margin-bottom:20px;
+    }
+
+    .contact-list a,
+    .contact-list div{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:13px;
+      border-radius:17px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.08);
+      color:#E2E8F0;
+      font-weight:750;
+    }
+
+    .form{
+      display:grid;
+      gap:12px;
+    }
+
+    .field{
+      display:grid;
+      gap:7px;
+    }
+
+    .field label{
+      color:#94A3B8;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:900;
+    }
+
+    .field input,
+    .field textarea{
+      width:100%;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(7,17,31,.66);
+      color:#fff;
+      padding:13px 14px;
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:118px;
+      resize:vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus{
+      border-color:rgba(19,216,195,.72);
+      box-shadow:0 0 0 4px rgba(19,216,195,.12);
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,.09);
+      padding:28px 0;
+      color:#94A3B8;
+    }
+
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr .9fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .footer-brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .footer-brand img{
+      width:42px;
+      height:42px;
+      border-radius:12px;
+    }
+
+    .footer h3{
+      color:#F8FAFC;
+      margin-bottom:10px;
+    }
+
+    .footer a{
+      display:block;
+      color:#94A3B8;
+      margin-bottom:8px;
+    }
+
+    .copyright{
+      margin-top:24px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .whatsapp{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:70;
+      min-height:56px;
+      padding:0 18px;
+      border-radius:999px;
+      background:#25D366;
+      color:#06111F;
+      font-weight:950;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 18px 54px rgba(0,0,0,.34);
+      animation:whatsPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes whatsPulse{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .reveal.in{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width:980px){
+      .menu{display:none}
+      .hero,
+      .about,
+      .contact{
+        grid-template-columns:1fr;
+      }
+      .services{
+        grid-template-columns:1fr 1fr;
+      }
+      .hero-visual{
+        min-height:auto;
+      }
+      .footer-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{width:calc(100% - 24px)}
+      .nav{
+        min-height:auto;
+        padding:14px 0;
+        align-items:flex-start;
+        flex-direction:column;
+      }
+      .nav-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+      }
+      .btn{
+        width:100%;
+        padding:0 12px;
+      }
+      .hero{
+        padding:40px 0 34px;
+      }
+      h1{
+        font-size:38px;
+      }
+      .lead{
+        font-size:14px;
+      }
+      .hero-actions{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+      .services{
+        grid-template-columns:1fr;
+      }
+      .screen-grid{
+        grid-template-columns:1fr;
+      }
+      .floating{
+        display:none;
+      }
+      .section-head{
+        display:block;
+      }
+      .section-head h2{
+        font-size:30px;
+        margin-bottom:10px;
+      }
+      section{
+        padding:46px 0;
+      }
+      .about-box,
+      .contact-card,
+      .form-card{
+        padding:20px;
+        border-radius:24px;
+      }
+      .about-box h2,
+      .contact-card h2,
+      .form-card h2{
+        font-size:28px;
+      }
+      .whatsapp{
+        right:12px;
+        bottom:12px;
+        min-height:52px;
+        font-size:13px;
+      }
+    }
+  
+/* ── Alternância das imagens familiares anteriores ─────────── */
+:root{
+  --lavi-family-current: url("/lavi-bg-familia-1.jpg");
+  --lavi-family-next: url("/lavi-bg-familia-1.jpg");
+}
+
+.site::before{
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-family-current) right center / auto 100% no-repeat !important;
+}
+
+.site{
+  position:relative;
+  isolation:isolate;
+}
+
+.hero-visual{
+  position:relative;
+  isolation:isolate;
+}
+
+.hero-visual::before{
+  content:"";
+  position:absolute;
+  inset:-24px;
+  z-index:-1;
+  border-radius:38px;
+  background:
+    linear-gradient(180deg,rgba(6,17,31,.18),rgba(6,17,31,.70)),
+    var(--lavi-family-current) center / cover no-repeat;
+  opacity:.55;
+  filter:saturate(1.05);
+  box-shadow:0 28px 90px rgba(0,0,0,.32);
+  transition:background-image 1s ease, opacity 1s ease, transform 1.2s ease;
+  animation:laviFamilyVisualMove 12s ease-in-out infinite alternate;
+}
+
+@keyframes laviFamilyVisualMove{
+  from{transform:scale(1)}
+  to{transform:scale(1.035)}
+}
+
+.lavi-family-fade-layer{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.88) 28%,rgba(3,9,17,.56) 52%,rgba(3,9,17,.22) 78%,rgba(3,9,17,.62) 100%),
+    var(--lavi-family-next) right center / auto 100% no-repeat;
+  opacity:0;
+  transition:opacity 1.15s ease;
+}
+
+.lavi-family-fade-layer.show{
+  opacity:1;
+}
+
+.lavi-family-dots{
+  position:absolute;
+  right:28px;
+  top:104px;
+  z-index:25;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.lavi-family-dot{
+  width:9px;
+  height:9px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);
+  background:rgba(255,255,255,.22);
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.lavi-family-dot.active{
+  width:30px;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  border-color:transparent;
+}
+
+body.lavi-mobile-page .hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+body.lavi-mobile-page .hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:
+    linear-gradient(180deg,rgba(7,17,31,.44),rgba(7,17,31,.90)),
+    var(--lavi-family-current) center center / cover no-repeat;
+  opacity:.62;
+  transform:scale(1.04);
+  transition:background-image .8s ease, opacity .8s ease;
+}
+
+.lavi-live-info,
+.lavi-ticker,
+.lavi-bank-tabs,
+.lavi-bank-tab{
+  display:none !important;
+}
+
+@media (max-width:760px){
+  .site::before{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.25) 0%,rgba(3,9,17,.66) 38%,rgba(3,9,17,.96) 78%,rgba(3,9,17,.99) 100%),
+      var(--lavi-family-current) center top / cover no-repeat !important;
+  }
+
+  .lavi-family-fade-layer{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.25) 0%,rgba(3,9,17,.66) 38%,rgba(3,9,17,.96) 78%,rgba(3,9,17,.99) 100%),
+      var(--lavi-family-next) center top / cover no-repeat;
+    height:430px;
+    inset:0 0 auto 0;
+  }
+
+  .lavi-family-dots{
+    right:16px;
+    top:auto;
+    bottom:18px;
+  }
+
+  .hero-visual::before{
+    opacity:.38;
+  }
+}
+
+
+/* ── Slider profissional fullscreen LaviApp ────────────────── */
+:root{
+  --lavi-slide-current:url("/lavi-bg-familia-1.jpg");
+  --lavi-slide-next:url("/lavi-bg-familia-1.jpg");
+}
+
+.lavi-family-fade-layer,
+.lavi-hero-fade-layer,
+.lavi-live-info,
+.lavi-ticker,
+.lavi-bank-tabs,
+.lavi-bank-tab{
+  display:none !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+
+.site{
+  position:relative !important;
+  min-height:100vh !important;
+  overflow:hidden !important;
+  isolation:isolate !important;
+  background:#06111F !important;
+}
+
+.site::before{
+  display:none !important;
+  content:none !important;
+  background:none !important;
+}
+
+.lavi-pro-slider{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:#06111F;
+}
+
+.lavi-pro-slide{
+  position:absolute;
+  inset:-2px;
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:0;
+  transform:scale(1.035);
+  transition:opacity 1.45s ease-in-out, transform 7.5s ease-in-out;
+  will-change:opacity, transform;
+}
+
+.lavi-pro-slide.active{
+  opacity:1;
+  transform:scale(1.09);
+}
+
+.lavi-pro-overlay{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(3,9,17,.98) 0%,rgba(3,9,17,.90) 28%,rgba(3,9,17,.62) 52%,rgba(3,9,17,.30) 74%,rgba(3,9,17,.70) 100%),
+    radial-gradient(circle at 72% 30%,rgba(45,212,191,.12),transparent 34%),
+    linear-gradient(0deg,rgba(4,16,28,.88) 0%,transparent 34%);
+}
+
+.site > .wrap,
+.site header,
+.site main,
+.site footer{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+.hero-visual::before{
+  display:none !important;
+  content:none !important;
+  background:none !important;
+}
+
+.hero-visual{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+.visual-card{
+  background:
+    radial-gradient(circle at 20% 0%,rgba(19,216,195,.18),transparent 34%),
+    linear-gradient(145deg,rgba(16,36,60,.88),rgba(6,17,31,.88)) !important;
+  backdrop-filter:blur(10px);
+}
+
+.lavi-pro-dots{
+  position:absolute;
+  right:34px;
+  bottom:34px;
+  z-index:8;
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.lavi-pro-dot{
+  width:9px;
+  height:9px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.58);
+  background:rgba(255,255,255,.20);
+  cursor:pointer;
+  transition:width .25s ease, background .25s ease, border-color .25s ease;
+}
+
+.lavi-pro-dot.active{
+  width:34px;
+  background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  border-color:transparent;
+}
+
+.hero-copy,
+.hero .hero-copy{
+  text-shadow:0 10px 34px rgba(0,0,0,.34);
+}
+
+html, body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden !important;
+}
+
+@media (max-width:760px){
+  .lavi-pro-slider{
+    height:430px;
+    inset:0 0 auto 0;
+  }
+
+  .lavi-pro-slide{
+    background-position:center top;
+  }
+
+  .lavi-pro-overlay{
+    background:
+      linear-gradient(180deg,rgba(3,9,17,.18) 0%,rgba(3,9,17,.55) 36%,rgba(3,9,17,.94) 74%,rgba(3,9,17,1) 100%),
+      radial-gradient(circle at 50% 18%,rgba(45,212,191,.10),transparent 34%);
+  }
+
+  .lavi-pro-dots{
+    right:16px;
+    bottom:18px;
+  }
+
+  .site{
+    overflow:visible !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .lavi-pro-slide{
+    transition:none !important;
+    transform:none !important;
+  }
+}
+
+
+/* FUNDO FAMILIAR SUAVE - sem card visual */
+.site{
+  position:relative !important;
+  overflow:hidden !important;
+  background:#06111F !important;
+}
+
+.lavi-family-bg-slider{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.lavi-family-bg-slide{
+  position:absolute;
+  inset:-24px;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transform:scale(1.04);
+  transition:opacity 3.8s ease-in-out, transform 18s ease-in-out;
+  will-change:opacity,transform;
+  filter:saturate(1.04) contrast(1.02);
+}
+
+.lavi-family-bg-slide.active{
+  opacity:1;
+  transform:scale(1.08);
+}
+
+.lavi-family-bg-slider::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  background:
+    linear-gradient(90deg, rgba(3,9,17,.97) 0%, rgba(3,9,17,.88) 30%, rgba(3,9,17,.62) 58%, rgba(3,9,17,.80) 100%),
+    linear-gradient(180deg, rgba(3,9,17,.60) 0%, rgba(3,9,17,.30) 44%, rgba(3,9,17,.96) 100%),
+    radial-gradient(circle at 30% 25%, rgba(45,212,191,.14), transparent 34%),
+    radial-gradient(circle at 78% 62%, rgba(246,199,104,.10), transparent 38%);
+  backdrop-filter:blur(2px);
+}
+
+/* Garante que o conteúdo fique acima do fundo */
+.site > *:not(.lavi-family-bg-slider),
+.hero,
+.nav,
+.section,
+.pricing,
+footer{
+  position:relative;
+  z-index:3;
+}
+
+/* Remove completamente o card visual/resumo e cards flutuantes */
+.hero-visual,
+.visual-card,
+.mock-top,
+.screen-grid,
+.screen-box,
+.chart,
+.floating,
+.floating.one,
+.floating.two{
+  display:none !important;
+}
+
+/* Hero sem coluna visual */
+.hero{
+  grid-template-columns:1fr !important;
+  max-width:980px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  text-align:center !important;
+}
+
+.hero-copy{
+  max-width:860px !important;
+  margin:0 auto !important;
+}
+
+.hero-actions{
+  justify-content:center !important;
+}
+
+.trust{
+  justify-content:center !important;
+}
+
+@media(max-width:760px){
+  .hero{
+    text-align:left !important;
+  }
+  .hero-actions,
+  .trust{
+    justify-content:flex-start !important;
+  }
+}
+
+</style>
+
+
+<style id="laviapp-planos-site-style">
+.laviapp-planos-section{position:relative;z-index:4;padding:44px 0 54px}
+.laviapp-planos-head{text-align:center;margin-bottom:22px}
+.laviapp-planos-head .eyebrow{display:inline-flex;border-radius:999px;padding:7px 12px;background:rgba(45,212,191,.13);border:1px solid rgba(45,212,191,.28);color:#5FFFEA;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.laviapp-planos-head h2{font-size:clamp(26px,4vw,42px);line-height:1.05;margin:0;color:#F8FAFC;letter-spacing:-.04em}
+.laviapp-planos-head p{color:#CBD5E1;margin:10px auto 0;max-width:620px;font-size:14px;line-height:1.5}
+.laviapp-planos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-items:stretch}
+.laviapp-plan-card{min-height:430px;height:100%;display:flex;flex-direction:column;box-sizing:border-box;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(15,23,42,.90),rgba(6,17,31,.82));border-radius:24px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.24);position:relative;overflow:hidden}
+.laviapp-plan-card.featured{border-color:rgba(45,212,191,.55);box-shadow:0 22px 60px rgba(45,212,191,.13),0 18px 50px rgba(0,0,0,.24);transform:translateY(-4px)}
+.laviapp-plan-tag{display:inline-flex;align-self:flex-start;border-radius:999px;padding:6px 10px;background:rgba(45,212,191,.14);color:#5FFFEA;font-size:11px;font-weight:900;margin-bottom:12px}
+.laviapp-plan-title{font-size:22px;font-weight:900;color:#F8FAFC;margin:0 0 6px;letter-spacing:-.03em}
+.laviapp-plan-price{font-size:30px;font-weight:950;color:#2DD4BF;margin:0 0 4px;letter-spacing:-.04em}
+.laviapp-plan-period{font-size:12px;color:#94A3B8;min-height:18px;margin-bottom:15px}
+.laviapp-plan-desc{min-height:54px;font-size:13px;color:#CBD5E1;line-height:1.45;margin:0 0 14px;min-height:56px}
+.laviapp-plan-features{list-style:none;margin:0 0 18px;padding:0;display:flex;flex-direction:column;gap:9px;flex:1}
+.laviapp-plan-features li{font-size:12px;color:#CBD5E1;line-height:1.35;display:flex;gap:8px;align-items:flex-start}
+.laviapp-plan-features li::before{content:'✓';width:18px;height:18px;border-radius:999px;background:rgba(45,212,191,.13);color:#5FFFEA;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex:0 0 18px;margin-top:-1px}
+.laviapp-plan-card .btn{width:100%;justify-content:center;margin-top:auto;box-sizing:border-box;text-align:center}
+@media(max-width:1050px){.laviapp-planos-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.laviapp-plan-card.featured{transform:none}}
+@media(max-width:620px){.laviapp-planos-grid{grid-template-columns:1fr}.laviapp-plan-card{min-height:430px}.laviapp-plan-desc{min-height:54px}}
+</style>
+
+<style id="laviapp-premium-site-style">
+  :root{
+    --brand-teal:#2DD4BF;
+    --brand-teal-strong:#00B894;
+    --brand-blue:#60A5FA;
+    --brand-gold:#F6C768;
+    --brand-ink:#06111F;
+    --glass:rgba(8,20,36,.72);
+    --glass-strong:rgba(10,26,45,.88);
+  }
+
+  body{
+    background:
+      linear-gradient(180deg,#06111F 0%,#081827 42%,#06111F 100%);
+  }
+
+  .topbar{
+    background:rgba(6,17,31,.68);
+    border-bottom:1px solid rgba(255,255,255,.10);
+  }
+
+  .nav{
+    min-height:78px;
+  }
+
+  .brand{
+    gap:13px;
+  }
+
+  .brand-mark{
+    width:54px;
+    height:54px;
+    border-radius:17px;
+    display:grid;
+    place-items:center;
+    background:
+      linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.04)),
+      linear-gradient(135deg,rgba(45,212,191,.18),rgba(96,165,250,.14));
+    border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 16px 38px rgba(0,0,0,.30),0 0 0 6px rgba(45,212,191,.06);
+  }
+
+  .brand-mark img,
+  .brand img{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    box-shadow:none;
+  }
+
+  .brand-title{
+    font-family:Sora,Inter,sans-serif;
+    font-size:28px;
+    letter-spacing:-.045em;
+  }
+
+  .brand-title span{
+    color:var(--brand-teal-strong);
+  }
+
+  .brand-sub{
+    letter-spacing:.17em;
+    color:#9FB2C8;
+  }
+
+  .menu{
+    gap:22px;
+    font-size:13px;
+  }
+
+  .btn{
+    position:relative;
+    min-height:50px;
+    border-radius:16px;
+    padding:0 20px;
+    overflow:hidden;
+    letter-spacing:-.01em;
+    transform:translateZ(0);
+  }
+
+  .btn svg{
+    width:18px;
+    height:18px;
+    flex:0 0 auto;
+    stroke:currentColor;
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .btn-primary{
+    color:#06111F;
+    background:linear-gradient(135deg,#34F5DD 0%,#7DD3FC 48%,#F6C768 100%);
+    box-shadow:0 18px 42px rgba(45,212,191,.22),inset 0 1px 0 rgba(255,255,255,.46);
+  }
+
+  .btn-primary::before{
+    content:"";
+    position:absolute;
+    inset:1px;
+    border-radius:15px;
+    background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0));
+    pointer-events:none;
+  }
+
+  .btn-secondary{
+    color:#F8FAFC;
+    background:rgba(255,255,255,.075);
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+  }
+
+  .btn:hover{
+    transform:translateY(-2px);
+  }
+
+  .site{
+    overflow:visible !important;
+  }
+
+  .lavi-family-bg-slider::after{
+    background:
+      linear-gradient(90deg, rgba(3,9,17,.96) 0%, rgba(3,9,17,.83) 29%, rgba(3,9,17,.50) 57%, rgba(3,9,17,.74) 100%),
+      linear-gradient(180deg, rgba(3,9,17,.54) 0%, rgba(3,9,17,.20) 44%, rgba(3,9,17,.94) 100%),
+      radial-gradient(circle at 28% 22%, rgba(45,212,191,.18), transparent 34%),
+      radial-gradient(circle at 74% 56%, rgba(246,199,104,.14), transparent 36%);
+    backdrop-filter:blur(1.6px);
+  }
+
+  .hero{
+    grid-template-columns:minmax(0,1.04fr) minmax(330px,.78fr) !important;
+    max-width:none !important;
+    min-height:690px;
+    text-align:left !important;
+    gap:36px;
+    padding:88px 0 64px;
+  }
+
+  .hero-copy{
+    max-width:720px !important;
+    margin:0 !important;
+  }
+
+  .kicker{
+    background:rgba(45,212,191,.13);
+    border-color:rgba(45,212,191,.34);
+    color:#A7FFF4;
+  }
+
+  .kicker-pulse{
+    width:8px;
+    height:8px;
+    border-radius:999px;
+    background:var(--brand-teal);
+    box-shadow:0 0 0 7px rgba(45,212,191,.12);
+  }
+
+  h1{
+    font-family:Sora,Inter,sans-serif;
+    letter-spacing:-.065em;
+  }
+
+  h1 span{
+    background:linear-gradient(135deg,#67E8F9,#2DD4BF 45%,#F6C768);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .lead{
+    font-size:18px;
+    color:#E5EEF8;
+  }
+
+  .hero-actions,
+  .trust{
+    justify-content:flex-start !important;
+  }
+
+  .trust span{
+    min-height:40px;
+    padding:9px 12px;
+    background:rgba(8,20,36,.62);
+    border-color:rgba(255,255,255,.14);
+    backdrop-filter:blur(10px);
+  }
+
+  .trust svg{
+    width:15px;
+    height:15px;
+    color:var(--brand-teal);
+  }
+
+  .hero-showcase{
+    position:relative;
+    min-height:auto;
+    align-self:center;
+    z-index:4;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:14px;
+  }
+
+  .phone-panel{
+    width:min(100%,390px);
+    margin-left:auto;
+    border-radius:34px;
+    border:1px solid rgba(255,255,255,.18);
+    background:
+      radial-gradient(circle at 22% 0%,rgba(45,212,191,.22),transparent 32%),
+      linear-gradient(180deg,rgba(12,29,49,.90),rgba(5,13,24,.92));
+    box-shadow:0 28px 80px rgba(0,0,0,.36),0 0 0 10px rgba(255,255,255,.045);
+    padding:18px;
+    backdrop-filter:blur(18px);
+  }
+
+  .phone-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+  }
+
+  .phone-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:Sora,Inter,sans-serif;
+    font-weight:800;
+  }
+
+  .phone-brand img{
+    width:32px;
+    height:32px;
+    border-radius:10px;
+  }
+
+  .phone-chip{
+    font-size:11px;
+    font-weight:900;
+    color:#06111F;
+    border-radius:999px;
+    padding:7px 10px;
+    background:linear-gradient(135deg,#2DD4BF,#F6C768);
+  }
+
+  .phone-balance{
+    border-radius:24px;
+    padding:20px;
+    background:linear-gradient(135deg,rgba(45,212,191,.18),rgba(96,165,250,.10));
+    border:1px solid rgba(255,255,255,.12);
+    margin-bottom:14px;
+  }
+
+  .phone-balance small,
+  .phone-row span{
+    display:block;
+    color:#9FB2C8;
+    font-size:11px;
+    font-weight:850;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+  }
+
+  .phone-balance strong{
+    display:block;
+    font-size:32px;
+    letter-spacing:-.05em;
+    margin-top:7px;
+  }
+
+  .phone-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:14px;
+  }
+
+  .phone-row{
+    min-height:92px;
+    border-radius:20px;
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.10);
+    padding:14px;
+  }
+
+  .phone-row strong{
+    display:block;
+    margin-top:10px;
+    font-size:18px;
+  }
+
+  .phone-bars{
+    display:flex;
+    align-items:end;
+    gap:8px;
+    height:92px;
+    border-radius:20px;
+    padding:14px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+  }
+
+  .phone-bars i{
+    flex:1;
+    border-radius:999px 999px 6px 6px;
+    background:linear-gradient(180deg,#2DD4BF,#60A5FA);
+    min-height:22px;
+  }
+
+  .phone-bars i:nth-child(2){height:72%}
+  .phone-bars i:nth-child(3){height:48%;background:linear-gradient(180deg,#F6C768,#FB7185)}
+  .phone-bars i:nth-child(4){height:86%}
+  .phone-bars i:nth-child(5){height:60%}
+
+  .hero-tag{
+    position:relative;
+    width:min(100%,390px);
+    border-radius:22px;
+    padding:15px 16px;
+    background:rgba(255,255,255,.92);
+    color:#06111F;
+    border:1px solid rgba(255,255,255,.62);
+    box-shadow:0 18px 48px rgba(0,0,0,.24);
+  }
+
+  .hero-tag span{
+    display:block;
+    color:#0F766E;
+    font-size:11px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    margin-bottom:5px;
+  }
+
+  .hero-tag strong{
+    display:block;
+    font-size:18px;
+    line-height:1.18;
+    letter-spacing:-.035em;
+  }
+
+  .lifestyle{
+    position:relative;
+    min-height:620px;
+    margin:34px 0 18px;
+    padding:82px 0;
+    overflow:hidden;
+    isolation:isolate;
+    background:#06111F;
+  }
+
+  .lifestyle-backdrops{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    grid-template-rows:1fr 1fr;
+  }
+
+  .lifestyle-bg{
+    min-height:0;
+    background-size:cover;
+    background-position:center;
+    filter:saturate(1.05) contrast(1.02);
+    transform:scale(1.02);
+  }
+
+  .lifestyle-bg-shopping{
+    grid-row:1 / span 2;
+    background-image:url("/lavi-bg-familia-3.jpg");
+    background-position:center;
+  }
+
+  .lifestyle-bg-paris{
+    background-image:url("/lavi-bg-familia-2.jpg");
+    background-position:center 36%;
+  }
+
+  .lifestyle-bg-praia{
+    background-image:url("/lavi-bg-familia-4.jpg");
+    background-position:center;
+  }
+
+  .lifestyle::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:
+      linear-gradient(90deg,rgba(3,9,17,.95) 0%,rgba(3,9,17,.76) 34%,rgba(3,9,17,.24) 64%,rgba(3,9,17,.64) 100%),
+      linear-gradient(180deg,rgba(3,9,17,.28) 0%,rgba(3,9,17,.18) 44%,rgba(3,9,17,.90) 100%);
+  }
+
+  .lifestyle-content{
+    position:relative;
+    z-index:2;
+    min-height:450px;
+    display:grid;
+    grid-template-columns:minmax(0,.92fr) minmax(320px,.58fr);
+    gap:30px;
+    align-items:end;
+  }
+
+  .lifestyle .section-head{
+    display:block;
+    align-self:start;
+    max-width:620px;
+    margin:0;
+    padding-top:18px;
+  }
+
+  .lifestyle .section-head h2{
+    color:#fff;
+    text-shadow:0 18px 46px rgba(0,0,0,.42);
+  }
+
+  .lifestyle .section-head p{
+    max-width:560px;
+    color:#E5EEF8;
+    margin-top:14px;
+    text-shadow:0 12px 34px rgba(0,0,0,.42);
+  }
+
+  .lifestyle-panel{
+    border-radius:28px;
+    padding:24px;
+    background:rgba(6,17,31,.72);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 24px 70px rgba(0,0,0,.26);
+    backdrop-filter:blur(18px);
+  }
+
+  .lifestyle-panel > span{
+    display:inline-flex;
+    border-radius:999px;
+    padding:7px 10px;
+    margin-bottom:13px;
+    background:rgba(45,212,191,.18);
+    border:1px solid rgba(45,212,191,.34);
+    color:#A7FFF4;
+    font-size:11px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.10em;
+  }
+
+  .lifestyle-panel h3{
+    font-size:clamp(25px,3.1vw,40px);
+    line-height:1.04;
+    letter-spacing:-.055em;
+    margin-bottom:10px;
+  }
+
+  .lifestyle-panel p{
+    color:#DDE7F2;
+    line-height:1.6;
+    font-size:14px;
+  }
+
+  .lifestyle-places{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:16px;
+  }
+
+  .lifestyle-places span{
+    min-height:36px;
+    display:inline-flex;
+    align-items:center;
+    border-radius:999px;
+    padding:0 12px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.13);
+    color:#F8FAFC;
+    font-size:12px;
+    font-weight:900;
+  }
+
+  .lifestyle img,
+  .lifestyle-grid,
+  .lifestyle-column,
+  .lifestyle-card{
+    display:none !important;
+  }
+
+  /* classe mantida apenas para compatibilidade com validações antigas */
+  .lifestyle-card{
+    position:relative;
+  }
+
+  .lifestyle-photo{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform 1.6s ease;
+  }
+
+  .service-icon,
+  .about-icon,
+  .contact-icon{
+    color:var(--brand-teal);
+  }
+
+  .service-icon svg,
+  .about-icon svg,
+  .contact-icon svg{
+    width:25px;
+    height:25px;
+    stroke:currentColor;
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .about-icon{
+    width:38px;
+    height:38px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    background:rgba(19,216,195,.12);
+    flex:0 0 auto;
+  }
+
+  .contact-icon{
+    width:34px;
+    height:34px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:rgba(19,216,195,.12);
+    flex:0 0 auto;
+  }
+
+  .whatsapp{
+    right:clamp(26px,3vw,42px) !important;
+    bottom:calc(clamp(26px,3vw,42px) + env(safe-area-inset-bottom, 0px)) !important;
+    z-index:9999 !important;
+    min-height:58px;
+    padding:0 20px;
+    background:linear-gradient(135deg,#34D399,#2DD4BF);
+    color:#06111F;
+    white-space:nowrap;
+    border:1px solid rgba(255,255,255,.28);
+    box-shadow:0 22px 58px rgba(0,0,0,.38),0 0 0 1px rgba(45,212,191,.16);
+  }
+
+  .whatsapp svg{
+    width:18px;
+    height:18px;
+  }
+
+  @media(max-width:640px){
+    .whatsapp{
+      right:18px !important;
+      bottom:calc(22px + env(safe-area-inset-bottom, 0px)) !important;
+      min-height:52px;
+      padding:0 15px;
+      font-size:13px;
+    }
+  }
+
+  .footer{
+    background:rgba(3,9,17,.50);
+    backdrop-filter:blur(14px);
+  }
+
+  .footer p{
+    color:#9FB2C8;
+    line-height:1.6;
+    max-width:380px;
+  }
+
+  .footer .brand-title{
+    font-size:24px;
+  }
+
+  @media (max-width:980px){
+    .hero{
+      grid-template-columns:1fr !important;
+      min-height:auto;
+      padding-top:58px;
+    }
+
+    .hero-showcase{
+      min-height:auto;
+    }
+
+    .phone-panel{
+      margin:0;
+      width:min(100%,430px);
+    }
+
+    .lifestyle-content{
+      grid-template-columns:1fr;
+      min-height:520px;
+    }
+
+    .lifestyle-backdrops{
+      grid-template-columns:1fr;
+      grid-template-rows:2fr 1fr 1fr;
+    }
+
+    .lifestyle-bg-shopping{
+      grid-row:auto;
+    }
+
+    .lifestyle-bg-paris,
+    .lifestyle-bg-praia{min-height:0}
+  }
+
+  @media (max-width:640px){
+    .brand-mark{
+      width:48px;
+      height:48px;
+      border-radius:15px;
+    }
+
+    .brand-mark img,
+    .brand img{
+      width:38px;
+      height:38px;
+    }
+
+    .nav-actions .btn-primary{
+      display:none;
+    }
+
+    .hero{
+      text-align:left !important;
+      padding-top:38px;
+    }
+
+    h1{
+      font-size:clamp(38px,12vw,52px);
+    }
+
+    .lead{
+      font-size:16px;
+    }
+
+    .hero-actions,
+    .trust{
+      justify-content:flex-start !important;
+    }
+
+    .hero-showcase{
+      margin-top:8px;
+    }
+
+    .hero-tag{
+      position:relative;
+      width:100%;
+      right:auto;
+      bottom:auto;
+      margin-top:12px;
+    }
+
+    .phone-panel{
+      border-radius:28px;
+      padding:14px;
+    }
+
+    .phone-balance strong{
+      font-size:27px;
+    }
+
+    .lifestyle{
+      min-height:auto;
+      padding:62px 0;
+    }
+
+    .lifestyle-content{
+      min-height:600px;
+      align-items:end;
+    }
+
+    .lifestyle-panel{
+      border-radius:24px;
+      padding:20px;
+    }
+
+    .section-head{
+      align-items:flex-start;
+    }
+  }
+</style>
+
+<style id="laviapp-rescue-site-style">
+  body.site{
+    background:
+      radial-gradient(circle at 10% 0%,rgba(45,212,191,.14),transparent 30%),
+      radial-gradient(circle at 88% 8%,rgba(96,165,250,.10),transparent 28%),
+      linear-gradient(180deg,#06111F 0%,#071827 46%,#06111F 100%) !important;
+  }
+
+  .lavi-family-bg-slider,
+  .lavi-pro-slider,
+  .lavi-family-fade-layer{
+    display:none !important;
+  }
+
+  .brand-mark{
+    width:54px !important;
+    height:54px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    display:grid;
+    place-items:center;
+    flex:0 0 auto;
+  }
+
+  .brand-mark img,
+  .brand img{
+    width:54px !important;
+    height:54px !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    object-fit:contain;
+    filter:drop-shadow(0 10px 24px rgba(30,80,240,.35));
+  }
+
+  .footer-brand .brand-mark,
+  .footer-brand .brand-mark img{
+    width:48px !important;
+    height:48px !important;
+  }
+
+  .hero{
+    grid-template-columns:1fr !important;
+    min-height:560px;
+    width:100vw !important;
+    max-width:none !important;
+    margin-left:calc(50% - 50vw) !important;
+    margin-right:calc(50% - 50vw) !important;
+    padding:92px max(28px,calc((100vw - 1180px) / 2 + 24px)) 78px;
+    text-align:left !important;
+    border-radius:0;
+    overflow:hidden;
+    isolation:isolate;
+    background:#06111F;
+    border:1px solid rgba(255,255,255,.10);
+    border-left:0;
+    border-right:0;
+    box-shadow:0 28px 90px rgba(0,0,0,.28);
+  }
+
+  .hero-copy{
+    max-width:640px !important;
+    margin:0 !important;
+    position:relative;
+    z-index:3;
+  }
+
+  .hero-showcase{
+    display:none !important;
+  }
+
+  .hero-actions,
+  .trust{
+    justify-content:flex-start !important;
+  }
+
+  .lavi-hero-bg-slider{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+    background:#06111F;
+  }
+
+  .lavi-hero-bg-slide{
+    position:absolute;
+    inset:-18px;
+    background-size:cover;
+    background-position:74% center;
+    background-repeat:no-repeat;
+    transform-origin:74% center;
+    opacity:0;
+    transform:scale(1.035);
+    transition:opacity 2.4s ease-in-out, transform 12s ease-in-out;
+    will-change:opacity,transform;
+  }
+
+  .lavi-hero-bg-slide.is-active{
+    opacity:1;
+    transform:scale(1.075);
+  }
+
+  .lavi-hero-bg-slider::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    background:
+      linear-gradient(90deg,rgba(6,17,31,.96) 0%,rgba(6,17,31,.86) 34%,rgba(6,17,31,.34) 62%,rgba(6,17,31,.08) 100%),
+      linear-gradient(180deg,rgba(6,17,31,.18) 0%,rgba(6,17,31,.10) 48%,rgba(6,17,31,.42) 100%),
+      radial-gradient(circle at 24% 20%,rgba(45,212,191,.18),transparent 34%);
+  }
+
+  .web-access{
+    width:max-content;
+    max-width:100%;
+    min-height:42px;
+    margin-top:16px;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    border-radius:999px;
+    padding:0 14px;
+    color:#D7FFF8;
+    background:rgba(45,212,191,.10);
+    border:1px solid rgba(45,212,191,.24);
+    font-size:13px;
+    font-weight:850;
+    backdrop-filter:blur(12px);
+  }
+
+  .web-access svg{
+    width:17px;
+    height:17px;
+    stroke:currentColor;
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .desktop-section{
+    padding:56px 0;
+  }
+
+  .desktop-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+  }
+
+  .desktop-item{
+    min-height:280px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:24px;
+    padding:26px;
+    background:linear-gradient(180deg,rgba(16,36,60,.72),rgba(8,20,36,.68));
+    box-shadow:0 18px 44px rgba(0,0,0,.18);
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .desktop-item span{
+    display:inline-flex;
+    border-radius:999px;
+    padding:7px 10px;
+    margin-bottom:16px;
+    background:rgba(45,212,191,.13);
+    border:1px solid rgba(45,212,191,.26);
+    color:#A7FFF4;
+    font-size:11px;
+    font-weight:950;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+  }
+
+  .desktop-item h3{
+    font-size:28px;
+    line-height:1.08;
+    letter-spacing:-.045em;
+    margin-bottom:10px;
+  }
+
+  .desktop-item p{
+    color:#CBD5E1;
+    line-height:1.6;
+    margin-bottom:22px;
+  }
+
+  .desktop-item .btn{
+    margin-top:auto;
+  }
+
+  @media(max-width:980px){
+    .hero{
+      grid-template-columns:1fr !important;
+      min-height:600px;
+      padding:70px max(22px,calc((100vw - 720px) / 2 + 22px)) 64px;
+    }
+
+    .hero-copy{
+      max-width:600px !important;
+    }
+
+    .desktop-grid{
+      grid-template-columns:1fr;
+    }
+  }
+
+  @media(max-width:640px){
+    .hero{
+      width:100vw !important;
+      max-width:none !important;
+      margin-left:calc(50% - 50vw) !important;
+      margin-right:calc(50% - 50vw) !important;
+      border-radius:0;
+      min-height:620px;
+      padding:58px 22px 56px;
+    }
+
+    .hero-copy{
+      max-width:100% !important;
+      margin:0 !important;
+    }
+
+    .hero-actions,
+    .trust{
+      justify-content:flex-start !important;
+    }
+
+    .lavi-hero-bg-slide{
+      background-position:center top;
+    }
+
+    .lavi-hero-bg-slider::after{
+      background:
+        linear-gradient(180deg,rgba(6,17,31,.48) 0%,rgba(6,17,31,.76) 42%,rgba(6,17,31,.96) 100%),
+        radial-gradient(circle at 24% 18%,rgba(45,212,191,.18),transparent 34%);
+    }
+
+    .web-access{
+      width:100%;
+      justify-content:center;
+      text-align:center;
+    }
+  }
+</style>
+
+
+</head>
+<body class="site">
+  <header class="topbar">
+    <div class="wrap nav">
+      <a href="/" class="brand" aria-label="LaviApp - página inicial">
+        <span class="brand-mark"><img src="laviapp-logo-app.svg" alt="LaviApp"/></span>
+        <div>
+          <div class="brand-title">Lavi<span>App</span></div>
+          <div class="brand-sub">Finanças Familiar</div>
+        </div>
+      </a>
+
+      <nav class="menu">
+        <a href="#inicio">Início</a>
+        <a href="#servicos">Serviços</a>
+        <a href="https://www.laviapp.com.br/web.html">Painel Web</a>
+        <a href="#experiencias">Experiências</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#planos">Planos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="https://www.laviapp.com.br/app.html?v=1.2.42">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+          <span>Entrar</span>
+        </a>
+        <a class="btn btn-primary" href="#contato">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+          <span>Solicitar contato</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap hero" id="inicio">
+      <div class="lavi-hero-bg-slider" aria-hidden="true">
+        <span class="lavi-hero-bg-slide is-active" style="background-image:url('lavi-bg-familia-1.jpg')"></span>
+        <span class="lavi-hero-bg-slide" style="background-image:url('lavi-bg-familia-3.jpg')"></span>
+        <span class="lavi-hero-bg-slide" style="background-image:url('lavi-bg-familia-2.jpg')"></span>
+        <span class="lavi-hero-bg-slide" style="background-image:url('lavi-bg-familia-4.jpg')"></span>
+      </div>
+      <div class="hero-copy reveal">
+        <div class="kicker"><span class="kicker-pulse"></span> Tecnologia para finanças familiares</div>
+        <h1>Seu dinheiro, seus planos e sua família <span>no mesmo lugar.</span></h1>
+        <p class="lead">O LaviApp combina app, painel web, metas, relatórios e controle compartilhado para a família decidir melhor no dia a dia, em casa, no shopping ou viajando.</p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#planos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+            <span>Escolher meu plano</span>
+          </a>
+          <a class="btn btn-secondary" href="https://www.laviapp.com.br/app.html?v=1.2.42">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/></svg>
+            <span>Acessar minha conta</span>
+          </a>
+        </div>
+
+        <div class="trust">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Acesso protegido</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-7"/></svg> Relatórios inteligentes</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Família conectada</span>
+        </div>
+        <a class="web-access" href="https://www.laviapp.com.br/web.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
+          <span>Prefere usar no computador? Abrir Painel Web</span>
+        </a>
+      </div>
+</section>
+
+    <section class="wrap" id="servicos">
+      <div class="section-head reveal">
+        <h2>Serviços e recursos</h2>
+        <p>Uma estrutura completa para organizar a rotina financeira da família com clareza, praticidade e segurança.</p>
+      </div>
+
+      <div class="services">
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2"/><circle cx="17" cy="13" r="1.5"/></svg></div>
+          <h3>Controle financeiro</h3>
+          <p>Cadastre receitas, despesas, categorias e formas de pagamento para entender exatamente para onde vai o dinheiro.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="5" rx="1"/><rect x="12" y="8" width="3" height="9" rx="1"/><rect x="17" y="5" width="3" height="12" rx="1"/></svg></div>
+          <h3>Relatórios e gráficos</h3>
+          <p>Acompanhe indicadores, evolução mensal, gastos por categoria e relatórios para decisões mais inteligentes.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/><path d="M15 9l4-4"/><path d="M18 5h1v1"/></svg></div>
+          <h3>Metas e sonhos</h3>
+          <p>Planeje reserva de emergência, viagens, casa própria, quitação de dívidas e objetivos da família.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <h3>Família conectada</h3>
+          <p>Permita que os membros participem da organização financeira com visão compartilhada e transparente.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg></div>
+          <h3>Painel web</h3>
+          <p>Use pelo computador com dashboard amplo, filtros, tabelas, gráficos, exportação CSV e PDF.</p>
+        </article>
+
+        <article class="service-card reveal">
+          <div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/><path d="M12 15v2"/></svg></div>
+          <h3>Segurança</h3>
+          <p>Acesso protegido, dados separados por família e experiência preparada para app e navegador.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap desktop-section" id="experiencias">
+      <div class="section-head reveal">
+        <h2>Use como app ou como painel web</h2>
+        <p>O LaviApp mantém a experiência simples no celular e oferece uma visão ampla no computador para conferir gráficos, filtros, lançamentos e relatórios.</p>
+      </div>
+
+      <div class="desktop-grid">
+        <article class="desktop-item reveal">
+          <span>App/PWA</span>
+          <h3>Rotina rápida no celular</h3>
+          <p>Cadastre gastos, acompanhe alertas e consulte o saldo familiar em poucos toques.</p>
+          <a class="btn btn-secondary" href="https://www.laviapp.com.br/app.html?v=1.2.42">Abrir app</a>
+        </article>
+
+        <article class="desktop-item reveal">
+          <span>Painel Web</span>
+          <h3>Tela cheia para trabalhar melhor</h3>
+          <p>Use no computador com sidebar, gráficos, filtros, tabela de lançamentos e exportação PDF/CSV.</p>
+          <a class="btn btn-primary" href="https://www.laviapp.com.br/web.html">Abrir painel web</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap about" id="sobre">
+      <article class="about-box reveal">
+        <h2>Sobre o LaviApp</h2>
+        <p>O LaviApp nasceu para simplificar a organização financeira familiar. A proposta é unir tecnologia, visual moderno e facilidade de uso para que qualquer família consiga acompanhar sua vida financeira.</p>
+        <p>Mais do que registrar gastos, o LaviApp ajuda a criar consciência financeira, planejar metas e manter todos alinhados.</p>
+        <a class="btn btn-primary" href="#planos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"/><path d="M7 15l3-3 3 2 4-7"/><path d="M17 7h3v3"/></svg>
+          <span>Ver planos</span>
+        </a>
+      </article>
+
+      <article class="about-box reveal">
+        <div class="about-list">
+          <div class="about-item"><span class="about-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><div><strong>Rápido de usar</strong><span>Fluxos simples para lançar gastos e receitas em poucos segundos.</span></div></div>
+          <div class="about-item"><span class="about-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5"/><path d="M12 12v9"/><path d="M12 12L4 7.5"/></svg></span><div><strong>Visual moderno</strong><span>Interface inspirada em bancos digitais, com leitura clara e objetiva.</span></div></div>
+          <div class="about-item"><span class="about-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg></span><div><strong>Multiplataforma</strong><span>Funciona como site, app instalado e painel web para computador.</span></div></div>
+          <div class="about-item"><span class="about-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11l2 2a4 4 0 0 1-6 6l-1-1"/><path d="M8 13l-2-2a4 4 0 0 1 6-6l1 1"/><path d="M8 12h8"/></svg></span><div><strong>Suporte próximo</strong><span>Canal de contato para dúvidas, melhorias e acompanhamento.</span></div></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="wrap contact" id="contato">
+      <article class="contact-card reveal">
+        <h2>Fale com a gente</h2>
+        <p>Quer conhecer o LaviApp, contratar um plano ou tirar dúvidas? Envie uma mensagem pelo WhatsApp ou preencha o formulário.</p>
+
+        <div class="contact-list">
+          <a href="#contato" data-whatsapp-link="default" target="_blank" rel="noopener"><span class="contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></span>WhatsApp comercial</a>
+          <div><span class="contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.62a2 2 0 0 1-.45 2.11L8 9.69a16 16 0 0 0 6.31 6.31l1.24-1.24a2 2 0 0 1 2.11-.45c.84.3 1.72.51 2.62.63A2 2 0 0 1 22 16.92z"/></svg></span>Telefone: (15) 99724-3182</div>
+          <div><span class="contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>contato@laviapp.com.br</div>
+          <div><span class="contact-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 0 20"/><path d="M12 2a15.3 15.3 0 0 0 0 20"/></svg></span>www.laviapp.com.br</div>
+        </div>
+
+        <a class="btn btn-primary" href="#contato" data-whatsapp-link="default" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+          <span>Chamar no WhatsApp</span>
+        </a>
+      </article>
+
+      <article class="form-card reveal">
+        <h2>Solicitar contato</h2>
+        <form class="form" onsubmit="enviarContato(event)">
+          <div class="field">
+            <label>Nome</label>
+            <input id="nome" placeholder="Seu nome"/>
+          </div>
+          <div class="field">
+            <label>WhatsApp</label>
+            <input id="telefone" placeholder="(15) 99999-9999"/>
+          </div>
+          <div class="field">
+            <label>Mensagem</label>
+            <textarea id="mensagem" placeholder="Olá, quero conhecer o LaviApp..."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+            <span>Enviar pelo WhatsApp</span>
+          </button>
+        </form>
+      </article>
+    </section>
+  </main>
+
+  <section class="wrap laviapp-planos-section" id="planos">
+    <div class="laviapp-planos-head">
+      <span class="eyebrow">Planos do LaviApp</span>
+      <h2>Escolha o plano ideal para sua família</h2>
+      <p>Comece pelo teste grátis ou assine um plano pago para liberar mais recursos, relatórios e controle familiar completo.</p>
+    </div>
+    <div class="laviapp-planos-grid">
+      <article class="laviapp-plan-card">
+        <span class="laviapp-plan-tag">Teste grátis</span>
+        <h3 class="laviapp-plan-title">Free</h3>
+        <div class="laviapp-plan-price">R$ 0,00</div>
+        <div class="laviapp-plan-period">para testar</div>
+        <p class="laviapp-plan-desc">Ideal para conhecer o LaviApp antes de contratar um plano.</p>
+        <ul class="laviapp-plan-features">
+          <li>Até 2 membros</li>
+          <li>Até 30 lançamentos por mês</li>
+          <li>Recursos principais para testar</li>
+          <li>Relatório PDF bloqueado</li>
+        </ul>
+        <a class="btn btn-primary laviapp-plan-action" href="https://www.laviapp.com.br/free-family.html" data-plano="free">Começar grátis</a>
+      </article>
+      <article class="laviapp-plan-card">
+        <span class="laviapp-plan-tag">Mensal</span>
+        <h3 class="laviapp-plan-title">Pro</h3>
+        <div class="laviapp-plan-price">R$ 9,90</div>
+        <div class="laviapp-plan-period">por mês</div>
+        <p class="laviapp-plan-desc">Para famílias que querem controle financeiro contínuo e organizado.</p>
+        <ul class="laviapp-plan-features">
+          <li>Receitas e despesas</li>
+          <li>Saldo familiar</li>
+          <li>Categorias financeiras</li>
+          <li>Gráficos e relatórios</li>
+        </ul>
+        <a class="btn btn-primary laviapp-plan-action" href="https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=pro" data-plano="pro">Assinar Pro</a>
+      </article>
+      <article class="laviapp-plan-card featured">
+        <span class="laviapp-plan-tag">Melhor custo-benefício</span>
+        <h3 class="laviapp-plan-title">Anual</h3>
+        <div class="laviapp-plan-price">R$ 159,00</div>
+        <div class="laviapp-plan-period">por ano</div>
+        <p class="laviapp-plan-desc">Pagamento anual para economizar e manter o planejamento por 12 meses.</p>
+        <ul class="laviapp-plan-features">
+          <li>Acesso por 12 meses</li>
+          <li>Todos os módulos principais</li>
+          <li>Metas, gráficos e relatórios</li>
+          <li>Planejamento de longo prazo</li>
+        </ul>
+        <a class="btn btn-primary laviapp-plan-action" href="https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=anual" data-plano="anual">Assinar Anual</a>
+      </article>
+      <article class="laviapp-plan-card">
+        <span class="laviapp-plan-tag">Família</span>
+        <h3 class="laviapp-plan-title">Família</h3>
+        <div class="laviapp-plan-price">R$ 19,90</div>
+        <div class="laviapp-plan-period">a cada 3 meses</div>
+        <p class="laviapp-plan-desc">Para liberar o controle familiar completo e recursos avançados.</p>
+        <ul class="laviapp-plan-features">
+          <li>Tudo do Pro</li>
+          <li>Metas e sonhos</li>
+          <li>Relatórios avançados</li>
+          <li>Acompanhamento de evolução</li>
+        </ul>
+        <a class="btn btn-primary laviapp-plan-action" href="https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=familia" data-plano="familia">Assinar Família</a>
+      </article>
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div>
+      <div class="footer-brand">
+        <span class="brand-mark"><img src="laviapp-logo-app.svg" alt="LaviApp"/></span>
+        <div>
+          <div class="brand-title">Lavi<span>App</span></div>
+          <div class="brand-sub">Finanças Familiar</div>
+        </div>
+      </div>
+      <p>Controle financeiro familiar com experiência moderna, segura e prática.</p>
+    </div>
+    <div>
+      <h3>Navegação</h3>
+      <a href="#servicos">Serviços</a>
+      <a href="#experiencias">Experiências</a>
+      <a href="#planos">Planos</a>
+    </div>
+    <div>
+      <h3>Contato</h3>
+      <a href="#contato" data-whatsapp-link="default" target="_blank" rel="noopener">WhatsApp comercial</a>
+      <a href="mailto:contato@laviapp.com.br">contato@laviapp.com.br</a>
+      <a href="https://www.laviapp.com.br">www.laviapp.com.br</a>
+    </div>
+  </div>
+  <div class="wrap copyright">
+    <span>© 2026 · AlphaTI - Business Solutions</span>
+  </div>
+</footer>
+
+  <a class="whatsapp" href="#contato" data-whatsapp-link="default" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+    <span>WhatsApp</span>
+  </a>
+
+
+<script id="laviapp-site-config">
+  window.LAVIAPP_SITE = {
+    appUrl: "https://www.laviapp.com.br/app.html?v=1.2.42",
+    freeUrl: "https://www.laviapp.com.br/free-family.html",
+    contactEmail: "contato@laviapp.com.br",
+    whatsappNumber: "5515997243182"
+  };
+
+  function contatoMensagemPadrao(){
+    return "Olá! Gostaria de conhecer melhor o LaviApp.";
+  }
+
+  function contatoUrl(mensagem){
+    const cfg = window.LAVIAPP_SITE || {};
+    const texto = encodeURIComponent(mensagem || contatoMensagemPadrao());
+    if(cfg.whatsappNumber){
+      return "https://wa.me/" + cfg.whatsappNumber + "?text=" + texto;
+    }
+    return "mailto:" + (cfg.contactEmail || "contato@laviapp.com.br") + "?subject=" + encodeURIComponent("Contato LaviApp") + "&body=" + texto;
+  }
+
+  function abrirWhatsAppOuEmail(mensagem){
+    window.open(contatoUrl(mensagem), "_blank", "noopener");
+  }
+
+  function prepararLinksDeContato(){
+    document.querySelectorAll("[data-whatsapp-link]").forEach(function(el){
+      el.setAttribute("href", contatoUrl(contatoMensagemPadrao()));
+      el.setAttribute("target", "_blank");
+      el.setAttribute("rel", "noopener");
+    });
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", prepararLinksDeContato, {once:true});
+  else prepararLinksDeContato();
+</script>
+
+  <script>
+    function enviarContato(ev){
+      ev.preventDefault();
+      const nome = document.getElementById("nome").value || "";
+      const telefone = document.getElementById("telefone").value || "";
+      const mensagem = document.getElementById("mensagem").value || "Quero conhecer o LaviApp.";
+      const texto = "Olá! Meu nome é " + nome + ". Meu WhatsApp é " + telefone + ". " + mensagem;
+      abrirWhatsAppOuEmail(texto);
+    }
+
+    const reveals = document.querySelectorAll(".reveal");
+    if("IntersectionObserver" in window){
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add("in");
+            obs.unobserve(entry.target);
+          }
+        });
+      }, {threshold:.12});
+      reveals.forEach(el=>obs.observe(el));
+    }else{
+      reveals.forEach(el=>el.classList.add("in"));
+    }
+  </script>
+
+
+
+
+<script id="laviapp-planos-actions-fix">
+(function(){
+  if(window.__laviappPlanosActionsFix) return;
+  window.__laviappPlanosActionsFix = true;
+  const destinos = {
+    free: "https://www.laviapp.com.br/free-family.html",
+    pro: "https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=pro",
+    anual: "https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=anual",
+    familia: "https://www.laviapp.com.br/app.html?v=1.2.42&cadastro=1&plano=familia"
+  };
+  function wire(){
+    document.querySelectorAll("[data-plano]").forEach(function(el){
+      const plano = String(el.getAttribute("data-plano")||"").toLowerCase();
+      if(!destinos[plano] || el.dataset.planActionFixed) return;
+      el.dataset.planActionFixed = "1";
+      el.setAttribute("href", destinos[plano]);
+      el.addEventListener("click", function(ev){
+        ev.preventDefault();
+        window.location.assign(destinos[plano]);
+      }, true);
+    });
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", wire, {once:true});
+  else wire();
+  setTimeout(wire, 800);
+})();
+</script>
+
+<script id="lavi-hero-background-rotation">
+(function(){
+  if(window.__laviHeroBackgroundRotation) return;
+  window.__laviHeroBackgroundRotation = true;
+
+  function startHeroBackground(){
+    const hero = document.querySelector(".lavi-hero-bg-slider");
+    if(!hero) return;
+
+    const slides = Array.from(hero.querySelectorAll(".lavi-hero-bg-slide"));
+    if(slides.length < 2) return;
+
+    slides.forEach(slide => {
+      const match = /url\(['"]?([^'")]+)['"]?\)/.exec(slide.style.backgroundImage || "");
+      if(match){
+        const img = new Image();
+        img.src = match[1];
+      }
+    });
+
+    let current = 0;
+    const show = index => {
+      slides[current].classList.remove("is-active");
+      current = index;
+      slides[current].classList.add("is-active");
+    };
+
+    setInterval(() => show((current + 1) % slides.length), 8200);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", startHeroBackground, {once:true});
+  }else{
+    startHeroBackground();
+  }
+})();
+</script>
+
+
+  <script src="/sw-register.js"></script>
+</body>
+</html>

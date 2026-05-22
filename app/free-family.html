@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#07111F"/>
+  <meta name="description" content="Comece no Plano Free do LaviApp e teste o controle financeiro familiar."/>
+  <title>Plano Free - LaviApp</title>
+  <link rel="icon" href="/icon-192.png"/>
+  <link rel="apple-touch-icon" href="/icon-192.png"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{background:#07111F}
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:#F8FAFC;
+      background:
+        radial-gradient(circle at 16% 0%,rgba(45,212,191,.24),transparent 34%),
+        radial-gradient(circle at 88% 12%,rgba(96,165,250,.18),transparent 32%),
+        linear-gradient(180deg,#07111F,#070B14);
+      display:grid;
+      place-items:center;
+      padding:22px;
+    }
+    .card{
+      width:min(480px,100%);
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(15,23,42,.86);
+      border-radius:28px;
+      padding:28px;
+      box-shadow:0 28px 80px rgba(0,0,0,.36);
+      backdrop-filter:blur(16px);
+    }
+    .logo{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .logo img{width:54px;height:54px;border-radius:16px;box-shadow:0 14px 34px rgba(0,0,0,.32)}
+    .logo strong{display:block;font-size:26px;line-height:1;letter-spacing:-.06em}
+    .logo small{display:block;color:#94A3B8;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:900;margin-top:5px}
+    .badge{
+      display:inline-flex;
+      border-radius:999px;
+      padding:7px 11px;
+      background:rgba(45,212,191,.13);
+      color:#5FFFEA;
+      border:1px solid rgba(45,212,191,.28);
+      font-size:12px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+    h1{font-size:32px;line-height:1.05;letter-spacing:-.06em;margin-bottom:10px}
+    p{color:#CBD5E1;line-height:1.55;font-size:14px;margin-bottom:18px}
+    .limits{display:grid;gap:10px;margin:18px 0}
+    .limit{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      border-radius:16px;
+      padding:12px;
+      color:#E2E8F0;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .limit i{
+      width:22px;
+      height:22px;
+      border-radius:8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(45,212,191,.14);
+      color:#5FFFEA;
+      font-style:normal;
+      font-weight:950;
+      flex:0 0 22px;
+    }
+    .actions{display:grid;gap:10px;margin-top:16px}
+    .btn{
+      width:100%;
+      min-height:50px;
+      border:0;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:950;
+      font-size:14px;
+    }
+    .primary{background:linear-gradient(135deg,#2DD4BF,#F6C768);color:#06111F}
+    .secondary{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#fff}
+    .trust{
+      margin-top:16px;
+      padding:12px;
+      border-radius:16px;
+      background:rgba(45,212,191,.08);
+      border:1px solid rgba(45,212,191,.18);
+      color:#A7F3D0;
+      font-size:12px;
+      line-height:1.55;
+    }
+    .footer{margin-top:16px;text-align:center;color:#94A3B8;font-size:11px;line-height:1.7}
+    .footer a{color:#94F3E8;text-decoration:none;font-weight:800}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">
+      <img src="/icon-192.png" alt="LaviApp"/>
+      <div>
+        <strong>LaviApp</strong>
+        <small>Financas Familiar</small>
+      </div>
+    </div>
+
+    <div class="badge">Plano Free</div>
+    <h1>Comece sua familia no LaviApp</h1>
+    <p>Teste o controle financeiro familiar sem pagamento agora. Depois, o administrador pode migrar para um plano pago quando fizer sentido.</p>
+
+    <div class="limits">
+      <div class="limit"><i>2</i><span>Ate 2 membros na familia para validar o fluxo em conjunto.</span></div>
+      <div class="limit"><i>30</i><span>Ate 30 lancamentos por mes para testar gastos, rendas e organizacao.</span></div>
+      <div class="limit"><i>PDF</i><span>Relatorio PDF fica reservado para planos pagos.</span></div>
+      <div class="limit"><i>R$</i><span>Nao precisa informar cartao para iniciar o Plano Free.</span></div>
+    </div>
+
+    <div class="trust">Ao continuar, voce podera revisar Termos, Privacidade e canais de suporte antes de usar o app em producao.</div>
+
+    <div class="actions">
+      <button class="btn primary" onclick="continuarFree()">Criar familia Free</button>
+      <button class="btn secondary" onclick="location.href='/app.html?v=1.2.42'">Voltar</button>
+    </div>
+
+    <div class="footer">
+      2026 · AlphaTI - Business Solutions · v1.0<br/>
+      <a href="/termos.html">Termos</a> · <a href="/privacidade.html">Privacidade</a> · <a href="/suporte.html">Suporte</a>
+    </div>
+  </main>
+
+  <script>
+    function continuarFree(){
+      try{
+        localStorage.setItem("laviapp-plano","free");
+        localStorage.setItem("laviapp-plano-selecionado","free");
+        localStorage.setItem("laviapp-plano-free-ativo","1");
+        localStorage.setItem("laviapp-free-criar-familia","1");
+        localStorage.setItem("laviapp-plano-free-inicio", new Date().toISOString());
+      }catch(e){}
+      location.href = "/app.html?v=1.2.42&plano=free&criarFamilia=1&cadastro=1";
+    }
+  </script>
+</body>
+</html>

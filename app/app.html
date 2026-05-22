@@ -5972,7 +5972,7 @@ function App({user, familyId, familyNome, isAdmin, familyPlan="basico", planStat
     {id:"resumo", label:"Resumo financeiro"},
     {id:"visual", label:"Visão visual"},
     {id:"alertas", label:"Alertas inteligentes"},
-    {id:"categorias", label:"Gastos por categoria"},
+    {id:"categorias", label:"Relatório"},
     {id:"metas", label:"Metas mensais"},
     {id:"compromissos", label:"Compromissos"},
     {id:"pendencias", label:"Pendências"},
@@ -12607,30 +12607,29 @@ function App({user, familyId, familyNome, isAdmin, familyPlan="basico", planStat
           )
         )),
 
-        // ── GRÁFICO DE GASTOS POR CATEGORIA ─────────────────────────────────
-        dashboardCardWrap("categorias", e("div",{style:{...S.card,marginBottom:10,padding:"14px"}},
-          e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}},
-            e("div",{style:{fontSize:10,letterSpacing:2.2,color:"#60A5FA",textTransform:"uppercase",fontWeight:900}},"▥ Gastos por categoria"),
-            e("div",{style:{fontSize:11,color:"#94A3B8"}},fmtH(totalExp,hideValues))
+        // ── RELATÓRIO FINANCEIRO ─────────────────────────────────────────────
+        dashboardCardWrap("categorias", e("div",{style:{...S.card,marginBottom:10,padding:"14px",borderColor:"rgba(96,165,250,.24)",background:"linear-gradient(155deg,rgba(15,23,42,.98),rgba(17,24,39,.96) 55%,rgba(30,41,59,.98))"}},
+          e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:10,marginBottom:12}},
+            e("div",{style:{minWidth:0}},
+              e("div",{style:{fontSize:10,letterSpacing:2.2,color:"#60A5FA",textTransform:"uppercase",fontWeight:900,marginBottom:4}},"▤ Relatório"),
+              e("div",{style:{fontSize:20,fontWeight:900,color:"#F8FAFC",letterSpacing:"-.03em"}},MONTHS[filterMonth])
+            ),
+            e("button",{onClick:()=>setShowExportModal(true),style:{padding:"8px 10px",borderRadius:12,background:"#60A5FA",border:"none",color:"#07111F",fontSize:11,fontWeight:900,fontFamily:"inherit",cursor:"pointer",whiteSpace:"nowrap"}},"Gerar PDF")
           ),
-          dashboardCategoryRows.length===0
-            ? e("div",{style:{fontSize:12,color:"#64748B",textAlign:"center",padding:"14px 0",border:"1px dashed rgba(148,163,184,.20)",borderRadius:14}},"Sem gastos lançados neste mês")
-            : e("div",{style:{display:"flex",flexDirection:"column",gap:10}},
-                dashboardCategoryRows.map(row=>e("div",{key:row.id,onClick:()=>openGastosDetail(row.id),className:"lavi-cat-row",title:"Ver lançamentos de "+row.cat.label,style:{cursor:"pointer",borderRadius:14,padding:"8px 8px 9px",background:row.cat.color+"0D",border:"1px solid "+row.cat.color+"22"}},
-                  e("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",gap:8,marginBottom:5}},
-                    e("div",{style:{fontSize:12,color:"#F8FAFC",fontWeight:800,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},
-                      CategoryLabel(row.cat,{size:14,box:25,textStyle:{fontSize:12,fontWeight:900,color:"#F8FAFC"}})
-                    ),
-                    e("div",{style:{fontSize:11,color:row.cat.color,fontWeight:900,whiteSpace:"nowrap"}},fmtH(row.total,hideValues)+" · "+row.pct+"%")
-                  ),
-                  e("div",{style:{height:8,background:"rgba(255,255,255,.07)",borderRadius:999,overflow:"hidden"}},
-                    e("div",{style:{height:"100%",width:Math.min(100,row.pct)+"%",background:row.cat.color,borderRadius:999,boxShadow:"0 0 18px "+row.cat.color+"55"}})
-                  )
-                ))
-              ),
-          dashboardTopPayment&&e("div",{style:{marginTop:12,paddingTop:10,borderTop:"1px solid rgba(255,255,255,.08)",display:"flex",justifyContent:"space-between",gap:10,alignItems:"center"}},
-            e("div",{style:{fontSize:11,color:"#94A3B8"}},"Forma mais usada"),
-            e("div",{style:{fontSize:12,color:"#F8FAFC",fontWeight:900,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},dashboardTopPayment.icon+" "+dashboardTopPayment.label+" · "+dashboardTopPayment.pct+"%")
+          e("div",{style:{fontSize:12,color:"#CBD5E1",lineHeight:1.45,marginBottom:12}},"Exporte um resumo com entradas, gastos, cartão, contas, metas e evolução da família."),
+          e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}},
+            [
+              {label:"Movimentos",value:String(filteredExp.length+filteredInc.length),color:"#60A5FA"},
+              {label:"Saldo",value:fmtH(dashboardSaldoProjetado,hideValues),color:dashboardSaldoProjetado>=0?"#34D399":"#FB7185"},
+              {label:"Pessoa",value:filterMember,color:"#F6C768"}
+            ].map(item=>e("div",{key:item.label,style:{background:"rgba(15,23,42,.72)",border:"1px solid rgba(255,255,255,.08)",borderRadius:12,padding:"9px 6px",minWidth:0,textAlign:"center"}},
+              e("div",{style:{fontSize:8,color:"#94A3B8",letterSpacing:1.1,textTransform:"uppercase",marginBottom:4,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},item.label),
+              e("div",{style:{fontSize:"clamp(11px,3.2vw,15px)",fontWeight:900,color:item.color,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},item.value)
+            ))
+          ),
+          e("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}},
+            e("button",{onClick:()=>setShowExportModal(true),style:{padding:"11px",borderRadius:14,background:"linear-gradient(135deg,#60A5FA,#2DD4BF)",border:"none",color:"#07111F",fontSize:12,fontWeight:900,fontFamily:"inherit",cursor:"pointer"}},"Exportar"),
+            e("button",{onClick:()=>setView("reports"),style:{padding:"11px",borderRadius:14,background:"rgba(15,23,42,.72)",border:"1px solid rgba(96,165,250,.35)",color:"#BFDBFE",fontSize:12,fontWeight:900,fontFamily:"inherit",cursor:"pointer"}},"Abrir tela")
           )
         )),
 

@@ -1,0 +1,156 @@
+@page "/"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Cockpit | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Cockpit operacional</div>
+        <h1 class="page-title">Visao geral do varejo</h1>
+        <p class="page-subtitle">Resumo para acompanhar cadastros, vendas recentes e alertas de estoque.</p>
+    </div>
+    <button class="btn secondary" @onclick="CarregarAsync" disabled="@carregando">
+        <span>↻</span>
+        Atualizar
+    </button>
+</header>
+
+@if (!string.IsNullOrWhiteSpace(erro))
+{
+    <div class="alert-state">
+        <strong>API indisponivel</strong>
+        <span>@erro Verifique se `ProjetoVarejo.Api` esta rodando em @Api.BaseUrl.</span>
+    </div>
+}
+
+<section class="grid-kpis">
+    <article class="panel kpi">
+        <div>
+            <div class="kpi-label">Faturamento 7 dias</div>
+            <div class="kpi-value">@Moeda(totalVendas)</div>
+        </div>
+        <div class="kpi-help">@quantidadeVendas venda(s) no periodo</div>
+    </article>
+    <article class="panel kpi success">
+        <div>
+            <div class="kpi-label">Produtos ativos</div>
+            <div class="kpi-value">@produtosAtivos</div>
+        </div>
+        <div class="kpi-help">@produtos.Count item(ns) no catalogo</div>
+    </article>
+    <article class="panel kpi info">
+        <div>
+            <div class="kpi-label">Clientes</div>
+            <div class="kpi-value">@clientes.Count</div>
+        </div>
+        <div class="kpi-help">Base comercial cadastrada</div>
+    </article>
+    <article class="panel kpi warning">
+        <div>
+            <div class="kpi-label">Alertas estoque</div>
+            <div class="kpi-value">@alertas.Count</div>
+        </div>
+        <div class="kpi-help">Produtos abaixo do minimo</div>
+    </article>
+</section>
+
+<section class="work-grid">
+    <article class="panel panel-pad">
+        <div class="section-head">
+            <h2 class="section-title">Vendas dos ultimos 7 dias</h2>
+            <span class="muted">@Moeda(totalVendas)</span>
+        </div>
+        @if (carregando)
+        {
+            <div class="empty-state">Carregando indicadores...</div>
+        }
+        else if (vendas.Count == 0)
+        {
+            <div class="empty-state">Sem vendas finalizadas no periodo.</div>
+        }
+        else
+        {
+            <div class="chart-bars">
+                @foreach (var dia in vendas)
+                {
+                    <div class="bar-item">
+                        <div class="bar" style="height:@AlturaBarra(dia.Total)%"></div>
+                        <span>@dia.Dia.ToString("dd/MM")</span>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+
+    <aside class="panel panel-pad">
+        <div class="section-head">
+            <h2 class="section-title">Estoque em atencao</h2>
+            <a class="btn secondary" href="estoque">Ver lista</a>
+        </div>
+        @if (alertas.Count == 0)
+        {
+            <div class="empty-state">Nenhum produto abaixo do minimo.</div>
+        }
+        else
+        {
+            <div class="list-stack">
+                @foreach (var item in alertas.Take(5))
+                {
+                    <div class="compact-row">
+                        <div>
+                            <strong>@item.Descricao</strong>
+                            <span class="muted">@item.Codigo</span>
+                        </div>
+                        <span class="badge warning">@Numero(item.Estoque)</span>
+                    </div>
+                }
+            </div>
+        }
+    </aside>
+</section>
+
+@code {
+    private readonly CultureInfo cultura = CultureInfo.GetCultureInfo("pt-BR");
+    private List<ProdutoResumo> produtos = new();
+    private List<ClienteResumo> clientes = new();
+    private List<EstoqueAlerta> alertas = new();
+    private List<VendaDiariaItem> vendas = new();
+    private bool carregando = true;
+    private string? erro;
+
+    private decimal totalVendas => vendas.Sum(v => v.Total);
+    private int quantidadeVendas => vendas.Sum(v => v.Quantidade);
+    private int produtosAtivos => produtos.Count(p => p.Ativo);
+    private decimal maiorVenda => vendas.Count == 0 ? 0 : vendas.Max(v => v.Total);
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+
+        var ate = DateTime.Today.AddDays(1);
+        var de = ate.AddDays(-7);
+
+        var produtosReq = Api.ProdutosAsync();
+        var clientesReq = Api.ClientesAsync();
+        var alertasReq = Api.EstoqueAbaixoMinimoAsync();
+        var vendasReq = Api.VendasPorDiaAsync(de, ate);
+
+        await Task.WhenAll(produtosReq, clientesReq, alertasReq, vendasReq);
+
+        produtos = produtosReq.Result.Dados ?? new();
+        clientes = clientesReq.Result.Dados ?? new();
+        alertas = alertasReq.Result.Dados ?? new();
+        vendas = vendasReq.Result.Dados ?? new();
+        erro = new[] { produtosReq.Result.Erro, clientesReq.Result.Erro, alertasReq.Result.Erro, vendasReq.Result.Erro }
+            .FirstOrDefault(e => !string.IsNullOrWhiteSpace(e));
+
+        carregando = false;
+    }
+
+    private string Moeda(decimal valor) => valor.ToString("C", cultura);
+    private string Numero(decimal valor) => valor.ToString("N3", cultura);
+    private decimal AlturaBarra(decimal valor) => maiorVenda <= 0 ? 5 : Math.Max(5, Math.Round(valor / maiorVenda * 100, 0));
+}

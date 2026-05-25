@@ -1,0 +1,2 @@
+C:\Users\victo\Documents\projeto\publish\web-pwa\emcc-props.json
+C:\Users\victo\Documents\projeto\publish\web-pwa\web.config

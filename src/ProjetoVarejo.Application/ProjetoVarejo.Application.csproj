@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ProjetoVarejo.Domain\ProjetoVarejo.Domain.csproj" />
+    <ProjectReference Include="..\ProjetoVarejo.Shared\ProjetoVarejo.Shared.csproj" />
+    <ProjectReference Include="..\ProjetoVarejo.Infrastructure\ProjetoVarejo.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

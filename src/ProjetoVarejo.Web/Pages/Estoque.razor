@@ -1,0 +1,115 @@
+@page "/estoque"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Estoque | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Operacao</div>
+        <h1 class="page-title">Estoque</h1>
+        <p class="page-subtitle">Produtos abaixo do minimo e ultimos movimentos registrados.</p>
+    </div>
+    <button class="btn secondary" @onclick="CarregarAsync" disabled="@carregando">
+        <span>↻</span>
+        Atualizar
+    </button>
+</header>
+
+@if (!string.IsNullOrWhiteSpace(erro))
+{
+    <div class="alert-state">@erro</div>
+}
+
+<section class="work-grid">
+    <article class="panel panel-pad">
+        <div class="section-head">
+            <h2 class="section-title">Abaixo do minimo</h2>
+            <span class="badge warning">@alertas.Count alerta(s)</span>
+        </div>
+
+        @if (carregando)
+        {
+            <div class="empty-state">Carregando alertas...</div>
+        }
+        else if (alertas.Count == 0)
+        {
+            <div class="empty-state">Nenhum produto em alerta.</div>
+        }
+        else
+        {
+            <div class="list-stack">
+                @foreach (var item in alertas)
+                {
+                    <div class="compact-row">
+                        <div>
+                            <strong>@item.Descricao</strong>
+                            <span class="muted">@item.Codigo</span>
+                        </div>
+                        <div class="number">
+                            <strong>@Numero(item.Estoque)</strong>
+                            <div class="muted">min. @Numero(item.EstoqueMinimo)</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+
+    <article class="panel panel-pad">
+        <div class="section-head">
+            <h2 class="section-title">Movimentos recentes</h2>
+            <span class="muted">@movimentos.Count registro(s)</span>
+        </div>
+
+        @if (carregando)
+        {
+            <div class="empty-state">Carregando movimentos...</div>
+        }
+        else if (movimentos.Count == 0)
+        {
+            <div class="empty-state">Sem movimentos de estoque.</div>
+        }
+        else
+        {
+            <div class="list-stack">
+                @foreach (var item in movimentos.Take(10))
+                {
+                    <div class="compact-row">
+                        <div>
+                            <strong>@item.Produto</strong>
+                            <span class="muted">@item.CriadoEm.ToString("dd/MM HH:mm") · @item.Tipo</span>
+                        </div>
+                        <strong class="number">@Numero(item.Quantidade)</strong>
+                    </div>
+                }
+            </div>
+        }
+    </article>
+</section>
+
+@code {
+    private readonly CultureInfo cultura = CultureInfo.GetCultureInfo("pt-BR");
+    private List<EstoqueAlerta> alertas = new();
+    private List<MovimentoEstoque> movimentos = new();
+    private bool carregando = true;
+    private string? erro;
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+
+        var alertasReq = Api.EstoqueAbaixoMinimoAsync();
+        var movimentosReq = Api.MovimentosEstoqueAsync();
+        await Task.WhenAll(alertasReq, movimentosReq);
+
+        alertas = alertasReq.Result.Dados ?? new();
+        movimentos = movimentosReq.Result.Dados?.OrderByDescending(m => m.CriadoEm).ToList() ?? new();
+        erro = alertasReq.Result.Erro ?? movimentosReq.Result.Erro;
+        carregando = false;
+    }
+
+    private string Numero(decimal valor) => valor.ToString("N3", cultura);
+}

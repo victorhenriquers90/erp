@@ -1,0 +1,115 @@
+@page "/produtos"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Produtos | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Cadastros</div>
+        <h1 class="page-title">Produtos</h1>
+        <p class="page-subtitle">Consulta responsiva do catalogo integrado ao ERP.</p>
+    </div>
+    <span class="badge">@produtos.Count produto(s)</span>
+</header>
+
+<section class="panel panel-pad">
+    <div class="toolbar">
+        <label class="search-box">
+            <span>⌕</span>
+            <input placeholder="Buscar por codigo, barras ou descricao" @bind-value="busca" @bind-value:event="oninput" @onkeydown="AoPressionarTecla" />
+        </label>
+        <button class="btn" @onclick="CarregarAsync" disabled="@carregando">
+            <span>⌕</span>
+            Buscar
+        </button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(erro))
+    {
+        <div class="alert-state">@erro</div>
+    }
+    else if (carregando)
+    {
+        <div class="empty-state">Carregando produtos...</div>
+    }
+    else if (produtos.Count == 0)
+    {
+        <div class="empty-state">Nenhum produto encontrado.</div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Descricao</th>
+                        <th>Categoria</th>
+                        <th class="number">Preco</th>
+                        <th class="number">Estoque</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var produto in produtos)
+                    {
+                        var baixo = produto.Estoque <= produto.EstoqueMinimo;
+                        <tr>
+                            <td>@produto.Codigo</td>
+                            <td>
+                                <span class="cell-title">@produto.Descricao</span>
+                                <span class="muted">@produto.Unidade</span>
+                            </td>
+                            <td>@(produto.Categoria ?? "Sem categoria")</td>
+                            <td class="number">@Moeda(produto.PrecoVenda)</td>
+                            <td class="number">@Numero(produto.Estoque)</td>
+                            <td>
+                                @if (!produto.Ativo)
+                                {
+                                    <span class="badge danger">Inativo</span>
+                                }
+                                else if (baixo)
+                                {
+                                    <span class="badge warning">Estoque baixo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge">Ativo</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private readonly CultureInfo cultura = CultureInfo.GetCultureInfo("pt-BR");
+    private List<ProdutoResumo> produtos = new();
+    private string? busca;
+    private bool carregando = true;
+    private string? erro;
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+        var resultado = await Api.ProdutosAsync(busca);
+        produtos = resultado.Dados ?? new();
+        erro = resultado.Erro;
+        carregando = false;
+    }
+
+    private async Task AoPressionarTecla(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+            await CarregarAsync();
+    }
+
+    private string Moeda(decimal valor) => valor.ToString("C", cultura);
+    private string Numero(decimal valor) => valor.ToString("N3", cultura);
+}

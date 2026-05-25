@@ -1,0 +1,101 @@
+@page "/clientes"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Clientes | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Cadastros</div>
+        <h1 class="page-title">Clientes</h1>
+        <p class="page-subtitle">Base de clientes para consulta rapida em campo ou no balcão.</p>
+    </div>
+    <span class="badge">@clientes.Count cliente(s)</span>
+</header>
+
+<section class="panel panel-pad">
+    <div class="toolbar">
+        <label class="search-box">
+            <span>⌕</span>
+            <input placeholder="Buscar por nome ou CPF/CNPJ" @bind-value="busca" @bind-value:event="oninput" @onkeydown="AoPressionarTecla" />
+        </label>
+        <button class="btn" @onclick="CarregarAsync" disabled="@carregando">
+            <span>⌕</span>
+            Buscar
+        </button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(erro))
+    {
+        <div class="alert-state">@erro</div>
+    }
+    else if (carregando)
+    {
+        <div class="empty-state">Carregando clientes...</div>
+    }
+    else if (clientes.Count == 0)
+    {
+        <div class="empty-state">Nenhum cliente encontrado.</div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF/CNPJ</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Cidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cliente in clientes)
+                    {
+                        <tr>
+                            <td><span class="cell-title">@cliente.Nome</span></td>
+                            <td>@cliente.CpfCnpj</td>
+                            <td>@cliente.Telefone</td>
+                            <td>@cliente.Email</td>
+                            <td>@Endereco(cliente)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private List<ClienteResumo> clientes = new();
+    private string? busca;
+    private bool carregando = true;
+    private string? erro;
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+        var resultado = await Api.ClientesAsync(busca);
+        clientes = resultado.Dados ?? new();
+        erro = resultado.Erro;
+        carregando = false;
+    }
+
+    private async Task AoPressionarTecla(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+            await CarregarAsync();
+    }
+
+    private static string Endereco(ClienteResumo cliente)
+    {
+        if (string.IsNullOrWhiteSpace(cliente.Cidade) && string.IsNullOrWhiteSpace(cliente.Uf))
+            return "";
+        if (string.IsNullOrWhiteSpace(cliente.Uf))
+            return cliente.Cidade ?? "";
+        return $"{cliente.Cidade}/{cliente.Uf}";
+    }
+}

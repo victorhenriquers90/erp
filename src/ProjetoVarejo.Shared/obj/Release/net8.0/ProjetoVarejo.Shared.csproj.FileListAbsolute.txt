@@ -1,0 +1,11 @@
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\bin\Release\net8.0\ProjetoVarejo.Shared.deps.json
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\bin\Release\net8.0\ProjetoVarejo.Shared.dll
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\bin\Release\net8.0\ProjetoVarejo.Shared.pdb
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.AssemblyInfoInputs.cache
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.AssemblyInfo.cs
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.csproj.CoreCompileInputs.cache
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.dll
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\refint\ProjetoVarejo.Shared.dll
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ProjetoVarejo.Shared.pdb
+C:\Users\victo\Documents\projeto\src\ProjetoVarejo.Shared\obj\Release\net8.0\ref\ProjetoVarejo.Shared.dll

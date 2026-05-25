@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\victo\\\\Documents\\\\projeto\")",
+      "Bash(dotnet --version)",
+      "Bash(dotnet --list-sdks)",
+      "Bash(dotnet new *)",
+      "Bash(dotnet sln *)",
+      "Bash(dotnet add *)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet remove *)",
+      "Bash(dotnet tool *)",
+      "Bash(dotnet ef *)",
+      "Bash(dir src\\\\ProjetoVarejo.Infrastructure\\\\Migrations)",
+      "Bash(dir /b)",
+      "Bash(dir /b src)",
+      "Bash(dir /b src\\\\ProjetoVarejo.Desktop\\\\Forms)",
+      "Bash(dotnet run *)",
+      "Bash(cat \"/c/Users/victo/AppData/Local/Temp/claude/C--Users-victo-Documents-projeto/99e653d3-e757-4d73-ac92-24ea81e94998/tasks/bybrz4lv5.output\" | head -50)",
+      "Bash(curl -s -k -m 5 https://localhost:7000/)",
+      "Bash(curl -s -m 5 http://localhost:5000/)",
+      "Bash(curl -s -m 5 http://localhost:5290/)"
+    ]
+  }
+}

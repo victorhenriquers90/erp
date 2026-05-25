@@ -1,0 +1,884 @@
+﻿Categoria;Codigo;CodigoBarras;Descricao;Unidade;PrecoCusto;PrecoVenda;Estoque;EstoqueMinimo;Ncm;Cfop;CstIcms;AliquotaIcms
+Mercearia - Graos e Cereais;HP00001;2000000000015;Arroz agulhinha tipo 1 1 kg Casa Vale;UN;4.75;6.99;26;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00002;2000000000022;Arroz agulhinha tipo 1 1 kg Popular;UN;4.75;6.99;27;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00003;2000000000039;Arroz agulhinha tipo 1 1 kg Select;UN;4.75;6.99;28;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00004;2000000000046;Arroz agulhinha tipo 1 1 kg Bom Preco;UN;4.75;6.99;29;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00005;2000000000053;Arroz agulhinha tipo 1 1 kg Familia;UN;4.75;6.99;30;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00006;2000000000060;Arroz agulhinha tipo 1 2 kg Casa Vale;UN;8.83;12.99;31;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00007;2000000000077;Arroz agulhinha tipo 1 2 kg Popular;UN;8.83;12.99;32;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00008;2000000000084;Arroz agulhinha tipo 1 2 kg Select;UN;8.83;12.99;33;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00009;2000000000091;Arroz agulhinha tipo 1 2 kg Bom Preco;UN;8.83;12.99;34;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00010;2000000000107;Arroz agulhinha tipo 1 2 kg Familia;UN;8.83;12.99;35;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00011;2000000000114;Arroz agulhinha tipo 1 5 kg Casa Vale;UN;20.33;29.90;36;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00012;2000000000121;Arroz agulhinha tipo 1 5 kg Popular;UN;20.33;29.90;37;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00013;2000000000138;Arroz agulhinha tipo 1 5 kg Select;UN;20.33;29.90;38;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00014;2000000000145;Arroz agulhinha tipo 1 5 kg Bom Preco;UN;20.33;29.90;39;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00015;2000000000152;Arroz agulhinha tipo 1 5 kg Familia;UN;20.33;29.90;40;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00016;2000000000169;Arroz parboilizado 1 kg Casa Vale;UN;5.09;7.49;41;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00017;2000000000176;Arroz parboilizado 1 kg Popular;UN;5.09;7.49;42;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00018;2000000000183;Arroz parboilizado 1 kg Select;UN;5.09;7.49;43;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00019;2000000000190;Arroz parboilizado 1 kg Bom Preco;UN;5.09;7.49;44;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00020;2000000000206;Arroz parboilizado 1 kg Familia;UN;5.09;7.49;45;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00021;2000000000213;Arroz parboilizado 5 kg Casa Vale;UN;21.69;31.90;46;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00022;2000000000220;Arroz parboilizado 5 kg Popular;UN;21.69;31.90;47;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00023;2000000000237;Arroz parboilizado 5 kg Select;UN;21.69;31.90;48;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00024;2000000000244;Arroz parboilizado 5 kg Bom Preco;UN;21.69;31.90;49;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00025;2000000000251;Arroz parboilizado 5 kg Familia;UN;21.69;31.90;50;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00026;2000000000268;Feijao carioca 1 kg Casa Vale;UN;6.11;8.99;51;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00027;2000000000275;Feijao carioca 1 kg Popular;UN;6.11;8.99;52;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00028;2000000000282;Feijao carioca 1 kg Select;UN;6.11;8.99;53;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00029;2000000000299;Feijao carioca 1 kg Bom Preco;UN;6.11;8.99;54;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00030;2000000000305;Feijao carioca 1 kg Familia;UN;6.11;8.99;55;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00031;2000000000312;Feijao carioca 2 kg Casa Vale;UN;11.49;16.90;56;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00032;2000000000329;Feijao carioca 2 kg Popular;UN;11.49;16.90;57;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00033;2000000000336;Feijao carioca 2 kg Select;UN;11.49;16.90;58;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00034;2000000000343;Feijao carioca 2 kg Bom Preco;UN;11.49;16.90;59;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00035;2000000000350;Feijao carioca 2 kg Familia;UN;11.49;16.90;60;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00036;2000000000367;Feijao preto 1 kg Casa Vale;UN;6.45;9.49;61;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00037;2000000000374;Feijao preto 1 kg Popular;UN;6.45;9.49;62;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00038;2000000000381;Feijao preto 1 kg Select;UN;6.45;9.49;63;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00039;2000000000398;Feijao preto 1 kg Bom Preco;UN;6.45;9.49;64;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00040;2000000000404;Feijao preto 1 kg Familia;UN;6.45;9.49;65;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00041;2000000000411;Feijao preto 2 kg Casa Vale;UN;12.17;17.90;66;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00042;2000000000428;Feijao preto 2 kg Popular;UN;12.17;17.90;67;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00043;2000000000435;Feijao preto 2 kg Select;UN;12.17;17.90;68;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00044;2000000000442;Feijao preto 2 kg Bom Preco;UN;12.17;17.90;69;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00045;2000000000459;Feijao preto 2 kg Familia;UN;12.17;17.90;70;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00046;2000000000466;Lentilha 500 g Casa Vale;UN;6.73;9.90;71;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00047;2000000000473;Lentilha 500 g Popular;UN;6.73;9.90;72;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00048;2000000000480;Lentilha 500 g Select;UN;6.73;9.90;73;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00049;2000000000497;Lentilha 500 g Bom Preco;UN;6.73;9.90;74;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00050;2000000000503;Lentilha 500 g Familia;UN;6.73;9.90;75;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00051;2000000000510;Grao de bico 500 g Casa Vale;UN;8.09;11.90;76;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00052;2000000000527;Grao de bico 500 g Popular;UN;8.09;11.90;77;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00053;2000000000534;Grao de bico 500 g Select;UN;8.09;11.90;78;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00054;2000000000541;Grao de bico 500 g Bom Preco;UN;8.09;11.90;79;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00055;2000000000558;Grao de bico 500 g Familia;UN;8.09;11.90;80;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00056;2000000000565;Milho para pipoca 500 g Casa Vale;UN;3.39;4.99;81;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00057;2000000000572;Milho para pipoca 500 g Popular;UN;3.39;4.99;82;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00058;2000000000589;Milho para pipoca 500 g Select;UN;3.39;4.99;83;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00059;2000000000596;Milho para pipoca 500 g Bom Preco;UN;3.39;4.99;84;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00060;2000000000602;Milho para pipoca 500 g Familia;UN;3.39;4.99;85;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00061;2000000000619;Farinha de trigo 1 kg Casa Vale;UN;3.73;5.49;86;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00062;2000000000626;Farinha de trigo 1 kg Popular;UN;3.73;5.49;87;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00063;2000000000633;Farinha de trigo 1 kg Select;UN;3.73;5.49;88;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00064;2000000000640;Farinha de trigo 1 kg Bom Preco;UN;3.73;5.49;89;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00065;2000000000657;Farinha de trigo 1 kg Familia;UN;3.73;5.49;90;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00066;2000000000664;Farinha de trigo 5 kg Casa Vale;UN;16.93;24.90;91;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00067;2000000000671;Farinha de trigo 5 kg Popular;UN;16.93;24.90;92;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00068;2000000000688;Farinha de trigo 5 kg Select;UN;16.93;24.90;93;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00069;2000000000695;Farinha de trigo 5 kg Bom Preco;UN;16.93;24.90;94;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00070;2000000000701;Farinha de trigo 5 kg Familia;UN;16.93;24.90;95;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00071;2000000000718;Farinha de mandioca 500 g Casa Vale;UN;4.75;6.99;96;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00072;2000000000725;Farinha de mandioca 500 g Popular;UN;4.75;6.99;97;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00073;2000000000732;Farinha de mandioca 500 g Select;UN;4.75;6.99;98;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00074;2000000000749;Farinha de mandioca 500 g Bom Preco;UN;4.75;6.99;99;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00075;2000000000756;Farinha de mandioca 500 g Familia;UN;4.75;6.99;100;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00076;2000000000763;Farinha de mandioca 1 kg Casa Vale;UN;8.77;12.90;101;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00077;2000000000770;Farinha de mandioca 1 kg Popular;UN;8.77;12.90;102;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00078;2000000000787;Farinha de mandioca 1 kg Select;UN;8.77;12.90;103;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00079;2000000000794;Farinha de mandioca 1 kg Bom Preco;UN;8.77;12.90;104;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00080;2000000000800;Farinha de mandioca 1 kg Familia;UN;8.77;12.90;105;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00081;2000000000817;Fuba mimoso 500 g Casa Vale;UN;3.26;4.79;106;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00082;2000000000824;Fuba mimoso 500 g Popular;UN;3.26;4.79;107;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00083;2000000000831;Fuba mimoso 500 g Select;UN;3.26;4.79;108;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00084;2000000000848;Fuba mimoso 500 g Bom Preco;UN;3.26;4.79;109;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00085;2000000000855;Fuba mimoso 500 g Familia;UN;3.26;4.79;110;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00086;2000000000862;Fuba mimoso 1 kg Casa Vale;UN;5.77;8.49;111;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00087;2000000000879;Fuba mimoso 1 kg Popular;UN;5.77;8.49;112;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00088;2000000000886;Fuba mimoso 1 kg Select;UN;5.77;8.49;113;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00089;2000000000893;Fuba mimoso 1 kg Bom Preco;UN;5.77;8.49;114;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00090;2000000000909;Fuba mimoso 1 kg Familia;UN;5.77;8.49;25;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00091;2000000000916;Acucar cristal 1 kg Casa Vale;UN;3.39;4.99;26;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00092;2000000000923;Acucar cristal 1 kg Popular;UN;3.39;4.99;27;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00093;2000000000930;Acucar cristal 1 kg Select;UN;3.39;4.99;28;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00094;2000000000947;Acucar cristal 1 kg Bom Preco;UN;3.39;4.99;29;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00095;2000000000954;Acucar cristal 1 kg Familia;UN;3.39;4.99;30;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00096;2000000000961;Acucar cristal 5 kg Casa Vale;UN;15.57;22.90;31;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00097;2000000000978;Acucar cristal 5 kg Popular;UN;15.57;22.90;32;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00098;2000000000985;Acucar cristal 5 kg Select;UN;15.57;22.90;33;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00099;2000000000992;Acucar cristal 5 kg Bom Preco;UN;15.57;22.90;34;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00100;2000000001005;Acucar cristal 5 kg Familia;UN;15.57;22.90;35;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00101;2000000001012;Acucar refinado 1 kg Casa Vale;UN;3.73;5.49;36;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00102;2000000001029;Acucar refinado 1 kg Popular;UN;3.73;5.49;37;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00103;2000000001036;Acucar refinado 1 kg Select;UN;3.73;5.49;38;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00104;2000000001043;Acucar refinado 1 kg Bom Preco;UN;3.73;5.49;39;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00105;2000000001050;Acucar refinado 1 kg Familia;UN;3.73;5.49;40;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00106;2000000001067;Sal refinado 1 kg Casa Vale;UN;2.03;2.99;41;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00107;2000000001074;Sal refinado 1 kg Popular;UN;2.03;2.99;42;8;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00108;2000000001081;Sal refinado 1 kg Select;UN;2.03;2.99;43;9;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00109;2000000001098;Sal refinado 1 kg Bom Preco;UN;2.03;2.99;44;10;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00110;2000000001104;Sal refinado 1 kg Familia;UN;2.03;2.99;45;11;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00111;2000000001111;Aveia em flocos 500 g Casa Vale;UN;5.43;7.99;46;12;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00112;2000000001128;Aveia em flocos 500 g Popular;UN;5.43;7.99;47;5;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00113;2000000001135;Aveia em flocos 500 g Select;UN;5.43;7.99;48;6;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00114;2000000001142;Aveia em flocos 500 g Bom Preco;UN;5.43;7.99;49;7;;5102;102;0.00
+Mercearia - Graos e Cereais;HP00115;2000000001159;Aveia em flocos 500 g Familia;UN;5.43;7.99;50;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00116;2000000001166;Macarrao espaguete 500 g Casa Vale;UN;3.39;4.99;51;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00117;2000000001173;Macarrao espaguete 500 g Popular;UN;3.39;4.99;52;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00118;2000000001180;Macarrao espaguete 500 g Select;UN;3.39;4.99;53;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00119;2000000001197;Macarrao espaguete 500 g Bom Preco;UN;3.39;4.99;54;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00120;2000000001203;Macarrao espaguete 500 g Familia;UN;3.39;4.99;55;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00121;2000000001210;Macarrao espaguete 1 kg Casa Vale;UN;6.11;8.99;56;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00122;2000000001227;Macarrao espaguete 1 kg Popular;UN;6.11;8.99;57;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00123;2000000001234;Macarrao espaguete 1 kg Select;UN;6.11;8.99;58;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00124;2000000001241;Macarrao espaguete 1 kg Bom Preco;UN;6.11;8.99;59;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00125;2000000001258;Macarrao espaguete 1 kg Familia;UN;6.11;8.99;60;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00126;2000000001265;Macarrao parafuso 500 g Casa Vale;UN;3.60;5.29;61;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00127;2000000001272;Macarrao parafuso 500 g Popular;UN;3.60;5.29;62;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00128;2000000001289;Macarrao parafuso 500 g Select;UN;3.60;5.29;63;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00129;2000000001296;Macarrao parafuso 500 g Bom Preco;UN;3.60;5.29;64;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00130;2000000001302;Macarrao parafuso 500 g Familia;UN;3.60;5.29;65;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00131;2000000001319;Macarrao penne 500 g Casa Vale;UN;4.28;6.29;66;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00132;2000000001326;Macarrao penne 500 g Popular;UN;4.28;6.29;67;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00133;2000000001333;Macarrao penne 500 g Select;UN;4.28;6.29;68;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00134;2000000001340;Macarrao penne 500 g Bom Preco;UN;4.28;6.29;69;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00135;2000000001357;Macarrao penne 500 g Familia;UN;4.28;6.29;70;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00136;2000000001364;Lasanha seca 500 g Casa Vale;UN;6.79;9.99;71;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00137;2000000001371;Lasanha seca 500 g Popular;UN;6.79;9.99;72;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00138;2000000001388;Lasanha seca 500 g Select;UN;6.79;9.99;73;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00139;2000000001395;Lasanha seca 500 g Bom Preco;UN;6.79;9.99;74;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00140;2000000001401;Lasanha seca 500 g Familia;UN;6.79;9.99;75;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00141;2000000001418;Molho de tomate tradicional 300 g Casa Vale;UN;2.37;3.49;76;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00142;2000000001425;Molho de tomate tradicional 300 g Popular;UN;2.37;3.49;77;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00143;2000000001432;Molho de tomate tradicional 300 g Select;UN;2.37;3.49;78;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00144;2000000001449;Molho de tomate tradicional 300 g Bom Preco;UN;2.37;3.49;79;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00145;2000000001456;Molho de tomate tradicional 300 g Familia;UN;2.37;3.49;80;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00146;2000000001463;Molho de tomate tradicional 500 g Casa Vale;UN;3.73;5.49;81;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00147;2000000001470;Molho de tomate tradicional 500 g Popular;UN;3.73;5.49;82;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00148;2000000001487;Molho de tomate tradicional 500 g Select;UN;3.73;5.49;83;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00149;2000000001494;Molho de tomate tradicional 500 g Bom Preco;UN;3.73;5.49;84;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00150;2000000001500;Molho de tomate tradicional 500 g Familia;UN;3.73;5.49;85;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00151;2000000001517;Extrato de tomate 340 g Casa Vale;UN;4.07;5.99;86;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00152;2000000001524;Extrato de tomate 340 g Popular;UN;4.07;5.99;87;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00153;2000000001531;Extrato de tomate 340 g Select;UN;4.07;5.99;88;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00154;2000000001548;Extrato de tomate 340 g Bom Preco;UN;4.07;5.99;89;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00155;2000000001555;Extrato de tomate 340 g Familia;UN;4.07;5.99;90;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00156;2000000001562;Tomate pelado 400 g Casa Vale;UN;5.77;8.49;91;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00157;2000000001579;Tomate pelado 400 g Popular;UN;5.77;8.49;92;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00158;2000000001586;Tomate pelado 400 g Select;UN;5.77;8.49;93;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00159;2000000001593;Tomate pelado 400 g Bom Preco;UN;5.77;8.49;94;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00160;2000000001609;Tomate pelado 400 g Familia;UN;5.77;8.49;95;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00161;2000000001616;Milho verde lata 170 g Casa Vale;UN;3.05;4.49;96;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00162;2000000001623;Milho verde lata 170 g Popular;UN;3.05;4.49;97;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00163;2000000001630;Milho verde lata 170 g Select;UN;3.05;4.49;98;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00164;2000000001647;Milho verde lata 170 g Bom Preco;UN;3.05;4.49;99;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00165;2000000001654;Milho verde lata 170 g Familia;UN;3.05;4.49;100;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00166;2000000001661;Ervilha lata 170 g Casa Vale;UN;2.92;4.29;101;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00167;2000000001678;Ervilha lata 170 g Popular;UN;2.92;4.29;102;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00168;2000000001685;Ervilha lata 170 g Select;UN;2.92;4.29;103;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00169;2000000001692;Ervilha lata 170 g Bom Preco;UN;2.92;4.29;104;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00170;2000000001708;Ervilha lata 170 g Familia;UN;2.92;4.29;105;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00171;2000000001715;Seleta de legumes 170 g Casa Vale;UN;3.73;5.49;106;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00172;2000000001722;Seleta de legumes 170 g Popular;UN;3.73;5.49;107;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00173;2000000001739;Seleta de legumes 170 g Select;UN;3.73;5.49;108;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00174;2000000001746;Seleta de legumes 170 g Bom Preco;UN;3.73;5.49;109;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00175;2000000001753;Seleta de legumes 170 g Familia;UN;3.73;5.49;110;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00176;2000000001760;Atum ralado 170 g Casa Vale;UN;6.11;8.99;111;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00177;2000000001777;Atum ralado 170 g Popular;UN;6.11;8.99;112;6;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00178;2000000001784;Atum ralado 170 g Select;UN;6.11;8.99;113;7;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00179;2000000001791;Atum ralado 170 g Bom Preco;UN;6.11;8.99;114;8;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00180;2000000001807;Atum ralado 170 g Familia;UN;6.11;8.99;25;9;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00181;2000000001814;Sardinha em oleo 125 g Casa Vale;UN;4.75;6.99;26;10;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00182;2000000001821;Sardinha em oleo 125 g Popular;UN;4.75;6.99;27;11;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00183;2000000001838;Sardinha em oleo 125 g Select;UN;4.75;6.99;28;12;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00184;2000000001845;Sardinha em oleo 125 g Bom Preco;UN;4.75;6.99;29;5;;5102;102;0.00
+Mercearia - Massas e Molhos;HP00185;2000000001852;Sardinha em oleo 125 g Familia;UN;4.75;6.99;30;6;;5102;102;0.00
+Mercearia - Matinais;HP00186;2000000001869;Cafe torrado e moido 250 g Casa Vale;UN;7.41;10.90;31;7;;5102;102;0.00
+Mercearia - Matinais;HP00187;2000000001876;Cafe torrado e moido 250 g Popular;UN;7.41;10.90;32;8;;5102;102;0.00
+Mercearia - Matinais;HP00188;2000000001883;Cafe torrado e moido 250 g Select;UN;7.41;10.90;33;9;;5102;102;0.00
+Mercearia - Matinais;HP00189;2000000001890;Cafe torrado e moido 250 g Bom Preco;UN;7.41;10.90;34;10;;5102;102;0.00
+Mercearia - Matinais;HP00190;2000000001906;Cafe torrado e moido 250 g Familia;UN;7.41;10.90;35;11;;5102;102;0.00
+Mercearia - Matinais;HP00191;2000000001913;Cafe torrado e moido 500 g Casa Vale;UN;13.53;19.90;36;12;;5102;102;0.00
+Mercearia - Matinais;HP00192;2000000001920;Cafe torrado e moido 500 g Popular;UN;13.53;19.90;37;5;;5102;102;0.00
+Mercearia - Matinais;HP00193;2000000001937;Cafe torrado e moido 500 g Select;UN;13.53;19.90;38;6;;5102;102;0.00
+Mercearia - Matinais;HP00194;2000000001944;Cafe torrado e moido 500 g Bom Preco;UN;13.53;19.90;39;7;;5102;102;0.00
+Mercearia - Matinais;HP00195;2000000001951;Cafe torrado e moido 500 g Familia;UN;13.53;19.90;40;8;;5102;102;0.00
+Mercearia - Matinais;HP00196;2000000001968;Cafe soluvel 100 g Casa Vale;UN;10.13;14.90;41;9;;5102;102;0.00
+Mercearia - Matinais;HP00197;2000000001975;Cafe soluvel 100 g Popular;UN;10.13;14.90;42;10;;5102;102;0.00
+Mercearia - Matinais;HP00198;2000000001982;Cafe soluvel 100 g Select;UN;10.13;14.90;43;11;;5102;102;0.00
+Mercearia - Matinais;HP00199;2000000001999;Cafe soluvel 100 g Bom Preco;UN;10.13;14.90;44;12;;5102;102;0.00
+Mercearia - Matinais;HP00200;2000000002002;Cafe soluvel 100 g Familia;UN;10.13;14.90;45;5;;5102;102;0.00
+Mercearia - Matinais;HP00201;2000000002019;Achocolatado em po 400 g Casa Vale;UN;6.73;9.90;46;6;;5102;102;0.00
+Mercearia - Matinais;HP00202;2000000002026;Achocolatado em po 400 g Popular;UN;6.73;9.90;47;7;;5102;102;0.00
+Mercearia - Matinais;HP00203;2000000002033;Achocolatado em po 400 g Select;UN;6.73;9.90;48;8;;5102;102;0.00
+Mercearia - Matinais;HP00204;2000000002040;Achocolatado em po 400 g Bom Preco;UN;6.73;9.90;49;9;;5102;102;0.00
+Mercearia - Matinais;HP00205;2000000002057;Achocolatado em po 400 g Familia;UN;6.73;9.90;50;10;;5102;102;0.00
+Mercearia - Matinais;HP00206;2000000002064;Achocolatado em po 800 g Casa Vale;UN;12.17;17.90;51;11;;5102;102;0.00
+Mercearia - Matinais;HP00207;2000000002071;Achocolatado em po 800 g Popular;UN;12.17;17.90;52;12;;5102;102;0.00
+Mercearia - Matinais;HP00208;2000000002088;Achocolatado em po 800 g Select;UN;12.17;17.90;53;5;;5102;102;0.00
+Mercearia - Matinais;HP00209;2000000002095;Achocolatado em po 800 g Bom Preco;UN;12.17;17.90;54;6;;5102;102;0.00
+Mercearia - Matinais;HP00210;2000000002101;Achocolatado em po 800 g Familia;UN;12.17;17.90;55;7;;5102;102;0.00
+Mercearia - Matinais;HP00211;2000000002118;Leite em po integral 400 g Casa Vale;UN;12.85;18.90;56;8;;5102;102;0.00
+Mercearia - Matinais;HP00212;2000000002125;Leite em po integral 400 g Popular;UN;12.85;18.90;57;9;;5102;102;0.00
+Mercearia - Matinais;HP00213;2000000002132;Leite em po integral 400 g Select;UN;12.85;18.90;58;10;;5102;102;0.00
+Mercearia - Matinais;HP00214;2000000002149;Leite em po integral 400 g Bom Preco;UN;12.85;18.90;59;11;;5102;102;0.00
+Mercearia - Matinais;HP00215;2000000002156;Leite em po integral 400 g Familia;UN;12.85;18.90;60;12;;5102;102;0.00
+Mercearia - Matinais;HP00216;2000000002163;Cereal matinal chocolate 250 g Casa Vale;UN;8.77;12.90;61;5;;5102;102;0.00
+Mercearia - Matinais;HP00217;2000000002170;Cereal matinal chocolate 250 g Popular;UN;8.77;12.90;62;6;;5102;102;0.00
+Mercearia - Matinais;HP00218;2000000002187;Cereal matinal chocolate 250 g Select;UN;8.77;12.90;63;7;;5102;102;0.00
+Mercearia - Matinais;HP00219;2000000002194;Cereal matinal chocolate 250 g Bom Preco;UN;8.77;12.90;64;8;;5102;102;0.00
+Mercearia - Matinais;HP00220;2000000002200;Cereal matinal chocolate 250 g Familia;UN;8.77;12.90;65;9;;5102;102;0.00
+Mercearia - Matinais;HP00221;2000000002217;Granola tradicional 500 g Casa Vale;UN;11.49;16.90;66;10;;5102;102;0.00
+Mercearia - Matinais;HP00222;2000000002224;Granola tradicional 500 g Popular;UN;11.49;16.90;67;11;;5102;102;0.00
+Mercearia - Matinais;HP00223;2000000002231;Granola tradicional 500 g Select;UN;11.49;16.90;68;12;;5102;102;0.00
+Mercearia - Matinais;HP00224;2000000002248;Granola tradicional 500 g Bom Preco;UN;11.49;16.90;69;5;;5102;102;0.00
+Mercearia - Matinais;HP00225;2000000002255;Granola tradicional 500 g Familia;UN;11.49;16.90;70;6;;5102;102;0.00
+Mercearia - Matinais;HP00226;2000000002262;Biscoito cream cracker 350 g Casa Vale;UN;4.07;5.99;71;7;;5102;102;0.00
+Mercearia - Matinais;HP00227;2000000002279;Biscoito cream cracker 350 g Popular;UN;4.07;5.99;72;8;;5102;102;0.00
+Mercearia - Matinais;HP00228;2000000002286;Biscoito cream cracker 350 g Select;UN;4.07;5.99;73;9;;5102;102;0.00
+Mercearia - Matinais;HP00229;2000000002293;Biscoito cream cracker 350 g Bom Preco;UN;4.07;5.99;74;10;;5102;102;0.00
+Mercearia - Matinais;HP00230;2000000002309;Biscoito cream cracker 350 g Familia;UN;4.07;5.99;75;11;;5102;102;0.00
+Mercearia - Matinais;HP00231;2000000002316;Biscoito recheado chocolate 130 g Casa Vale;UN;2.03;2.99;76;12;;5102;102;0.00
+Mercearia - Matinais;HP00232;2000000002323;Biscoito recheado chocolate 130 g Popular;UN;2.03;2.99;77;5;;5102;102;0.00
+Mercearia - Matinais;HP00233;2000000002330;Biscoito recheado chocolate 130 g Select;UN;2.03;2.99;78;6;;5102;102;0.00
+Mercearia - Matinais;HP00234;2000000002347;Biscoito recheado chocolate 130 g Bom Preco;UN;2.03;2.99;79;7;;5102;102;0.00
+Mercearia - Matinais;HP00235;2000000002354;Biscoito recheado chocolate 130 g Familia;UN;2.03;2.99;80;8;;5102;102;0.00
+Mercearia - Matinais;HP00236;2000000002361;Biscoito maisena 350 g Casa Vale;UN;4.41;6.49;81;9;;5102;102;0.00
+Mercearia - Matinais;HP00237;2000000002378;Biscoito maisena 350 g Popular;UN;4.41;6.49;82;10;;5102;102;0.00
+Mercearia - Matinais;HP00238;2000000002385;Biscoito maisena 350 g Select;UN;4.41;6.49;83;11;;5102;102;0.00
+Mercearia - Matinais;HP00239;2000000002392;Biscoito maisena 350 g Bom Preco;UN;4.41;6.49;84;12;;5102;102;0.00
+Mercearia - Matinais;HP00240;2000000002408;Biscoito maisena 350 g Familia;UN;4.41;6.49;85;5;;5102;102;0.00
+Mercearia - Matinais;HP00241;2000000002415;Torrada integral 160 g Casa Vale;UN;4.75;6.99;86;6;;5102;102;0.00
+Mercearia - Matinais;HP00242;2000000002422;Torrada integral 160 g Popular;UN;4.75;6.99;87;7;;5102;102;0.00
+Mercearia - Matinais;HP00243;2000000002439;Torrada integral 160 g Select;UN;4.75;6.99;88;8;;5102;102;0.00
+Mercearia - Matinais;HP00244;2000000002446;Torrada integral 160 g Bom Preco;UN;4.75;6.99;89;9;;5102;102;0.00
+Mercearia - Matinais;HP00245;2000000002453;Torrada integral 160 g Familia;UN;4.75;6.99;90;10;;5102;102;0.00
+Mercearia - Matinais;HP00246;2000000002460;Geleia de morango 230 g Casa Vale;UN;8.77;12.90;91;11;;5102;102;0.00
+Mercearia - Matinais;HP00247;2000000002477;Geleia de morango 230 g Popular;UN;8.77;12.90;92;12;;5102;102;0.00
+Mercearia - Matinais;HP00248;2000000002484;Geleia de morango 230 g Select;UN;8.77;12.90;93;5;;5102;102;0.00
+Mercearia - Matinais;HP00249;2000000002491;Geleia de morango 230 g Bom Preco;UN;8.77;12.90;94;6;;5102;102;0.00
+Mercearia - Matinais;HP00250;2000000002507;Geleia de morango 230 g Familia;UN;8.77;12.90;95;7;;5102;102;0.00
+Mercearia - Matinais;HP00251;2000000002514;Mel 500 g Casa Vale;UN;16.93;24.90;96;8;;5102;102;0.00
+Mercearia - Matinais;HP00252;2000000002521;Mel 500 g Popular;UN;16.93;24.90;97;9;;5102;102;0.00
+Mercearia - Matinais;HP00253;2000000002538;Mel 500 g Select;UN;16.93;24.90;98;10;;5102;102;0.00
+Mercearia - Matinais;HP00254;2000000002545;Mel 500 g Bom Preco;UN;16.93;24.90;99;11;;5102;102;0.00
+Mercearia - Matinais;HP00255;2000000002552;Mel 500 g Familia;UN;16.93;24.90;100;12;;5102;102;0.00
+Mercearia - Condimentos;HP00256;2000000002569;Oleo de soja 900 ml Casa Vale;UN;5.09;7.49;101;5;;5102;102;0.00
+Mercearia - Condimentos;HP00257;2000000002576;Oleo de soja 900 ml Popular;UN;5.09;7.49;102;6;;5102;102;0.00
+Mercearia - Condimentos;HP00258;2000000002583;Oleo de soja 900 ml Select;UN;5.09;7.49;103;7;;5102;102;0.00
+Mercearia - Condimentos;HP00259;2000000002590;Oleo de soja 900 ml Bom Preco;UN;5.09;7.49;104;8;;5102;102;0.00
+Mercearia - Condimentos;HP00260;2000000002606;Oleo de soja 900 ml Familia;UN;5.09;7.49;105;9;;5102;102;0.00
+Mercearia - Condimentos;HP00261;2000000002613;Oleo de milho 900 ml Casa Vale;UN;7.41;10.90;106;10;;5102;102;0.00
+Mercearia - Condimentos;HP00262;2000000002620;Oleo de milho 900 ml Popular;UN;7.41;10.90;107;11;;5102;102;0.00
+Mercearia - Condimentos;HP00263;2000000002637;Oleo de milho 900 ml Select;UN;7.41;10.90;108;12;;5102;102;0.00
+Mercearia - Condimentos;HP00264;2000000002644;Oleo de milho 900 ml Bom Preco;UN;7.41;10.90;109;5;;5102;102;0.00
+Mercearia - Condimentos;HP00265;2000000002651;Oleo de milho 900 ml Familia;UN;7.41;10.90;110;6;;5102;102;0.00
+Mercearia - Condimentos;HP00266;2000000002668;Azeite extra virgem 500 ml Casa Vale;UN;21.69;31.90;111;7;;5102;102;0.00
+Mercearia - Condimentos;HP00267;2000000002675;Azeite extra virgem 500 ml Popular;UN;21.69;31.90;112;8;;5102;102;0.00
+Mercearia - Condimentos;HP00268;2000000002682;Azeite extra virgem 500 ml Select;UN;21.69;31.90;113;9;;5102;102;0.00
+Mercearia - Condimentos;HP00269;2000000002699;Azeite extra virgem 500 ml Bom Preco;UN;21.69;31.90;114;10;;5102;102;0.00
+Mercearia - Condimentos;HP00270;2000000002705;Azeite extra virgem 500 ml Familia;UN;21.69;31.90;25;11;;5102;102;0.00
+Mercearia - Condimentos;HP00271;2000000002712;Vinagre alcool 750 ml Casa Vale;UN;2.71;3.99;26;12;;5102;102;0.00
+Mercearia - Condimentos;HP00272;2000000002729;Vinagre alcool 750 ml Popular;UN;2.71;3.99;27;5;;5102;102;0.00
+Mercearia - Condimentos;HP00273;2000000002736;Vinagre alcool 750 ml Select;UN;2.71;3.99;28;6;;5102;102;0.00
+Mercearia - Condimentos;HP00274;2000000002743;Vinagre alcool 750 ml Bom Preco;UN;2.71;3.99;29;7;;5102;102;0.00
+Mercearia - Condimentos;HP00275;2000000002750;Vinagre alcool 750 ml Familia;UN;2.71;3.99;30;8;;5102;102;0.00
+Mercearia - Condimentos;HP00276;2000000002767;Vinagre maca 750 ml Casa Vale;UN;4.75;6.99;31;9;;5102;102;0.00
+Mercearia - Condimentos;HP00277;2000000002774;Vinagre maca 750 ml Popular;UN;4.75;6.99;32;10;;5102;102;0.00
+Mercearia - Condimentos;HP00278;2000000002781;Vinagre maca 750 ml Select;UN;4.75;6.99;33;11;;5102;102;0.00
+Mercearia - Condimentos;HP00279;2000000002798;Vinagre maca 750 ml Bom Preco;UN;4.75;6.99;34;12;;5102;102;0.00
+Mercearia - Condimentos;HP00280;2000000002804;Vinagre maca 750 ml Familia;UN;4.75;6.99;35;5;;5102;102;0.00
+Mercearia - Condimentos;HP00281;2000000002811;Maionese 500 g Casa Vale;UN;6.73;9.90;36;6;;5102;102;0.00
+Mercearia - Condimentos;HP00282;2000000002828;Maionese 500 g Popular;UN;6.73;9.90;37;7;;5102;102;0.00
+Mercearia - Condimentos;HP00283;2000000002835;Maionese 500 g Select;UN;6.73;9.90;38;8;;5102;102;0.00
+Mercearia - Condimentos;HP00284;2000000002842;Maionese 500 g Bom Preco;UN;6.73;9.90;39;9;;5102;102;0.00
+Mercearia - Condimentos;HP00285;2000000002859;Maionese 500 g Familia;UN;6.73;9.90;40;10;;5102;102;0.00
+Mercearia - Condimentos;HP00286;2000000002866;Ketchup 400 g Casa Vale;UN;5.77;8.49;41;11;;5102;102;0.00
+Mercearia - Condimentos;HP00287;2000000002873;Ketchup 400 g Popular;UN;5.77;8.49;42;12;;5102;102;0.00
+Mercearia - Condimentos;HP00288;2000000002880;Ketchup 400 g Select;UN;5.77;8.49;43;5;;5102;102;0.00
+Mercearia - Condimentos;HP00289;2000000002897;Ketchup 400 g Bom Preco;UN;5.77;8.49;44;6;;5102;102;0.00
+Mercearia - Condimentos;HP00290;2000000002903;Ketchup 400 g Familia;UN;5.77;8.49;45;7;;5102;102;0.00
+Mercearia - Condimentos;HP00291;2000000002910;Mostarda 200 g Casa Vale;UN;4.41;6.49;46;8;;5102;102;0.00
+Mercearia - Condimentos;HP00292;2000000002927;Mostarda 200 g Popular;UN;4.41;6.49;47;9;;5102;102;0.00
+Mercearia - Condimentos;HP00293;2000000002934;Mostarda 200 g Select;UN;4.41;6.49;48;10;;5102;102;0.00
+Mercearia - Condimentos;HP00294;2000000002941;Mostarda 200 g Bom Preco;UN;4.41;6.49;49;11;;5102;102;0.00
+Mercearia - Condimentos;HP00295;2000000002958;Mostarda 200 g Familia;UN;4.41;6.49;50;12;;5102;102;0.00
+Mercearia - Condimentos;HP00296;2000000002965;Molho shoyu 150 ml Casa Vale;UN;4.75;6.99;51;5;;5102;102;0.00
+Mercearia - Condimentos;HP00297;2000000002972;Molho shoyu 150 ml Popular;UN;4.75;6.99;52;6;;5102;102;0.00
+Mercearia - Condimentos;HP00298;2000000002989;Molho shoyu 150 ml Select;UN;4.75;6.99;53;7;;5102;102;0.00
+Mercearia - Condimentos;HP00299;2000000002996;Molho shoyu 150 ml Bom Preco;UN;4.75;6.99;54;8;;5102;102;0.00
+Mercearia - Condimentos;HP00300;2000000003009;Molho shoyu 150 ml Familia;UN;4.75;6.99;55;9;;5102;102;0.00
+Mercearia - Condimentos;HP00301;2000000003016;Tempero completo 300 g Casa Vale;UN;4.07;5.99;56;10;;5102;102;0.00
+Mercearia - Condimentos;HP00302;2000000003023;Tempero completo 300 g Popular;UN;4.07;5.99;57;11;;5102;102;0.00
+Mercearia - Condimentos;HP00303;2000000003030;Tempero completo 300 g Select;UN;4.07;5.99;58;12;;5102;102;0.00
+Mercearia - Condimentos;HP00304;2000000003047;Tempero completo 300 g Bom Preco;UN;4.07;5.99;59;5;;5102;102;0.00
+Mercearia - Condimentos;HP00305;2000000003054;Tempero completo 300 g Familia;UN;4.07;5.99;60;6;;5102;102;0.00
+Mercearia - Condimentos;HP00306;2000000003061;Pimenta do reino 50 g Casa Vale;UN;5.09;7.49;61;7;;5102;102;0.00
+Mercearia - Condimentos;HP00307;2000000003078;Pimenta do reino 50 g Popular;UN;5.09;7.49;62;8;;5102;102;0.00
+Mercearia - Condimentos;HP00308;2000000003085;Pimenta do reino 50 g Select;UN;5.09;7.49;63;9;;5102;102;0.00
+Mercearia - Condimentos;HP00309;2000000003092;Pimenta do reino 50 g Bom Preco;UN;5.09;7.49;64;10;;5102;102;0.00
+Mercearia - Condimentos;HP00310;2000000003108;Pimenta do reino 50 g Familia;UN;5.09;7.49;65;11;;5102;102;0.00
+Mercearia - Condimentos;HP00311;2000000003115;Alho triturado 200 g Casa Vale;UN;6.05;8.90;66;12;;5102;102;0.00
+Mercearia - Condimentos;HP00312;2000000003122;Alho triturado 200 g Popular;UN;6.05;8.90;67;5;;5102;102;0.00
+Mercearia - Condimentos;HP00313;2000000003139;Alho triturado 200 g Select;UN;6.05;8.90;68;6;;5102;102;0.00
+Mercearia - Condimentos;HP00314;2000000003146;Alho triturado 200 g Bom Preco;UN;6.05;8.90;69;7;;5102;102;0.00
+Mercearia - Condimentos;HP00315;2000000003153;Alho triturado 200 g Familia;UN;6.05;8.90;70;8;;5102;102;0.00
+Bebidas;HP00316;2000000003160;Agua mineral sem gas 500 ml Casa Vale;UN;1.35;1.99;71;9;;5102;102;0.00
+Bebidas;HP00317;2000000003177;Agua mineral sem gas 500 ml Popular;UN;1.35;1.99;72;10;;5102;102;0.00
+Bebidas;HP00318;2000000003184;Agua mineral sem gas 500 ml Select;UN;1.35;1.99;73;11;;5102;102;0.00
+Bebidas;HP00319;2000000003191;Agua mineral sem gas 500 ml Bom Preco;UN;1.35;1.99;74;12;;5102;102;0.00
+Bebidas;HP00320;2000000003207;Agua mineral sem gas 500 ml Familia;UN;1.35;1.99;75;5;;5102;102;0.00
+Bebidas;HP00321;2000000003214;Agua mineral sem gas 1,5 l Casa Vale;UN;2.37;3.49;76;6;;5102;102;0.00
+Bebidas;HP00322;2000000003221;Agua mineral sem gas 1,5 l Popular;UN;2.37;3.49;77;7;;5102;102;0.00
+Bebidas;HP00323;2000000003238;Agua mineral sem gas 1,5 l Select;UN;2.37;3.49;78;8;;5102;102;0.00
+Bebidas;HP00324;2000000003245;Agua mineral sem gas 1,5 l Bom Preco;UN;2.37;3.49;79;9;;5102;102;0.00
+Bebidas;HP00325;2000000003252;Agua mineral sem gas 1,5 l Familia;UN;2.37;3.49;80;10;;5102;102;0.00
+Bebidas;HP00326;2000000003269;Agua mineral sem gas 5 l Casa Vale;UN;6.73;9.90;81;11;;5102;102;0.00
+Bebidas;HP00327;2000000003276;Agua mineral sem gas 5 l Popular;UN;6.73;9.90;82;12;;5102;102;0.00
+Bebidas;HP00328;2000000003283;Agua mineral sem gas 5 l Select;UN;6.73;9.90;83;5;;5102;102;0.00
+Bebidas;HP00329;2000000003290;Agua mineral sem gas 5 l Bom Preco;UN;6.73;9.90;84;6;;5102;102;0.00
+Bebidas;HP00330;2000000003306;Agua mineral sem gas 5 l Familia;UN;6.73;9.90;85;7;;5102;102;0.00
+Bebidas;HP00331;2000000003313;Agua mineral com gas 500 ml Casa Vale;UN;1.69;2.49;86;8;;5102;102;0.00
+Bebidas;HP00332;2000000003320;Agua mineral com gas 500 ml Popular;UN;1.69;2.49;87;9;;5102;102;0.00
+Bebidas;HP00333;2000000003337;Agua mineral com gas 500 ml Select;UN;1.69;2.49;88;10;;5102;102;0.00
+Bebidas;HP00334;2000000003344;Agua mineral com gas 500 ml Bom Preco;UN;1.69;2.49;89;11;;5102;102;0.00
+Bebidas;HP00335;2000000003351;Agua mineral com gas 500 ml Familia;UN;1.69;2.49;90;12;;5102;102;0.00
+Bebidas;HP00336;2000000003368;Refrigerante cola 350 ml Casa Vale;UN;2.71;3.99;91;5;;5102;102;0.00
+Bebidas;HP00337;2000000003375;Refrigerante cola 350 ml Popular;UN;2.71;3.99;92;6;;5102;102;0.00
+Bebidas;HP00338;2000000003382;Refrigerante cola 350 ml Select;UN;2.71;3.99;93;7;;5102;102;0.00
+Bebidas;HP00339;2000000003399;Refrigerante cola 350 ml Bom Preco;UN;2.71;3.99;94;8;;5102;102;0.00
+Bebidas;HP00340;2000000003405;Refrigerante cola 350 ml Familia;UN;2.71;3.99;95;9;;5102;102;0.00
+Bebidas;HP00341;2000000003412;Refrigerante cola 2 l Casa Vale;UN;6.45;9.49;96;10;;5102;102;0.00
+Bebidas;HP00342;2000000003429;Refrigerante cola 2 l Popular;UN;6.45;9.49;97;11;;5102;102;0.00
+Bebidas;HP00343;2000000003436;Refrigerante cola 2 l Select;UN;6.45;9.49;98;12;;5102;102;0.00
+Bebidas;HP00344;2000000003443;Refrigerante cola 2 l Bom Preco;UN;6.45;9.49;99;5;;5102;102;0.00
+Bebidas;HP00345;2000000003450;Refrigerante cola 2 l Familia;UN;6.45;9.49;100;6;;5102;102;0.00
+Bebidas;HP00346;2000000003467;Refrigerante guarana 350 ml Casa Vale;UN;2.58;3.79;101;7;;5102;102;0.00
+Bebidas;HP00347;2000000003474;Refrigerante guarana 350 ml Popular;UN;2.58;3.79;102;8;;5102;102;0.00
+Bebidas;HP00348;2000000003481;Refrigerante guarana 350 ml Select;UN;2.58;3.79;103;9;;5102;102;0.00
+Bebidas;HP00349;2000000003498;Refrigerante guarana 350 ml Bom Preco;UN;2.58;3.79;104;10;;5102;102;0.00
+Bebidas;HP00350;2000000003504;Refrigerante guarana 350 ml Familia;UN;2.58;3.79;105;11;;5102;102;0.00
+Bebidas;HP00351;2000000003511;Refrigerante guarana 2 l Casa Vale;UN;6.11;8.99;106;12;;5102;102;0.00
+Bebidas;HP00352;2000000003528;Refrigerante guarana 2 l Popular;UN;6.11;8.99;107;5;;5102;102;0.00
+Bebidas;HP00353;2000000003535;Refrigerante guarana 2 l Select;UN;6.11;8.99;108;6;;5102;102;0.00
+Bebidas;HP00354;2000000003542;Refrigerante guarana 2 l Bom Preco;UN;6.11;8.99;109;7;;5102;102;0.00
+Bebidas;HP00355;2000000003559;Refrigerante guarana 2 l Familia;UN;6.11;8.99;110;8;;5102;102;0.00
+Bebidas;HP00356;2000000003566;Refrigerante laranja 2 l Casa Vale;UN;5.77;8.49;111;9;;5102;102;0.00
+Bebidas;HP00357;2000000003573;Refrigerante laranja 2 l Popular;UN;5.77;8.49;112;10;;5102;102;0.00
+Bebidas;HP00358;2000000003580;Refrigerante laranja 2 l Select;UN;5.77;8.49;113;11;;5102;102;0.00
+Bebidas;HP00359;2000000003597;Refrigerante laranja 2 l Bom Preco;UN;5.77;8.49;114;12;;5102;102;0.00
+Bebidas;HP00360;2000000003603;Refrigerante laranja 2 l Familia;UN;5.77;8.49;25;5;;5102;102;0.00
+Bebidas;HP00361;2000000003610;Suco nectar uva 1 l Casa Vale;UN;5.43;7.99;26;6;;5102;102;0.00
+Bebidas;HP00362;2000000003627;Suco nectar uva 1 l Popular;UN;5.43;7.99;27;7;;5102;102;0.00
+Bebidas;HP00363;2000000003634;Suco nectar uva 1 l Select;UN;5.43;7.99;28;8;;5102;102;0.00
+Bebidas;HP00364;2000000003641;Suco nectar uva 1 l Bom Preco;UN;5.43;7.99;29;9;;5102;102;0.00
+Bebidas;HP00365;2000000003658;Suco nectar uva 1 l Familia;UN;5.43;7.99;30;10;;5102;102;0.00
+Bebidas;HP00366;2000000003665;Suco nectar laranja 1 l Casa Vale;UN;5.43;7.99;31;11;;5102;102;0.00
+Bebidas;HP00367;2000000003672;Suco nectar laranja 1 l Popular;UN;5.43;7.99;32;12;;5102;102;0.00
+Bebidas;HP00368;2000000003689;Suco nectar laranja 1 l Select;UN;5.43;7.99;33;5;;5102;102;0.00
+Bebidas;HP00369;2000000003696;Suco nectar laranja 1 l Bom Preco;UN;5.43;7.99;34;6;;5102;102;0.00
+Bebidas;HP00370;2000000003702;Suco nectar laranja 1 l Familia;UN;5.43;7.99;35;7;;5102;102;0.00
+Bebidas;HP00371;2000000003719;Cha pronto pessego 1,5 l Casa Vale;UN;6.11;8.99;36;8;;5102;102;0.00
+Bebidas;HP00372;2000000003726;Cha pronto pessego 1,5 l Popular;UN;6.11;8.99;37;9;;5102;102;0.00
+Bebidas;HP00373;2000000003733;Cha pronto pessego 1,5 l Select;UN;6.11;8.99;38;10;;5102;102;0.00
+Bebidas;HP00374;2000000003740;Cha pronto pessego 1,5 l Bom Preco;UN;6.11;8.99;39;11;;5102;102;0.00
+Bebidas;HP00375;2000000003757;Cha pronto pessego 1,5 l Familia;UN;6.11;8.99;40;12;;5102;102;0.00
+Bebidas;HP00376;2000000003764;Energetico 269 ml Casa Vale;UN;5.43;7.99;41;5;;5102;102;0.00
+Bebidas;HP00377;2000000003771;Energetico 269 ml Popular;UN;5.43;7.99;42;6;;5102;102;0.00
+Bebidas;HP00378;2000000003788;Energetico 269 ml Select;UN;5.43;7.99;43;7;;5102;102;0.00
+Bebidas;HP00379;2000000003795;Energetico 269 ml Bom Preco;UN;5.43;7.99;44;8;;5102;102;0.00
+Bebidas;HP00380;2000000003801;Energetico 269 ml Familia;UN;5.43;7.99;45;9;;5102;102;0.00
+Bebidas;HP00381;2000000003818;Energetico 473 ml Casa Vale;UN;8.09;11.90;46;10;;5102;102;0.00
+Bebidas;HP00382;2000000003825;Energetico 473 ml Popular;UN;8.09;11.90;47;11;;5102;102;0.00
+Bebidas;HP00383;2000000003832;Energetico 473 ml Select;UN;8.09;11.90;48;12;;5102;102;0.00
+Bebidas;HP00384;2000000003849;Energetico 473 ml Bom Preco;UN;8.09;11.90;49;5;;5102;102;0.00
+Bebidas;HP00385;2000000003856;Energetico 473 ml Familia;UN;8.09;11.90;50;6;;5102;102;0.00
+Bebidas;HP00386;2000000003863;Agua de coco 1 l Casa Vale;UN;8.77;12.90;51;7;;5102;102;0.00
+Bebidas;HP00387;2000000003870;Agua de coco 1 l Popular;UN;8.77;12.90;52;8;;5102;102;0.00
+Bebidas;HP00388;2000000003887;Agua de coco 1 l Select;UN;8.77;12.90;53;9;;5102;102;0.00
+Bebidas;HP00389;2000000003894;Agua de coco 1 l Bom Preco;UN;8.77;12.90;54;10;;5102;102;0.00
+Bebidas;HP00390;2000000003900;Agua de coco 1 l Familia;UN;8.77;12.90;55;11;;5102;102;0.00
+Bebidas;HP00391;2000000003917;Isotonico limao 500 ml Casa Vale;UN;4.07;5.99;56;12;;5102;102;0.00
+Bebidas;HP00392;2000000003924;Isotonico limao 500 ml Popular;UN;4.07;5.99;57;5;;5102;102;0.00
+Bebidas;HP00393;2000000003931;Isotonico limao 500 ml Select;UN;4.07;5.99;58;6;;5102;102;0.00
+Bebidas;HP00394;2000000003948;Isotonico limao 500 ml Bom Preco;UN;4.07;5.99;59;7;;5102;102;0.00
+Bebidas;HP00395;2000000003955;Isotonico limao 500 ml Familia;UN;4.07;5.99;60;8;;5102;102;0.00
+Bebidas;HP00396;2000000003962;Leite UHT integral 1 l Casa Vale;UN;3.73;5.49;61;9;;5102;102;0.00
+Bebidas;HP00397;2000000003979;Leite UHT integral 1 l Popular;UN;3.73;5.49;62;10;;5102;102;0.00
+Bebidas;HP00398;2000000003986;Leite UHT integral 1 l Select;UN;3.73;5.49;63;11;;5102;102;0.00
+Bebidas;HP00399;2000000003993;Leite UHT integral 1 l Bom Preco;UN;3.73;5.49;64;12;;5102;102;0.00
+Bebidas;HP00400;2000000004006;Leite UHT integral 1 l Familia;UN;3.73;5.49;65;5;;5102;102;0.00
+Bebidas;HP00401;2000000004013;Leite UHT desnatado 1 l Casa Vale;UN;3.87;5.69;66;6;;5102;102;0.00
+Bebidas;HP00402;2000000004020;Leite UHT desnatado 1 l Popular;UN;3.87;5.69;67;7;;5102;102;0.00
+Bebidas;HP00403;2000000004037;Leite UHT desnatado 1 l Select;UN;3.87;5.69;68;8;;5102;102;0.00
+Bebidas;HP00404;2000000004044;Leite UHT desnatado 1 l Bom Preco;UN;3.87;5.69;69;9;;5102;102;0.00
+Bebidas;HP00405;2000000004051;Leite UHT desnatado 1 l Familia;UN;3.87;5.69;70;10;;5102;102;0.00
+Adega e Cervejas;HP00406;2000000004068;Cerveja pilsen lata 350 ml Casa Vale;UN;2.37;3.49;71;11;;5102;102;0.00
+Adega e Cervejas;HP00407;2000000004075;Cerveja pilsen lata 350 ml Popular;UN;2.37;3.49;72;12;;5102;102;0.00
+Adega e Cervejas;HP00408;2000000004082;Cerveja pilsen lata 350 ml Select;UN;2.37;3.49;73;5;;5102;102;0.00
+Adega e Cervejas;HP00409;2000000004099;Cerveja pilsen lata 350 ml Bom Preco;UN;2.37;3.49;74;6;;5102;102;0.00
+Adega e Cervejas;HP00410;2000000004105;Cerveja pilsen lata 473 ml Casa Vale;UN;3.39;4.99;75;7;;5102;102;0.00
+Adega e Cervejas;HP00411;2000000004112;Cerveja pilsen lata 473 ml Popular;UN;3.39;4.99;76;8;;5102;102;0.00
+Adega e Cervejas;HP00412;2000000004129;Cerveja pilsen lata 473 ml Select;UN;3.39;4.99;77;9;;5102;102;0.00
+Adega e Cervejas;HP00413;2000000004136;Cerveja pilsen lata 473 ml Bom Preco;UN;3.39;4.99;78;10;;5102;102;0.00
+Adega e Cervejas;HP00414;2000000004143;Cerveja puro malte lata 350 ml Casa Vale;UN;3.05;4.49;79;11;;5102;102;0.00
+Adega e Cervejas;HP00415;2000000004150;Cerveja puro malte lata 350 ml Popular;UN;3.05;4.49;80;12;;5102;102;0.00
+Adega e Cervejas;HP00416;2000000004167;Cerveja puro malte lata 350 ml Select;UN;3.05;4.49;81;5;;5102;102;0.00
+Adega e Cervejas;HP00417;2000000004174;Cerveja puro malte lata 350 ml Bom Preco;UN;3.05;4.49;82;6;;5102;102;0.00
+Adega e Cervejas;HP00418;2000000004181;Cerveja long neck 330 ml Casa Vale;UN;4.07;5.99;83;7;;5102;102;0.00
+Adega e Cervejas;HP00419;2000000004198;Cerveja long neck 330 ml Popular;UN;4.07;5.99;84;8;;5102;102;0.00
+Adega e Cervejas;HP00420;2000000004204;Cerveja long neck 330 ml Select;UN;4.07;5.99;85;9;;5102;102;0.00
+Adega e Cervejas;HP00421;2000000004211;Cerveja long neck 330 ml Bom Preco;UN;4.07;5.99;86;10;;5102;102;0.00
+Adega e Cervejas;HP00422;2000000004228;Vinho tinto seco 750 ml Casa Vale;UN;23.73;34.90;87;11;;5102;102;0.00
+Adega e Cervejas;HP00423;2000000004235;Vinho tinto seco 750 ml Popular;UN;23.73;34.90;88;12;;5102;102;0.00
+Adega e Cervejas;HP00424;2000000004242;Vinho tinto seco 750 ml Select;UN;23.73;34.90;89;5;;5102;102;0.00
+Adega e Cervejas;HP00425;2000000004259;Vinho tinto seco 750 ml Bom Preco;UN;23.73;34.90;90;6;;5102;102;0.00
+Adega e Cervejas;HP00426;2000000004266;Vinho tinto suave 750 ml Casa Vale;UN;20.33;29.90;91;7;;5102;102;0.00
+Adega e Cervejas;HP00427;2000000004273;Vinho tinto suave 750 ml Popular;UN;20.33;29.90;92;8;;5102;102;0.00
+Adega e Cervejas;HP00428;2000000004280;Vinho tinto suave 750 ml Select;UN;20.33;29.90;93;9;;5102;102;0.00
+Adega e Cervejas;HP00429;2000000004297;Vinho tinto suave 750 ml Bom Preco;UN;20.33;29.90;94;10;;5102;102;0.00
+Adega e Cervejas;HP00430;2000000004303;Vinho branco seco 750 ml Casa Vale;UN;22.37;32.90;95;11;;5102;102;0.00
+Adega e Cervejas;HP00431;2000000004310;Vinho branco seco 750 ml Popular;UN;22.37;32.90;96;12;;5102;102;0.00
+Adega e Cervejas;HP00432;2000000004327;Vinho branco seco 750 ml Select;UN;22.37;32.90;97;5;;5102;102;0.00
+Adega e Cervejas;HP00433;2000000004334;Vinho branco seco 750 ml Bom Preco;UN;22.37;32.90;98;6;;5102;102;0.00
+Adega e Cervejas;HP00434;2000000004341;Espumante brut 750 ml Casa Vale;UN;33.93;49.90;99;7;;5102;102;0.00
+Adega e Cervejas;HP00435;2000000004358;Espumante brut 750 ml Popular;UN;33.93;49.90;100;8;;5102;102;0.00
+Adega e Cervejas;HP00436;2000000004365;Espumante brut 750 ml Select;UN;33.93;49.90;101;9;;5102;102;0.00
+Adega e Cervejas;HP00437;2000000004372;Espumante brut 750 ml Bom Preco;UN;33.93;49.90;102;10;;5102;102;0.00
+Adega e Cervejas;HP00438;2000000004389;Vodka 1 l Casa Vale;UN;27.13;39.90;103;11;;5102;102;0.00
+Adega e Cervejas;HP00439;2000000004396;Vodka 1 l Popular;UN;27.13;39.90;104;12;;5102;102;0.00
+Adega e Cervejas;HP00440;2000000004402;Vodka 1 l Select;UN;27.13;39.90;105;5;;5102;102;0.00
+Adega e Cervejas;HP00441;2000000004419;Vodka 1 l Bom Preco;UN;27.13;39.90;106;6;;5102;102;0.00
+Adega e Cervejas;HP00442;2000000004426;Cachaca prata 965 ml Casa Vale;UN;12.85;18.90;107;7;;5102;102;0.00
+Adega e Cervejas;HP00443;2000000004433;Cachaca prata 965 ml Popular;UN;12.85;18.90;108;8;;5102;102;0.00
+Adega e Cervejas;HP00444;2000000004440;Cachaca prata 965 ml Select;UN;12.85;18.90;109;9;;5102;102;0.00
+Adega e Cervejas;HP00445;2000000004457;Cachaca prata 965 ml Bom Preco;UN;12.85;18.90;110;10;;5102;102;0.00
+Adega e Cervejas;HP00446;2000000004464;Whisky nacional 1 l Casa Vale;UN;47.53;69.90;111;11;;5102;102;0.00
+Adega e Cervejas;HP00447;2000000004471;Whisky nacional 1 l Popular;UN;47.53;69.90;112;12;;5102;102;0.00
+Adega e Cervejas;HP00448;2000000004488;Whisky nacional 1 l Select;UN;47.53;69.90;113;5;;5102;102;0.00
+Adega e Cervejas;HP00449;2000000004495;Whisky nacional 1 l Bom Preco;UN;47.53;69.90;114;6;;5102;102;0.00
+Hortifruti;HP00450;2000000004501;Banana prata;KG;4.75;6.99;25;7;;5102;102;0.00
+Hortifruti;HP00451;2000000004518;Banana nanica;KG;4.07;5.99;26;8;;5102;102;0.00
+Hortifruti;HP00452;2000000004525;Maca nacional;KG;6.79;9.99;27;9;;5102;102;0.00
+Hortifruti;HP00453;2000000004532;Maca gala;KG;8.09;11.90;28;10;;5102;102;0.00
+Hortifruti;HP00454;2000000004549;Laranja pera;KG;3.39;4.99;29;11;;5102;102;0.00
+Hortifruti;HP00455;2000000004556;Limao taiti;KG;4.41;6.49;30;12;;5102;102;0.00
+Hortifruti;HP00456;2000000004563;Mamao formosa;KG;5.43;7.99;31;5;;5102;102;0.00
+Hortifruti;HP00457;2000000004570;Manga palmer;KG;6.11;8.99;32;6;;5102;102;0.00
+Hortifruti;HP00458;2000000004587;Uva sem semente;KG;12.17;17.90;33;7;;5102;102;0.00
+Hortifruti;HP00459;2000000004594;Melancia;KG;2.37;3.49;34;8;;5102;102;0.00
+Hortifruti;HP00460;2000000004600;Melao amarelo;KG;4.75;6.99;35;9;;5102;102;0.00
+Hortifruti;HP00461;2000000004617;Abacaxi;KG;6.11;8.99;36;10;;5102;102;0.00
+Hortifruti;HP00462;2000000004624;Tomate italiano;KG;6.11;8.99;37;11;;5102;102;0.00
+Hortifruti;HP00463;2000000004631;Cebola;KG;3.73;5.49;38;12;;5102;102;0.00
+Hortifruti;HP00464;2000000004648;Batata inglesa;KG;4.07;5.99;39;5;;5102;102;0.00
+Hortifruti;HP00465;2000000004655;Batata doce;KG;3.73;5.49;40;6;;5102;102;0.00
+Hortifruti;HP00466;2000000004662;Cenoura;KG;3.39;4.99;41;7;;5102;102;0.00
+Hortifruti;HP00467;2000000004679;Beterraba;KG;3.39;4.99;42;8;;5102;102;0.00
+Hortifruti;HP00468;2000000004686;Pepino;KG;4.07;5.99;43;9;;5102;102;0.00
+Hortifruti;HP00469;2000000004693;Abobrinha;KG;4.41;6.49;44;10;;5102;102;0.00
+Hortifruti;HP00470;2000000004709;Alface crespa;KG;2.71;3.99;45;11;;5102;102;0.00
+Hortifruti;HP00471;2000000004716;Alface americana;KG;4.07;5.99;46;12;;5102;102;0.00
+Hortifruti;HP00472;2000000004723;Brocolis;KG;6.11;8.99;47;5;;5102;102;0.00
+Hortifruti;HP00473;2000000004730;Couve manteiga;KG;2.37;3.49;48;6;;5102;102;0.00
+Hortifruti;HP00474;2000000004747;Ovos brancos duzia;DZ;7.41;10.90;49;7;;5102;102;0.00
+Hortifruti;HP00475;2000000004754;Ovos vermelhos duzia;DZ;8.77;12.90;50;8;;5102;102;0.00
+Acougue e Peixaria;HP00476;2000000004761;Acem bovino;KG;22.37;32.90;51;9;;5102;102;0.00
+Acougue e Peixaria;HP00477;2000000004778;Patinho bovino;KG;29.17;42.90;52;10;;5102;102;0.00
+Acougue e Peixaria;HP00478;2000000004785;Coxao mole;KG;30.53;44.90;53;11;;5102;102;0.00
+Acougue e Peixaria;HP00479;2000000004792;Contra file;KG;40.73;59.90;54;12;;5102;102;0.00
+Acougue e Peixaria;HP00480;2000000004808;Carne moida bovina;KG;24.41;35.90;55;5;;5102;102;0.00
+Acougue e Peixaria;HP00481;2000000004815;Costela bovina;KG;20.33;29.90;56;6;;5102;102;0.00
+Acougue e Peixaria;HP00482;2000000004822;File de frango;KG;14.89;21.90;57;7;;5102;102;0.00
+Acougue e Peixaria;HP00483;2000000004839;Coxa e sobrecoxa de frango;KG;9.45;13.90;58;8;;5102;102;0.00
+Acougue e Peixaria;HP00484;2000000004846;Frango inteiro resfriado;KG;7.41;10.90;59;9;;5102;102;0.00
+Acougue e Peixaria;HP00485;2000000004853;Linguica toscana;KG;15.57;22.90;60;10;;5102;102;0.00
+Acougue e Peixaria;HP00486;2000000004860;Pernil suino;KG;16.93;24.90;61;11;;5102;102;0.00
+Acougue e Peixaria;HP00487;2000000004877;Bisteca suina;KG;16.25;23.90;62;12;;5102;102;0.00
+Acougue e Peixaria;HP00488;2000000004884;Costelinha suina;KG;19.65;28.90;63;5;;5102;102;0.00
+Acougue e Peixaria;HP00489;2000000004891;File de tilapia;KG;33.93;49.90;64;6;;5102;102;0.00
+Acougue e Peixaria;HP00490;2000000004907;Sardinha fresca;KG;12.85;18.90;65;7;;5102;102;0.00
+Acougue e Peixaria;HP00491;2000000004914;Camarao limpo;KG;47.53;69.90;66;8;;5102;102;0.00
+Padaria e Confeitaria;HP00492;2000000004921;Pao frances;KG;12.17;17.90;67;9;;5102;102;0.00
+Padaria e Confeitaria;HP00493;2000000004938;Pao de forma tradicional;UN;5.43;7.99;68;10;;5102;102;0.00
+Padaria e Confeitaria;HP00494;2000000004945;Pao integral;UN;6.79;9.99;69;11;;5102;102;0.00
+Padaria e Confeitaria;HP00495;2000000004952;Pao de queijo congelado;UN;12.85;18.90;70;12;;5102;102;0.00
+Padaria e Confeitaria;HP00496;2000000004969;Bolo de cenoura;UN;16.93;24.90;71;5;;5102;102;0.00
+Padaria e Confeitaria;HP00497;2000000004976;Bolo de chocolate;UN;18.97;27.90;72;6;;5102;102;0.00
+Padaria e Confeitaria;HP00498;2000000004983;Rosca doce;UN;8.77;12.90;73;7;;5102;102;0.00
+Padaria e Confeitaria;HP00499;2000000004990;Sonho recheado;UN;3.39;4.99;74;8;;5102;102;0.00
+Padaria e Confeitaria;HP00500;2000000005003;Croissant;UN;4.75;6.99;75;9;;5102;102;0.00
+Padaria e Confeitaria;HP00501;2000000005010;Torta salgada pedaco;UN;6.11;8.99;76;10;;5102;102;0.00
+Frios e Laticinios;HP00502;2000000005027;Queijo mussarela fatiado 200 g Casa Vale;UN;8.77;12.90;77;11;;5102;102;0.00
+Frios e Laticinios;HP00503;2000000005034;Queijo mussarela fatiado 200 g Popular;UN;8.77;12.90;78;12;;5102;102;0.00
+Frios e Laticinios;HP00504;2000000005041;Queijo mussarela fatiado 200 g Select;UN;8.77;12.90;79;5;;5102;102;0.00
+Frios e Laticinios;HP00505;2000000005058;Queijo mussarela fatiado 200 g Bom Preco;UN;8.77;12.90;80;6;;5102;102;0.00
+Frios e Laticinios;HP00506;2000000005065;Queijo mussarela fatiado 200 g Familia;UN;8.77;12.90;81;7;;5102;102;0.00
+Frios e Laticinios;HP00507;2000000005072;Queijo prato fatiado 200 g Casa Vale;UN;9.45;13.90;82;8;;5102;102;0.00
+Frios e Laticinios;HP00508;2000000005089;Queijo prato fatiado 200 g Popular;UN;9.45;13.90;83;9;;5102;102;0.00
+Frios e Laticinios;HP00509;2000000005096;Queijo prato fatiado 200 g Select;UN;9.45;13.90;84;10;;5102;102;0.00
+Frios e Laticinios;HP00510;2000000005102;Queijo prato fatiado 200 g Bom Preco;UN;9.45;13.90;85;11;;5102;102;0.00
+Frios e Laticinios;HP00511;2000000005119;Queijo prato fatiado 200 g Familia;UN;9.45;13.90;86;12;;5102;102;0.00
+Frios e Laticinios;HP00512;2000000005126;Presunto cozido fatiado 200 g Casa Vale;UN;6.79;9.99;87;5;;5102;102;0.00
+Frios e Laticinios;HP00513;2000000005133;Presunto cozido fatiado 200 g Popular;UN;6.79;9.99;88;6;;5102;102;0.00
+Frios e Laticinios;HP00514;2000000005140;Presunto cozido fatiado 200 g Select;UN;6.79;9.99;89;7;;5102;102;0.00
+Frios e Laticinios;HP00515;2000000005157;Presunto cozido fatiado 200 g Bom Preco;UN;6.79;9.99;90;8;;5102;102;0.00
+Frios e Laticinios;HP00516;2000000005164;Presunto cozido fatiado 200 g Familia;UN;6.79;9.99;91;9;;5102;102;0.00
+Frios e Laticinios;HP00517;2000000005171;Mortadela fatiada 200 g Casa Vale;UN;4.75;6.99;92;10;;5102;102;0.00
+Frios e Laticinios;HP00518;2000000005188;Mortadela fatiada 200 g Popular;UN;4.75;6.99;93;11;;5102;102;0.00
+Frios e Laticinios;HP00519;2000000005195;Mortadela fatiada 200 g Select;UN;4.75;6.99;94;12;;5102;102;0.00
+Frios e Laticinios;HP00520;2000000005201;Mortadela fatiada 200 g Bom Preco;UN;4.75;6.99;95;5;;5102;102;0.00
+Frios e Laticinios;HP00521;2000000005218;Mortadela fatiada 200 g Familia;UN;4.75;6.99;96;6;;5102;102;0.00
+Frios e Laticinios;HP00522;2000000005225;Iogurte morango 900 g Casa Vale;UN;8.77;12.90;97;7;;5102;102;0.00
+Frios e Laticinios;HP00523;2000000005232;Iogurte morango 900 g Popular;UN;8.77;12.90;98;8;;5102;102;0.00
+Frios e Laticinios;HP00524;2000000005249;Iogurte morango 900 g Select;UN;8.77;12.90;99;9;;5102;102;0.00
+Frios e Laticinios;HP00525;2000000005256;Iogurte morango 900 g Bom Preco;UN;8.77;12.90;100;10;;5102;102;0.00
+Frios e Laticinios;HP00526;2000000005263;Iogurte morango 900 g Familia;UN;8.77;12.90;101;11;;5102;102;0.00
+Frios e Laticinios;HP00527;2000000005270;Iogurte natural 170 g Casa Vale;UN;2.37;3.49;102;12;;5102;102;0.00
+Frios e Laticinios;HP00528;2000000005287;Iogurte natural 170 g Popular;UN;2.37;3.49;103;5;;5102;102;0.00
+Frios e Laticinios;HP00529;2000000005294;Iogurte natural 170 g Select;UN;2.37;3.49;104;6;;5102;102;0.00
+Frios e Laticinios;HP00530;2000000005300;Iogurte natural 170 g Bom Preco;UN;2.37;3.49;105;7;;5102;102;0.00
+Frios e Laticinios;HP00531;2000000005317;Iogurte natural 170 g Familia;UN;2.37;3.49;106;8;;5102;102;0.00
+Frios e Laticinios;HP00532;2000000005324;Requeijao cremoso 200 g Casa Vale;UN;6.11;8.99;107;9;;5102;102;0.00
+Frios e Laticinios;HP00533;2000000005331;Requeijao cremoso 200 g Popular;UN;6.11;8.99;108;10;;5102;102;0.00
+Frios e Laticinios;HP00534;2000000005348;Requeijao cremoso 200 g Select;UN;6.11;8.99;109;11;;5102;102;0.00
+Frios e Laticinios;HP00535;2000000005355;Requeijao cremoso 200 g Bom Preco;UN;6.11;8.99;110;12;;5102;102;0.00
+Frios e Laticinios;HP00536;2000000005362;Requeijao cremoso 200 g Familia;UN;6.11;8.99;111;5;;5102;102;0.00
+Frios e Laticinios;HP00537;2000000005379;Manteiga 200 g Casa Vale;UN;8.09;11.90;112;6;;5102;102;0.00
+Frios e Laticinios;HP00538;2000000005386;Manteiga 200 g Popular;UN;8.09;11.90;113;7;;5102;102;0.00
+Frios e Laticinios;HP00539;2000000005393;Manteiga 200 g Select;UN;8.09;11.90;114;8;;5102;102;0.00
+Frios e Laticinios;HP00540;2000000005409;Manteiga 200 g Bom Preco;UN;8.09;11.90;25;9;;5102;102;0.00
+Frios e Laticinios;HP00541;2000000005416;Manteiga 200 g Familia;UN;8.09;11.90;26;10;;5102;102;0.00
+Frios e Laticinios;HP00542;2000000005423;Margarina 500 g Casa Vale;UN;5.43;7.99;27;11;;5102;102;0.00
+Frios e Laticinios;HP00543;2000000005430;Margarina 500 g Popular;UN;5.43;7.99;28;12;;5102;102;0.00
+Frios e Laticinios;HP00544;2000000005447;Margarina 500 g Select;UN;5.43;7.99;29;5;;5102;102;0.00
+Frios e Laticinios;HP00545;2000000005454;Margarina 500 g Bom Preco;UN;5.43;7.99;30;6;;5102;102;0.00
+Frios e Laticinios;HP00546;2000000005461;Margarina 500 g Familia;UN;5.43;7.99;31;7;;5102;102;0.00
+Frios e Laticinios;HP00547;2000000005478;Creme de leite 200 g Casa Vale;UN;3.05;4.49;32;8;;5102;102;0.00
+Frios e Laticinios;HP00548;2000000005485;Creme de leite 200 g Popular;UN;3.05;4.49;33;9;;5102;102;0.00
+Frios e Laticinios;HP00549;2000000005492;Creme de leite 200 g Select;UN;3.05;4.49;34;10;;5102;102;0.00
+Frios e Laticinios;HP00550;2000000005508;Creme de leite 200 g Bom Preco;UN;3.05;4.49;35;11;;5102;102;0.00
+Frios e Laticinios;HP00551;2000000005515;Creme de leite 200 g Familia;UN;3.05;4.49;36;12;;5102;102;0.00
+Frios e Laticinios;HP00552;2000000005522;Leite condensado 395 g Casa Vale;UN;4.75;6.99;37;5;;5102;102;0.00
+Frios e Laticinios;HP00553;2000000005539;Leite condensado 395 g Popular;UN;4.75;6.99;38;6;;5102;102;0.00
+Frios e Laticinios;HP00554;2000000005546;Leite condensado 395 g Select;UN;4.75;6.99;39;7;;5102;102;0.00
+Frios e Laticinios;HP00555;2000000005553;Leite condensado 395 g Bom Preco;UN;4.75;6.99;40;8;;5102;102;0.00
+Frios e Laticinios;HP00556;2000000005560;Leite condensado 395 g Familia;UN;4.75;6.99;41;9;;5102;102;0.00
+Frios e Laticinios;HP00557;2000000005577;Queijo parmesao ralado 50 g Casa Vale;UN;4.07;5.99;42;10;;5102;102;0.00
+Frios e Laticinios;HP00558;2000000005584;Queijo parmesao ralado 50 g Popular;UN;4.07;5.99;43;11;;5102;102;0.00
+Frios e Laticinios;HP00559;2000000005591;Queijo parmesao ralado 50 g Select;UN;4.07;5.99;44;12;;5102;102;0.00
+Frios e Laticinios;HP00560;2000000005607;Queijo parmesao ralado 50 g Bom Preco;UN;4.07;5.99;45;5;;5102;102;0.00
+Frios e Laticinios;HP00561;2000000005614;Queijo parmesao ralado 50 g Familia;UN;4.07;5.99;46;6;;5102;102;0.00
+Congelados;HP00562;2000000005621;Pizza mussarela congelada 460 g Casa Vale;UN;12.85;18.90;47;7;;5102;102;0.00
+Congelados;HP00563;2000000005638;Pizza mussarela congelada 460 g Popular;UN;12.85;18.90;48;8;;5102;102;0.00
+Congelados;HP00564;2000000005645;Pizza mussarela congelada 460 g Select;UN;12.85;18.90;49;9;;5102;102;0.00
+Congelados;HP00565;2000000005652;Pizza mussarela congelada 460 g Bom Preco;UN;12.85;18.90;50;10;;5102;102;0.00
+Congelados;HP00566;2000000005669;Pizza mussarela congelada 460 g Familia;UN;12.85;18.90;51;11;;5102;102;0.00
+Congelados;HP00567;2000000005676;Pizza calabresa congelada 460 g Casa Vale;UN;13.53;19.90;52;12;;5102;102;0.00
+Congelados;HP00568;2000000005683;Pizza calabresa congelada 460 g Popular;UN;13.53;19.90;53;5;;5102;102;0.00
+Congelados;HP00569;2000000005690;Pizza calabresa congelada 460 g Select;UN;13.53;19.90;54;6;;5102;102;0.00
+Congelados;HP00570;2000000005706;Pizza calabresa congelada 460 g Bom Preco;UN;13.53;19.90;55;7;;5102;102;0.00
+Congelados;HP00571;2000000005713;Pizza calabresa congelada 460 g Familia;UN;13.53;19.90;56;8;;5102;102;0.00
+Congelados;HP00572;2000000005720;Hamburguer bovino 672 g Casa Vale;UN;16.93;24.90;57;9;;5102;102;0.00
+Congelados;HP00573;2000000005737;Hamburguer bovino 672 g Popular;UN;16.93;24.90;58;10;;5102;102;0.00
+Congelados;HP00574;2000000005744;Hamburguer bovino 672 g Select;UN;16.93;24.90;59;11;;5102;102;0.00
+Congelados;HP00575;2000000005751;Hamburguer bovino 672 g Bom Preco;UN;16.93;24.90;60;12;;5102;102;0.00
+Congelados;HP00576;2000000005768;Hamburguer bovino 672 g Familia;UN;16.93;24.90;61;5;;5102;102;0.00
+Congelados;HP00577;2000000005775;Batata palito congelada 1,05 kg Casa Vale;UN;14.89;21.90;62;6;;5102;102;0.00
+Congelados;HP00578;2000000005782;Batata palito congelada 1,05 kg Popular;UN;14.89;21.90;63;7;;5102;102;0.00
+Congelados;HP00579;2000000005799;Batata palito congelada 1,05 kg Select;UN;14.89;21.90;64;8;;5102;102;0.00
+Congelados;HP00580;2000000005805;Batata palito congelada 1,05 kg Bom Preco;UN;14.89;21.90;65;9;;5102;102;0.00
+Congelados;HP00581;2000000005812;Batata palito congelada 1,05 kg Familia;UN;14.89;21.90;66;10;;5102;102;0.00
+Congelados;HP00582;2000000005829;Lasanha bolonhesa congelada 600 g Casa Vale;UN;11.49;16.90;67;11;;5102;102;0.00
+Congelados;HP00583;2000000005836;Lasanha bolonhesa congelada 600 g Popular;UN;11.49;16.90;68;12;;5102;102;0.00
+Congelados;HP00584;2000000005843;Lasanha bolonhesa congelada 600 g Select;UN;11.49;16.90;69;5;;5102;102;0.00
+Congelados;HP00585;2000000005850;Lasanha bolonhesa congelada 600 g Bom Preco;UN;11.49;16.90;70;6;;5102;102;0.00
+Congelados;HP00586;2000000005867;Lasanha bolonhesa congelada 600 g Familia;UN;11.49;16.90;71;7;;5102;102;0.00
+Congelados;HP00587;2000000005874;Nuggets de frango 700 g Casa Vale;UN;16.93;24.90;72;8;;5102;102;0.00
+Congelados;HP00588;2000000005881;Nuggets de frango 700 g Popular;UN;16.93;24.90;73;9;;5102;102;0.00
+Congelados;HP00589;2000000005898;Nuggets de frango 700 g Select;UN;16.93;24.90;74;10;;5102;102;0.00
+Congelados;HP00590;2000000005904;Nuggets de frango 700 g Bom Preco;UN;16.93;24.90;75;11;;5102;102;0.00
+Congelados;HP00591;2000000005911;Nuggets de frango 700 g Familia;UN;16.93;24.90;76;12;;5102;102;0.00
+Congelados;HP00592;2000000005928;Vegetais seleta congelada 300 g Casa Vale;UN;5.43;7.99;77;5;;5102;102;0.00
+Congelados;HP00593;2000000005935;Vegetais seleta congelada 300 g Popular;UN;5.43;7.99;78;6;;5102;102;0.00
+Congelados;HP00594;2000000005942;Vegetais seleta congelada 300 g Select;UN;5.43;7.99;79;7;;5102;102;0.00
+Congelados;HP00595;2000000005959;Vegetais seleta congelada 300 g Bom Preco;UN;5.43;7.99;80;8;;5102;102;0.00
+Congelados;HP00596;2000000005966;Vegetais seleta congelada 300 g Familia;UN;5.43;7.99;81;9;;5102;102;0.00
+Congelados;HP00597;2000000005973;Sorvete creme 1,5 l Casa Vale;UN;16.93;24.90;82;10;;5102;102;0.00
+Congelados;HP00598;2000000005980;Sorvete creme 1,5 l Popular;UN;16.93;24.90;83;11;;5102;102;0.00
+Congelados;HP00599;2000000005997;Sorvete creme 1,5 l Select;UN;16.93;24.90;84;12;;5102;102;0.00
+Congelados;HP00600;2000000006000;Sorvete creme 1,5 l Bom Preco;UN;16.93;24.90;85;5;;5102;102;0.00
+Congelados;HP00601;2000000006017;Sorvete creme 1,5 l Familia;UN;16.93;24.90;86;6;;5102;102;0.00
+Congelados;HP00602;2000000006024;Sorvete chocolate 1,5 l Casa Vale;UN;16.93;24.90;87;7;;5102;102;0.00
+Congelados;HP00603;2000000006031;Sorvete chocolate 1,5 l Popular;UN;16.93;24.90;88;8;;5102;102;0.00
+Congelados;HP00604;2000000006048;Sorvete chocolate 1,5 l Select;UN;16.93;24.90;89;9;;5102;102;0.00
+Congelados;HP00605;2000000006055;Sorvete chocolate 1,5 l Bom Preco;UN;16.93;24.90;90;10;;5102;102;0.00
+Congelados;HP00606;2000000006062;Sorvete chocolate 1,5 l Familia;UN;16.93;24.90;91;11;;5102;102;0.00
+Congelados;HP00607;2000000006079;Polpa de fruta 400 g Casa Vale;UN;6.79;9.99;92;12;;5102;102;0.00
+Congelados;HP00608;2000000006086;Polpa de fruta 400 g Popular;UN;6.79;9.99;93;5;;5102;102;0.00
+Congelados;HP00609;2000000006093;Polpa de fruta 400 g Select;UN;6.79;9.99;94;6;;5102;102;0.00
+Congelados;HP00610;2000000006109;Polpa de fruta 400 g Bom Preco;UN;6.79;9.99;95;7;;5102;102;0.00
+Congelados;HP00611;2000000006116;Polpa de fruta 400 g Familia;UN;6.79;9.99;96;8;;5102;102;0.00
+Limpeza;HP00612;2000000006123;Detergente neutro 500 ml Casa Vale;UN;1.69;2.49;97;9;;5102;102;0.00
+Limpeza;HP00613;2000000006130;Detergente neutro 500 ml Popular;UN;1.69;2.49;98;10;;5102;102;0.00
+Limpeza;HP00614;2000000006147;Detergente neutro 500 ml Select;UN;1.69;2.49;99;11;;5102;102;0.00
+Limpeza;HP00615;2000000006154;Detergente neutro 500 ml Bom Preco;UN;1.69;2.49;100;12;;5102;102;0.00
+Limpeza;HP00616;2000000006161;Detergente neutro 500 ml Familia;UN;1.69;2.49;101;5;;5102;102;0.00
+Limpeza;HP00617;2000000006178;Detergente limao 500 ml Casa Vale;UN;1.69;2.49;102;6;;5102;102;0.00
+Limpeza;HP00618;2000000006185;Detergente limao 500 ml Popular;UN;1.69;2.49;103;7;;5102;102;0.00
+Limpeza;HP00619;2000000006192;Detergente limao 500 ml Select;UN;1.69;2.49;104;8;;5102;102;0.00
+Limpeza;HP00620;2000000006208;Detergente limao 500 ml Bom Preco;UN;1.69;2.49;105;9;;5102;102;0.00
+Limpeza;HP00621;2000000006215;Detergente limao 500 ml Familia;UN;1.69;2.49;106;10;;5102;102;0.00
+Limpeza;HP00622;2000000006222;Sabao em po 1,6 kg Casa Vale;UN;12.85;18.90;107;11;;5102;102;0.00
+Limpeza;HP00623;2000000006239;Sabao em po 1,6 kg Popular;UN;12.85;18.90;108;12;;5102;102;0.00
+Limpeza;HP00624;2000000006246;Sabao em po 1,6 kg Select;UN;12.85;18.90;109;5;;5102;102;0.00
+Limpeza;HP00625;2000000006253;Sabao em po 1,6 kg Bom Preco;UN;12.85;18.90;110;6;;5102;102;0.00
+Limpeza;HP00626;2000000006260;Sabao em po 1,6 kg Familia;UN;12.85;18.90;111;7;;5102;102;0.00
+Limpeza;HP00627;2000000006277;Sabao liquido roupas 3 l Casa Vale;UN;22.37;32.90;112;8;;5102;102;0.00
+Limpeza;HP00628;2000000006284;Sabao liquido roupas 3 l Popular;UN;22.37;32.90;113;9;;5102;102;0.00
+Limpeza;HP00629;2000000006291;Sabao liquido roupas 3 l Select;UN;22.37;32.90;114;10;;5102;102;0.00
+Limpeza;HP00630;2000000006307;Sabao liquido roupas 3 l Bom Preco;UN;22.37;32.90;25;11;;5102;102;0.00
+Limpeza;HP00631;2000000006314;Sabao liquido roupas 3 l Familia;UN;22.37;32.90;26;12;;5102;102;0.00
+Limpeza;HP00632;2000000006321;Amaciante 2 l Casa Vale;UN;8.77;12.90;27;5;;5102;102;0.00
+Limpeza;HP00633;2000000006338;Amaciante 2 l Popular;UN;8.77;12.90;28;6;;5102;102;0.00
+Limpeza;HP00634;2000000006345;Amaciante 2 l Select;UN;8.77;12.90;29;7;;5102;102;0.00
+Limpeza;HP00635;2000000006352;Amaciante 2 l Bom Preco;UN;8.77;12.90;30;8;;5102;102;0.00
+Limpeza;HP00636;2000000006369;Amaciante 2 l Familia;UN;8.77;12.90;31;9;;5102;102;0.00
+Limpeza;HP00637;2000000006376;Agua sanitaria 2 l Casa Vale;UN;4.41;6.49;32;10;;5102;102;0.00
+Limpeza;HP00638;2000000006383;Agua sanitaria 2 l Popular;UN;4.41;6.49;33;11;;5102;102;0.00
+Limpeza;HP00639;2000000006390;Agua sanitaria 2 l Select;UN;4.41;6.49;34;12;;5102;102;0.00
+Limpeza;HP00640;2000000006406;Agua sanitaria 2 l Bom Preco;UN;4.41;6.49;35;5;;5102;102;0.00
+Limpeza;HP00641;2000000006413;Agua sanitaria 2 l Familia;UN;4.41;6.49;36;6;;5102;102;0.00
+Limpeza;HP00642;2000000006420;Desinfetante lavanda 2 l Casa Vale;UN;6.11;8.99;37;7;;5102;102;0.00
+Limpeza;HP00643;2000000006437;Desinfetante lavanda 2 l Popular;UN;6.11;8.99;38;8;;5102;102;0.00
+Limpeza;HP00644;2000000006444;Desinfetante lavanda 2 l Select;UN;6.11;8.99;39;9;;5102;102;0.00
+Limpeza;HP00645;2000000006451;Desinfetante lavanda 2 l Bom Preco;UN;6.11;8.99;40;10;;5102;102;0.00
+Limpeza;HP00646;2000000006468;Desinfetante lavanda 2 l Familia;UN;6.11;8.99;41;11;;5102;102;0.00
+Limpeza;HP00647;2000000006475;Limpador multiuso 500 ml Casa Vale;UN;4.75;6.99;42;12;;5102;102;0.00
+Limpeza;HP00648;2000000006482;Limpador multiuso 500 ml Popular;UN;4.75;6.99;43;5;;5102;102;0.00
+Limpeza;HP00649;2000000006499;Limpador multiuso 500 ml Select;UN;4.75;6.99;44;6;;5102;102;0.00
+Limpeza;HP00650;2000000006505;Limpador multiuso 500 ml Bom Preco;UN;4.75;6.99;45;7;;5102;102;0.00
+Limpeza;HP00651;2000000006512;Limpador multiuso 500 ml Familia;UN;4.75;6.99;46;8;;5102;102;0.00
+Limpeza;HP00652;2000000006529;Esponja dupla face 4 un Casa Vale;UN;4.07;5.99;47;9;;5102;102;0.00
+Limpeza;HP00653;2000000006536;Esponja dupla face 4 un Popular;UN;4.07;5.99;48;10;;5102;102;0.00
+Limpeza;HP00654;2000000006543;Esponja dupla face 4 un Select;UN;4.07;5.99;49;11;;5102;102;0.00
+Limpeza;HP00655;2000000006550;Esponja dupla face 4 un Bom Preco;UN;4.07;5.99;50;12;;5102;102;0.00
+Limpeza;HP00656;2000000006567;Esponja dupla face 4 un Familia;UN;4.07;5.99;51;5;;5102;102;0.00
+Limpeza;HP00657;2000000006574;Pano multiuso 5 un Casa Vale;UN;5.43;7.99;52;6;;5102;102;0.00
+Limpeza;HP00658;2000000006581;Pano multiuso 5 un Popular;UN;5.43;7.99;53;7;;5102;102;0.00
+Limpeza;HP00659;2000000006598;Pano multiuso 5 un Select;UN;5.43;7.99;54;8;;5102;102;0.00
+Limpeza;HP00660;2000000006604;Pano multiuso 5 un Bom Preco;UN;5.43;7.99;55;9;;5102;102;0.00
+Limpeza;HP00661;2000000006611;Pano multiuso 5 un Familia;UN;5.43;7.99;56;10;;5102;102;0.00
+Limpeza;HP00662;2000000006628;Saco lixo 30 l 30 un Casa Vale;UN;6.79;9.99;57;11;;5102;102;0.00
+Limpeza;HP00663;2000000006635;Saco lixo 30 l 30 un Popular;UN;6.79;9.99;58;12;;5102;102;0.00
+Limpeza;HP00664;2000000006642;Saco lixo 30 l 30 un Select;UN;6.79;9.99;59;5;;5102;102;0.00
+Limpeza;HP00665;2000000006659;Saco lixo 30 l 30 un Bom Preco;UN;6.79;9.99;60;6;;5102;102;0.00
+Limpeza;HP00666;2000000006666;Saco lixo 30 l 30 un Familia;UN;6.79;9.99;61;7;;5102;102;0.00
+Limpeza;HP00667;2000000006673;Saco lixo 100 l 15 un Casa Vale;UN;10.13;14.90;62;8;;5102;102;0.00
+Limpeza;HP00668;2000000006680;Saco lixo 100 l 15 un Popular;UN;10.13;14.90;63;9;;5102;102;0.00
+Limpeza;HP00669;2000000006697;Saco lixo 100 l 15 un Select;UN;10.13;14.90;64;10;;5102;102;0.00
+Limpeza;HP00670;2000000006703;Saco lixo 100 l 15 un Bom Preco;UN;10.13;14.90;65;11;;5102;102;0.00
+Limpeza;HP00671;2000000006710;Saco lixo 100 l 15 un Familia;UN;10.13;14.90;66;12;;5102;102;0.00
+Limpeza;HP00672;2000000006727;Papel toalha 2 rolos Casa Vale;UN;6.11;8.99;67;5;;5102;102;0.00
+Limpeza;HP00673;2000000006734;Papel toalha 2 rolos Popular;UN;6.11;8.99;68;6;;5102;102;0.00
+Limpeza;HP00674;2000000006741;Papel toalha 2 rolos Select;UN;6.11;8.99;69;7;;5102;102;0.00
+Limpeza;HP00675;2000000006758;Papel toalha 2 rolos Bom Preco;UN;6.11;8.99;70;8;;5102;102;0.00
+Limpeza;HP00676;2000000006765;Papel toalha 2 rolos Familia;UN;6.11;8.99;71;9;;5102;102;0.00
+Limpeza;HP00677;2000000006772;Alcool 70 1 l Casa Vale;UN;6.79;9.99;72;10;;5102;102;0.00
+Limpeza;HP00678;2000000006789;Alcool 70 1 l Popular;UN;6.79;9.99;73;11;;5102;102;0.00
+Limpeza;HP00679;2000000006796;Alcool 70 1 l Select;UN;6.79;9.99;74;12;;5102;102;0.00
+Limpeza;HP00680;2000000006802;Alcool 70 1 l Bom Preco;UN;6.79;9.99;75;5;;5102;102;0.00
+Limpeza;HP00681;2000000006819;Alcool 70 1 l Familia;UN;6.79;9.99;76;6;;5102;102;0.00
+Higiene e Beleza;HP00682;2000000006826;Sabonete 85 g Casa Vale;UN;2.03;2.99;77;7;;5102;102;0.00
+Higiene e Beleza;HP00683;2000000006833;Sabonete 85 g Popular;UN;2.03;2.99;78;8;;5102;102;0.00
+Higiene e Beleza;HP00684;2000000006840;Sabonete 85 g Select;UN;2.03;2.99;79;9;;5102;102;0.00
+Higiene e Beleza;HP00685;2000000006857;Sabonete 85 g Bom Preco;UN;2.03;2.99;80;10;;5102;102;0.00
+Higiene e Beleza;HP00686;2000000006864;Sabonete 85 g Familia;UN;2.03;2.99;81;11;;5102;102;0.00
+Higiene e Beleza;HP00687;2000000006871;Shampoo cabelo normal 350 ml Casa Vale;UN;9.45;13.90;82;12;;5102;102;0.00
+Higiene e Beleza;HP00688;2000000006888;Shampoo cabelo normal 350 ml Popular;UN;9.45;13.90;83;5;;5102;102;0.00
+Higiene e Beleza;HP00689;2000000006895;Shampoo cabelo normal 350 ml Select;UN;9.45;13.90;84;6;;5102;102;0.00
+Higiene e Beleza;HP00690;2000000006901;Shampoo cabelo normal 350 ml Bom Preco;UN;9.45;13.90;85;7;;5102;102;0.00
+Higiene e Beleza;HP00691;2000000006918;Shampoo cabelo normal 350 ml Familia;UN;9.45;13.90;86;8;;5102;102;0.00
+Higiene e Beleza;HP00692;2000000006925;Condicionador cabelo normal 350 ml Casa Vale;UN;10.13;14.90;87;9;;5102;102;0.00
+Higiene e Beleza;HP00693;2000000006932;Condicionador cabelo normal 350 ml Popular;UN;10.13;14.90;88;10;;5102;102;0.00
+Higiene e Beleza;HP00694;2000000006949;Condicionador cabelo normal 350 ml Select;UN;10.13;14.90;89;11;;5102;102;0.00
+Higiene e Beleza;HP00695;2000000006956;Condicionador cabelo normal 350 ml Bom Preco;UN;10.13;14.90;90;12;;5102;102;0.00
+Higiene e Beleza;HP00696;2000000006963;Condicionador cabelo normal 350 ml Familia;UN;10.13;14.90;91;5;;5102;102;0.00
+Higiene e Beleza;HP00697;2000000006970;Creme dental 90 g Casa Vale;UN;3.39;4.99;92;6;;5102;102;0.00
+Higiene e Beleza;HP00698;2000000006987;Creme dental 90 g Popular;UN;3.39;4.99;93;7;;5102;102;0.00
+Higiene e Beleza;HP00699;2000000006994;Creme dental 90 g Select;UN;3.39;4.99;94;8;;5102;102;0.00
+Higiene e Beleza;HP00700;2000000007007;Creme dental 90 g Bom Preco;UN;3.39;4.99;95;9;;5102;102;0.00
+Higiene e Beleza;HP00701;2000000007014;Creme dental 90 g Familia;UN;3.39;4.99;96;10;;5102;102;0.00
+Higiene e Beleza;HP00702;2000000007021;Escova dental media 1 un Casa Vale;UN;4.75;6.99;97;11;;5102;102;0.00
+Higiene e Beleza;HP00703;2000000007038;Escova dental media 1 un Popular;UN;4.75;6.99;98;12;;5102;102;0.00
+Higiene e Beleza;HP00704;2000000007045;Escova dental media 1 un Select;UN;4.75;6.99;99;5;;5102;102;0.00
+Higiene e Beleza;HP00705;2000000007052;Escova dental media 1 un Bom Preco;UN;4.75;6.99;100;6;;5102;102;0.00
+Higiene e Beleza;HP00706;2000000007069;Escova dental media 1 un Familia;UN;4.75;6.99;101;7;;5102;102;0.00
+Higiene e Beleza;HP00707;2000000007076;Fio dental 50 m Casa Vale;UN;5.43;7.99;102;8;;5102;102;0.00
+Higiene e Beleza;HP00708;2000000007083;Fio dental 50 m Popular;UN;5.43;7.99;103;9;;5102;102;0.00
+Higiene e Beleza;HP00709;2000000007090;Fio dental 50 m Select;UN;5.43;7.99;104;10;;5102;102;0.00
+Higiene e Beleza;HP00710;2000000007106;Fio dental 50 m Bom Preco;UN;5.43;7.99;105;11;;5102;102;0.00
+Higiene e Beleza;HP00711;2000000007113;Fio dental 50 m Familia;UN;5.43;7.99;106;12;;5102;102;0.00
+Higiene e Beleza;HP00712;2000000007120;Desodorante aerosol 150 ml Casa Vale;UN;8.77;12.90;107;5;;5102;102;0.00
+Higiene e Beleza;HP00713;2000000007137;Desodorante aerosol 150 ml Popular;UN;8.77;12.90;108;6;;5102;102;0.00
+Higiene e Beleza;HP00714;2000000007144;Desodorante aerosol 150 ml Select;UN;8.77;12.90;109;7;;5102;102;0.00
+Higiene e Beleza;HP00715;2000000007151;Desodorante aerosol 150 ml Bom Preco;UN;8.77;12.90;110;8;;5102;102;0.00
+Higiene e Beleza;HP00716;2000000007168;Desodorante aerosol 150 ml Familia;UN;8.77;12.90;111;9;;5102;102;0.00
+Higiene e Beleza;HP00717;2000000007175;Papel higienico folha dupla 12 rolos Casa Vale;UN;12.85;18.90;112;10;;5102;102;0.00
+Higiene e Beleza;HP00718;2000000007182;Papel higienico folha dupla 12 rolos Popular;UN;12.85;18.90;113;11;;5102;102;0.00
+Higiene e Beleza;HP00719;2000000007199;Papel higienico folha dupla 12 rolos Select;UN;12.85;18.90;114;12;;5102;102;0.00
+Higiene e Beleza;HP00720;2000000007205;Papel higienico folha dupla 12 rolos Bom Preco;UN;12.85;18.90;25;5;;5102;102;0.00
+Higiene e Beleza;HP00721;2000000007212;Papel higienico folha dupla 12 rolos Familia;UN;12.85;18.90;26;6;;5102;102;0.00
+Higiene e Beleza;HP00722;2000000007229;Absorvente com abas 16 un Casa Vale;UN;6.11;8.99;27;7;;5102;102;0.00
+Higiene e Beleza;HP00723;2000000007236;Absorvente com abas 16 un Popular;UN;6.11;8.99;28;8;;5102;102;0.00
+Higiene e Beleza;HP00724;2000000007243;Absorvente com abas 16 un Select;UN;6.11;8.99;29;9;;5102;102;0.00
+Higiene e Beleza;HP00725;2000000007250;Absorvente com abas 16 un Bom Preco;UN;6.11;8.99;30;10;;5102;102;0.00
+Higiene e Beleza;HP00726;2000000007267;Absorvente com abas 16 un Familia;UN;6.11;8.99;31;11;;5102;102;0.00
+Higiene e Beleza;HP00727;2000000007274;Aparelho barbear descartavel 2 un Casa Vale;UN;6.79;9.99;32;12;;5102;102;0.00
+Higiene e Beleza;HP00728;2000000007281;Aparelho barbear descartavel 2 un Popular;UN;6.79;9.99;33;5;;5102;102;0.00
+Higiene e Beleza;HP00729;2000000007298;Aparelho barbear descartavel 2 un Select;UN;6.79;9.99;34;6;;5102;102;0.00
+Higiene e Beleza;HP00730;2000000007304;Aparelho barbear descartavel 2 un Bom Preco;UN;6.79;9.99;35;7;;5102;102;0.00
+Higiene e Beleza;HP00731;2000000007311;Aparelho barbear descartavel 2 un Familia;UN;6.79;9.99;36;8;;5102;102;0.00
+Higiene e Beleza;HP00732;2000000007328;Hidratante corporal 400 ml Casa Vale;UN;13.53;19.90;37;9;;5102;102;0.00
+Higiene e Beleza;HP00733;2000000007335;Hidratante corporal 400 ml Popular;UN;13.53;19.90;38;10;;5102;102;0.00
+Higiene e Beleza;HP00734;2000000007342;Hidratante corporal 400 ml Select;UN;13.53;19.90;39;11;;5102;102;0.00
+Higiene e Beleza;HP00735;2000000007359;Hidratante corporal 400 ml Bom Preco;UN;13.53;19.90;40;12;;5102;102;0.00
+Higiene e Beleza;HP00736;2000000007366;Hidratante corporal 400 ml Familia;UN;13.53;19.90;41;5;;5102;102;0.00
+Higiene e Beleza;HP00737;2000000007373;Protetor solar FPS 30 120 ml Casa Vale;UN;23.73;34.90;42;6;;5102;102;0.00
+Higiene e Beleza;HP00738;2000000007380;Protetor solar FPS 30 120 ml Popular;UN;23.73;34.90;43;7;;5102;102;0.00
+Higiene e Beleza;HP00739;2000000007397;Protetor solar FPS 30 120 ml Select;UN;23.73;34.90;44;8;;5102;102;0.00
+Higiene e Beleza;HP00740;2000000007403;Protetor solar FPS 30 120 ml Bom Preco;UN;23.73;34.90;45;9;;5102;102;0.00
+Higiene e Beleza;HP00741;2000000007410;Protetor solar FPS 30 120 ml Familia;UN;23.73;34.90;46;10;;5102;102;0.00
+Bebe e Infantil;HP00742;2000000007427;Fralda infantil P 30 un Casa Vale;UN;22.37;32.90;47;11;;5102;102;0.00
+Bebe e Infantil;HP00743;2000000007434;Fralda infantil P 30 un Popular;UN;22.37;32.90;48;12;;5102;102;0.00
+Bebe e Infantil;HP00744;2000000007441;Fralda infantil P 30 un Select;UN;22.37;32.90;49;5;;5102;102;0.00
+Bebe e Infantil;HP00745;2000000007458;Fralda infantil M 28 un Casa Vale;UN;23.73;34.90;50;6;;5102;102;0.00
+Bebe e Infantil;HP00746;2000000007465;Fralda infantil M 28 un Popular;UN;23.73;34.90;51;7;;5102;102;0.00
+Bebe e Infantil;HP00747;2000000007472;Fralda infantil M 28 un Select;UN;23.73;34.90;52;8;;5102;102;0.00
+Bebe e Infantil;HP00748;2000000007489;Fralda infantil G 26 un Casa Vale;UN;25.09;36.90;53;9;;5102;102;0.00
+Bebe e Infantil;HP00749;2000000007496;Fralda infantil G 26 un Popular;UN;25.09;36.90;54;10;;5102;102;0.00
+Bebe e Infantil;HP00750;2000000007502;Fralda infantil G 26 un Select;UN;25.09;36.90;55;11;;5102;102;0.00
+Bebe e Infantil;HP00751;2000000007519;Lenco umedecido 48 un Casa Vale;UN;6.11;8.99;56;12;;5102;102;0.00
+Bebe e Infantil;HP00752;2000000007526;Lenco umedecido 48 un Popular;UN;6.11;8.99;57;5;;5102;102;0.00
+Bebe e Infantil;HP00753;2000000007533;Lenco umedecido 48 un Select;UN;6.11;8.99;58;6;;5102;102;0.00
+Bebe e Infantil;HP00754;2000000007540;Shampoo infantil 200 ml Casa Vale;UN;8.77;12.90;59;7;;5102;102;0.00
+Bebe e Infantil;HP00755;2000000007557;Shampoo infantil 200 ml Popular;UN;8.77;12.90;60;8;;5102;102;0.00
+Bebe e Infantil;HP00756;2000000007564;Shampoo infantil 200 ml Select;UN;8.77;12.90;61;9;;5102;102;0.00
+Bebe e Infantil;HP00757;2000000007571;Sabonete infantil 80 g Casa Vale;UN;2.71;3.99;62;10;;5102;102;0.00
+Bebe e Infantil;HP00758;2000000007588;Sabonete infantil 80 g Popular;UN;2.71;3.99;63;11;;5102;102;0.00
+Bebe e Infantil;HP00759;2000000007595;Sabonete infantil 80 g Select;UN;2.71;3.99;64;12;;5102;102;0.00
+Bebe e Infantil;HP00760;2000000007601;Papinha legumes 115 g Casa Vale;UN;5.43;7.99;65;5;;5102;102;0.00
+Bebe e Infantil;HP00761;2000000007618;Papinha legumes 115 g Popular;UN;5.43;7.99;66;6;;5102;102;0.00
+Bebe e Infantil;HP00762;2000000007625;Papinha legumes 115 g Select;UN;5.43;7.99;67;7;;5102;102;0.00
+Bebe e Infantil;HP00763;2000000007632;Cereal infantil 230 g Casa Vale;UN;10.13;14.90;68;8;;5102;102;0.00
+Bebe e Infantil;HP00764;2000000007649;Cereal infantil 230 g Popular;UN;10.13;14.90;69;9;;5102;102;0.00
+Bebe e Infantil;HP00765;2000000007656;Cereal infantil 230 g Select;UN;10.13;14.90;70;10;;5102;102;0.00
+Pet Shop;HP00766;2000000007663;Racao cao adulto carne 10 kg Casa Vale;UN;61.13;89.90;71;11;;5102;102;0.00
+Pet Shop;HP00767;2000000007670;Racao cao adulto carne 10 kg Popular;UN;61.13;89.90;72;12;;5102;102;0.00
+Pet Shop;HP00768;2000000007687;Racao cao adulto carne 10 kg Select;UN;61.13;89.90;73;5;;5102;102;0.00
+Pet Shop;HP00769;2000000007694;Racao cao adulto carne 10 kg Bom Preco;UN;61.13;89.90;74;6;;5102;102;0.00
+Pet Shop;HP00770;2000000007700;Racao cao adulto frango 10 kg Casa Vale;UN;57.73;84.90;75;7;;5102;102;0.00
+Pet Shop;HP00771;2000000007717;Racao cao adulto frango 10 kg Popular;UN;57.73;84.90;76;8;;5102;102;0.00
+Pet Shop;HP00772;2000000007724;Racao cao adulto frango 10 kg Select;UN;57.73;84.90;77;9;;5102;102;0.00
+Pet Shop;HP00773;2000000007731;Racao cao adulto frango 10 kg Bom Preco;UN;57.73;84.90;78;10;;5102;102;0.00
+Pet Shop;HP00774;2000000007748;Racao cao filhote 3 kg Casa Vale;UN;27.13;39.90;79;11;;5102;102;0.00
+Pet Shop;HP00775;2000000007755;Racao cao filhote 3 kg Popular;UN;27.13;39.90;80;12;;5102;102;0.00
+Pet Shop;HP00776;2000000007762;Racao cao filhote 3 kg Select;UN;27.13;39.90;81;5;;5102;102;0.00
+Pet Shop;HP00777;2000000007779;Racao cao filhote 3 kg Bom Preco;UN;27.13;39.90;82;6;;5102;102;0.00
+Pet Shop;HP00778;2000000007786;Racao gato adulto peixe 3 kg Casa Vale;UN;29.17;42.90;83;7;;5102;102;0.00
+Pet Shop;HP00779;2000000007793;Racao gato adulto peixe 3 kg Popular;UN;29.17;42.90;84;8;;5102;102;0.00
+Pet Shop;HP00780;2000000007809;Racao gato adulto peixe 3 kg Select;UN;29.17;42.90;85;9;;5102;102;0.00
+Pet Shop;HP00781;2000000007816;Racao gato adulto peixe 3 kg Bom Preco;UN;29.17;42.90;86;10;;5102;102;0.00
+Pet Shop;HP00782;2000000007823;Racao gato castrado 3 kg Casa Vale;UN;33.93;49.90;87;11;;5102;102;0.00
+Pet Shop;HP00783;2000000007830;Racao gato castrado 3 kg Popular;UN;33.93;49.90;88;12;;5102;102;0.00
+Pet Shop;HP00784;2000000007847;Racao gato castrado 3 kg Select;UN;33.93;49.90;89;5;;5102;102;0.00
+Pet Shop;HP00785;2000000007854;Racao gato castrado 3 kg Bom Preco;UN;33.93;49.90;90;6;;5102;102;0.00
+Pet Shop;HP00786;2000000007861;Areia sanitaria gatos 4 kg Casa Vale;UN;11.49;16.90;91;7;;5102;102;0.00
+Pet Shop;HP00787;2000000007878;Areia sanitaria gatos 4 kg Popular;UN;11.49;16.90;92;8;;5102;102;0.00
+Pet Shop;HP00788;2000000007885;Areia sanitaria gatos 4 kg Select;UN;11.49;16.90;93;9;;5102;102;0.00
+Pet Shop;HP00789;2000000007892;Areia sanitaria gatos 4 kg Bom Preco;UN;11.49;16.90;94;10;;5102;102;0.00
+Pet Shop;HP00790;2000000007908;Bifinho cao 500 g Casa Vale;UN;12.85;18.90;95;11;;5102;102;0.00
+Pet Shop;HP00791;2000000007915;Bifinho cao 500 g Popular;UN;12.85;18.90;96;12;;5102;102;0.00
+Pet Shop;HP00792;2000000007922;Bifinho cao 500 g Select;UN;12.85;18.90;97;5;;5102;102;0.00
+Pet Shop;HP00793;2000000007939;Bifinho cao 500 g Bom Preco;UN;12.85;18.90;98;6;;5102;102;0.00
+Pet Shop;HP00794;2000000007946;Sachê gato 85 g Casa Vale;UN;2.37;3.49;99;7;;5102;102;0.00
+Pet Shop;HP00795;2000000007953;Sachê gato 85 g Popular;UN;2.37;3.49;100;8;;5102;102;0.00
+Pet Shop;HP00796;2000000007960;Sachê gato 85 g Select;UN;2.37;3.49;101;9;;5102;102;0.00
+Pet Shop;HP00797;2000000007977;Sachê gato 85 g Bom Preco;UN;2.37;3.49;102;10;;5102;102;0.00
+Pet Shop;HP00798;2000000007984;Shampoo pet 500 ml Casa Vale;UN;13.53;19.90;103;11;;5102;102;0.00
+Pet Shop;HP00799;2000000007991;Shampoo pet 500 ml Popular;UN;13.53;19.90;104;12;;5102;102;0.00
+Pet Shop;HP00800;2000000008004;Shampoo pet 500 ml Select;UN;13.53;19.90;105;5;;5102;102;0.00
+Pet Shop;HP00801;2000000008011;Shampoo pet 500 ml Bom Preco;UN;13.53;19.90;106;6;;5102;102;0.00
+Pet Shop;HP00802;2000000008028;Tapete higienico 30 un Casa Vale;UN;40.73;59.90;107;7;;5102;102;0.00
+Pet Shop;HP00803;2000000008035;Tapete higienico 30 un Popular;UN;40.73;59.90;108;8;;5102;102;0.00
+Pet Shop;HP00804;2000000008042;Tapete higienico 30 un Select;UN;40.73;59.90;109;9;;5102;102;0.00
+Pet Shop;HP00805;2000000008059;Tapete higienico 30 un Bom Preco;UN;40.73;59.90;110;10;;5102;102;0.00
+Bazar e Utilidades;HP00806;2000000008066;Copo descartavel 100 un Casa Vale;UN;6.11;8.99;111;11;;5102;102;0.00
+Bazar e Utilidades;HP00807;2000000008073;Copo descartavel 100 un Popular;UN;6.11;8.99;112;12;;5102;102;0.00
+Bazar e Utilidades;HP00808;2000000008080;Copo descartavel 100 un Select;UN;6.11;8.99;113;5;;5102;102;0.00
+Bazar e Utilidades;HP00809;2000000008097;Prato descartavel 10 un Casa Vale;UN;4.07;5.99;114;6;;5102;102;0.00
+Bazar e Utilidades;HP00810;2000000008103;Prato descartavel 10 un Popular;UN;4.07;5.99;25;7;;5102;102;0.00
+Bazar e Utilidades;HP00811;2000000008110;Prato descartavel 10 un Select;UN;4.07;5.99;26;8;;5102;102;0.00
+Bazar e Utilidades;HP00812;2000000008127;Talher descartavel 50 un Casa Vale;UN;5.43;7.99;27;9;;5102;102;0.00
+Bazar e Utilidades;HP00813;2000000008134;Talher descartavel 50 un Popular;UN;5.43;7.99;28;10;;5102;102;0.00
+Bazar e Utilidades;HP00814;2000000008141;Talher descartavel 50 un Select;UN;5.43;7.99;29;11;;5102;102;0.00
+Bazar e Utilidades;HP00815;2000000008158;Pote plastico 1 l Casa Vale;UN;6.79;9.99;30;12;;5102;102;0.00
+Bazar e Utilidades;HP00816;2000000008165;Pote plastico 1 l Popular;UN;6.79;9.99;31;5;;5102;102;0.00
+Bazar e Utilidades;HP00817;2000000008172;Pote plastico 1 l Select;UN;6.79;9.99;32;6;;5102;102;0.00
+Bazar e Utilidades;HP00818;2000000008189;Garrafa termica 1 l Casa Vale;UN;27.13;39.90;33;7;;5102;102;0.00
+Bazar e Utilidades;HP00819;2000000008196;Garrafa termica 1 l Popular;UN;27.13;39.90;34;8;;5102;102;0.00
+Bazar e Utilidades;HP00820;2000000008202;Garrafa termica 1 l Select;UN;27.13;39.90;35;9;;5102;102;0.00
+Bazar e Utilidades;HP00821;2000000008219;Pilha alcalina AA 4 un Casa Vale;UN;12.85;18.90;36;10;;5102;102;0.00
+Bazar e Utilidades;HP00822;2000000008226;Pilha alcalina AA 4 un Popular;UN;12.85;18.90;37;11;;5102;102;0.00
+Bazar e Utilidades;HP00823;2000000008233;Pilha alcalina AA 4 un Select;UN;12.85;18.90;38;12;;5102;102;0.00
+Bazar e Utilidades;HP00824;2000000008240;Lampada LED 9 W Casa Vale;UN;6.11;8.99;39;5;;5102;102;0.00
+Bazar e Utilidades;HP00825;2000000008257;Lampada LED 9 W Popular;UN;6.11;8.99;40;6;;5102;102;0.00
+Bazar e Utilidades;HP00826;2000000008264;Lampada LED 9 W Select;UN;6.11;8.99;41;7;;5102;102;0.00
+Bazar e Utilidades;HP00827;2000000008271;Extensao eletrica 3 m Casa Vale;UN;20.33;29.90;42;8;;5102;102;0.00
+Bazar e Utilidades;HP00828;2000000008288;Extensao eletrica 3 m Popular;UN;20.33;29.90;43;9;;5102;102;0.00
+Bazar e Utilidades;HP00829;2000000008295;Extensao eletrica 3 m Select;UN;20.33;29.90;44;10;;5102;102;0.00
+Bazar e Utilidades;HP00830;2000000008301;Vela aniversario 24 un Casa Vale;UN;4.75;6.99;45;11;;5102;102;0.00
+Bazar e Utilidades;HP00831;2000000008318;Vela aniversario 24 un Popular;UN;4.75;6.99;46;12;;5102;102;0.00
+Bazar e Utilidades;HP00832;2000000008325;Vela aniversario 24 un Select;UN;4.75;6.99;47;5;;5102;102;0.00
+Bazar e Utilidades;HP00833;2000000008332;Carvao vegetal 4 kg Casa Vale;UN;12.17;17.90;48;6;;5102;102;0.00
+Bazar e Utilidades;HP00834;2000000008349;Carvao vegetal 4 kg Popular;UN;12.17;17.90;49;7;;5102;102;0.00
+Bazar e Utilidades;HP00835;2000000008356;Carvao vegetal 4 kg Select;UN;12.17;17.90;50;8;;5102;102;0.00
+Bazar e Utilidades;HP00836;2000000008363;Papel aluminio 30 cm x 4 m Casa Vale;UN;5.43;7.99;51;9;;5102;102;0.00
+Bazar e Utilidades;HP00837;2000000008370;Papel aluminio 30 cm x 4 m Popular;UN;5.43;7.99;52;10;;5102;102;0.00
+Bazar e Utilidades;HP00838;2000000008387;Papel aluminio 30 cm x 4 m Select;UN;5.43;7.99;53;11;;5102;102;0.00
+Bazar e Utilidades;HP00839;2000000008394;Filme PVC 28 cm x 15 m Casa Vale;UN;6.11;8.99;54;12;;5102;102;0.00
+Bazar e Utilidades;HP00840;2000000008400;Filme PVC 28 cm x 15 m Popular;UN;6.11;8.99;55;5;;5102;102;0.00
+Bazar e Utilidades;HP00841;2000000008417;Filme PVC 28 cm x 15 m Select;UN;6.11;8.99;56;6;;5102;102;0.00
+Papelaria;HP00842;2000000008424;Caderno universitario 96 folhas Casa Vale;UN;10.13;14.90;57;7;;5102;102;0.00
+Papelaria;HP00843;2000000008431;Caderno universitario 96 folhas Popular;UN;10.13;14.90;58;8;;5102;102;0.00
+Papelaria;HP00844;2000000008448;Caderno universitario 96 folhas Select;UN;10.13;14.90;59;9;;5102;102;0.00
+Papelaria;HP00845;2000000008455;Caneta esferografica azul 1 un Casa Vale;UN;1.69;2.49;60;10;;5102;102;0.00
+Papelaria;HP00846;2000000008462;Caneta esferografica azul 1 un Popular;UN;1.69;2.49;61;11;;5102;102;0.00
+Papelaria;HP00847;2000000008479;Caneta esferografica azul 1 un Select;UN;1.69;2.49;62;12;;5102;102;0.00
+Papelaria;HP00848;2000000008486;Lapis preto 1 un Casa Vale;UN;1.01;1.49;63;5;;5102;102;0.00
+Papelaria;HP00849;2000000008493;Lapis preto 1 un Popular;UN;1.01;1.49;64;6;;5102;102;0.00
+Papelaria;HP00850;2000000008509;Lapis preto 1 un Select;UN;1.01;1.49;65;7;;5102;102;0.00
+Papelaria;HP00851;2000000008516;Borracha branca 1 un Casa Vale;UN;1.35;1.99;66;8;;5102;102;0.00
+Papelaria;HP00852;2000000008523;Borracha branca 1 un Popular;UN;1.35;1.99;67;9;;5102;102;0.00
+Papelaria;HP00853;2000000008530;Borracha branca 1 un Select;UN;1.35;1.99;68;10;;5102;102;0.00
+Papelaria;HP00854;2000000008547;Cola branca 90 g Casa Vale;UN;3.39;4.99;69;11;;5102;102;0.00
+Papelaria;HP00855;2000000008554;Cola branca 90 g Popular;UN;3.39;4.99;70;12;;5102;102;0.00
+Papelaria;HP00856;2000000008561;Cola branca 90 g Select;UN;3.39;4.99;71;5;;5102;102;0.00
+Papelaria;HP00857;2000000008578;Papel sulfite A4 500 folhas Casa Vale;UN;20.33;29.90;72;6;;5102;102;0.00
+Papelaria;HP00858;2000000008585;Papel sulfite A4 500 folhas Popular;UN;20.33;29.90;73;7;;5102;102;0.00
+Papelaria;HP00859;2000000008592;Papel sulfite A4 500 folhas Select;UN;20.33;29.90;74;8;;5102;102;0.00
+Papelaria;HP00860;2000000008608;Envelope oficio 10 un Casa Vale;UN;4.75;6.99;75;9;;5102;102;0.00
+Papelaria;HP00861;2000000008615;Envelope oficio 10 un Popular;UN;4.75;6.99;76;10;;5102;102;0.00
+Papelaria;HP00862;2000000008622;Envelope oficio 10 un Select;UN;4.75;6.99;77;11;;5102;102;0.00
+Papelaria;HP00863;2000000008639;Fita adesiva 45 m Casa Vale;UN;4.07;5.99;78;12;;5102;102;0.00
+Papelaria;HP00864;2000000008646;Fita adesiva 45 m Popular;UN;4.07;5.99;79;5;;5102;102;0.00
+Papelaria;HP00865;2000000008653;Fita adesiva 45 m Select;UN;4.07;5.99;80;6;;5102;102;0.00
+Automotivo;HP00866;2000000008660;Oleo motor 1 l Casa Vale;UN;26.45;38.90;81;7;;5102;102;0.00
+Automotivo;HP00867;2000000008677;Oleo motor 1 l Popular;UN;26.45;38.90;82;8;;5102;102;0.00
+Automotivo;HP00868;2000000008684;Oleo motor 1 l Select;UN;26.45;38.90;83;9;;5102;102;0.00
+Automotivo;HP00869;2000000008691;Aditivo radiador 1 l Casa Vale;UN;11.49;16.90;84;10;;5102;102;0.00
+Automotivo;HP00870;2000000008707;Aditivo radiador 1 l Popular;UN;11.49;16.90;85;11;;5102;102;0.00
+Automotivo;HP00871;2000000008714;Aditivo radiador 1 l Select;UN;11.49;16.90;86;12;;5102;102;0.00
+Automotivo;HP00872;2000000008721;Limpador para-brisa 100 ml Casa Vale;UN;5.43;7.99;87;5;;5102;102;0.00
+Automotivo;HP00873;2000000008738;Limpador para-brisa 100 ml Popular;UN;5.43;7.99;88;6;;5102;102;0.00
+Automotivo;HP00874;2000000008745;Limpador para-brisa 100 ml Select;UN;5.43;7.99;89;7;;5102;102;0.00
+Automotivo;HP00875;2000000008752;Cera automotiva 200 g Casa Vale;UN;13.53;19.90;90;8;;5102;102;0.00
+Automotivo;HP00876;2000000008769;Cera automotiva 200 g Popular;UN;13.53;19.90;91;9;;5102;102;0.00
+Automotivo;HP00877;2000000008776;Cera automotiva 200 g Select;UN;13.53;19.90;92;10;;5102;102;0.00
+Automotivo;HP00878;2000000008783;Pano microfibra 2 un Casa Vale;UN;8.77;12.90;93;11;;5102;102;0.00
+Automotivo;HP00879;2000000008790;Pano microfibra 2 un Popular;UN;8.77;12.90;94;12;;5102;102;0.00
+Automotivo;HP00880;2000000008806;Pano microfibra 2 un Select;UN;8.77;12.90;95;5;;5102;102;0.00
+Automotivo;HP00881;2000000008813;Odorizador automotivo 1 un Casa Vale;UN;6.11;8.99;96;6;;5102;102;0.00
+Automotivo;HP00882;2000000008820;Odorizador automotivo 1 un Popular;UN;6.11;8.99;97;7;;5102;102;0.00
+Automotivo;HP00883;2000000008837;Odorizador automotivo 1 un Select;UN;6.11;8.99;98;8;;5102;102;0.00

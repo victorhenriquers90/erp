@@ -1,0 +1,51 @@
+@inherits LayoutComponentBase
+
+<div class="app-shell">
+    <aside class="shell-sidebar">
+        <div class="brand-block">
+            <div class="brand-mark">PV</div>
+            <div>
+                <div class="brand-name">ProjetoVarejo</div>
+                <div class="brand-caption">ERP web</div>
+            </div>
+        </div>
+
+        <NavMenu />
+    </aside>
+
+    <main class="shell-main">
+        <header class="shell-topbar">
+            <div>
+                <div class="topbar-label">Ambiente conectado</div>
+                <strong>Operacao varejo</strong>
+            </div>
+            <div class="topbar-actions">
+                <span class="status-dot"></span>
+                <span>API local</span>
+            </div>
+        </header>
+
+        <section class="shell-content">
+            @Body
+        </section>
+    </main>
+</div>
+
+<nav class="mobile-nav" aria-label="Navegacao principal">
+    <NavLink href="" Match="NavLinkMatch.All">
+        <span>⌂</span>
+        Cockpit
+    </NavLink>
+    <NavLink href="produtos">
+        <span>□</span>
+        Produtos
+    </NavLink>
+    <NavLink href="clientes">
+        <span>◌</span>
+        Clientes
+    </NavLink>
+    <NavLink href="estoque">
+        <span>▤</span>
+        Estoque
+    </NavLink>
+</nav>

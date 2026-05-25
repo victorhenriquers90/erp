@@ -1,0 +1,252 @@
+═══════════════════════════════════════════════════════════════════
+        INSTRUÇÕES PARA CODEX COLABORAR NO PROJETO VAREJO
+═══════════════════════════════════════════════════════════════════
+
+Oi Codex! Você foi selecionado como IA2 para trabalhar no Projeto Varejo.
+
+Aqui estão TODAS as informações que você precisa:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📂 PASTA DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+C:\Users\victo\Documents\projeto
+
+Já tem Git inicializado. Clone ou acesse daqui.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 LEIA ISSO EM ORDEM (Total: 2 horas)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. C:\Users\victo\Documents\projeto\ROADMAP.md
+   (Visão geral, 15 min)
+
+2. C:\Users\victo\Documents\projeto\SISTEMA_MODULAR_COMPLETO.md
+   (Tudo que foi feito, 45 min)
+
+3. C:\Users\victo\Documents\projeto\.claude\AI_COORDINATION.md
+   (Como IAs trabalham juntas, 10 min)
+
+4. C:\Users\victo\Documents\projeto\.claude\TASKS_IA2.md
+   (Suas tarefas específicas, 30 min)
+
+5. C:\Users\victo\Documents\projeto\.claude\CODEX_WELCOME.md
+   (Bem-vindo Codex! Instruções detalhadas, 40 min)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 SETUP EM 7 PASSOS (Total: 1 hora)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PASSO 1: Acesse o repo
+cd C:\Users\victo\Documents\projeto
+git status
+
+PASSO 2: Configure Git (primeira vez)
+git config user.name "Codex"
+git config user.email "codex@example.com"
+
+PASSO 3: Execute migrations
+cd src\ProjetoVarejo.Infrastructure
+dotnet ef database update
+
+PASSO 4: Compile
+cd C:\Users\victo\Documents\projeto
+dotnet build -c Release
+
+✓ Esperado: 0 erros
+
+PASSO 5: Teste a app
+cd src\ProjetoVarejo.Desktop
+dotnet run
+
+Login: admin / admin
+Tipo: Loja Exemplo
+
+PASSO 6: Abra em IDE
+code C:\Users\victo\Documents\projeto
+(ou abra em Visual Studio)
+
+PASSO 7: Atualize status
+Edite .claude\AI_COORDINATION.md:
+Mude linha IA2 para "✅ Em progresso"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 SEU PAPEL (Codex)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você (Codex) trabalha com:
+✅ Backend - Services, lógica de negócio
+✅ Database - Entidades, migrations, EF Core
+✅ APIs - Integrações e endpoints
+✅ Testes - Testes unitários
+
+Você NÃO mexe com:
+❌ Desktop/Forms/ (isso é Claude - Frontend)
+❌ Application/Configuracao/TemasNegocio.cs (Claude - Temas)
+❌ Desktop/Theme/ (Claude - UI components)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 TAREFAS IMEDIATAS (Esta semana)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Code review (2h):
+   - Ler Application/Services/
+   - Revisar ConfiguracaoNegocioService
+   - Entender ModulosPorTipo
+
+2. Validar banco (1h):
+   - dotnet ef database update
+   - Verificar tabelas em SQL Server
+   - Testar conexão
+
+3. Testes unitários (3-4h):
+   - Criar testes para ConfiguracaoNegocioService
+   - Criar testes para ModulosPorTipo
+   - Setup projeto de testes
+
+4. Comunicar status (30 min):
+   - Atualizar AI_COORDINATION.md
+   - Fazer primeiro commit com seu nome
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💻 STACK TÉCNICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+C# .NET 8.0
+Entity Framework Core 8.0
+SQL Server (LocalDB ou Express)
+xUnit (testes)
+Git (versionamento)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔑 ARQUIVOS-CHAVE (Codex precisa entender estes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Domain/Enums/ModuloSistema.cs
+   - [Flags] enum com 16 módulos
+
+2. Domain/Enums/TipoNegocio.cs
+   - Enum com 8 tipos de negócio
+
+3. Application/Configuracao/ModulosPorTipo.cs ⭐ CRÍTICO
+   - Mapeia qual módulo para cada tipo
+
+4. Application/Services/ConfiguracaoNegocioService.cs ⭐ PRINCIPAL
+   - Serviço que você vai estender
+
+5. Domain/Configuracao/ConfiguracaoNegocio.cs
+   - Entidade principal que você vai modificar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔀 GIT - COMO FAZER COMMITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+git commit -m "feat(service): descrição - Codex"
+git commit -m "feat(domain): nova entidade - Codex"
+git commit -m "test(unit): testes para X - Codex"
+git commit -m "fix(service): bug em Y - Codex"
+
+EXEMPLO BOM:
+✅ git commit -m "feat(service): adicionar ConfiguracaoAuditService - Codex"
+
+EXEMPLO RUIM:
+❌ git commit -m "mudanças" - Codex
+❌ git commit -m "feat(ui): novo botão" - Codex (isso é Claude!)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 COMO COMUNICAR COM CLAUDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Arquivo: .claude\AI_COORDINATION.md
+
+Se precisar de Claude:
+
+⚠️ BLOQUEADO: Preciso que Claude [descrição]
+   Razão: [por quê]
+   Aguardando: Claude implementar até [data]
+
+Claude verá na próxima vez que trabalhar.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ CHECKLIST ANTES DE COMEÇAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- [ ] Li ROADMAP.md
+- [ ] Li SISTEMA_MODULAR_COMPLETO.md
+- [ ] Li AI_COORDINATION.md
+- [ ] Li TASKS_IA2.md
+- [ ] Li CODEX_WELCOME.md
+- [ ] Acessei repo: git status OK
+- [ ] Executei migrations: 0 erros
+- [ ] Compilei: dotnet build - 0 erros
+- [ ] Testei app: dotnet run - funcionando
+- [ ] Abri em IDE
+- [ ] Atualizei AI_COORDINATION.md
+- [ ] Fiz primeiro commit com meu nome
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 PRÓXIMAS AÇÕES (Ordem)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ler documentação (2h)
+2. Fazer setup (1h)
+3. Fazer checklist
+4. Começar tarefas imediatas (6-8h)
+5. Comunicar progresso
+
+Total primeira semana: ~18 horas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 O PROJETO EM 30 SEGUNDOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Projeto Varejo é um PDV/Estoque/Financeiro que foi transformado em
+um SISTEMA MODULAR inteligente que:
+
+1. Detecta tipo de negócio (8 tipos: Padaria, Açougue, Loja, etc)
+2. Carrega APENAS módulos relevantes (16 módulos configuráveis)
+3. Customiza interface automaticamente (cores, temas, ícones)
+4. Bloqueia acesso a módulos indisponíveis
+
+STATUS: 70% completo, pronto para produção
+
+FASE 1-7: ✅ Completo (Claude fez)
+FASE 8-10: 🔲 Você vai fazer (Codex)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 RESUMO FINAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Você (Codex) vai:
+✅ Trabalhar em Backend, Services, Database
+✅ Com Claude (IA1) no Frontend
+✅ Dividindo tarefas via AI_COORDINATION.md
+✅ Usando Git para sincronizar código
+✅ Começando com tarefas imediatas
+✅ Entregando Fases 8-10
+
+Tudo está pronto. Tem documentação completa. É só começar!
+
+═══════════════════════════════════════════════════════════════════
+
+Bem-vindo, Codex! 🚀
+
+Qualquer dúvida, consulte:
+- CODEX_WELCOME.md (instruções detalhadas)
+- TASKS_IA2.md (suas tarefas)
+- AI_COORDINATION.md (comunicação)
+
+═══════════════════════════════════════════════════════════════════

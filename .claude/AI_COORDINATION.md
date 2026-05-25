@@ -8,8 +8,8 @@
 
 | IA | Responsável | Tarefa Atual | Status | Progresso |
 |---|---|---|---|---|
-| **IA1** | Claude (você + Claude) | Corrigir tela de login (campos cortados, botão X) | ✅ Concluído | 100% |
-| **IA2** | Outra IA | Aguardando atribuição | ⏳ Pendente | 0% |
+| **IA1** | Claude | Testes de UI e documentação | ✅ Em progresso | 15% |
+| **IA2** | Codex | Setup e code review | ⏳ Aguardando início | 0% |
 
 ---
 
@@ -127,8 +127,12 @@ git commit -m "feat(service): adicionar novo validador - IA2"
 
 **15:27 - Setup de Coordenação**
 - ✅ Criado AI_COORDINATION.md
-- ✅ Criado TASKS_IA2.md
-- ✅ Pronto para IA2 começar
+- ✅ Criado TASKS_IA1.md (Claude)
+- ✅ Criado TASKS_IA2.md (Codex)
+- ✅ Criado CODEX_WELCOME.md (boas-vindas)
+- ✅ Criado ROADMAP.md (plano geral)
+- ✅ Git inicializado com primeiro commit
+- ✅ Pronto para Codex começar!
 
 ---
 

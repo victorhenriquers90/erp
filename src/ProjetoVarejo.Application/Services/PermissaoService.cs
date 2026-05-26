@@ -1,19 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using ProjetoVarejo.Shared;
 
 namespace ProjetoVarejo.Application.Services;
 
 public class PermissaoService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly SessaoApp _sessao;
 
-    public PermissaoService(AppDbContext db, SessaoApp sessao)
+    public PermissaoService(IUnitOfWork unitOfWork, SessaoApp sessao)
     {
-        _db = db; _sessao = sessao;
+        _unitOfWork = unitOfWork; _sessao = sessao;
     }
 
     public static readonly Dictionary<PerfilUsuario, HashSet<Permissao>> PermissoesPadrao = new()
@@ -49,7 +49,7 @@ public class PermissaoService
 
     public async Task<bool> TemPermissaoAsync(int usuarioId, PerfilUsuario perfil, Permissao permissao)
     {
-        var customizada = await _db.UsuarioPermissoes
+        var customizada = await _unitOfWork.UsuarioPermissoes.Query()
             .AnyAsync(p => p.UsuarioId == usuarioId && p.Permissao == permissao);
         if (customizada) return true;
         return PermissoesPadrao.TryGetValue(perfil, out var lista) && lista.Contains(permissao);
@@ -58,7 +58,7 @@ public class PermissaoService
     public async Task<HashSet<Permissao>> ObterPermissoesAsync(Usuario usuario)
     {
         var padrao = PermissoesPadrao.TryGetValue(usuario.Perfil, out var p) ? p : new();
-        var custom = await _db.UsuarioPermissoes
+        var custom = await _unitOfWork.UsuarioPermissoes.Query()
             .Where(up => up.UsuarioId == usuario.Id)
             .Select(up => up.Permissao)
             .ToListAsync();
@@ -67,26 +67,26 @@ public class PermissaoService
 
     public async Task<Result> ConcederAsync(int usuarioId, Permissao permissao)
     {
-        var existe = await _db.UsuarioPermissoes
+        var existe = await _unitOfWork.UsuarioPermissoes.Query()
             .AnyAsync(p => p.UsuarioId == usuarioId && p.Permissao == permissao);
         if (existe) return Result.Ok();
-        _db.UsuarioPermissoes.Add(new UsuarioPermissao
+        await _unitOfWork.UsuarioPermissoes.InsertAsync(new UsuarioPermissao
         {
             UsuarioId = usuarioId,
             Permissao = permissao
         });
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
     }
 
     public async Task<Result> RevogarAsync(int usuarioId, Permissao permissao)
     {
-        var p = await _db.UsuarioPermissoes
+        var p = await _unitOfWork.UsuarioPermissoes.Query()
             .FirstOrDefaultAsync(x => x.UsuarioId == usuarioId && x.Permissao == permissao);
         if (p != null)
         {
-            _db.UsuarioPermissoes.Remove(p);
-            await _db.SaveChangesAsync();
+            await _unitOfWork.UsuarioPermissoes.DeleteAsync(p);
+            await _unitOfWork.SaveChangesAsync();
         }
         return Result.Ok();
     }

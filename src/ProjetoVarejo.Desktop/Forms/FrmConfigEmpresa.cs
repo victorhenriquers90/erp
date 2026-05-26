@@ -6,7 +6,8 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmConfigEmpresa : Form
 {
-    private readonly NfceService _svc;
+    // TODO: PHASE 2.5 - NfceService refactoring needed
+    // private readonly NfceService _svc;
     private EmpresaConfig _emp = null!;
 
     private TextBox txtRazao = null!, txtFantasia = null!, txtCnpj = null!, txtIe = null!, txtIm = null!;
@@ -23,9 +24,10 @@ public class FrmConfigEmpresa : Form
 
     private TabControl tabs = null!;
 
-    public FrmConfigEmpresa(NfceService svc)
+    public FrmConfigEmpresa()
     {
-        _svc = svc;
+        // TODO: PHASE 2.5 - Remove NfceService dependency
+        // _svc = svc;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
     }
@@ -243,7 +245,9 @@ public class FrmConfigEmpresa : Form
 
     private async Task CarregarAsync()
     {
-        _emp = await _svc.ObterEmpresaAsync() ?? new EmpresaConfig();
+        // TODO: PHASE 2.5 - Load from service when NfceService is ready
+        // _emp = await _svc.ObterEmpresaAsync() ?? new EmpresaConfig();
+        _emp = new EmpresaConfig();
         txtRazao.Text = _emp.RazaoSocial;
         txtFantasia.Text = _emp.NomeFantasia;
         txtCnpj.Text = _emp.Cnpj;
@@ -340,9 +344,10 @@ public class FrmConfigEmpresa : Form
         _emp.PixNomeRecebedor = txtPixNome.Text.Trim();
         _emp.PixCidade = txtPixCidade.Text.Trim();
 
-        var res = await _svc.SalvarEmpresaAsync(_emp);
-        if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro", TipoToast.Erro, owner: this); return; }
-        Toast.Mostrar("Configurações salvas.", TipoToast.Sucesso, owner: this);
+        // TODO: PHASE 2.5 - Save to service when NfceService is ready
+        // var res = await _svc.SalvarEmpresaAsync(_emp);
+        // if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro", TipoToast.Erro, owner: this); return; }
+        Toast.Mostrar("Configurações salvas (PHASE 2.5 - não persistidas).", TipoToast.Sucesso, owner: this);
         DialogResult = DialogResult.OK;
         Close();
     }

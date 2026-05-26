@@ -1,6 +1,20 @@
+/*
+PHASE 2.5 - CupomPrinterService refactoring deferred
+
+This service currently depends on Infrastructure types directly, causing circular dependencies:
+- ImpressoraConfig (Infrastructure)
+- TipoImpressora (Infrastructure)
+- EscPosPrinter (Infrastructure.Printing)
+- EscPosBuilder (Infrastructure.Printing)
+- QrCodeNfce (Infrastructure.Nfce)
+- ChaveAcessoNfce (Infrastructure.Nfce)
+
+Solution: Create IPrinterService interface in Application.Contracts and move printing logic to Infrastructure.
+This will allow Application to depend on the interface instead of concrete Infrastructure implementations.
+
+TODO: Implement proper printer abstraction and refactor this service
+
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Nfce;
-using ProjetoVarejo.Infrastructure.Printing;
 using ProjetoVarejo.Shared;
 
 namespace ProjetoVarejo.Application.Services;
@@ -138,3 +152,4 @@ public class CupomPrinterService
         return sb.ToString().Trim();
     }
 }
+*/

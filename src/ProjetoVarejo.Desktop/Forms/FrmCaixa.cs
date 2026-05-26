@@ -1,3 +1,5 @@
+using ProjetoVarejo.Application.Contracts.Services;
+using ProjetoVarejo.Application.Contracts.Services.DTOs;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,7 +9,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmCaixa : Form
 {
-    private readonly CaixaService _svc;
+    private readonly ICaixaService _svc;
     private Label _statusIcone = null!, _statusTexto = null!, _statusDetalhe = null!;
     private Card _statusCard = null!;
     private FlowLayoutPanel _kpis = null!;
@@ -16,7 +18,7 @@ public class FrmCaixa : Form
     private Button _btnAbrir = null!, _btnFechar = null!, _btnSangria = null!, _btnSuprimento = null!;
     private CaixaSessao? _caixa;
 
-    public FrmCaixa(CaixaService svc)
+    public FrmCaixa(ICaixaService svc)
     {
         _svc = svc;
         InitUi();
@@ -267,7 +269,7 @@ public class FrmFechamentoCaixa : Form
     public decimal ValorInformado { get; private set; }
     public string? Observacao { get; private set; }
 
-    public FrmFechamentoCaixa(CaixaService.ResumoCaixa resumo)
+    public FrmFechamentoCaixa(ResumoCaixa resumo)
     {
         Text = "Fechamento de Caixa";
         Size = new Size(620, 600);

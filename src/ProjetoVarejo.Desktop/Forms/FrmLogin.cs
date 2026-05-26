@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 
@@ -5,14 +6,14 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmLogin : Form
 {
-    private readonly AutenticacaoService _auth;
+    private readonly IAutenticacaoService _auth;
     private TextBox txtLogin = null!;
     private TextBox txtSenha = null!;
     private Button btnEntrar = null!;
     private Panel pnlErro = null!;
     private Label lblErro = null!;
 
-    public FrmLogin(AutenticacaoService auth)
+    public FrmLogin(IAutenticacaoService auth)
     {
         _auth = auth;
         InitUi();

@@ -1,19 +1,22 @@
 using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Application.Contracts.Services;
+using ProjetoVarejo.Application.Logging;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
+using Serilog;
 
 namespace ProjetoVarejo.Application.Services;
 
-public class EstoqueService
+public class EstoqueService : IEstoqueService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly SessaoApp _sessao;
 
-    public EstoqueService(AppDbContext db, SessaoApp sessao)
+    public EstoqueService(IUnitOfWork unitOfWork, SessaoApp sessao)
     {
-        _db = db;
+        _unitOfWork = unitOfWork;
         _sessao = sessao;
     }
 
@@ -27,67 +30,103 @@ public class EstoqueService
         int? fornecedorId = null,
         string? observacao = null)
     {
-        if (quantidade <= 0)
-            return Result.Falha<MovimentoEstoque>("Quantidade deve ser maior que zero.");
-        if (_sessao.UsuarioLogado == null)
-            return Result.Falha<MovimentoEstoque>("Usuário não autenticado.");
-
-        var produto = await _db.Produtos.FindAsync(produtoId);
-        if (produto == null) return Result.Falha<MovimentoEstoque>("Produto não encontrado.");
-
-        bool isEntrada = tipo == TipoMovimentoEstoque.Entrada
-                       || tipo == TipoMovimentoEstoque.AjusteEntrada
-                       || tipo == TipoMovimentoEstoque.Devolucao;
-
-        var saldoAnterior = produto.Estoque;
-        var saldoNovo = isEntrada ? saldoAnterior + quantidade : saldoAnterior - quantidade;
-
-        if (!isEntrada && produto.ControlaEstoque && saldoNovo < 0)
-            return Result.Falha<MovimentoEstoque>(
-                $"Estoque insuficiente. Disponível: {saldoAnterior}, solicitado: {quantidade}.");
-
-        // RowVersion garante que múltiplas operações simultâneas não causem inconsistência
-        // DbUpdateConcurrencyException é lançada se outro usuário já modificou este produto
-        produto.Estoque = saldoNovo;
-        produto.AtualizadoEm = DateTime.Now;
-        if (isEntrada && custoUnitario.HasValue && custoUnitario.Value > 0)
-            produto.PrecoCusto = custoUnitario.Value;
-
-        var mov = new MovimentoEstoque
-        {
-            ProdutoId = produtoId,
-            Tipo = tipo,
-            Quantidade = quantidade,
-            SaldoAnterior = saldoAnterior,
-            SaldoAtual = saldoNovo,
-            CustoUnitario = custoUnitario,
-            Documento = documento,
-            VendaId = vendaId,
-            FornecedorId = fornecedorId,
-            UsuarioId = _sessao.UsuarioLogado.Id,
-            Observacao = observacao
-        };
-
         try
         {
-            _db.MovimentosEstoque.Add(mov);
-            await _db.SaveChangesAsync();
-            return Result.Ok(mov);
-        }
-        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
-        {
-            // Outro usuário modificou o mesmo produto. Carrega dados atualizados do banco
-            await _db.Entry(produto).ReloadAsync();
+            if (quantidade <= 0)
+            {
+                Log.Warning("Tentativa de registrar movimento com quantidade inválida: {Quantidade}", quantidade);
+                return Result.Falha<MovimentoEstoque>("Quantidade deve ser maior que zero.");
+            }
 
-            return Result.Falha<MovimentoEstoque>(
-                $"Conflito de concorrência: o estoque foi modificado por outro usuário. " +
-                $"Saldo atual: {produto.Estoque}. Tente novamente.");
+            if (_sessao.UsuarioLogado == null)
+            {
+                Log.Warning("Tentativa de registrar movimento de estoque sem usuário autenticado");
+                return Result.Falha<MovimentoEstoque>("Usuário não autenticado.");
+            }
+
+            var produto = await _unitOfWork.Produtos.GetByIdAsync(produtoId);
+            if (produto == null)
+            {
+                Log.Warning("Produto {ProdutoId} não encontrado para movimento de estoque", produtoId);
+                return Result.Falha<MovimentoEstoque>("Produto não encontrado.");
+            }
+
+            bool isEntrada = tipo == TipoMovimentoEstoque.Entrada
+                           || tipo == TipoMovimentoEstoque.AjusteEntrada
+                           || tipo == TipoMovimentoEstoque.Devolucao;
+
+            var saldoAnterior = produto.Estoque;
+            var saldoNovo = isEntrada ? saldoAnterior + quantidade : saldoAnterior - quantidade;
+
+            if (!isEntrada && produto.ControlaEstoque && saldoNovo < 0)
+            {
+                Log.Warning(LogTemplates.EstoqueInsuficiente, produtoId, quantidade, saldoAnterior);
+                return Result.Falha<MovimentoEstoque>(
+                    $"Estoque insuficiente. Disponível: {saldoAnterior}, solicitado: {quantidade}.");
+            }
+
+            // Verificar se está abaixo do mínimo após movimento
+            if (saldoNovo <= produto.EstoqueMinimo && produto.ControlaEstoque)
+            {
+                Log.Warning(LogTemplates.EstoqueAbaixoMinimo, produtoId, produto.Descricao, saldoNovo, produto.EstoqueMinimo);
+            }
+
+            // RowVersion garante que múltiplas operações simultâneas não causem inconsistência
+            // DbUpdateConcurrencyException é lançada se outro usuário já modificou este produto
+            produto.Estoque = saldoNovo;
+            produto.AtualizadoEm = DateTime.Now;
+            if (isEntrada && custoUnitario.HasValue && custoUnitario.Value > 0)
+                produto.PrecoCusto = custoUnitario.Value;
+
+            var mov = new MovimentoEstoque
+            {
+                ProdutoId = produtoId,
+                Tipo = tipo,
+                Quantidade = quantidade,
+                SaldoAnterior = saldoAnterior,
+                SaldoAtual = saldoNovo,
+                CustoUnitario = custoUnitario,
+                Documento = documento,
+                VendaId = vendaId,
+                FornecedorId = fornecedorId,
+                UsuarioId = _sessao.UsuarioLogado.Id,
+                Observacao = observacao
+            };
+
+            try
+            {
+                await _unitOfWork.MovimentosEstoque.InsertAsync(mov);
+                await _unitOfWork.SaveChangesAsync();
+
+                Log.Information(LogTemplates.MovimentoEstoque, produtoId, tipo.ToString(), quantidade);
+                return Result.Ok(mov);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // Outro usuário modificou o mesmo produto. Carrega dados atualizados do banco
+                produto = await _unitOfWork.Produtos.GetByIdAsync(produtoId);
+                if (produto == null)
+                {
+                    Log.Error("Produto {ProdutoId} não encontrado após conflito de concorrência", produtoId);
+                    return Result.Falha<MovimentoEstoque>("Produto não encontrado após conflito.");
+                }
+
+                Log.Warning("Conflito de concorrência ao registrar movimento para produto {ProdutoId}. Saldo: {Saldo}", produtoId, produto.Estoque);
+                return Result.Falha<MovimentoEstoque>(
+                    $"Conflito de concorrência: o estoque foi modificado por outro usuário. " +
+                    $"Saldo atual: {produto.Estoque}. Tente novamente.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, LogTemplates.ErroNaoTratado, "EstoqueService.RegistrarMovimentoAsync", ex.Message);
+            return Result.Falha<MovimentoEstoque>($"Erro ao registrar movimento: {ex.Message}");
         }
     }
 
     public Task<List<MovimentoEstoque>> ListarMovimentosAsync(int? produtoId = null, DateTime? de = null, DateTime? ate = null)
     {
-        var q = _db.MovimentosEstoque
+        var q = _unitOfWork.MovimentosEstoque.Query()
             .Include(m => m.Produto)
             .Include(m => m.Usuario)
             .AsQueryable();
@@ -97,9 +136,26 @@ public class EstoqueService
         return q.OrderByDescending(m => m.CriadoEm).Take(1000).ToListAsync();
     }
 
-    public Task<List<Produto>> ProdutosAbaixoMinimoAsync() =>
-        _db.Produtos
-            .Where(p => p.Ativo && p.ControlaEstoque && p.Estoque <= p.EstoqueMinimo)
-            .OrderBy(p => p.Descricao)
-            .ToListAsync();
+    public async Task<List<Produto>> ProdutosAbaixoMinimoAsync()
+    {
+        try
+        {
+            var produtos = await _unitOfWork.Produtos.Query()
+                .Where(p => p.Ativo && p.ControlaEstoque && p.Estoque <= p.EstoqueMinimo)
+                .OrderBy(p => p.Descricao)
+                .ToListAsync();
+
+            if (produtos.Count > 0)
+            {
+                Log.Warning("Total de {Quantidade} produtos abaixo do estoque mínimo detectados", produtos.Count);
+            }
+
+            return produtos;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, LogTemplates.ErroNaoTratado, "EstoqueService.ProdutosAbaixoMinimoAsync", ex.Message);
+            return new List<Produto>();
+        }
+    }
 }

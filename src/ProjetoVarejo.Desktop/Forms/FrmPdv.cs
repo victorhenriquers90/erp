@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,11 +8,13 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmPdv : Form
 {
-    private readonly VendaService _vendaService;
-    private readonly ProdutoService _produtoService;
-    private readonly NfceService _nfceService;
-    private readonly CaixaService _caixaService;
-    private readonly CupomPrinterService _printer;
+    private readonly IVendaService _vendaService;
+    private readonly IProdutoService _produtoService;
+    // TODO: PHASE 2.5 - NfceService refactoring needed
+    // private readonly INfceService // TODO: PHASE 2.5 _nfceService;
+    private readonly ICaixaService _caixaService;
+    // TODO: PHASE 2.5 - CupomPrinterService refactoring needed
+    // private readonly CupomPrinterService // TODO: PHASE 2.5 _printer;
     private readonly ProducaoGuardService _producaoGuard;
     private Venda? _vendaAtual;
     private bool _alertaProntidaoExibido;
@@ -26,13 +29,15 @@ public class FrmPdv : Form
     private Label lblNumero = null!;
     private Button btnFinalizar = null!;
 
-    public FrmPdv(VendaService vendaService, ProdutoService produtoService, NfceService nfceService, CaixaService caixaService, CupomPrinterService printer, ProducaoGuardService producaoGuard)
+    public FrmPdv(IVendaService vendaService, IProdutoService produtoService, ICaixaService caixaService, ProducaoGuardService producaoGuard)
     {
         _vendaService = vendaService;
         _produtoService = produtoService;
-        _nfceService = nfceService;
+        // TODO: PHASE 2.5 - NfceService refactoring needed
+        // // TODO: PHASE 2.5 _nfceService = nfceService;
         _caixaService = caixaService;
-        _printer = printer;
+        // TODO: PHASE 2.5 - CupomPrinterService refactoring needed
+        // // TODO: PHASE 2.5 _printer = printer;
         _producaoGuard = producaoGuard;
         InitUi();
         Shown += async (s, e) => await IniciarNovaVendaAsync();
@@ -560,15 +565,16 @@ public class FrmPdv : Form
         }
         else
         {
-            var empresa = await _nfceService.ObterEmpresaAsync();
-            var vendaCompleta = await _vendaService.BuscarAsync(venda.Id);
-            if (empresa != null && vendaCompleta != null && empresa.ImprimirAutomatico
-                && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
-            {
-                var resPrint = await _printer.ImprimirVendaAsync(vendaCompleta, empresa, null);
-                if (!resPrint.Sucesso)
-                    Toast.Mostrar("Aviso na impressão: " + resPrint.Erro, TipoToast.Aviso, owner: this);
-            }
+            // TODO: PHASE 2.5 - NfceService refactoring needed - automatic printing disabled
+            // var empresa = await _nfceService.ObterEmpresaAsync();
+            // var vendaCompleta = await _vendaService.BuscarAsync(venda.Id);
+            // if (empresa != null && vendaCompleta != null && empresa.ImprimirAutomatico
+            //     && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
+            // {
+            //     var resPrint = await _printer.ImprimirVendaAsync(vendaCompleta, empresa, null);
+            //     if (!resPrint.Sucesso)
+            //         Toast.Mostrar("Aviso na impressão: " + resPrint.Erro, TipoToast.Aviso, owner: this);
+            // }
         }
 
         await IniciarNovaVendaAsync();
@@ -576,9 +582,19 @@ public class FrmPdv : Form
 
     private async Task EmitirNfceAsync(int vendaId)
     {
+        // TODO: PHASE 2.5 - NfceService refactoring needed - NFC-e emission disabled until service is refactored
         UseWaitCursor = true;
         try
         {
+            MessageBox.Show(
+                "Funcionalidade de emissão de NFC-e desabilitada na PHASE 2.5.\nA classe NfceService está em refatoração.",
+                "NFC-e Indisponível",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+            return;
+
+            // Code below disabled until NfceService is refactored with IUnitOfWork pattern
+            /*
             bool contingencia = false;
             if (!await _nfceService.SefazOnlineAsync())
             {
@@ -624,6 +640,7 @@ public class FrmPdv : Form
                 using var dlg = new FrmNfceResultado(nota, empresa, venda);
                 dlg.ShowDialog(this);
             }
+            */
         }
         catch (Exception ex)
         {

@@ -1,4 +1,4 @@
-using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
 
@@ -6,7 +6,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmBuscarProdutoPdv : Form
 {
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly string _termoInicial;
     private TextBox txtBusca = null!;
     private StyledGrid grid = null!;
@@ -14,7 +14,7 @@ public class FrmBuscarProdutoPdv : Form
 
     public Produto? ProdutoSelecionado { get; private set; }
 
-    public FrmBuscarProdutoPdv(ProdutoService produtos, string? termoInicial = null)
+    public FrmBuscarProdutoPdv(IProdutoService produtos, string? termoInicial = null)
     {
         _produtos = produtos;
         _termoInicial = termoInicial?.Trim() ?? "";

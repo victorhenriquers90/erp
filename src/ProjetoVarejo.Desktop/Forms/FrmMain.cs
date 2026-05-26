@@ -5,6 +5,7 @@ using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Enums;
+using ProjetoVarejo.Domain.Configuracao;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
 using static ProjetoVarejo.Application.Configuracao.TemasNegocio;
@@ -27,9 +28,41 @@ public class FrmMain : Form
         _sessao = sessao;
         _implantacaoService = implantacaoService;
         _configuracaoService = configuracaoService;
-        _implantacao = _implantacaoService.ObterAsync().GetAwaiter().GetResult();
-        _configuracaoNegocio = _configuracaoService.ObterConfiguracao().GetAwaiter().GetResult();
+
+        // Use defaults initially - load async in Load event
+        _implantacao = new ImplantacaoConfig();
+        _configuracaoNegocio = new ProjetoVarejo.Domain.Configuracao.ConfiguracaoNegocio
+        {
+            Id = 1,
+            TipoNegocio = (TipoNegocio)0,
+            ConfiguracaoInicial = false,
+            ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+            DataAtualizacao = DateTime.Now,
+            Versao = 1
+        };
+
         InitUi();
+
+        // Load actual configuration asynchronously after UI is created
+        Shown += async (s, e) => await CarregarConfiguraçaoAsync();
+    }
+
+    private async Task CarregarConfiguraçaoAsync()
+    {
+        try
+        {
+            _implantacao = await _implantacaoService.ObterAsync();
+            _configuracaoNegocio = await _configuracaoService.ObterConfiguracao();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Aviso ao carregar configurações:\n\n{ex.Message}",
+                "Aviso",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            // Continue with defaults
+        }
     }
 
     private void InitUi()

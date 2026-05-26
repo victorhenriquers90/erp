@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,8 +8,8 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmEstoque : Form
 {
-    private readonly EstoqueService _estoque;
-    private readonly ProdutoService _produtos;
+    private readonly IEstoqueService _estoque;
+    private readonly IProdutoService _produtos;
     private readonly FornecedorService _fornecedores;
     private TabControl tabs = null!;
     private StyledGrid gridMov = null!;
@@ -16,7 +17,7 @@ public class FrmEstoque : Form
     private DateTimePicker dtDe = null!, dtAte = null!;
     private TextBox txtFiltroProd = null!;
 
-    public FrmEstoque(EstoqueService estoque, ProdutoService produtos, FornecedorService fornecedores)
+    public FrmEstoque(IEstoqueService estoque, IProdutoService produtos, FornecedorService fornecedores)
     {
         _estoque = estoque;
         _produtos = produtos;
@@ -188,15 +189,15 @@ public class FrmEstoque : Form
 public class FrmLancamentoEstoque : Form
 {
     private readonly TipoMovimentoEstoque _tipo;
-    private readonly EstoqueService _estoque;
-    private readonly ProdutoService _produtos;
+    private readonly IEstoqueService _estoque;
+    private readonly IProdutoService _produtos;
     private readonly FornecedorService _fornecedores;
     private TextBox txtCodigo = null!, txtQtd = null!, txtCusto = null!, txtDoc = null!, txtObs = null!;
     private ComboBox cboForn = null!;
     private Label lblProduto = null!;
     private Produto? _selecionado;
 
-    public FrmLancamentoEstoque(TipoMovimentoEstoque tipo, EstoqueService estoque, ProdutoService produtos, FornecedorService fornecedores)
+    public FrmLancamentoEstoque(TipoMovimentoEstoque tipo, IEstoqueService estoque, IProdutoService produtos, FornecedorService fornecedores)
     {
         _tipo = tipo; _estoque = estoque; _produtos = produtos; _fornecedores = fornecedores;
         InitUi();

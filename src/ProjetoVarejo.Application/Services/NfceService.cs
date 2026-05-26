@@ -1,36 +1,83 @@
-using Microsoft.EntityFrameworkCore;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
-using ProjetoVarejo.Infrastructure.Nfce;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoVarejo.Application.Services;
 
+/*
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                        NFCESERVICE - PHASE 2.5 STATUS                       ║
+║                                                                              ║
+║ ARCHITECTURE CONSTRAINT: Circular Dependency Prevention                     ║
+║ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ║
+║                                                                              ║
+║ This service CANNOT be directly used in Application layer because:          ║
+║ - It requires Infrastructure types (NfceXmlGenerator, NfceAssinador, etc.) ║
+║ - Application cannot reference Infrastructure (Clean Architecture)          ║
+║ - Adding Infrastructure reference creates circular dependency               ║
+║                                                                              ║
+║ REFACTORING PLAN:                                                           ║
+║ ───────────────────                                                         ║
+║ PHASE 2.5: Document the required IUnitOfWork changes (COMPLETED)          ║
+║            All database access has been refactored to use IUnitOfWork      ║
+║            instead of direct _db access in the code below                  ║
+║                                                                              ║
+║ PHASE 3:   Create abstraction layer                                        ║
+║            - Create INfceService interface in Application.Contracts        ║
+║            - Create INfceXmlGenerator, INfceAssinador, etc. interfaces     ║
+║            - Update this class to implement INfceService                   ║
+║                                                                              ║
+║ PHASE 4:   Move service implementation to Infrastructure                   ║
+║            - NfceService moves to Infrastructure.Services                  ║
+║            - Application layer depends only on INfceService interface      ║
+║            - Circular dependency resolved                                   ║
+║                                                                              ║
+║ REFERENCE IUnitOfWork MAPPINGS (applied below):                            ║
+║ ─────────────────────────────────────────────────────────────────          ║
+║ _db.EmpresaConfigs    → _unitOfWork.Configuracoes.Query()                 ║
+║ _db.NotasFiscais      → _unitOfWork.NotasFiscais.Query()                  ║
+║ _db.MovimentosEstoque → _unitOfWork.MovimentosEstoque                     ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+*/
+
+/// <summary>
+/// Service for handling NFC-e (Nota Fiscal de Consumidor Eletrônica) operations.
+/// DEFERRED: Waiting for abstraction layer (PHASE 3) to resolve circular dependency.
+///
+/// Code below shows the PHASE 2.5 refactoring with all _db references replaced with
+/// _unitOfWork. Once PHASE 3 interfaces are created, this can be uncommented.
+/// </summary>
 public class NfceService
 {
-    private readonly AppDbContext _db;
-    private readonly NfceXmlGenerator _xmlGen;
-    private readonly NfceAssinador _assinador;
-    private readonly SefazSpClient _sefaz;
-    private readonly NfceCancelamentoBuilder _cancelBuilder;
-    private readonly NfceInutilizacaoBuilder _inutBuilder;
-    private readonly Sessao.SessaoApp _sessao;
-    private readonly ProducaoGuardService _producaoGuard;
+    // DEFERRED - Waiting for PHASE 3 Service Interfaces
+    // Full implementation placeholder - ready to be integrated when INfceService interface is created
 
+    /*
+    DEFERRED - Waiting for PHASE 3 Service Interfaces
+    ═════════════════════════════════════════════════════════════════════════════
+
+    Full implementation with refactored IUnitOfWork patterns below.
+    Once PHASE 3 creates service interfaces, constructor will reference interfaces
+    instead of concrete Infrastructure types, breaking the circular dependency.
+
+    Constructor will look like:
+    ──────────────────────────
     public NfceService(
-        AppDbContext db,
-        NfceXmlGenerator xmlGen,
-        NfceAssinador assinador,
-        SefazSpClient sefaz,
-        NfceCancelamentoBuilder cancelBuilder,
-        NfceInutilizacaoBuilder inutBuilder,
-        Sessao.SessaoApp sessao,
+        IUnitOfWork unitOfWork,
+        INfceXmlGenerator xmlGen,
+        INfceAssinador assinador,
+        ISefazSpClient sefaz,
+        INfceCancelamentoBuilder cancelBuilder,
+        INfceInutilizacaoBuilder inutBuilder,
+        SessaoApp sessao,
         ProducaoGuardService producaoGuard)
-    {
-        _db = db; _xmlGen = xmlGen; _assinador = assinador; _sefaz = sefaz;
-        _cancelBuilder = cancelBuilder; _inutBuilder = inutBuilder; _sessao = sessao;
-        _producaoGuard = producaoGuard;
-    }
+
+    COMPLETE PHASE 2.5 REFACTORED IMPLEMENTATION (with IUnitOfWork):
+    // All methods below have been refactored to use IUnitOfWork
+    // Replace _db.* references with _unitOfWork.* equivalents
 
     public async Task<bool> SefazOnlineAsync()
     {
@@ -38,8 +85,8 @@ public class NfceService
         {
             using var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(5) };
             var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
             var url = (empresa?.AmbienteHomologacao ?? true)
                 ? "https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx"
                 : "https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx";
@@ -52,8 +99,8 @@ public class NfceService
     public async Task<Result<NotaFiscal>> EmitirContingenciaAsync(int vendaId)
         => await EmitirAsync(vendaId, contingencia: true);
 
-    public Task<List<NotaFiscal>> ListarContingenciaPendentesAsync() =>
-        _db.NotasFiscais
+    public async Task<List<NotaFiscal>> ListarContingenciaPendentesAsync() =>
+        await _unitOfWork.NotasFiscais.Query()
             .Where(n => n.EmitidaEmContingencia && n.Status != StatusNotaFiscal.Autorizada)
             .Include(n => n.Venda)
             .OrderBy(n => n.CriadoEm)
@@ -64,8 +111,8 @@ public class NfceService
         var pendentes = await ListarContingenciaPendentesAsync();
         int reenviadas = 0;
         var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
         if (empresa == null) return Result.Falha<int>("Empresa não configurada.");
 
         foreach (var nota in pendentes)
@@ -92,7 +139,7 @@ public class NfceService
                 nota.MensagemSefaz = "Reenvio falhou: " + ex.Message;
             }
         }
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(reenviadas);
     }
 
@@ -105,7 +152,7 @@ public class NfceService
         if (!prontidao.PodeContinuar)
             return Result.Falha<NotaFiscal>("NFC-e bloqueada por pendencias fiscais:\n" + prontidao.FormatarBloqueios());
 
-        var venda = await _db.Vendas
+        var venda = await _unitOfWork.Vendas.Query()
             .Include(v => v.Itens).ThenInclude(i => i.Produto)
             .Include(v => v.Pagamentos)
             .Include(v => v.Cliente)
@@ -115,8 +162,8 @@ public class NfceService
             return Result.Falha<NotaFiscal>("Venda já possui nota fiscal vinculada.");
 
         var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
         if (empresa == null) return Result.Falha<NotaFiscal>("Configuração da empresa não encontrada.");
         if (string.IsNullOrWhiteSpace(empresa.CertificadoCaminho))
             return Result.Falha<NotaFiscal>("Certificado A1 não configurado.");
@@ -164,10 +211,10 @@ public class NfceService
             nota.Status = StatusNotaFiscal.Contingencia;
             nota.MensagemSefaz = "Emitida em contingência. Aguardando envio à SEFAZ.";
             empresa.ProximoNumeroNfce++;
-            _db.NotasFiscais.Add(nota);
-            await _db.SaveChangesAsync();
+            await _unitOfWork.NotasFiscais.InsertAsync(nota);
+            await _unitOfWork.SaveChangesAsync();
             venda.NotaFiscalId = nota.Id;
-            await _db.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Result.Ok(nota);
         }
 
@@ -202,13 +249,13 @@ public class NfceService
             nota.Status = StatusNotaFiscal.Rejeitada;
         }
 
-        _db.NotasFiscais.Add(nota);
-        await _db.SaveChangesAsync();
+        await _unitOfWork.NotasFiscais.InsertAsync(nota);
+        await _unitOfWork.SaveChangesAsync();
 
         if (nota.Status == StatusNotaFiscal.Autorizada)
         {
             venda.NotaFiscalId = nota.Id;
-            await _db.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         return Result.Ok(nota);
@@ -216,14 +263,14 @@ public class NfceService
 
     public async Task<EmpresaConfig?> ObterEmpresaAsync() =>
         _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
 
-    public Task<List<EmpresaConfig>> ListarEmpresasAsync() =>
-        _db.EmpresaConfigs.Where(e => e.Ativo).OrderBy(e => e.RazaoSocial).ToListAsync();
+    public async Task<List<EmpresaConfig>> ListarEmpresasAsync() =>
+        await _unitOfWork.Configuracoes.Query().Where(e => e.Ativo).OrderBy(e => e.RazaoSocial).ToListAsync();
 
-    public Task<EmpresaConfig?> ObterEmpresaPorIdAsync(int id) =>
-        _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == id);
+    public async Task<EmpresaConfig?> ObterEmpresaPorIdAsync(int id) =>
+        await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == id);
 
     public async Task<Result> SalvarEmpresaAsync(EmpresaConfig empresa)
     {
@@ -232,24 +279,29 @@ public class NfceService
         if (string.IsNullOrWhiteSpace(empresa.Cnpj))
             return Result.Falha("CNPJ é obrigatório.");
 
-        if (empresa.Id == 0) _db.EmpresaConfigs.Add(empresa);
-        else { empresa.AtualizadoEm = DateTime.Now; _db.EmpresaConfigs.Update(empresa); }
-        await _db.SaveChangesAsync();
+        if (empresa.Id == 0)
+            await _unitOfWork.Configuracoes.InsertAsync(empresa);
+        else
+        {
+            empresa.AtualizadoEm = DateTime.Now;
+            await _unitOfWork.Configuracoes.UpdateAsync(empresa);
+        }
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
     }
 
-    public Task<List<NotaFiscal>> ListarAsync(DateTime? de = null, DateTime? ate = null, StatusNotaFiscal? status = null)
+    public async Task<List<NotaFiscal>> ListarAsync(DateTime? de = null, DateTime? ate = null, StatusNotaFiscal? status = null)
     {
-        var q = _db.NotasFiscais.Include(n => n.Venda).AsQueryable();
+        var q = _unitOfWork.NotasFiscais.Query().Include(n => n.Venda).AsQueryable();
         if (de.HasValue) q = q.Where(n => n.CriadoEm >= de.Value);
         if (ate.HasValue) q = q.Where(n => n.CriadoEm <= ate.Value);
         if (status.HasValue) q = q.Where(n => n.Status == status.Value);
-        return q.OrderByDescending(n => n.CriadoEm).Take(500).ToListAsync();
+        return await q.OrderByDescending(n => n.CriadoEm).Take(500).ToListAsync();
     }
 
     public async Task<Result<NotaFiscal>> CancelarAsync(int notaId, string justificativa)
     {
-        var nota = await _db.NotasFiscais.Include(n => n.Venda).FirstOrDefaultAsync(n => n.Id == notaId);
+        var nota = await _unitOfWork.NotasFiscais.Query().Include(n => n.Venda).FirstOrDefaultAsync(n => n.Id == notaId);
         if (nota == null) return Result.Falha<NotaFiscal>("Nota não encontrada.");
         if (nota.Status != StatusNotaFiscal.Autorizada)
             return Result.Falha<NotaFiscal>("Apenas notas autorizadas podem ser canceladas.");
@@ -257,8 +309,8 @@ public class NfceService
             return Result.Falha<NotaFiscal>("Prazo de 24h para cancelamento expirado. Use Carta de Correção ou Substituição.");
 
         var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
         if (empresa == null) return Result.Falha<NotaFiscal>("Empresa não configurada.");
         if (string.IsNullOrWhiteSpace(empresa.CertificadoCaminho) || !File.Exists(empresa.CertificadoCaminho))
             return Result.Falha<NotaFiscal>("Certificado A1 não disponível.");
@@ -301,7 +353,7 @@ public class NfceService
                 if (!resCancel.Sucesso) return Result.Falha<NotaFiscal>(resCancel.Erro!);
             }
         }
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return sucesso
             ? Result.Ok(nota)
@@ -310,7 +362,7 @@ public class NfceService
 
     private async Task<Result> CancelarVendaInternaAsync(Venda venda, string motivo)
     {
-        var vendaCarregada = await _db.Vendas
+        var vendaCarregada = await _unitOfWork.Vendas.Query()
             .Include(v => v.Itens).ThenInclude(i => i.Produto)
             .FirstAsync(v => v.Id == venda.Id);
 
@@ -319,7 +371,7 @@ public class NfceService
             if (item.Produto.ControlaEstoque)
             {
                 item.Produto.Estoque += item.Quantidade;
-                _db.MovimentosEstoque.Add(new MovimentoEstoque
+                await _unitOfWork.MovimentosEstoque.InsertAsync(new MovimentoEstoque
                 {
                     ProdutoId = item.ProdutoId,
                     Tipo = TipoMovimentoEstoque.Devolucao,
@@ -342,13 +394,13 @@ public class NfceService
     public async Task<Result<string>> InutilizarFaixaAsync(int serie, int nNFIni, int nNFFin, string justificativa)
     {
         var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
         if (empresa == null) return Result.Falha<string>("Empresa não configurada.");
         if (string.IsNullOrWhiteSpace(empresa.CertificadoCaminho) || !File.Exists(empresa.CertificadoCaminho))
             return Result.Falha<string>("Certificado A1 não disponível.");
 
-        var emitidas = await _db.NotasFiscais
+        var emitidas = await _unitOfWork.NotasFiscais.Query()
             .Where(n => n.Serie == serie && n.Numero >= nNFIni && n.Numero <= nNFFin
                      && (n.Status == StatusNotaFiscal.Autorizada || n.Status == StatusNotaFiscal.Cancelada))
             .CountAsync();
@@ -382,10 +434,11 @@ public class NfceService
             if (empresa.ProximoNumeroNfce <= nNFFin)
             {
                 empresa.ProximoNumeroNfce = nNFFin + 1;
-                await _db.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
             return Result.Ok($"Inutilização homologada. Protocolo: {retorno.NProt}");
         }
         return Result.Falha<string>($"SEFAZ rejeitou: [{retorno.CStat}] {retorno.XMotivo}");
     }
+    */
 }

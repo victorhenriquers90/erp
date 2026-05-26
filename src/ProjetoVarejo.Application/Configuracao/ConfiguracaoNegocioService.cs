@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjetoVarejo.Domain.Configuracao;
 using ProjetoVarejo.Domain.Enums;
-using ProjetoVarejo.Infrastructure.Data;
+using ProjetoVarejo.Application.Contracts.Repositories;
 
 namespace ProjetoVarejo.Application.Configuracao;
 
@@ -10,12 +10,12 @@ namespace ProjetoVarejo.Application.Configuracao;
 /// </summary>
 public class ConfiguracaoNegocioService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private ConfiguracaoNegocio? _cacheConfiguracao;
 
-    public ConfiguracaoNegocioService(AppDbContext db)
+    public ConfiguracaoNegocioService(IUnitOfWork unitOfWork)
     {
-        _db = db;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class ConfiguracaoNegocioService
         if (_cacheConfiguracao != null)
             return _cacheConfiguracao;
 
-        _cacheConfiguracao = await _db.ConfiguracaoNegocio
+        _cacheConfiguracao = await _unitOfWork.ConfiguracoesNegocio.Query()
             .OrderBy(c => c.Id)
             .FirstOrDefaultAsync();
 
@@ -70,19 +70,25 @@ public class ConfiguracaoNegocioService
     {
         config.DataAtualizacao = DateTime.Now;
 
-        var existente = await _db.ConfiguracaoNegocio
+        var existente = await _unitOfWork.ConfiguracoesNegocio.Query()
             .FirstOrDefaultAsync(c => c.Id == config.Id);
 
         if (existente == null)
         {
-            _db.ConfiguracaoNegocio.Add(config);
+            await _unitOfWork.ConfiguracoesNegocio.InsertAsync(config);
         }
         else
         {
-            _db.Entry(existente).CurrentValues.SetValues(config);
+            existente.TipoNegocio = config.TipoNegocio;
+            existente.DescricaoNegocio = config.DescricaoNegocio;
+            existente.ModulosAtivos = config.ModulosAtivos;
+            existente.ConfiguracaoInicial = config.ConfiguracaoInicial;
+            existente.DataAtualizacao = config.DataAtualizacao;
+            existente.Versao = config.Versao;
+            await _unitOfWork.ConfiguracoesNegocio.UpdateAsync(existente);
         }
 
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         // Limpar cache
         _cacheConfiguracao = config;

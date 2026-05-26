@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -10,7 +11,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 [ModuloRequerido(ModuloSistema.Financeiro)]
 public class FrmFinanceiro : Form
 {
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private readonly ClienteService _clientes;
     private readonly FornecedorService _fornecedores;
     private ComboBox cboTipo = null!, cboStatus = null!;
@@ -18,7 +19,7 @@ public class FrmFinanceiro : Form
     private StyledGrid grid = null!;
     private FlowLayoutPanel _kpis = null!;
 
-    public FrmFinanceiro(FinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
+    public FrmFinanceiro(IFinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
     {
         _svc = svc; _clientes = clientes; _fornecedores = fornecedores;
         InitUi();
@@ -193,7 +194,7 @@ public class FrmFinanceiro : Form
 public class FrmContaEdit : Form
 {
     private readonly ContaFinanceira _c;
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private readonly ClienteService _clientes;
     private readonly FornecedorService _fornecedores;
     private ComboBox cboTipo = null!;
@@ -201,7 +202,7 @@ public class FrmContaEdit : Form
     private DateTimePicker dtVenc = null!, dtEmissao = null!;
     private ComboBox cboCliente = null!, cboFornecedor = null!;
 
-    public FrmContaEdit(ContaFinanceira c, FinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
+    public FrmContaEdit(ContaFinanceira c, IFinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
     {
         _c = c; _svc = svc; _clientes = clientes; _fornecedores = fornecedores;
         InitUi();
@@ -308,12 +309,12 @@ public class FrmContaEdit : Form
 public class FrmQuitacao : Form
 {
     private readonly int _contaId;
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private DateTimePicker dtPag = null!;
     private TextBox txtValor = null!, txtJuros = null!, txtMulta = null!, txtDesc = null!;
     private ComboBox cboForma = null!;
 
-    public FrmQuitacao(int contaId, FinanceiroService svc)
+    public FrmQuitacao(int contaId, IFinanceiroService svc)
     {
         _contaId = contaId; _svc = svc;
         InitUi();

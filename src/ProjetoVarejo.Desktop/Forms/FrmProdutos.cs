@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,13 +8,13 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmProdutos : Form
 {
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly CategoriaService _categorias;
     private TextBox txtBusca = null!;
     private StyledGrid grid = null!;
     private Label lblTotal = null!;
 
-    public FrmProdutos(ProdutoService produtos, CategoriaService categorias)
+    public FrmProdutos(IProdutoService produtos, CategoriaService categorias)
     {
         _produtos = produtos;
         _categorias = categorias;
@@ -190,7 +191,7 @@ public class FrmProdutos : Form
 public class FrmProdutoEdit : Form
 {
     private readonly Produto _produto;
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly CategoriaService _categorias;
 
     private TextBox txtCodigo = null!, txtBarras = null!, txtDescricao = null!;
@@ -199,7 +200,7 @@ public class FrmProdutoEdit : Form
     private TextBox txtNcm = null!, txtCfop = null!, txtCstIcms = null!, txtAliqIcms = null!;
     private CheckBox chkAtivo = null!, chkControla = null!;
 
-    public FrmProdutoEdit(Produto produto, ProdutoService produtos, CategoriaService categorias)
+    public FrmProdutoEdit(Produto produto, IProdutoService produtos, CategoriaService categorias)
     {
         _produto = produto;
         _produtos = produtos;

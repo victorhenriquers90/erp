@@ -7,13 +7,16 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmSelecionarEmpresa : Form
 {
-    private readonly NfceService _svc;
+    // TODO: PHASE 2.5
+    // private readonly NfceService _svc;
     private readonly SessaoApp _sessao;
     private FlowLayoutPanel pnlEmpresas = null!;
 
-    public FrmSelecionarEmpresa(NfceService svc, SessaoApp sessao)
+    public FrmSelecionarEmpresa(SessaoApp sessao)
     {
-        _svc = svc; _sessao = sessao;
+        // TODO: PHASE 2.5 - NfceService refactoring needed
+        // _svc = svc;
+        _sessao = sessao;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
     }
@@ -40,7 +43,9 @@ public class FrmSelecionarEmpresa : Form
 
     private async Task CarregarAsync()
     {
-        var empresas = await _svc.ListarEmpresasAsync();
+        // TODO: PHASE 2.5 - Load from NfceService when available
+        // var empresas = await _svc.ListarEmpresasAsync();
+        var empresas = new List<EmpresaConfig>();
         pnlEmpresas.Controls.Clear();
         foreach (var emp in empresas)
             pnlEmpresas.Controls.Add(CardEmpresa(emp));

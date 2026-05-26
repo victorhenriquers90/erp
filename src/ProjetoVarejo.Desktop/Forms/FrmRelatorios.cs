@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Enums;
@@ -10,13 +11,13 @@ namespace ProjetoVarejo.Desktop.Forms;
 [ModuloRequerido(ModuloSistema.Relatorios)]
 public class FrmRelatorios : Form
 {
-    private readonly RelatorioService _svc;
+    private readonly IRelatorioService _svc;
     private DateTimePicker dtDe = null!, dtAte = null!;
     private TabControl tabs = null!;
     private StyledGrid gridDia = null!, gridForma = null!, gridVendedor = null!, gridAbc = null!, gridTop = null!, gridFluxo = null!;
     private Label _resumo = null!;
 
-    public FrmRelatorios(RelatorioService svc)
+    public FrmRelatorios(IRelatorioService svc)
     {
         _svc = svc;
         InitUi();

@@ -1,0 +1,31 @@
+# Build outputs
+bin/
+obj/
+publish/
+*.dll
+*.exe
+*.pdb
+*.deps.json
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+packages/
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Temp files
+*.tmp
+*.temp

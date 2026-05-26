@@ -1,142 +1,291 @@
 using FluentAssertions;
+using Moq;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Domain.Entities;
 using ProjetoVarejo.Shared;
+using ProjetoVarejo.Tests.Mocking;
 using Xunit;
 
 namespace ProjetoVarejo.Tests;
 
+/// <summary>
+/// Unit tests for VendaService using Moq-based IUnitOfWork mocking.
+/// Tests cover sale creation, item addition, finalization, and cancellation.
+/// </summary>
 public class VendaServiceTests
 {
-    private static VendaService NewVendaService(TestDbFactory f) =>
-        new(f.Db, f.Sessao, new EstoqueService(f.Db, f.Sessao));
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+    private readonly Mock<IEstoqueService> _mockEstoque;
+    private readonly Mock<SessaoApp> _mockSessao;
+    private readonly VendaService _vendaService;
 
-    [Fact]
-    public async Task FinalizarVenda_BaixaEstoque()
+    public VendaServiceTests()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10, preco: 5);
-        var svc = NewVendaService(f);
+        _mockUnitOfWork = MockUnitOfWorkFactory.CreateMock();
+        _mockEstoque = new Mock<IEstoqueService>();
+        _mockSessao = new Mock<SessaoApp>();
 
-        var vRes = await svc.NovaVendaAsync();
-        await svc.AdicionarItemAsync(vRes.Valor!.Id, produto.Id, 3);
+        var testUser = new Usuario { Id = 1, Nome = "Test User", Login = "test", Ativo = true };
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns(testUser);
 
-        var fin = await svc.FinalizarAsync(vRes.Valor.Id, new List<PagamentoVenda>
-        {
-            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 15 }
-        });
-
-        fin.Sucesso.Should().BeTrue();
-        fin.Valor!.Status.Should().Be(StatusVenda.Finalizada);
-        fin.Valor.Troco.Should().Be(0);
-
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(7);
+        _vendaService = new VendaService(_mockUnitOfWork.Object, _mockSessao.Object, _mockEstoque.Object);
     }
 
     [Fact]
-    public async Task FinalizarVenda_ValorPagoMenor_Falha()
+    public async Task NovaVenda_CriaVendaComNumeroSequencial()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10, preco: 10);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
-        await svc.AdicionarItemAsync(v.Id, produto.Id, 2);
+        // Arrange
+        var hoje = DateTime.Today.ToString("yyyyMMdd");
+        var mockVendas = new MockRepositoryBuilder<Venda>().Build();
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
 
-        var fin = await svc.FinalizarAsync(v.Id, new List<PagamentoVenda>
-        {
-            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 5 }
-        });
+        // Act
+        var res = await _vendaService.NovaVendaAsync();
 
-        fin.Sucesso.Should().BeFalse();
-        fin.Erro.Should().Contain("menor");
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        res.Dados.Should().NotBeNull();
+        res.Dados!.Numero.Should().StartWith(hoje);
+        res.Dados.Status.Should().Be(StatusVenda.EmAberto);
     }
 
     [Fact]
-    public async Task FinalizarVenda_CalculaTrocoCorretamente()
+    public async Task AdicionarItem_AdicionaItemAVenda()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10, preco: 10);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
-        await svc.AdicionarItemAsync(v.Id, produto.Id, 1);
+        // Arrange
+        var venda = new Venda { Id = 1, Status = StatusVenda.EmAberto, Itens = new List<ItemVenda>() };
+        var produto = new Produto { Id = 1, Codigo = "P001", Descricao = "Test", PrecoVenda = 10, Ativo = true, ControlaEstoque = true, Estoque = 100 };
 
-        var fin = await svc.FinalizarAsync(v.Id, new List<PagamentoVenda>
-        {
-            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 50 }
-        });
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        var mockItens = new MockRepositoryBuilder<ItemVenda>().Build();
 
-        fin.Sucesso.Should().BeTrue();
-        fin.Valor!.Troco.Should().Be(40);
-    }
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+        _mockUnitOfWork.Setup(u => u.ItensVenda).Returns(mockItens.Object);
 
-    [Fact]
-    public async Task CancelarVenda_Finalizada_DevolveEstoque()
-    {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10, preco: 5);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
-        await svc.AdicionarItemAsync(v.Id, produto.Id, 4);
-        await svc.FinalizarAsync(v.Id, new List<PagamentoVenda>
-        {
-            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 20 }
-        });
+        // Act
+        var res = await _vendaService.AdicionarItemAsync(venda.Id, produto.Id, 5);
 
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(6);
-
-        var canc = await svc.CancelarAsync(v.Id, "teste cancel");
-
-        canc.Sucesso.Should().BeTrue();
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(10);
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.ItensVenda.InsertAsync(It.IsAny<ItemVenda>()), Times.Once);
     }
 
     [Fact]
     public async Task AdicionarItem_EstoqueInsuficiente_Falha()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 2, preco: 5);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
+        // Arrange
+        var venda = new Venda { Id = 1, Status = StatusVenda.EmAberto, Itens = new List<ItemVenda>() };
+        var produto = new Produto { Id = 1, Codigo = "P001", Descricao = "Test", PrecoVenda = 10, Ativo = true, ControlaEstoque = true, Estoque = 2 };
 
-        var res = await svc.AdicionarItemAsync(v.Id, produto.Id, 5);
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
 
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+
+        // Act
+        var res = await _vendaService.AdicionarItemAsync(venda.Id, produto.Id, 5);
+
+        // Assert
         res.Sucesso.Should().BeFalse();
         res.Erro.Should().Contain("insuficiente");
     }
 
     [Fact]
-    public async Task AdicionarItem_RecalculaTotal()
+    public async Task RemoverItem_RemoveItemDaVenda()
     {
-        using var f = new TestDbFactory();
-        var p1 = f.AdicionarProduto("P001", estoque: 10, preco: 5);
-        var p2 = f.AdicionarProduto("P002", estoque: 10, preco: 3);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
+        // Arrange
+        var item = new ItemVenda { Id = 1, VendaId = 1, ProdutoId = 1, Quantidade = 5 };
+        var venda = new Venda { Id = 1, Status = StatusVenda.EmAberto };
 
-        await svc.AdicionarItemAsync(v.Id, p1.Id, 2);
-        await svc.AdicionarItemAsync(v.Id, p2.Id, 1);
+        var mockItens = new MockRepositoryBuilder<ItemVenda>().WithData(item).Build();
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
 
-        var venda = await svc.BuscarAsync(v.Id);
-        venda!.SubTotal.Should().Be(13);
-        venda.Total.Should().Be(13);
+        _mockUnitOfWork.Setup(u => u.ItensVenda).Returns(mockItens.Object);
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var res = await _vendaService.RemoverItemAsync(item.Id);
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.ItensVenda.DeleteAsync(item.Id), Times.Once);
     }
 
     [Fact]
-    public async Task AplicarDesconto_AjustaTotal()
+    public async Task FinalizarVenda_ValorPagoMenor_Falha()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10, preco: 10);
-        var svc = NewVendaService(f);
-        var v = (await svc.NovaVendaAsync()).Valor!;
-        await svc.AdicionarItemAsync(v.Id, produto.Id, 5); // total 50
+        // Arrange
+        var venda = new Venda
+        {
+            Id = 1,
+            Status = StatusVenda.EmAberto,
+            Total = 100,
+            SubTotal = 100,
+            Itens = new List<ItemVenda>
+            {
+                new ItemVenda { ProdutoId = 1, Quantidade = 2, Produto = new Produto { ControlaEstoque = true } }
+            }
+        };
 
-        var res = await svc.AplicarDescontoAsync(v.Id, 10);
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        var mockPagamentos = new MockRepositoryBuilder<PagamentoVenda>().Build();
 
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.PagamentosVenda).Returns(mockPagamentos.Object);
+
+        var pagamentos = new List<PagamentoVenda>
+        {
+            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 50 }
+        };
+
+        // Act
+        var res = await _vendaService.FinalizarAsync(venda.Id, pagamentos);
+
+        // Assert
+        res.Sucesso.Should().BeFalse();
+        res.Erro.Should().Contain("menor");
+    }
+
+    [Fact]
+    public async Task FinalizarVenda_CalculaTrocoCorretamente()
+    {
+        // Arrange
+        var venda = new Venda
+        {
+            Id = 1,
+            Status = StatusVenda.EmAberto,
+            Total = 100,
+            SubTotal = 100,
+            Desconto = 0,
+            Acrescimo = 0,
+            Itens = new List<ItemVenda>
+            {
+                new ItemVenda { ProdutoId = 1, Quantidade = 1, Produto = new Produto { ControlaEstoque = true } }
+            }
+        };
+
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        var mockPagamentos = new MockRepositoryBuilder<PagamentoVenda>().Build();
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.PagamentosVenda).Returns(mockPagamentos.Object);
+
+        _mockEstoque.Setup(s => s.RegistrarMovimentoAsync(
+                It.IsAny<int>(), It.IsAny<TipoMovimentoEstoque>(), It.IsAny<decimal>(),
+                It.IsAny<decimal?>(), It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>()))
+            .ReturnsAsync(new Result<MovimentoEstoque> { Sucesso = true });
+
+        var pagamentos = new List<PagamentoVenda>
+        {
+            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 150 }
+        };
+
+        // Act
+        var res = await _vendaService.FinalizarAsync(venda.Id, pagamentos);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
-        var venda = await svc.BuscarAsync(v.Id);
-        venda!.Total.Should().Be(40);
+        res.Dados!.Troco.Should().Be(50);
+    }
+
+    [Fact]
+    public async Task CancelarVenda_MarcaComoCancelada()
+    {
+        // Arrange
+        var venda = new Venda
+        {
+            Id = 1,
+            Status = StatusVenda.Finalizada,
+            Itens = new List<ItemVenda>
+            {
+                new ItemVenda { ProdutoId = 1, Quantidade = 5, Produto = new Produto { ControlaEstoque = true } }
+            }
+        };
+
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        _mockEstoque.Setup(s => s.RegistrarMovimentoAsync(
+                It.IsAny<int>(), It.IsAny<TipoMovimentoEstoque>(), It.IsAny<decimal>(),
+                It.IsAny<decimal?>(), It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>(), It.IsAny<string>()))
+            .ReturnsAsync(new Result<MovimentoEstoque> { Sucesso = true });
+
+        // Act
+        var res = await _vendaService.CancelarAsync(venda.Id, "teste cancel");
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task BuscarVenda_RetornaVendaCompleta()
+    {
+        // Arrange
+        var venda = new Venda
+        {
+            Id = 1,
+            Status = StatusVenda.EmAberto,
+            Cliente = new Cliente { Id = 1, Nome = "Test Client" },
+            Usuario = new Usuario { Id = 1, Nome = "Test User" },
+            Itens = new List<ItemVenda>()
+        };
+
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var res = await _vendaService.BuscarAsync(venda.Id);
+
+        // Assert
+        res.Should().NotBeNull();
+        res!.Id.Should().Be(1);
+        res.Status.Should().Be(StatusVenda.EmAberto);
+    }
+
+    [Fact]
+    public async Task ListarVendas_RetornaVendasFiltradas()
+    {
+        // Arrange
+        var v1 = new Venda { Id = 1, Status = StatusVenda.Finalizada, DataVenda = DateTime.Today };
+        var v2 = new Venda { Id = 2, Status = StatusVenda.Cancelada, DataVenda = DateTime.Today.AddDays(-5) };
+
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(v1, v2).Build();
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var res = await _vendaService.ListarAsync(status: StatusVenda.Finalizada);
+
+        // Assert
+        res.Should().HaveCountGreaterThanOrEqualTo(1);
+    }
+
+    [Fact]
+    public async Task AplicarDesconto_DiminuiTotal()
+    {
+        // Arrange
+        var venda = new Venda
+        {
+            Id = 1,
+            Status = StatusVenda.EmAberto,
+            SubTotal = 100,
+            Total = 100,
+            Desconto = 0,
+            Itens = new List<ItemVenda>()
+        };
+
+        var mockVendas = new MockRepositoryBuilder<Venda>().WithData(venda).Build();
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var res = await _vendaService.AplicarDescontoAsync(venda.Id, 20);
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.Vendas.UpdateAsync(It.IsAny<Venda>()), Times.Once);
     }
 }

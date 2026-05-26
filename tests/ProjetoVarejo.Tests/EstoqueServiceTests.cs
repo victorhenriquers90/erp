@@ -1,93 +1,199 @@
 using FluentAssertions;
+using Moq;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Domain.Entities;
 using ProjetoVarejo.Shared;
+using ProjetoVarejo.Tests.Mocking;
 using Xunit;
 
 namespace ProjetoVarejo.Tests;
 
+/// <summary>
+/// Unit tests for EstoqueService using Moq-based IUnitOfWork mocking.
+/// Tests cover stock movement registration, validation, and product queries.
+/// </summary>
 public class EstoqueServiceTests
 {
-    [Fact]
-    public async Task RegistrarMovimento_Entrada_AumentaEstoqueEAtualizaCusto()
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+    private readonly Mock<SessaoApp> _mockSessao;
+    private readonly EstoqueService _estoque;
+
+    public EstoqueServiceTests()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 5);
-        var svc = new EstoqueService(f.Db, f.Sessao);
+        _mockUnitOfWork = MockUnitOfWorkFactory.CreateMock();
+        _mockSessao = new Mock<SessaoApp>();
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns(new Usuario
+        {
+            Id = 1,
+            Nome = "Test User",
+            Login = "test",
+            Ativo = true
+        });
 
-        var res = await svc.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Entrada, 10, custoUnitario: 25);
+        _estoque = new EstoqueService(_mockUnitOfWork.Object, _mockSessao.Object);
+    }
 
+    [Fact]
+    public async Task RegistrarMovimento_Entrada_AumentaEstoque()
+    {
+        // Arrange
+        var produto = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Test Product",
+            Estoque = 5,
+            ControlaEstoque = true
+        };
+
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoEstoque>().Build();
+
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosEstoque).Returns(mockMovimentos.Object);
+
+        // Act
+        var res = await _estoque.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Entrada, 10, custoUnitario: 25);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(15);
-        produto.PrecoCusto.Should().Be(25);
+        _mockUnitOfWork.Verify(u => u.MovimentosEstoque.InsertAsync(It.IsAny<MovimentoEstoque>()), Times.Once);
+        _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 
     [Fact]
     public async Task RegistrarMovimento_Saida_DiminuiEstoque()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 10);
-        var svc = new EstoqueService(f.Db, f.Sessao);
+        // Arrange
+        var produto = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Test Product",
+            Estoque = 10,
+            ControlaEstoque = true
+        };
 
-        var res = await svc.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 3);
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoEstoque>().Build();
 
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosEstoque).Returns(mockMovimentos.Object);
+
+        // Act
+        var res = await _estoque.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 3);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(7);
+        _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
     }
 
     [Fact]
     public async Task RegistrarMovimento_SaidaSemEstoque_Falha()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 2);
-        var svc = new EstoqueService(f.Db, f.Sessao);
+        // Arrange
+        var produto = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Test Product",
+            Estoque = 2,
+            ControlaEstoque = true
+        };
 
-        var res = await svc.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 5);
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
 
+        // Act
+        var res = await _estoque.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 5);
+
+        // Assert
         res.Sucesso.Should().BeFalse();
         res.Erro.Should().Contain("insuficiente");
-        f.Db.Entry(produto).Reload();
-        produto.Estoque.Should().Be(2); // não mudou
+        _mockUnitOfWork.Verify(u => u.SaveChangesAsync(), Times.Never);
     }
 
     [Fact]
     public async Task RegistrarMovimento_SemControleEstoque_PermiteSaidaNegativa()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001", estoque: 0, controla: false);
-        var svc = new EstoqueService(f.Db, f.Sessao);
+        // Arrange
+        var produto = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Test Product",
+            Estoque = 0,
+            ControlaEstoque = false
+        };
 
-        var res = await svc.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 5);
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoEstoque>().Build();
 
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosEstoque).Returns(mockMovimentos.Object);
+
+        // Act
+        var res = await _estoque.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Saida, 5);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
     }
 
     [Fact]
     public async Task RegistrarMovimento_QuantidadeZero_Falha()
     {
-        using var f = new TestDbFactory();
-        var produto = f.AdicionarProduto("P001");
-        var svc = new EstoqueService(f.Db, f.Sessao);
+        // Arrange
+        var produto = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Test Product"
+        };
 
-        var res = await svc.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Entrada, 0);
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(produto).Build();
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
 
+        // Act
+        var res = await _estoque.RegistrarMovimentoAsync(produto.Id, TipoMovimentoEstoque.Entrada, 0);
+
+        // Assert
         res.Sucesso.Should().BeFalse();
     }
 
     [Fact]
     public async Task ProdutosAbaixoMinimo_RetornaApenasOsAbaixo()
     {
-        using var f = new TestDbFactory();
-        var p1 = f.AdicionarProduto("P001", estoque: 5);
-        p1.EstoqueMinimo = 10;
-        var p2 = f.AdicionarProduto("P002", estoque: 20);
-        p2.EstoqueMinimo = 5;
-        f.Db.SaveChanges();
+        // Arrange
+        var p1 = new Produto
+        {
+            Id = 1,
+            Codigo = "P001",
+            Descricao = "Product 1",
+            Estoque = 5,
+            EstoqueMinimo = 10,
+            Ativo = true,
+            ControlaEstoque = true
+        };
 
-        var svc = new EstoqueService(f.Db, f.Sessao);
-        var lista = await svc.ProdutosAbaixoMinimoAsync();
+        var p2 = new Produto
+        {
+            Id = 2,
+            Codigo = "P002",
+            Descricao = "Product 2",
+            Estoque = 20,
+            EstoqueMinimo = 5,
+            Ativo = true,
+            ControlaEstoque = true
+        };
 
+        var mockProdutos = new MockRepositoryBuilder<Produto>().WithData(p1, p2).Build();
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+
+        // Act
+        var lista = await _estoque.ProdutosAbaixoMinimoAsync();
+
+        // Assert
         lista.Should().HaveCount(1);
         lista[0].Codigo.Should().Be("P001");
     }

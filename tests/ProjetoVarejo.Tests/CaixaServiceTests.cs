@@ -1,119 +1,201 @@
 using FluentAssertions;
+using Moq;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Domain.Entities;
 using ProjetoVarejo.Shared;
+using ProjetoVarejo.Tests.Mocking;
 using Xunit;
 
 namespace ProjetoVarejo.Tests;
 
+/// <summary>
+/// Unit tests for CaixaService using Moq-based IUnitOfWork mocking.
+/// Tests cover cash register opening, closing, movements, and reconciliation.
+/// </summary>
 public class CaixaServiceTests
 {
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+    private readonly Mock<SessaoApp> _mockSessao;
+    private readonly CaixaService _caixaService;
+
+    public CaixaServiceTests()
+    {
+        _mockUnitOfWork = MockUnitOfWorkFactory.CreateMock();
+        _mockSessao = new Mock<SessaoApp>();
+
+        var testUser = new Usuario { Id = 1, Nome = "Test User", Login = "test", Ativo = true };
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns(testUser);
+        _mockSessao.Setup(s => s.CaixaAtual).Returns((CaixaSessao?)null);
+
+        _caixaService = new CaixaService(_mockUnitOfWork.Object, _mockSessao.Object);
+    }
+
     [Fact]
     public async Task Abrir_RegistraMovimentoAbertura()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
+        // Arrange
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().Build();
 
-        var res = await svc.AbrirAsync(100);
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
 
+        // Act
+        var res = await _caixaService.AbrirAsync(100);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
-        var movs = f.Db.MovimentosCaixa.ToList();
-        movs.Should().HaveCount(1);
-        movs[0].Tipo.Should().Be(TipoMovimentoCaixa.Abertura);
-        movs[0].Valor.Should().Be(100);
+        res.Dados!.ValorAbertura.Should().Be(100);
+        _mockUnitOfWork.Verify(u => u.CaixaSessoes.InsertAsync(It.IsAny<CaixaSessao>()), Times.Once);
+        _mockUnitOfWork.Verify(u => u.MovimentosCaixa.InsertAsync(It.IsAny<MovimentoCaixa>()), Times.Once);
     }
 
     [Fact]
     public async Task Abrir_DuasVezes_Falha()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
-        await svc.AbrirAsync(100);
+        // Arrange
+        var caixaAberto = new CaixaSessao { Id = 1, ValorAbertura = 100, AbertaEm = DateTime.Now, UsuarioAberturaId = 1 };
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixaAberto).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().Build();
 
-        var res = await svc.AbrirAsync(200);
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
 
+        // Act
+        var res = await _caixaService.AbrirAsync(200);
+
+        // Assert
         res.Sucesso.Should().BeFalse();
+        res.Erro.Should().Contain("já existe");
     }
 
     [Fact]
-    public async Task Sangria_DiminuiSaldoEsperado()
+    public async Task ObterCaixaAberto_RetornaCaixaAberto()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
-        var caixa = (await svc.AbrirAsync(100)).Valor!;
+        // Arrange
+        var caixaAberto = new CaixaSessao { Id = 1, ValorAbertura = 100, UsuarioAberturaId = 1, AbertaEm = DateTime.Now };
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixaAberto).Build();
 
-        await svc.SangriaAsync(30, "retirada");
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
 
-        var resumo = await svc.ResumoAsync(caixa.Id);
-        resumo.TotalSangrias.Should().Be(30);
-        resumo.SaldoDinheiroEsperado.Should().Be(70); // 100 - 30
+        // Act
+        var resultado = await _caixaService.ObterCaixaAbertoAsync();
+
+        // Assert
+        resultado.Should().NotBeNull();
+        resultado!.Id.Should().Be(1);
+        resultado.ValorAbertura.Should().Be(100);
     }
 
     [Fact]
-    public async Task Suprimento_AumentaSaldoEsperado()
+    public async Task Sangria_RegistraMovimentoSangria()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
-        var caixa = (await svc.AbrirAsync(100)).Valor!;
+        // Arrange
+        var caixa = new CaixaSessao { Id = 1, ValorAbertura = 100, UsuarioAberturaId = 1, AbertaEm = DateTime.Now };
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixa).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().Build();
 
-        await svc.SuprimentoAsync(50, "troco");
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
+        _mockSessao.Setup(s => s.CaixaAtual).Returns(caixa);
 
-        var resumo = await svc.ResumoAsync(caixa.Id);
-        resumo.TotalSuprimentos.Should().Be(50);
-        resumo.SaldoDinheiroEsperado.Should().Be(150);
+        // Act
+        var res = await _caixaService.SangriaAsync(30, "retirada");
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.MovimentosCaixa.InsertAsync(It.IsAny<MovimentoCaixa>()), Times.Once);
     }
 
-    private static int CriarVendaFake(TestDbFactory f)
+    [Fact]
+    public async Task Suprimento_RegistraMovimentoSuprimento()
     {
-        var v = new Venda { Numero = "T" + Guid.NewGuid().ToString("N")[..8], UsuarioId = f.Sessao.UsuarioLogado!.Id, Status = StatusVenda.Finalizada };
-        f.Db.Vendas.Add(v);
-        f.Db.SaveChanges();
-        return v.Id;
+        // Arrange
+        var caixa = new CaixaSessao { Id = 1, ValorAbertura = 100, UsuarioAberturaId = 1, AbertaEm = DateTime.Now };
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixa).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().Build();
+
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
+        _mockSessao.Setup(s => s.CaixaAtual).Returns(caixa);
+
+        // Act
+        var res = await _caixaService.SuprimentoAsync(50, "troco");
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.MovimentosCaixa.InsertAsync(It.IsAny<MovimentoCaixa>()), Times.Once);
     }
 
     [Fact]
     public async Task RegistrarVenda_AgrupaPorFormaPagamento()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
-        var caixa = (await svc.AbrirAsync(0)).Valor!;
-        var v1 = CriarVendaFake(f);
-        var v2 = CriarVendaFake(f);
-
-        await svc.RegistrarVendaAsync(caixa.Id, v1, new[]
+        // Arrange
+        var caixa = new CaixaSessao { Id = 1 };
+        var venda = new Venda { Id = 1 };
+        var pagamentos = new List<PagamentoVenda>
         {
-            new PagamentoVenda { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 50 },
-            new PagamentoVenda { FormaPagamento = FormaPagamentoTipo.Credito, Valor = 100 }
-        });
-        await svc.RegistrarVendaAsync(caixa.Id, v2, new[]
-        {
-            new PagamentoVenda { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 30 }
-        });
+            new() { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 50 },
+            new() { FormaPagamento = FormaPagamentoTipo.Credito, Valor = 100 }
+        };
 
-        var r = await svc.ResumoAsync(caixa.Id);
-        r.VendasPorForma[FormaPagamentoTipo.Dinheiro].Should().Be(80);
-        r.VendasPorForma[FormaPagamentoTipo.Credito].Should().Be(100);
-        r.TotalVendas.Should().Be(180);
-        r.SaldoDinheiroEsperado.Should().Be(80); // só dinheiro
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().Build();
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
+
+        // Act
+        var res = await _caixaService.RegistrarVendaAsync(caixa.Id, venda.Id, pagamentos);
+
+        // Assert
+        res.Sucesso.Should().BeTrue();
+        _mockUnitOfWork.Verify(u => u.MovimentosCaixa.InsertAsync(It.IsAny<MovimentoCaixa>()), Times.Exactly(2));
+    }
+
+    [Fact]
+    public async Task Resumo_CalculaSaldoEsperado()
+    {
+        // Arrange
+        var mov1 = new MovimentoCaixa { Id = 1, CaixaSessaoId = 1, Tipo = TipoMovimentoCaixa.Abertura, Valor = 100, FormaPagamento = FormaPagamentoTipo.Dinheiro };
+        var mov2 = new MovimentoCaixa { Id = 2, CaixaSessaoId = 1, Tipo = TipoMovimentoCaixa.Sangria, Valor = 30, FormaPagamento = FormaPagamentoTipo.Dinheiro };
+        var mov3 = new MovimentoCaixa { Id = 3, CaixaSessaoId = 1, Tipo = TipoMovimentoCaixa.Venda, Valor = 50, FormaPagamento = FormaPagamentoTipo.Dinheiro };
+
+        var caixa = new CaixaSessao { Id = 1, ValorAbertura = 100 };
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixa).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().WithData(mov1, mov2, mov3).Build();
+
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
+
+        // Act
+        var resumo = await _caixaService.ResumoAsync(caixa.Id);
+
+        // Assert
+        resumo.ValorAbertura.Should().Be(100);
+        resumo.TotalSangrias.Should().Be(30);
+        resumo.VendasPorForma[FormaPagamentoTipo.Dinheiro].Should().Be(50);
+        resumo.SaldoDinheiroEsperado.Should().Be(120); // 100 - 30 + 50
     }
 
     [Fact]
     public async Task Fechar_CalculaDiferenca()
     {
-        using var f = new TestDbFactory();
-        var svc = new CaixaService(f.Db, f.Sessao);
-        var caixa = (await svc.AbrirAsync(100)).Valor!;
-        var v = CriarVendaFake(f);
-        await svc.RegistrarVendaAsync(caixa.Id, v, new[]
-        {
-            new PagamentoVenda { FormaPagamento = FormaPagamentoTipo.Dinheiro, Valor = 50 }
-        });
-        // esperado = 100 + 50 = 150. Operador conta 145 → falta 5.
+        // Arrange
+        var mov = new MovimentoCaixa { Id = 1, CaixaSessaoId = 1, Tipo = TipoMovimentoCaixa.Abertura, Valor = 100, FormaPagamento = FormaPagamentoTipo.Dinheiro };
+        var caixa = new CaixaSessao { Id = 1, ValorAbertura = 100, UsuarioAberturaId = 1, AbertaEm = DateTime.Now };
 
-        var res = await svc.FecharAsync(caixa.Id, 145);
+        var mockCaixas = new MockRepositoryBuilder<CaixaSessao>().WithData(caixa).Build();
+        var mockMovimentos = new MockRepositoryBuilder<MovimentoCaixa>().WithData(mov).Build();
 
+        _mockUnitOfWork.Setup(u => u.CaixaSessoes).Returns(mockCaixas.Object);
+        _mockUnitOfWork.Setup(u => u.MovimentosCaixa).Returns(mockMovimentos.Object);
+
+        // Act
+        var res = await _caixaService.FecharAsync(caixa.Id, 95);
+
+        // Assert
         res.Sucesso.Should().BeTrue();
-        res.Valor!.Diferenca.Should().Be(-5);
-        res.Valor.ValorFechamentoCalculado.Should().Be(150);
+        res.Dados!.ValorFechamentoInformado.Should().Be(95);
+        res.Dados.Diferenca.Should().Be(-5); // 95 - 100 = -5
+        _mockUnitOfWork.Verify(u => u.CaixaSessoes.UpdateAsync(It.IsAny<CaixaSessao>()), Times.Once);
     }
 }

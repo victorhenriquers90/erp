@@ -71,7 +71,12 @@
       "PowerShell(Get-Process ProjetoVarejo.Desktop)",
       "Bash(timeout 5 ProjetoVarejo.Desktop.exe)",
       "Bash(grep -E \"^src/.*\\\\.cs$|^src/.*\\\\.json$\")",
-      "Bash(grep -E \"^.* src/.*\\\\.cs$|^.* src/ProjetoVarejo\\\\.Api/Program\")"
+      "Bash(grep -E \"^.* src/.*\\\\.cs$|^.* src/ProjetoVarejo\\\\.Api/Program\")",
+      "Bash(git checkout *)",
+      "Bash(git commit -m 'Add .gitignore to exclude build artifacts *)",
+      "Bash(git clean *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Remove build artifacts from version control *)"
     ]
   }
 }

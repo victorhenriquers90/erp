@@ -3,10 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjetoVarejo.Domain\ProjetoVarejo.Domain.csproj" />
     <ProjectReference Include="..\ProjetoVarejo.Shared\ProjetoVarejo.Shared.csproj" />
+    <ProjectReference Include="..\ProjetoVarejo.Application\ProjetoVarejo.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -1,15 +1,21 @@
 # 🤖 Coordenação entre IAs - Projeto Varejo
 
-**Última atualização:** 2026-05-25 15:27
+**Última atualização:** 2026-05-26 11:02
 
 ---
 
-## 📊 Status Atual
+## 📊 Status Atual - MODERNIZAÇÃO v1.0
 
 | IA | Responsável | Tarefa Atual | Status | Progresso |
 |---|---|---|---|---|
-| **IA1** | Claude | Testes de UI e documentação | ✅ Em progresso | 15% |
-| **IA2** | Codex | Setup e code review | ⏳ Aguardando início | 0% |
+| **IA1** | Claude | **FASE 1: Foundation (P0 Críticos)** | ✅ Em progresso | 60% |
+| **IA2** | Codex | *Aguardando - FASE 1* | ⏳ Pausado | 35% |
+
+### 🚀 Novo: Plano de Modernização
+- **Arquivo:** `.claude/MODERNIZATION_PLAN.md` (Completo)
+- **Arquivo:** `.claude/PHASE1_PROGRESS.md` (Rastreamento)
+- **Branch:** `modernization/foundation`
+- **Fases:** 5 principais | **Total:** 60-80 horas
 
 ---
 
@@ -175,6 +181,69 @@ Exemplo:
 
 ---
 
-**Status Geral do Projeto: ✅ 70% Concluído**
+**Status Geral do Projeto: ✅ 70% Concluído (Modular) → 🚀 Modernização Iniciada**
 - Fases 1-7 (Sistema Modular): ✅ 100%
-- Fases 8-10 (Enhancements): 🔲 0%
+- Fases 8-10 (Enhancements): 🔲 0% (adiado)
+- **NOVA: FASE Modernização (P0-P3):** 🚀 Iniciada
+
+---
+
+## 🔴 FASE 1: Foundation (P0 - Críticos) - 2026-05-26
+
+### Mudanças Realizadas (60% - IA1/Claude)
+
+#### ✅ 1.1: Race Condition em EstoqueService - COMPLETO
+- **Arquivo:** `Domain/Entities/Produto.cs`
+  - ✅ Adicionado `[Timestamp] byte[]? RowVersion`
+  - Controle otimista de concorrência para multi-usuário
+  
+- **Arquivo:** `Application/Services/EstoqueService.cs`
+  - ✅ Try-catch para `DbUpdateConcurrencyException`
+  - ✅ Reload automático de dados atualizados
+  - ✅ Mensagem clara para usuário
+  - Removido TODO comment (resolved)
+
+- **Migration:** `AddRowVersionToProduto` (20260526110228)
+  - ✅ Criada com sucesso
+  - ✅ Coluna `rowversion` no SQL Server
+  - ✅ Tipo: `rowversion` (automático)
+
+#### ✅ 1.2: Segurança - CORS Restrito - COMPLETO
+- **Arquivo:** `Api/Program.cs`
+  - ❌ **Antes:** `AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()`
+  - ✅ **Depois:** CORS policy com whitelist
+  - ✅ Lê origens permitidas de `appsettings.json`
+  - ✅ Default dev: `https://localhost:3000`, `https://localhost:5173`
+  - ✅ Production: Configurável
+  - ✅ AllowCredentials = true
+  - ✅ WithExposedHeaders para paginação
+
+#### ✅ 1.3: Session Timeout - IMPLEMENTADO - COMPLETO
+- **Arquivo:** `Application/Sessao/SessaoApp.cs`
+  - ✅ Adicionado `UltimaAtividade` (DateTime?)
+  - ✅ Método `Expirou()` - verifica timeout (30 min)
+  - ✅ Método `AtualizarAtividade()` - refresh automático
+  - ✅ Property `Autenticado` agora verifica expiração
+  - ✅ Comportamento: Sessão expira após 30 min inatividade
+
+### 📋 Próximo Passo (40% - IA2)
+- [ ] Aplicar migration ao banco: `dotnet ef database update`
+- [ ] Testar race condition (simulação multi-caixa)
+- [ ] Testar session timeout (inatividade)
+- [ ] Testes de CORS (bloqueio de origem não permitida)
+
+### 📦 Compilação
+- ✅ Build Release: 0 erros
+- ⚠️ 3 warnings (conhecidos, não-críticos em FrmConfiguracao)
+
+### 🔗 Relação com FASE 2
+- Após FASE 1: Iniciar FASE 2 (Repository Pattern)
+- Branch: `modernization/foundation`
+- Próximo merge: `modernization/phase2`
+
+---
+
+### Índice de Documentação Modernização
+1. **MODERNIZATION_PLAN.md** - Plano completo (5 fases)
+2. **PHASE1_PROGRESS.md** - Rastreamento FASE 1
+3. **Este arquivo** - Coordenação entre IAs

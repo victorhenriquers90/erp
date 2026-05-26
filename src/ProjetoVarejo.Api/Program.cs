@@ -23,14 +23,29 @@ builder.Services.AddSingleton<ApiKeyValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
-    p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+// 🔒 CORS Seguro: Apenas domínios específicos permitidos
+// Lê lista de origens permitidas do appsettings.json
+var corsPolicy = "ProjetoVarejoCorsPolicy";
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "https://localhost:3000", "https://localhost:5173" }; // Padrão para dev
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicy, policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials()
+              .WithExposedHeaders("X-Total-Count", "X-Page-Count"); // Para paginação
+    });
+});
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors();
+app.UseCors(corsPolicy);
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.MapGet("/", () => Results.Ok(new { app = "ProjetoVarejo.Api", versao = "1.0", utc = DateTime.UtcNow }))

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using ProjetoVarejo.Shared;
 
 namespace ProjetoVarejo.Domain.Entities;
@@ -24,6 +25,13 @@ public class Produto : EntidadeBase
     public string CstIcms { get; set; } = "102";
     public decimal AliquotaIcms { get; set; }
     public string CstPisCofins { get; set; } = "49";
+
+    /// <summary>
+    /// RowVersion para controle otimista de concorrência em operações de estoque
+    /// Usado para detectar conflitos quando múltiplos usuários atualizam o mesmo produto simultaneamente
+    /// </summary>
+    [Timestamp]
+    public byte[]? RowVersion { get; set; }
 
     public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
     public ICollection<MovimentoEstoque> Movimentos { get; set; } = new List<MovimentoEstoque>();

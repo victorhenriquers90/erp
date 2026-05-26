@@ -46,8 +46,8 @@ public class EstoqueService
             return Result.Falha<MovimentoEstoque>(
                 $"Estoque insuficiente. Disponível: {saldoAnterior}, solicitado: {quantidade}.");
 
-        // TODO: race condition multi-caixa. Solução: adicionar RowVersion em Produto e tratar DbUpdateConcurrencyException,
-        // OU usar ExecuteSqlInterpolated com UPDATE ... WHERE Estoque >= qtd. Aceitável para 1 caixa, problemático com vários.
+        // RowVersion garante que múltiplas operações simultâneas não causem inconsistência
+        // DbUpdateConcurrencyException é lançada se outro usuário já modificou este produto
         produto.Estoque = saldoNovo;
         produto.AtualizadoEm = DateTime.Now;
         if (isEntrada && custoUnitario.HasValue && custoUnitario.Value > 0)
@@ -68,9 +68,21 @@ public class EstoqueService
             Observacao = observacao
         };
 
-        _db.MovimentosEstoque.Add(mov);
-        await _db.SaveChangesAsync();
-        return Result.Ok(mov);
+        try
+        {
+            _db.MovimentosEstoque.Add(mov);
+            await _db.SaveChangesAsync();
+            return Result.Ok(mov);
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
+        {
+            // Outro usuário modificou o mesmo produto. Carrega dados atualizados do banco
+            await _db.Entry(produto).ReloadAsync();
+
+            return Result.Falha<MovimentoEstoque>(
+                $"Conflito de concorrência: o estoque foi modificado por outro usuário. " +
+                $"Saldo atual: {produto.Estoque}. Tente novamente.");
+        }
     }
 
     public Task<List<MovimentoEstoque>> ListarMovimentosAsync(int? produtoId = null, DateTime? de = null, DateTime? ate = null)

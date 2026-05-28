@@ -147,26 +147,33 @@ static class Program
                 DbInitializer.Inicializar(db);
             }
 
+            // --firstrun é passado pelo instalador para forçar o wizard mesmo em reinstalações
+            var primeiraVez = Environment.GetCommandLineArgs().Contains("--firstrun");
+
             // Verificar se precisa fazer setup inicial
             using (var setupScope = Services.CreateScope())
             {
                 var validador = setupScope.ServiceProvider.GetRequiredService<ValidadorSetupInicial>();
-                var precisaSetup = validador.PrecisaDeSetupInicial().GetAwaiter().GetResult();
+                var naoConfigurado = validador.PrecisaDeSetupInicial().GetAwaiter().GetResult();
 
-                if (precisaSetup)
+                if (primeiraVez || naoConfigurado)
                 {
                     var frmSetup = setupScope.ServiceProvider.GetRequiredService<FrmConfiguracao>();
                     frmSetup.ShowDialog();
 
                     if (frmSetup.DialogResult != DialogResult.OK)
                     {
-                        // Usuário cancelou o setup
-                        MessageBox.Show(
-                            "O sistema não foi configurado. A aplicação será encerrada.",
-                            "Setup Cancelado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-                        return;
+                        if (naoConfigurado)
+                        {
+                            // Sem nenhuma configuração válida — não tem como continuar
+                            MessageBox.Show(
+                                "O sistema não foi configurado. A aplicação será encerrada.",
+                                "Setup Cancelado",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                            return;
+                        }
+                        // Reinstalação: o usuário cancelou mas já havia config no banco — continua normalmente
                     }
                 }
             }

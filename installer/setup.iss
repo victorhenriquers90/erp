@@ -63,8 +63,8 @@ Name: "{autodesktop}\{#MyAppName}";   Filename: "{app}\desktop\{#MyAppExeName}";
 [Run]
 ; Verificar/instalar .NET 8 Desktop Runtime se não houver
 Filename: "{cmd}"; Parameters: "/c dotnet --list-runtimes | findstr ""Microsoft.WindowsDesktop.App 8."""; Flags: runhidden; StatusMsg: "Verificando .NET 8 Desktop Runtime..."; Check: NetRuntimeAusente
-; Inicia o app após instalação
-Filename: "{app}\desktop\{#MyAppExeName}"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
+; Inicia o app após instalação com flag de primeira execução para forçar o wizard de configuração
+Filename: "{app}\desktop\{#MyAppExeName}"; Parameters: "--firstrun"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\desktop\Backups"

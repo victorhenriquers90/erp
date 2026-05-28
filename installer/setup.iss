@@ -63,13 +63,14 @@ Name: "{autodesktop}\{#MyAppName}";   Filename: "{app}\desktop\{#MyAppExeName}";
 [Run]
 ; Verificar/instalar .NET 8 Desktop Runtime se não houver
 Filename: "{cmd}"; Parameters: "/c dotnet --list-runtimes | findstr ""Microsoft.WindowsDesktop.App 8."""; Flags: runhidden; StatusMsg: "Verificando .NET 8 Desktop Runtime..."; Check: NetRuntimeAusente
-; Inicia o app após instalação com flag de primeira execução para forçar o wizard de configuração
-Filename: "{app}\desktop\{#MyAppExeName}"; Parameters: "--firstrun"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
+; Inicia o app após instalação (o arquivo firstrun.flag já foi criado pelo instalador)
+Filename: "{app}\desktop\{#MyAppExeName}"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\desktop\Backups"
 Type: filesandordirs; Name: "{app}\desktop\backup.cfg"
 Type: filesandordirs; Name: "{app}\desktop\backup.last"
+Type: files;          Name: "{app}\desktop\firstrun.flag"
 
 [Code]
 function NetRuntimeAusente: Boolean;
@@ -84,9 +85,15 @@ end;
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   ResultCode: Integer;
+  FlagFile: String;
 begin
   if CurStep = ssPostInstall then
   begin
+    // Criar arquivo sentinela — o app detecta na primeira abertura e exibe o
+    // wizard de configuração de segmento, independente de como for aberto
+    FlagFile := ExpandConstant('{app}\desktop\firstrun.flag');
+    SaveStringToFile(FlagFile, '', False);
+
     if NetRuntimeAusente() then
     begin
       if MsgBox('O .NET 8 Desktop Runtime é necessário e não foi detectado.' + #13#10 +

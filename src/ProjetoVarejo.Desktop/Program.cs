@@ -147,8 +147,11 @@ static class Program
                 DbInitializer.Inicializar(db);
             }
 
-            // --firstrun é passado pelo instalador para forçar o wizard mesmo em reinstalações
-            var primeiraVez = Environment.GetCommandLineArgs().Contains("--firstrun");
+            // O instalador cria firstrun.flag na pasta do app.
+            // Enquanto esse arquivo existir, o wizard de configuração é exibido
+            // independente do estado do banco — cobre fresh installs e reinstalações.
+            var flagFile = Path.Combine(AppContext.BaseDirectory, "firstrun.flag");
+            var primeiraVez = File.Exists(flagFile);
 
             // Verificar se precisa fazer setup inicial
             using (var setupScope = Services.CreateScope())
@@ -160,6 +163,10 @@ static class Program
                 {
                     var frmSetup = setupScope.ServiceProvider.GetRequiredService<FrmConfiguracao>();
                     frmSetup.ShowDialog();
+
+                    // Apagar a flag independente do resultado — não queremos mostrar
+                    // de novo na próxima abertura
+                    try { if (File.Exists(flagFile)) File.Delete(flagFile); } catch { }
 
                     if (frmSetup.DialogResult != DialogResult.OK)
                     {
@@ -173,7 +180,7 @@ static class Program
                                 MessageBoxIcon.Warning);
                             return;
                         }
-                        // Reinstalação: o usuário cancelou mas já havia config no banco — continua normalmente
+                        // Reinstalação: usuário cancelou mas já havia config no banco — continua normalmente
                     }
                 }
             }

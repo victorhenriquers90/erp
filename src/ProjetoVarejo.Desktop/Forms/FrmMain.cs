@@ -288,27 +288,10 @@ public class FrmMain : Form
         _conteudo.Controls.Clear();
 
         // === Cabeçalho ===
-        var header = new Panel { Dock = DockStyle.Top, Height = 84, BackColor = Tema.CorFundo };
-        var titulo = new Label
-        {
-            Text = "Painel operacional",
-            Dock = DockStyle.Top, Height = 36,
-            Font = Tema.FontTituloGrande,
-            ForeColor = Tema.CorTextoEscuro,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-        var sub = new Label
-        {
-            Text = "Indicadores, processos e módulos principais para operação diária",
-            Dock = DockStyle.Top, Height = 24,
-            Font = Tema.FontCorpo,
-            ForeColor = Tema.CorTextoMedio,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-        var linha = new Panel { Dock = DockStyle.Bottom, Height = 1, BackColor = Tema.CorBordaSuave };
-        header.Controls.Add(linha);
-        header.Controls.Add(sub);
-        header.Controls.Add(titulo);
+        var header = Inputs.HeaderPagina(
+            "Painel operacional",
+            "Indicadores, processos e módulos principais para operação diária",
+            84);
 
         // === KPIs ===
         _kpis = new FlowLayoutPanel

@@ -147,7 +147,9 @@ public static class Inputs
     /// </summary>
     public static Panel HeaderPagina(string titulo, string subtitulo, int height = 72)
     {
-        var header = new Panel { Dock = DockStyle.Top, Height = height, BackColor = Tema.CorFundo, Padding = new Padding(0, 2, 0, 8) };
+        var header = new Panel { Dock = DockStyle.Top, Height = height, BackColor = Tema.CorFundo, Padding = new Padding(6, 2, 0, 8) };
+        var acento = new Panel { Dock = DockStyle.Left, Width = 4, BackColor = Tema.CorPrimaria };
+        var corpo = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorFundo, Padding = new Padding(10, 0, 0, 0) };
         var lblTitulo = new Label
         {
             Name = "HeaderTitulo",
@@ -167,14 +169,16 @@ public static class Inputs
             TextAlign = ContentAlignment.MiddleLeft
         };
         var linha = new Panel { Dock = DockStyle.Bottom, Height = 1, BackColor = Tema.CorBordaSuave };
-        header.Controls.Add(linha);
-        header.Controls.Add(lblSub);
-        header.Controls.Add(lblTitulo);
+        corpo.Controls.Add(linha);
+        corpo.Controls.Add(lblSub);
+        corpo.Controls.Add(lblTitulo);
+        header.Controls.Add(corpo);
+        header.Controls.Add(acento);
         return header;
     }
 
     public static Label SubtituloHeader(Panel header) =>
-        header.Controls.Find("HeaderSubtitulo", false).OfType<Label>().FirstOrDefault()
+        header.Controls.Find("HeaderSubtitulo", true).OfType<Label>().FirstOrDefault()
         ?? throw new InvalidOperationException("Header de pagina sem subtitulo.");
 
     /// <summary>
@@ -182,7 +186,9 @@ public static class Inputs
     /// </summary>
     public static Panel HeaderModal(string titulo)
     {
-        var p = new Panel { Dock = DockStyle.Top, Height = 60, BackColor = Tema.CorFundo };
+        var p = new Panel { Dock = DockStyle.Top, Height = 60, BackColor = Tema.CorFundo, Padding = new Padding(6, 0, 0, 0) };
+        var acento = new Panel { Dock = DockStyle.Left, Width = 4, BackColor = Tema.CorPrimaria };
+        var corpo = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorFundo, Padding = new Padding(10, 0, 0, 0) };
         var lblTitulo = new Label
         {
             Text = titulo,
@@ -193,8 +199,10 @@ public static class Inputs
             Padding = new Padding(0, 8, 0, 0)
         };
         var linha = new Panel { Dock = DockStyle.Bottom, Height = 1, BackColor = Tema.CorBordaSuave };
-        p.Controls.Add(lblTitulo);
-        p.Controls.Add(linha);
+        corpo.Controls.Add(lblTitulo);
+        corpo.Controls.Add(linha);
+        p.Controls.Add(corpo);
+        p.Controls.Add(acento);
         return p;
     }
 

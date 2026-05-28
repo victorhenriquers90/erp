@@ -48,12 +48,12 @@ public class StyledGrid : DataGridView
         DefaultCellStyle.ForeColor = Tema.CorTextoEscuro;
         DefaultCellStyle.Font = Tema.FontCorpo;
         DefaultCellStyle.Padding = new Padding(10, 5, 10, 5);
-        DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 236, 252);
+        DefaultCellStyle.SelectionBackColor = Tema.CorPrimariaSoft;
         DefaultCellStyle.SelectionForeColor = Tema.CorTextoEscuro;
         DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
         AlternatingRowsDefaultCellStyle.BackColor = Tema.CorCardAlt;
-        AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 236, 252);
+        AlternatingRowsDefaultCellStyle.SelectionBackColor = Tema.CorPrimariaSoft;
         AlternatingRowsDefaultCellStyle.SelectionForeColor = Tema.CorTextoEscuro;
 
         RowTemplate.Height = 36;

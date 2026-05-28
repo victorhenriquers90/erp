@@ -105,7 +105,7 @@ public class LineChart : Control
     private List<decimal> _valores = new();
     private List<string> _rotulos = new();
     public Color CorLinha { get; set; } = Tema.CorPrimaria;
-    public Color CorArea { get; set; } = Color.FromArgb(34, 10, 110, 209);
+    public Color CorArea { get; set; } = Color.Empty; // lazy: resolved from Tema.CorPrimaria in OnPaint
     public string Titulo { get; set; } = "";
 
     public LineChart()
@@ -179,7 +179,8 @@ public class LineChart : Control
                 new(pontos[^1].X, bottom),
                 new(pontos[0].X, bottom)
             };
-            using var brushArea = new SolidBrush(CorArea);
+            var corArea = CorArea == Color.Empty ? Color.FromArgb(34, Tema.CorPrimaria) : CorArea;
+            using var brushArea = new SolidBrush(corArea);
             g.FillPolygon(brushArea, area.ToArray());
         }
 

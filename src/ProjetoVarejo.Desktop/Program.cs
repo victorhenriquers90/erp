@@ -226,20 +226,6 @@ static class Program
                 catch { }
             });
 
-            // Aplicar tema do segmento ANTES de criar qualquer Form,
-            // para que FrmLogin e FrmMain já inicializem com as cores corretas.
-            using (var temaScope = Services.CreateScope())
-            {
-                try
-                {
-                    var cfgSvc = temaScope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
-                    var cfg = cfgSvc.ObterConfiguracao().GetAwaiter().GetResult();
-                    if (cfg.ConfiguracaoInicial && cfg.TipoNegocio != 0)
-                        Tema.AplicarTema(cfg.TipoNegocio);
-                }
-                catch { /* falha silenciosa — mantém tema padrão */ }
-            }
-
             using var loginScope = Services.CreateScope();
             var login = loginScope.ServiceProvider.GetRequiredService<FrmLogin>();
             WinFormsApp.Run(login);

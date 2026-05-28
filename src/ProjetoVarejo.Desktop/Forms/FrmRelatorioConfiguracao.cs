@@ -112,17 +112,17 @@ public class FrmRelatorioConfiguracao : Form
         pnl.Controls.Add(Inputs.Rotulo("DESCRIÇÃO DO NEGÓCIO", 0, y));
         lblDescricao = new Label
         {
-            Left = 0, Top = y + 20, Width = 900, Height = 24,
+            Left = 0, Top = y + 20, Width = 900, Height = 28,
             Font = Tema.FontSubtitulo, ForeColor = Tema.CorTextoEscuro,
             AutoSize = false, BackColor = Color.Transparent
         };
         pnl.Controls.Add(lblDescricao);
-        y += 56;
+        y += 58;
 
         pnl.Controls.Add(Inputs.Rotulo("ÚLTIMA ATUALIZAÇÃO", 0, y));
         lblDataAtualizado = new Label
         {
-            Left = 0, Top = y + 20, Width = 400, Height = 24,
+            Left = 0, Top = y + 20, Width = 400, Height = 28,
             Font = Tema.FontCorpo, ForeColor = Tema.CorTextoMedio,
             AutoSize = false, BackColor = Color.Transparent
         };

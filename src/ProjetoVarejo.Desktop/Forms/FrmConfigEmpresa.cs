@@ -46,7 +46,7 @@ public class FrmConfigEmpresa : Form
             Dock = DockStyle.Fill,
             DrawMode = TabDrawMode.OwnerDrawFixed,
             SizeMode = TabSizeMode.Fixed,
-            ItemSize = new Size(180, 40),
+            ItemSize = new Size(200, 40),
             Appearance = TabAppearance.Normal
         };
         EstilizarTabs(tabs);
@@ -238,7 +238,7 @@ public class FrmConfigEmpresa : Form
                 g.FillRectangle(line, rect.X, rect.Bottom - 3, rect.Width, 3);
             }
             TextRenderer.DrawText(g, tab.Text, new Font(Tema.FontFamily, 10, selected ? FontStyle.Bold : FontStyle.Regular),
-                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
         };
     }
 

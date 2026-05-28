@@ -14,7 +14,7 @@ public class VendaService : IVendaService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly SessaoApp _sessao;
-    private readonly EstoqueService _estoque;
+    private readonly IEstoqueService _estoque;
     private readonly IValidator<Venda> _vendaValidator;
     private readonly IValidator<ItemVenda> _itemValidator;
     private readonly IValidator<PagamentoVenda> _pagamentoValidator;
@@ -22,7 +22,7 @@ public class VendaService : IVendaService
     public VendaService(
         IUnitOfWork unitOfWork,
         SessaoApp sessao,
-        EstoqueService estoque,
+        IEstoqueService estoque,
         IValidator<Venda> vendaValidator,
         IValidator<ItemVenda> itemValidator,
         IValidator<PagamentoVenda> pagamentoValidator)

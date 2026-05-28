@@ -1,4 +1,5 @@
-using ProjetoVarejo.Application.Services;
+using Microsoft.AspNetCore.Mvc;
+using ProjetoVarejo.Application.Contracts.Services;
 
 namespace ProjetoVarejo.Api.Endpoints;
 
@@ -8,7 +9,7 @@ public static class ProdutoEndpoints
     {
         var g = app.MapGroup("/api/produtos").WithTags("Produtos");
 
-        g.MapGet("/", async (ProdutoService svc, string? q) =>
+        g.MapGet("/", async ([FromServices] IProdutoService svc, [FromQuery] string? q) =>
         {
             var lista = await svc.ListarAsync(q);
             return Results.Ok(lista.Select(p => new
@@ -20,13 +21,13 @@ public static class ProdutoEndpoints
             }));
         });
 
-        g.MapGet("/{id:int}", async (int id, ProdutoService svc) =>
+        g.MapGet("/{id:int}", async (int id, [FromServices] IProdutoService svc) =>
         {
             var p = await svc.BuscarPorIdAsync(id);
             return p == null ? Results.NotFound() : Results.Ok(p);
         });
 
-        g.MapGet("/barras/{codigo}", async (string codigo, ProdutoService svc) =>
+        g.MapGet("/barras/{codigo}", async (string codigo, [FromServices] IProdutoService svc) =>
         {
             var p = await svc.BuscarPorCodigoAsync(codigo);
             if (p == null) return Results.NotFound(new { erro = "Produto não encontrado." });

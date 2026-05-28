@@ -21,8 +21,7 @@ public class CategoriaValidatorTests
         var categoria = new Categoria
         {
             Nome = "Alimentos",
-            Descricao = "Produtos alimentícios",
-            Ativa = true
+            Descricao = "Produtos alimentícios"
         };
 
         // Act
@@ -38,8 +37,7 @@ public class CategoriaValidatorTests
         // Arrange
         var categoria = new Categoria
         {
-            Nome = "",
-            Ativa = true
+            Nome = ""
         };
 
         // Act & Assert
@@ -53,8 +51,7 @@ public class CategoriaValidatorTests
         // Arrange
         var categoria = new Categoria
         {
-            Nome = new string('A', 101),
-            Ativa = true
+            Nome = new string('A', 101)
         };
 
         // Act & Assert
@@ -69,8 +66,7 @@ public class CategoriaValidatorTests
         var categoria = new Categoria
         {
             Nome = "Alimentos",
-            Descricao = new string('A', 501),
-            Ativa = true
+            Descricao = new string('A', 501)
         };
 
         // Act & Assert
@@ -85,8 +81,7 @@ public class CategoriaValidatorTests
         var categoria = new Categoria
         {
             Nome = "Alimentos",
-            Descricao = new string('A', 500),
-            Ativa = true
+            Descricao = new string('A', 500)
         };
 
         // Act

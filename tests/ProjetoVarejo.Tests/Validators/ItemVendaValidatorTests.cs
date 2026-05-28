@@ -22,7 +22,7 @@ public class ItemVendaValidatorTests
         {
             ProdutoId = 1,
             Quantidade = 5,
-            ValorUnitario = 10.50m,
+            PrecoUnitario = 10.50m,
             Desconto = 0
         };
 
@@ -41,7 +41,7 @@ public class ItemVendaValidatorTests
         {
             ProdutoId = 1,
             Quantidade = 0,
-            ValorUnitario = 10.50m
+            PrecoUnitario = 10.50m
         };
 
         // Act & Assert
@@ -50,19 +50,19 @@ public class ItemVendaValidatorTests
     }
 
     [Fact]
-    public void Validate_ValorUnitarioZero_ComErro()
+    public void Validate_PrecoUnitarioZero_ComErro()
     {
         // Arrange
         var item = new ItemVenda
         {
             ProdutoId = 1,
             Quantidade = 5,
-            ValorUnitario = 0
+            PrecoUnitario = 0
         };
 
         // Act & Assert
         var result = _validator.TestValidate(item);
-        result.ShouldHaveValidationErrorFor(i => i.ValorUnitario);
+        result.ShouldHaveValidationErrorFor(i => i.PrecoUnitario);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ItemVendaValidatorTests
         {
             ProdutoId = 1,
             Quantidade = 5,
-            ValorUnitario = 10,
+            PrecoUnitario = 10,
             Desconto = 60 // 5 * 10 = 50, desconto = 60 > 50
         };
 
@@ -90,7 +90,7 @@ public class ItemVendaValidatorTests
         {
             ProdutoId = 1,
             Quantidade = 5,
-            ValorUnitario = 10,
+            PrecoUnitario = 10,
             Desconto = 20 // 5 * 10 = 50, desconto = 20 <= 50
         };
 
@@ -109,7 +109,7 @@ public class ItemVendaValidatorTests
         {
             ProdutoId = 0,
             Quantidade = 5,
-            ValorUnitario = 10
+            PrecoUnitario = 10
         };
 
         // Act & Assert

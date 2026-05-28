@@ -10,11 +10,9 @@ public class FrmPdv : Form
 {
     private readonly IVendaService _vendaService;
     private readonly IProdutoService _produtoService;
-    // TODO: PHASE 2.5 - NfceService refactoring needed
-    // private readonly INfceService // TODO: PHASE 2.5 _nfceService;
+    private readonly INfceService _nfceService;
     private readonly ICaixaService _caixaService;
-    // TODO: PHASE 2.5 - CupomPrinterService refactoring needed
-    // private readonly CupomPrinterService // TODO: PHASE 2.5 _printer;
+    private readonly ICupomPrinterService _printer;
     private readonly ProducaoGuardService _producaoGuard;
     private Venda? _vendaAtual;
     private bool _alertaProntidaoExibido;
@@ -29,15 +27,14 @@ public class FrmPdv : Form
     private Label lblNumero = null!;
     private Button btnFinalizar = null!;
 
-    public FrmPdv(IVendaService vendaService, IProdutoService produtoService, ICaixaService caixaService, ProducaoGuardService producaoGuard)
+    public FrmPdv(IVendaService vendaService, IProdutoService produtoService, ICaixaService caixaService,
+        INfceService nfceService, ICupomPrinterService printer, ProducaoGuardService producaoGuard)
     {
         _vendaService = vendaService;
         _produtoService = produtoService;
-        // TODO: PHASE 2.5 - NfceService refactoring needed
-        // // TODO: PHASE 2.5 _nfceService = nfceService;
+        _nfceService = nfceService;
         _caixaService = caixaService;
-        // TODO: PHASE 2.5 - CupomPrinterService refactoring needed
-        // // TODO: PHASE 2.5 _printer = printer;
+        _printer = printer;
         _producaoGuard = producaoGuard;
         InitUi();
         Shown += async (s, e) => await IniciarNovaVendaAsync();
@@ -291,7 +288,14 @@ public class FrmPdv : Form
         if (e.KeyCode == Keys.Enter)
         {
             e.SuppressKeyPress = true;
-            await AdicionarItemAsync();
+            try
+            {
+                await AdicionarItemAsync();
+            }
+            catch (Exception ex)
+            {
+                Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
+            }
         }
     }
 
@@ -565,16 +569,16 @@ public class FrmPdv : Form
         }
         else
         {
-            // TODO: PHASE 2.5 - NfceService refactoring needed - automatic printing disabled
-            // var empresa = await _nfceService.ObterEmpresaAsync();
-            // var vendaCompleta = await _vendaService.BuscarAsync(venda.Id);
-            // if (empresa != null && vendaCompleta != null && empresa.ImprimirAutomatico
-            //     && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
-            // {
-            //     var resPrint = await _printer.ImprimirVendaAsync(vendaCompleta, empresa, null);
-            //     if (!resPrint.Sucesso)
-            //         Toast.Mostrar("Aviso na impressão: " + resPrint.Erro, TipoToast.Aviso, owner: this);
-            // }
+            // Impressão automática sem NFC-e
+            var empresa = await _nfceService.ObterEmpresaAsync();
+            var vendaCompleta = await _vendaService.BuscarAsync(venda.Id);
+            if (empresa != null && vendaCompleta != null && empresa.ImprimirAutomatico
+                && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
+            {
+                var resPrint = await _printer.ImprimirVendaAsync(vendaCompleta, empresa, null);
+                if (!resPrint.Sucesso)
+                    Toast.Mostrar("Aviso na impressão: " + resPrint.Erro, TipoToast.Aviso, owner: this);
+            }
         }
 
         await IniciarNovaVendaAsync();
@@ -582,19 +586,9 @@ public class FrmPdv : Form
 
     private async Task EmitirNfceAsync(int vendaId)
     {
-        // TODO: PHASE 2.5 - NfceService refactoring needed - NFC-e emission disabled until service is refactored
         UseWaitCursor = true;
         try
         {
-            MessageBox.Show(
-                "Funcionalidade de emissão de NFC-e desabilitada na PHASE 2.5.\nA classe NfceService está em refatoração.",
-                "NFC-e Indisponível",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-            return;
-
-            // Code below disabled until NfceService is refactored with IUnitOfWork pattern
-            /*
             bool contingencia = false;
             if (!await _nfceService.SefazOnlineAsync())
             {
@@ -604,15 +598,17 @@ public class FrmPdv : Form
                 if (r == DialogResult.Cancel) return;
                 contingencia = r == DialogResult.Yes;
             }
+
             var res = contingencia
                 ? await _nfceService.EmitirContingenciaAsync(vendaId)
                 : await _nfceService.EmitirAsync(vendaId);
+
             if (!res.Sucesso)
             {
                 if ((res.Erro ?? "").Contains("bloqueada", StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show(this,
-                        res.Erro + "\n\nAbra Sistema > Checklist de Producao para corrigir.",
+                        res.Erro + "\n\nAbra Sistema > Checklist de Produção para corrigir.",
                         "NFC-e bloqueada",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
@@ -627,10 +623,10 @@ public class FrmPdv : Form
             var nota = res.Valor!;
             var empresa = await _nfceService.ObterEmpresaAsync();
             var venda = await _vendaService.BuscarAsync(vendaId);
+
             if (empresa != null && venda != null)
             {
-                if (nota.Status == StatusNotaFiscal.Autorizada && empresa.ImprimirAutomatico
-                    && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
+                if (empresa.ImprimirAutomatico && !string.IsNullOrWhiteSpace(empresa.ImpressoraDestino))
                 {
                     var resPrint = await _printer.ImprimirVendaAsync(venda, empresa, nota);
                     if (!resPrint.Sucesso)
@@ -640,7 +636,6 @@ public class FrmPdv : Form
                 using var dlg = new FrmNfceResultado(nota, empresa, venda);
                 dlg.ShowDialog(this);
             }
-            */
         }
         catch (Exception ex)
         {

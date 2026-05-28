@@ -85,13 +85,20 @@ public class FrmClientes : Form
 
     private async void Editar(int? id)
     {
-        Cliente? c = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Cliente();
-        if (c == null) return;
-        using var dlg = new FrmClienteEdit(c, _svc);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Cliente salvo.", TipoToast.Sucesso, owner: this);
+            Cliente? c = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Cliente();
+            if (c == null) return;
+            using var dlg = new FrmClienteEdit(c, _svc);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Cliente salvo.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 

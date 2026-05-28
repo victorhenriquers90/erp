@@ -107,30 +107,46 @@ public class RelatorioService : IRelatorioService
 
     public async Task<List<FluxoCaixaItem>> FluxoCaixaAsync(DateTime de, DateTime ate)
     {
+        // Entradas de vendas finalizadas agrupadas por dia
         var vendas = await _unitOfWork.Vendas.Query()
             .Where(v => v.Status == StatusVenda.Finalizada && v.FinalizadaEm >= de && v.FinalizadaEm < ate)
             .GroupBy(v => v.FinalizadaEm!.Value.Date)
             .Select(g => new { Dia = g.Key, Total = g.Sum(v => v.Total) })
             .ToListAsync();
 
-        // TODO: ContasFinanceiras needs proper implementation - currently returns empty list
-        // This should query ContasFinanceiras and group by payment date
-        var contasPagasDays = new List<DateTime>();
+        // Recebimentos de contas a receber quitadas no período
+        var recebimentos = await _unitOfWork.ContasFinanceiras.Query()
+            .Where(c => c.Tipo == TipoConta.Receber
+                     && c.Status == StatusConta.Paga
+                     && c.DataPagamento >= de && c.DataPagamento < ate)
+            .GroupBy(c => c.DataPagamento!.Value.Date)
+            .Select(g => new { Dia = g.Key, Total = g.Sum(c => c.ValorPago) })
+            .ToListAsync();
+
+        // Pagamentos de contas a pagar quitadas no período
+        var pagamentos = await _unitOfWork.ContasFinanceiras.Query()
+            .Where(c => c.Tipo == TipoConta.Pagar
+                     && c.Status == StatusConta.Paga
+                     && c.DataPagamento >= de && c.DataPagamento < ate)
+            .GroupBy(c => c.DataPagamento!.Value.Date)
+            .Select(g => new { Dia = g.Key, Total = g.Sum(c => c.ValorPago) })
+            .ToListAsync();
 
         var dias = vendas.Select(v => v.Dia)
-            .Union(contasPagasDays)
+            .Union(recebimentos.Select(r => r.Dia))
+            .Union(pagamentos.Select(p => p.Dia))
             .Distinct().OrderBy(d => d).ToList();
 
+        var saldoAcumulado = 0m;
         var resultado = new List<FluxoCaixaItem>();
         foreach (var dia in dias)
         {
             var entradaVenda = vendas.FirstOrDefault(v => v.Dia == dia)?.Total ?? 0;
-            // TODO: Implement ContasFinanceiras properly to get entrada from accounts receivable
-            var entradaConta = 0m;
-            // TODO: Implement ContasFinanceiras properly to get saida from accounts payable
-            var saida = 0m;
+            var entradaConta = recebimentos.FirstOrDefault(r => r.Dia == dia)?.Total ?? 0;
+            var saida = pagamentos.FirstOrDefault(p => p.Dia == dia)?.Total ?? 0;
             var entradas = entradaVenda + entradaConta;
-            resultado.Add(new FluxoCaixaItem { Data = dia, Entradas = entradas, Saidas = saida, SaldoAcumulado = entradas - saida });
+            saldoAcumulado += entradas - saida;
+            resultado.Add(new FluxoCaixaItem { Data = dia, Entradas = entradas, Saidas = saida, SaldoAcumulado = saldoAcumulado });
         }
         return resultado;
     }

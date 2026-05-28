@@ -1,0 +1,17 @@
+# PHASE 12: Dockerfile for running integration tests
+# Used in docker-compose.yml for automated testing
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS test
+
+WORKDIR /app
+
+# Copy entire project
+COPY . .
+
+# Run tests with code coverage (dotnet test handles restore automatically)
+CMD ["dotnet", "test", "tests/ProjetoVarejo.Tests/ProjetoVarejo.Tests.csproj", \
+     "-c", "Release", \
+     "--logger:trx", \
+     "--collect:XPlat Code Coverage", \
+     "--results-directory", "/app/TestResults", \
+     "-v", "normal"]

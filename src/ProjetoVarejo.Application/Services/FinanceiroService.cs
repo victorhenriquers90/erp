@@ -31,16 +31,37 @@ public class FinanceiroService : IFinanceiroService
             return Result.Falha<ContaFinanceira>("Descrição é obrigatória.");
         if (c.Valor <= 0)
             return Result.Falha<ContaFinanceira>("Valor deve ser maior que zero.");
+        if (c.DataVencimento == default)
+            return Result.Falha<ContaFinanceira>("Data de vencimento é obrigatória.");
 
-        // TODO: Implement proper saving based on TipoConta
-        // For now, this service needs refactoring to work with the split repositories
-        return Result.Falha<ContaFinanceira>("Serviço em refatoração - necessário implementação com repositórios separados");
+        if (c.Id == 0)
+            await _unitOfWork.ContasFinanceiras.InsertAsync(c);
+        else
+            await _unitOfWork.ContasFinanceiras.UpdateAsync(c);
+
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(c);
     }
 
     public async Task<Result> QuitarAsync(int contaId, DateTime dataPagamento, decimal valorPago, FormaPagamentoTipo forma, decimal juros = 0, decimal multa = 0, decimal desconto = 0)
     {
-        // TODO: Implement proper quitting based on TipoConta
-        return Result.Falha("Serviço em refatoração - necessário implementação com repositórios separados");
+        var conta = await _unitOfWork.ContasFinanceiras.GetByIdAsync(contaId);
+        if (conta == null)
+            return Result.Falha($"Conta financeira {contaId} não encontrada.");
+        if (conta.Status == StatusConta.Paga)
+            return Result.Falha("Conta já está quitada.");
+
+        conta.DataPagamento = dataPagamento;
+        conta.ValorPago = valorPago;
+        conta.FormaPagamento = forma;
+        conta.Juros = juros;
+        conta.Multa = multa;
+        conta.Desconto = desconto;
+        conta.Status = StatusConta.Paga;
+
+        await _unitOfWork.ContasFinanceiras.UpdateAsync(conta);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok();
     }
 
     public async Task<(decimal totalReceber, decimal totalPagar, decimal saldoPrevisto)> ResumoAsync(DateTime de, DateTime ate)

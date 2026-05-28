@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using ProjetoVarejo.Application.Services;
 
 namespace ProjetoVarejo.Api.Endpoints;
@@ -8,7 +9,7 @@ public static class ClienteEndpoints
     {
         var g = app.MapGroup("/api/clientes").WithTags("Clientes");
 
-        g.MapGet("/", async (ClienteService svc, string? q) =>
+        g.MapGet("/", async ([FromServices] ClienteService svc, [FromQuery] string? q) =>
         {
             var lista = await svc.ListarAsync(q);
             return Results.Ok(lista.Select(c => new
@@ -18,7 +19,7 @@ public static class ClienteEndpoints
             }));
         });
 
-        g.MapGet("/{id:int}", async (int id, ClienteService svc) =>
+        g.MapGet("/{id:int}", async (int id, [FromServices] ClienteService svc) =>
         {
             var c = await svc.BuscarPorIdAsync(id);
             return c == null ? Results.NotFound() : Results.Ok(c);

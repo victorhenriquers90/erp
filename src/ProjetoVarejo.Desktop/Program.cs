@@ -16,6 +16,7 @@ using ProjetoVarejo.Infrastructure.Backup;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Infrastructure.Nfce;
 using ProjetoVarejo.Infrastructure.Repositories;
+using ProjetoVarejo.Infrastructure.Services;
 using Serilog;
 using WinFormsApp = System.Windows.Forms.Application;
 
@@ -50,7 +51,7 @@ static class Program
 
             // Configurar Serilog PRIMEIRO antes de qualquer outra coisa
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
-            var connectionString = config.GetConnectionString("Default");
+            var connectionString = config.GetConnectionString("Default") ?? string.Empty;
             LoggingConfiguration.ConfigureSerilog(environment, connectionString);
 
             Log.Information(LogTemplates.AplicacaoIniciada, "1.0.0", environment);
@@ -60,7 +61,11 @@ static class Program
             sc.AddSingleton<SessaoApp>();
             sc.AddScoped<AuditSaveChangesInterceptor>();
             sc.AddDbContext<AppDbContext>((sp, opt) =>
-                opt.UseSqlServer(config.GetConnectionString("Default"))
+                opt.UseSqlServer(config.GetConnectionString("Default"),
+                    sqlOpt => sqlOpt.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(3),
+                        errorNumbersToAdd: null))
                    .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
             // 🏗️ FASE 2: Dependency Inversion - Repository Pattern + Unit of Work
@@ -84,6 +89,8 @@ static class Program
             sc.AddScoped<IFinanceiroService, FinanceiroService>();
             sc.AddScoped<ICaixaService, CaixaService>();
             sc.AddScoped<IRelatorioService, RelatorioService>();
+            sc.AddScoped<INfceService, NfceService>(); // PHASE 2.5-3: NfceService (Infrastructure.Services)
+            sc.AddScoped<ICupomPrinterService, CupomPrinterService>(); // PHASE 2.5: CupomPrinterService (Infrastructure.Services)
 
             // Services without interfaces (can be added in future phases)
             sc.AddScoped<ClienteService>();
@@ -93,19 +100,19 @@ static class Program
             sc.AddScoped<UsuarioService>();
             sc.AddScoped<ProducaoGuardService>();
             sc.AddSingleton<ImplantacaoService>();
-            // TODO: PHASE 2.5 - CupomPrinterService refactoring needed
-            // sc.AddSingleton<CupomPrinterService>();
             sc.AddScoped<BackupService>();
             sc.AddScoped<NfeImporterService>();
             sc.AddScoped<PermissaoService>();
             sc.AddScoped<AuditLogService>();
-            // TODO: PHASE 2.5 - NfceService refactoring needed (Infrastructure types)
-            // sc.AddSingleton<NfceXmlGenerator>();
-            // sc.AddSingleton<NfceAssinador>();
-            // sc.AddSingleton<SefazSpClient>();
-            // sc.AddSingleton<NfceCancelamentoBuilder>();
-            // sc.AddSingleton<NfceInutilizacaoBuilder>();
-            // sc.AddScoped<NfceService>();
+
+            // PHASE 2.5-3: NfceService Infrastructure Components (NFC-e Generation & Signing)
+            sc.AddSingleton<NfceXmlGenerator>();
+            sc.AddSingleton<NfceAssinador>();
+            sc.AddSingleton<SefazSpClient>();
+            sc.AddSingleton<NfceCancelamentoBuilder>();
+            sc.AddSingleton<NfceInutilizacaoBuilder>();
+            // NfceService itself registered above with INfceService interface
+
             sc.AddScoped<ConfiguracaoNegocioService>();
             sc.AddScoped<ValidadorSetupInicial>();
 
@@ -130,6 +137,7 @@ static class Program
             sc.AddTransient<FrmUsuarios>();
             sc.AddTransient<FrmImplantacao>();
             sc.AddTransient<FrmGerenciadorModulos>();
+            sc.AddTransient<FrmFechamentoDia>();
 
             Services = sc.BuildServiceProvider();
 
@@ -163,7 +171,8 @@ static class Program
                 }
             }
 
-            _ = Task.Run(async () =>
+            // Task de backup rastreada
+            var backupTask = Task.Run(async () =>
             {
                 try
                 {
@@ -184,6 +193,7 @@ static class Program
                     var r = await bk.ExecutarAsync(pasta);
                     if (r.Sucesso) File.WriteAllText(ultimoFile, DateTime.Now.ToString("o"));
                 }
+                catch (System.OperationCanceledException) { }
                 catch { }
             });
 
@@ -191,24 +201,37 @@ static class Program
             var login = loginScope.ServiceProvider.GetRequiredService<FrmLogin>();
             WinFormsApp.Run(login);
 
+            // Aguardar task de backup ao fechar (máximo 5 segundos)
+            try
+            {
+                if (!backupTask.Wait(TimeSpan.FromSeconds(5)))
+                {
+                    Log.Warning("Task de backup não completou no tempo esperado");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Erro ao aguardar task de backup");
+            }
+
             var sessao = Services.GetRequiredService<SessaoApp>();
             if (sessao.Autenticado)
             {
-                // TODO: PHASE 2.5 - NfceService refactoring needed - temporarily skip company selection
-                // using (var seScope = Services.CreateScope())
-                // {
-                //     var nfceSvc = seScope.ServiceProvider.GetRequiredService<NfceService>();
-                //     var empresas = nfceSvc.ListarEmpresasAsync().GetAwaiter().GetResult();
-                //     if (empresas.Count > 1)
-                //     {
-                //         var fSel = seScope.ServiceProvider.GetRequiredService<FrmSelecionarEmpresa>();
-                //         WinFormsApp.Run(fSel);
-                //     }
-                //     else if (empresas.Count == 1)
-                //     {
-                //         sessao.EmpresaAtiva = empresas[0];
-                //     }
-                // }
+                // Seleção de empresa ativa (se houver mais de uma cadastrada)
+                using (var seScope = Services.CreateScope())
+                {
+                    var nfceSvc = seScope.ServiceProvider.GetRequiredService<INfceService>();
+                    var empresas = nfceSvc.ListarEmpresasAsync().GetAwaiter().GetResult();
+                    if (empresas.Count > 1)
+                    {
+                        var fSel = seScope.ServiceProvider.GetRequiredService<FrmSelecionarEmpresa>();
+                        WinFormsApp.Run(fSel);
+                    }
+                    else if (empresas.Count == 1)
+                    {
+                        sessao.EmpresaAtiva = empresas[0];
+                    }
+                }
 
                 using var mainScope = Services.CreateScope();
                 var main = mainScope.ServiceProvider.GetRequiredService<FrmMain>();

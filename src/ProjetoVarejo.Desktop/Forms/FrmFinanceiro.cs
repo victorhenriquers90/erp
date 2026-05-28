@@ -160,21 +160,28 @@ public class FrmFinanceiro : Form
 
     private async void Editar(int? id)
     {
-        ContaFinanceira c;
-        if (id.HasValue)
+        try
         {
-            var lista = await _svc.ListarAsync();
-            c = lista.FirstOrDefault(x => x.Id == id.Value) ?? new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30) };
+            ContaFinanceira c;
+            if (id.HasValue)
+            {
+                var lista = await _svc.ListarAsync();
+                c = lista.FirstOrDefault(x => x.Id == id.Value) ?? new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30) };
+            }
+            else
+            {
+                c = new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30), Tipo = TipoConta.Pagar };
+            }
+            using var dlg = new FrmContaEdit(c, _svc, _clientes, _fornecedores);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Conta salva.", TipoToast.Sucesso, owner: this);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            c = new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30), Tipo = TipoConta.Pagar };
-        }
-        using var dlg = new FrmContaEdit(c, _svc, _clientes, _fornecedores);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
-        {
-            await CarregarAsync();
-            Toast.Mostrar("Conta salva.", TipoToast.Sucesso, owner: this);
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 

@@ -157,13 +157,20 @@ public class FrmProdutos : Form
 
     private async void EditarProduto(int? id)
     {
-        Produto? produto = id.HasValue ? await _produtos.BuscarPorIdAsync(id.Value) : new Produto();
-        if (produto == null) return;
-        using var dlg = new FrmProdutoEdit(produto, _produtos, _categorias);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Produto salvo com sucesso.", TipoToast.Sucesso, owner: this);
+            Produto? produto = id.HasValue ? await _produtos.BuscarPorIdAsync(id.Value) : new Produto();
+            if (produto == null) return;
+            using var dlg = new FrmProdutoEdit(produto, _produtos, _categorias);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Produto salvo com sucesso.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 

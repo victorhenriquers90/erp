@@ -90,12 +90,12 @@ public class CaixaSessionValidatorTests
             UsuarioAberturaId = 1,
             AbertaEm = DateTime.Now.AddHours(-2),
             FechadaEm = DateTime.Now,
-            ValorFechamento = -10
+            ValorFechamentoInformado = -10
         };
 
         // Act & Assert
         var result = _validator.TestValidate(caixa);
-        result.ShouldHaveValidationErrorFor(c => c.ValorFechamento);
+        result.ShouldHaveValidationErrorFor(c => c.ValorFechamentoInformado);
     }
 
     [Fact]
@@ -108,13 +108,13 @@ public class CaixaSessionValidatorTests
             UsuarioAberturaId = 1,
             AbertaEm = DateTime.Now.AddHours(-2),
             FechadaEm = DateTime.Now,
-            ValorFechamento = 150
+            ValorFechamentoInformado = 150
         };
 
         // Act
         var result = _validator.TestValidate(caixa);
 
         // Assert
-        result.ShouldNotHaveValidationErrorFor(c => c.ValorFechamento);
+        result.ShouldNotHaveValidationErrorFor(c => c.ValorFechamentoInformado);
     }
 }

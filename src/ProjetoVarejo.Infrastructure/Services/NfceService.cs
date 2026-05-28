@@ -1,83 +1,56 @@
-using ProjetoVarejo.Domain.Entities;
 using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Application.Contracts.Services;
+using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Application.Sessao;
+using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Domain.Enums;
 using ProjetoVarejo.Shared;
+using ProjetoVarejo.Infrastructure.Nfce;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
-namespace ProjetoVarejo.Application.Services;
-
-/*
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                                                                              ║
-║                        NFCESERVICE - PHASE 2.5 STATUS                       ║
-║                                                                              ║
-║ ARCHITECTURE CONSTRAINT: Circular Dependency Prevention                     ║
-║ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  ║
-║                                                                              ║
-║ This service CANNOT be directly used in Application layer because:          ║
-║ - It requires Infrastructure types (NfceXmlGenerator, NfceAssinador, etc.) ║
-║ - Application cannot reference Infrastructure (Clean Architecture)          ║
-║ - Adding Infrastructure reference creates circular dependency               ║
-║                                                                              ║
-║ REFACTORING PLAN:                                                           ║
-║ ───────────────────                                                         ║
-║ PHASE 2.5: Document the required IUnitOfWork changes (COMPLETED)          ║
-║            All database access has been refactored to use IUnitOfWork      ║
-║            instead of direct _db access in the code below                  ║
-║                                                                              ║
-║ PHASE 3:   Create abstraction layer                                        ║
-║            - Create INfceService interface in Application.Contracts        ║
-║            - Create INfceXmlGenerator, INfceAssinador, etc. interfaces     ║
-║            - Update this class to implement INfceService                   ║
-║                                                                              ║
-║ PHASE 4:   Move service implementation to Infrastructure                   ║
-║            - NfceService moves to Infrastructure.Services                  ║
-║            - Application layer depends only on INfceService interface      ║
-║            - Circular dependency resolved                                   ║
-║                                                                              ║
-║ REFERENCE IUnitOfWork MAPPINGS (applied below):                            ║
-║ ─────────────────────────────────────────────────────────────────          ║
-║ _db.EmpresaConfigs    → _unitOfWork.Configuracoes.Query()                 ║
-║ _db.NotasFiscais      → _unitOfWork.NotasFiscais.Query()                  ║
-║ _db.MovimentosEstoque → _unitOfWork.MovimentosEstoque                     ║
-║                                                                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
-*/
+namespace ProjetoVarejo.Infrastructure.Services;
 
 /// <summary>
 /// Service for handling NFC-e (Nota Fiscal de Consumidor Eletrônica) operations.
-/// DEFERRED: Waiting for abstraction layer (PHASE 3) to resolve circular dependency.
 ///
-/// Code below shows the PHASE 2.5 refactoring with all _db references replaced with
-/// _unitOfWork. Once PHASE 3 interfaces are created, this can be uncommented.
+/// Implements INfceService interface from Application.Contracts to enable clean architecture.
+/// Resides in Infrastructure layer due to direct dependencies on NFC-e generation, signing, and SEFAZ communication.
+///
+/// PHASE 2.5: All database access refactored to use IUnitOfWork
+/// PHASE 3: Implements INfceService interface for abstraction
+/// PHASE 4: Ready for unit testing via Moq-based test infrastructure
 /// </summary>
-public class NfceService
+public class NfceService : INfceService
 {
-    // DEFERRED - Waiting for PHASE 3 Service Interfaces
-    // Full implementation placeholder - ready to be integrated when INfceService interface is created
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly SessaoApp _sessao;
+    private readonly ProducaoGuardService _producaoGuard;
+    private readonly NfceXmlGenerator _xmlGen;
+    private readonly NfceAssinador _assinador;
+    private readonly SefazSpClient _sefaz;
+    private readonly NfceCancelamentoBuilder _cancelBuilder;
+    private readonly NfceInutilizacaoBuilder _inutBuilder;
 
-    /*
-    DEFERRED - Waiting for PHASE 3 Service Interfaces
-    ═════════════════════════════════════════════════════════════════════════════
-
-    Full implementation with refactored IUnitOfWork patterns below.
-    Once PHASE 3 creates service interfaces, constructor will reference interfaces
-    instead of concrete Infrastructure types, breaking the circular dependency.
-
-    Constructor will look like:
-    ──────────────────────────
     public NfceService(
         IUnitOfWork unitOfWork,
-        INfceXmlGenerator xmlGen,
-        INfceAssinador assinador,
-        ISefazSpClient sefaz,
-        INfceCancelamentoBuilder cancelBuilder,
-        INfceInutilizacaoBuilder inutBuilder,
+        NfceXmlGenerator xmlGen,
+        NfceAssinador assinador,
+        SefazSpClient sefaz,
+        NfceCancelamentoBuilder cancelBuilder,
+        NfceInutilizacaoBuilder inutBuilder,
         SessaoApp sessao,
         ProducaoGuardService producaoGuard)
-
-    COMPLETE PHASE 2.5 REFACTORED IMPLEMENTATION (with IUnitOfWork):
-    // All methods below have been refactored to use IUnitOfWork
-    // Replace _db.* references with _unitOfWork.* equivalents
+    {
+        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _xmlGen = xmlGen ?? throw new ArgumentNullException(nameof(xmlGen));
+        _assinador = assinador ?? throw new ArgumentNullException(nameof(assinador));
+        _sefaz = sefaz ?? throw new ArgumentNullException(nameof(sefaz));
+        _cancelBuilder = cancelBuilder ?? throw new ArgumentNullException(nameof(cancelBuilder));
+        _inutBuilder = inutBuilder ?? throw new ArgumentNullException(nameof(inutBuilder));
+        _sessao = sessao ?? throw new ArgumentNullException(nameof(sessao));
+        _producaoGuard = producaoGuard ?? throw new ArgumentNullException(nameof(producaoGuard));
+    }
 
     public async Task<bool> SefazOnlineAsync()
     {
@@ -85,15 +58,19 @@ public class NfceService
         {
             using var http = new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(5) };
             var empresa = _sessao.EmpresaAtiva != null
-            ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
+                ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+                : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
             var url = (empresa?.AmbienteHomologacao ?? true)
                 ? "https://homologacao.nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx"
                 : "https://nfce.fazenda.sp.gov.br/ws/NFeStatusServico4.asmx";
             var resp = await http.GetAsync(url);
             return resp.IsSuccessStatusCode || resp.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed;
         }
-        catch { return false; }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "Falha ao verificar disponibilidade do SEFAZ-SP");
+            return false;
+        }
     }
 
     public async Task<Result<NotaFiscal>> EmitirContingenciaAsync(int vendaId)
@@ -264,7 +241,7 @@ public class NfceService
     public async Task<EmpresaConfig?> ObterEmpresaAsync() =>
         _sessao.EmpresaAtiva != null
             ? await _unitOfWork.Configuracoes.Query().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.Id).FirstOrDefaultAsync();
+            : await _unitOfWork.Configuracoes.Query().OrderBy(e => e.RazaoSocial).FirstOrDefaultAsync();
 
     public async Task<List<EmpresaConfig>> ListarEmpresasAsync() =>
         await _unitOfWork.Configuracoes.Query().Where(e => e.Ativo).OrderBy(e => e.RazaoSocial).ToListAsync();
@@ -440,5 +417,4 @@ public class NfceService
         }
         return Result.Falha<string>($"SEFAZ rejeitou: [{retorno.CStat}] {retorno.XMotivo}");
     }
-    */
 }

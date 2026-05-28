@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -10,18 +11,16 @@ namespace ProjetoVarejo.Desktop.Forms;
 [ModuloRequerido(ModuloSistema.Fiscal)]
 public class FrmNotasFiscais : Form
 {
-    // TODO: PHASE 2.5
-    // private readonly NfceService _svc;
+    private readonly INfceService _svc;
     private readonly VendaService _vendas;
     private DateTimePicker dtDe = null!, dtAte = null!;
     private ComboBox cboStatus = null!;
     private StyledGrid grid = null!;
     private Label lblTotal = null!;
 
-    public FrmNotasFiscais(VendaService vendas)
+    public FrmNotasFiscais(INfceService svc, VendaService vendas)
     {
-        // TODO: PHASE 2.5 - NfceService refactoring needed
-        // _svc = svc;
+        _svc = svc;
         _vendas = vendas;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
@@ -139,10 +138,8 @@ public class FrmNotasFiscais : Form
 
     private async Task CarregarAsync()
     {
-        // TODO: PHASE 2.5 - NfceService refactoring needed
-        // StatusNotaFiscal? status = cboStatus.SelectedItem is StatusNotaFiscal sn ? sn : null;
-        // var lista = await _svc.ListarAsync(dtDe.Value.Date, dtAte.Value.Date.AddDays(1), status);
-        var lista = new List<NotaFiscal>();
+        StatusNotaFiscal? status = cboStatus.SelectedItem is StatusNotaFiscal sn ? sn : null;
+        var lista = await _svc.ListarAsync(dtDe.Value.Date, dtAte.Value.Date.AddDays(1), status);
 
         grid.Rows.Clear();
         foreach (var n in lista)
@@ -162,9 +159,7 @@ public class FrmNotasFiscais : Form
                 _ => Tema.CorTextoMedio
             };
         }
-        lblTotal.Text = $"{lista.Count} nota(s) listada(s) no período (Funcionalidade desabilitada na PHASE 2.5)";
-
-        await Task.CompletedTask; // Keep async signature
+        lblTotal.Text = $"{lista.Count} nota(s) listada(s) no período";
     }
 
     private async Task CancelarSelAsync()
@@ -174,72 +169,47 @@ public class FrmNotasFiscais : Form
             Toast.Mostrar("Selecione uma nota.", TipoToast.Info, owner: this);
             return;
         }
-
-        MessageBox.Show(
-            "Funcionalidade de cancelamento de NFC-e desabilitada na PHASE 2.5.\nA classe NfceService está em refatoração.",
-            "Cancelamento Indisponível",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information);
-
-        // var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
-        // using var dlg = new FrmJustificativa("Justificativa de Cancelamento",
-        //     "Informe o motivo (mín. 15, máx. 255 caracteres):");
-        // if (dlg.ShowDialog(this) != DialogResult.OK) return;
-        // UseWaitCursor = true;
-        // try
-        // {
-        //     var res = await _svc.CancelarAsync(id, dlg.Justificativa);
-        //     if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
-        //     Toast.Mostrar("Nota cancelada com sucesso!", TipoToast.Sucesso, owner: this);
-        //     await CarregarAsync();
-        // }
-        // finally { UseWaitCursor = false; }
-
-        await Task.CompletedTask;
+        var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+        using var dlg = new FrmJustificativa("Justificativa de Cancelamento",
+            "Informe o motivo (mín. 15, máx. 255 caracteres):");
+        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        UseWaitCursor = true;
+        try
+        {
+            var res = await _svc.CancelarAsync(id, dlg.Justificativa);
+            if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
+            Toast.Mostrar("Nota cancelada com sucesso!", TipoToast.Sucesso, owner: this);
+            await CarregarAsync();
+        }
+        finally { UseWaitCursor = false; }
     }
 
     private async Task ReenviarContingenciaAsync()
     {
-        MessageBox.Show(
-            "Funcionalidade de reenvio em contingência desabilitada na PHASE 2.5.\nA classe NfceService está em refatoração.",
-            "Reenvio Indisponível",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information);
-
-        // UseWaitCursor = true;
-        // try
-        // {
-        //     var res = await _svc.ReenviarContingenciaAsync();
-        //     if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
-        //     Toast.Mostrar($"{res.Valor} nota(s) autorizada(s).", TipoToast.Sucesso, owner: this);
-        //     await CarregarAsync();
-        // }
-        // finally { UseWaitCursor = false; }
-
-        await Task.CompletedTask;
+        UseWaitCursor = true;
+        try
+        {
+            var res = await _svc.ReenviarContingenciaAsync();
+            if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
+            Toast.Mostrar($"{res.Valor} nota(s) autorizada(s).", TipoToast.Sucesso, owner: this);
+            await CarregarAsync();
+        }
+        finally { UseWaitCursor = false; }
     }
 
     private async Task InutilizarAsync()
     {
-        MessageBox.Show(
-            "Funcionalidade de inutilização de numeração desabilitada na PHASE 2.5.\nA classe NfceService está em refatoração.",
-            "Inutilização Indisponível",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Information);
-
-        // using var dlg = new FrmInutilizacao();
-        // if (dlg.ShowDialog(this) != DialogResult.OK) return;
-        // UseWaitCursor = true;
-        // try
-        // {
-        //     var res = await _svc.InutilizarFaixaAsync(dlg.Serie, dlg.NumeroInicial, dlg.NumeroFinal, dlg.Justificativa);
-        //     if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
-        //     Toast.Mostrar(res.Valor ?? "Sucesso", TipoToast.Sucesso, owner: this);
-        //     await CarregarAsync();
-        // }
-        // finally { UseWaitCursor = false; }
-
-        await Task.CompletedTask;
+        using var dlg = new FrmInutilizacao();
+        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+        UseWaitCursor = true;
+        try
+        {
+            var res = await _svc.InutilizarFaixaAsync(dlg.Serie, dlg.NumeroInicial, dlg.NumeroFinal, dlg.Justificativa);
+            if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Falha", TipoToast.Erro, owner: this); return; }
+            Toast.Mostrar(res.Valor ?? "Sucesso", TipoToast.Sucesso, owner: this);
+            await CarregarAsync();
+        }
+        finally { UseWaitCursor = false; }
     }
 }
 

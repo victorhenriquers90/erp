@@ -29,3 +29,10 @@ logs/
 # Temp files
 *.tmp
 *.temp
+
+# Segurança — arquivos com chaves reais nunca devem ser versionados
+appsettings.Production.json
+appsettings.Staging.json
+chaves-producao.txt
+*.pfx
+*.p12

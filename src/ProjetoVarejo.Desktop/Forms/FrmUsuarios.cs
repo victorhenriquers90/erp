@@ -137,14 +137,21 @@ public class FrmUsuarios : Form
 
     private async void Editar(int? id)
     {
-        Usuario? usuario = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Usuario { Ativo = true, Perfil = PerfilUsuario.Caixa };
-        if (usuario == null) return;
-
-        using var dlg = new FrmUsuarioEdit(usuario, _svc);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Usuario salvo.", TipoToast.Sucesso, owner: this);
+            Usuario? usuario = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Usuario { Ativo = true, Perfil = PerfilUsuario.Caixa };
+            if (usuario == null) return;
+
+            using var dlg = new FrmUsuarioEdit(usuario, _svc);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Usuario salvo.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 

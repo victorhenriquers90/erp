@@ -85,13 +85,20 @@ public class FrmFornecedores : Form
 
     private async void Editar(int? id)
     {
-        Fornecedor? f = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Fornecedor();
-        if (f == null) return;
-        using var dlg = new FrmFornecedorEdit(f, _svc);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Fornecedor salvo.", TipoToast.Sucesso, owner: this);
+            Fornecedor? f = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Fornecedor();
+            if (f == null) return;
+            using var dlg = new FrmFornecedorEdit(f, _svc);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Fornecedor salvo.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 

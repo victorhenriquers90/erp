@@ -1,0 +1,347 @@
+using FluentValidation;
+using Moq;
+using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Application.Sessao;
+using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Shared;
+using ProjetoVarejo.Tests.Builders;
+using ProjetoVarejo.Tests.Mocking;
+
+namespace ProjetoVarejo.Tests.Services;
+
+/// <summary>
+/// Comprehensive unit tests for VendaService using MockUnitOfWorkFactory.
+/// Tests sale creation, item management, finalization, and cancellation.
+/// </summary>
+public class VendaServiceTests
+{
+    private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+    private readonly Mock<SessaoApp> _mockSessao;
+    private readonly Mock<EstoqueService> _mockEstoqueService;
+    private readonly Mock<IValidator<Venda>> _mockVendaValidator;
+    private readonly Mock<IValidator<ItemVenda>> _mockItemValidator;
+    private readonly Mock<IValidator<PagamentoVenda>> _mockPagamentoValidator;
+    private readonly VendaService _vendaService;
+
+    public VendaServiceTests()
+    {
+        _mockUnitOfWork = new Mock<IUnitOfWork>();
+        _mockSessao = new Mock<SessaoApp>();
+        _mockEstoqueService = new Mock<EstoqueService>();
+        _mockVendaValidator = new Mock<IValidator<Venda>>();
+        _mockItemValidator = new Mock<IValidator<ItemVenda>>();
+        _mockPagamentoValidator = new Mock<IValidator<PagamentoVenda>>();
+
+        _vendaService = new VendaService(
+            _mockUnitOfWork.Object,
+            _mockSessao.Object,
+            _mockEstoqueService.Object,
+            _mockVendaValidator.Object,
+            _mockItemValidator.Object,
+            _mockPagamentoValidator.Object);
+    }
+
+    #region NovaVendaAsync Tests
+
+    [Fact]
+    public async Task NovaVendaAsync_AuthenticatedUser_CreatesVenda()
+    {
+        // Arrange
+        var usuario = UsuarioBuilder.CreateAdmin(1);
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda>().AsQueryable());
+        mockVendas.Setup(r => r.InsertAsync(It.IsAny<Venda>())).Returns(Task.CompletedTask);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+
+        // Act
+        var resultado = await _vendaService.NovaVendaAsync();
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        Assert.NotNull(resultado.Valor);
+        Assert.Equal(usuario.Id, resultado.Valor.UsuarioId);
+        Assert.Equal(StatusVenda.EmAberto, resultado.Valor.Status);
+        mockVendas.Verify(r => r.InsertAsync(It.IsAny<Venda>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task NovaVendaAsync_UnauthenticatedUser_ReturnsFail()
+    {
+        // Arrange
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns((Usuario?)null);
+
+        // Act
+        var resultado = await _vendaService.NovaVendaAsync();
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("não autenticado", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    [Fact]
+    public async Task NovaVendaAsync_GeneratesUniqueNumber()
+    {
+        // Arrange
+        var usuario = UsuarioBuilder.CreateAdmin(1);
+        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+
+        var hoje = DateTime.Today.ToString("yyyyMMdd");
+        var existingVenda = VendaBuilder.CreateSimple(1);
+        existingVenda.Numero = $"{hoje}0001";
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query())
+            .Returns(new List<Venda> { existingVenda }.AsQueryable());
+        mockVendas.Setup(r => r.InsertAsync(It.IsAny<Venda>())).Returns(Task.CompletedTask);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+
+        // Act
+        var resultado = await _vendaService.NovaVendaAsync();
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        // Should generate next number in sequence
+        Assert.StartsWith(hoje, resultado.Valor!.Numero);
+    }
+
+    #endregion
+
+    #region AdicionarItemAsync Tests
+
+    [Fact]
+    public async Task AdicionarItemAsync_ValidProductAndQuantity_AddsItem()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateSimple(1);
+        var produto = ProdutoBuilder.CreateSimple(1);
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+
+        var mockProdutos = new Mock<IRepository<Produto>>();
+        mockProdutos.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(produto);
+
+        var mockItensVenda = new Mock<IRepository<ItemVenda>>();
+        mockItensVenda.Setup(r => r.InsertAsync(It.IsAny<ItemVenda>())).Returns(Task.CompletedTask);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+        _mockUnitOfWork.Setup(u => u.ItensVenda).Returns(mockItensVenda.Object);
+        _mockUnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+
+        var validationResult = new FluentValidation.Results.ValidationResult();
+        _mockItemValidator.Setup(v => v.ValidateAsync(It.IsAny<ItemVenda>(), default))
+            .ReturnsAsync(validationResult);
+
+        // Act
+        var resultado = await _vendaService.AdicionarItemAsync(1, 1, 5, null);
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        Assert.NotNull(resultado.Valor);
+        Assert.Equal(1, resultado.Valor.ProdutoId);
+        Assert.Equal(5, resultado.Valor.Quantidade);
+    }
+
+    [Fact]
+    public async Task AdicionarItemAsync_VendaNaoExiste_ReturnsFail()
+    {
+        // Arrange
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda>().AsQueryable());
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var resultado = await _vendaService.AdicionarItemAsync(999, 1, 5, null);
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("não encontrada", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    [Fact]
+    public async Task AdicionarItemAsync_InsufficientStock_ReturnsFail()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateSimple(1);
+        var produto = ProdutoBuilder.CreateSimple(1).WithEstoque(3m);
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+
+        var mockProdutos = new Mock<IRepository<Produto>>();
+        mockProdutos.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(produto);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.Produtos).Returns(mockProdutos.Object);
+
+        // Act - Request 5 units but only 3 available
+        var resultado = await _vendaService.AdicionarItemAsync(1, 1, 5, null);
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("Estoque insuficiente", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    #endregion
+
+    #region RemoverItemAsync Tests
+
+    [Fact]
+    public async Task RemoverItemAsync_ValidItem_RemovesItem()
+    {
+        // Arrange
+        var item = new ItemVenda { Id = 1, VendaId = 1, ProdutoId = 1 };
+        var venda = VendaBuilder.CreateSimple(1);
+
+        var mockItensVenda = new Mock<IRepository<ItemVenda>>();
+        mockItensVenda.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(item);
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(venda);
+
+        _mockUnitOfWork.Setup(u => u.ItensVenda).Returns(mockItensVenda.Object);
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+
+        // Act
+        var resultado = await _vendaService.RemoverItemAsync(1);
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        mockItensVenda.Verify(r => r.DeleteAsync(1), Times.Once);
+    }
+
+    [Fact]
+    public async Task RemoverItemAsync_ItemNotFound_ReturnsFail()
+    {
+        // Arrange
+        var mockItensVenda = new Mock<IRepository<ItemVenda>>();
+        mockItensVenda.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((ItemVenda?)null);
+
+        _mockUnitOfWork.Setup(u => u.ItensVenda).Returns(mockItensVenda.Object);
+
+        // Act
+        var resultado = await _vendaService.RemoverItemAsync(999);
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("não encontrado", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    #endregion
+
+    #region FinalizarAsync Tests
+
+    [Fact]
+    public async Task FinalizarAsync_ValidVendaWithPayments_FinalizesSuccessfully()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateWithItems(1, 2).WithStatus(StatusVenda.EmAberto).Build();
+        var pagamento = new PagamentoVenda { Valor = venda.Total };
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+        mockVendas.Setup(r => r.UpdateAsync(It.IsAny<Venda>())).Returns(Task.CompletedTask);
+
+        var mockPagamentos = new Mock<IRepository<PagamentoVenda>>();
+        mockPagamentos.Setup(r => r.InsertAsync(It.IsAny<PagamentoVenda>())).Returns(Task.CompletedTask);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.PagamentosVenda).Returns(mockPagamentos.Object);
+        _mockUnitOfWork.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
+        _mockUnitOfWork.Setup(u => u.CommitAsync()).Returns(Task.CompletedTask);
+
+        var vendaValidationResult = new FluentValidation.Results.ValidationResult();
+        var pagamentoValidationResult = new FluentValidation.Results.ValidationResult();
+        _mockVendaValidator.Setup(v => v.ValidateAsync(It.IsAny<Venda>(), default))
+            .ReturnsAsync(vendaValidationResult);
+        _mockPagamentoValidator.Setup(v => v.ValidateAsync(It.IsAny<PagamentoVenda>(), default))
+            .ReturnsAsync(pagamentoValidationResult);
+
+        _mockEstoqueService.Setup(s => s.RegistrarMovimentoAsync(It.IsAny<int>(), It.IsAny<TipoMovimentoEstoque>(),
+            It.IsAny<decimal>(), It.IsAny<decimal?>(), It.IsAny<string>(), It.IsAny<int>()))
+            .ReturnsAsync(Result.Ok(new MovimentoEstoque()));
+
+        // Act
+        var resultado = await _vendaService.FinalizarAsync(1, new List<PagamentoVenda> { pagamento });
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        Assert.Equal(StatusVenda.Finalizada, resultado.Valor!.Status);
+        _mockUnitOfWork.Verify(u => u.CommitAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task FinalizarAsync_VendaSemItens_ReturnsFail()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateSimple(1);
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var resultado = await _vendaService.FinalizarAsync(1, new List<PagamentoVenda>());
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("sem itens", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    #endregion
+
+    #region CancelarAsync Tests
+
+    [Fact]
+    public async Task CancelarAsync_ValidVenda_CancelsSuccessfully()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateSimple(1).WithStatus(StatusVenda.EmAberto).Build();
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+        mockVendas.Setup(r => r.UpdateAsync(It.IsAny<Venda>())).Returns(Task.CompletedTask);
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+        _mockUnitOfWork.Setup(u => u.BeginTransactionAsync()).Returns(Task.CompletedTask);
+        _mockUnitOfWork.Setup(u => u.CommitAsync()).Returns(Task.CompletedTask);
+
+        // Act
+        var resultado = await _vendaService.CancelarAsync(1, "Solicitação do cliente");
+
+        // Assert
+        Assert.True(resultado.Sucesso);
+        _mockUnitOfWork.Verify(u => u.CommitAsync(), Times.Once);
+    }
+
+    [Fact]
+    public async Task CancelarAsync_AlreadyCancelled_ReturnsFail()
+    {
+        // Arrange
+        var venda = VendaBuilder.CreateSimple(1).WithStatus(StatusVenda.Cancelada).Build();
+
+        var mockVendas = new Mock<IRepository<Venda>>();
+        mockVendas.Setup(r => r.Query()).Returns(new List<Venda> { venda }.AsQueryable());
+
+        _mockUnitOfWork.Setup(u => u.Vendas).Returns(mockVendas.Object);
+
+        // Act
+        var resultado = await _vendaService.CancelarAsync(1, "Solicitação do cliente");
+
+        // Assert
+        Assert.False(resultado.Sucesso);
+        Assert.Contains("já cancelada", resultado.Mensagens.FirstOrDefault() ?? "");
+    }
+
+    #endregion
+}

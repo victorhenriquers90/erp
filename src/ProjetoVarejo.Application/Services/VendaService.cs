@@ -355,6 +355,7 @@ public class VendaService : IVendaService
 
     public Task<Venda?> BuscarAsync(int id) =>
         _unitOfWork.Vendas.Query()
+            .AsNoTracking()
             .Include(v => v.Itens).ThenInclude(i => i.Produto)
             .Include(v => v.Cliente)
             .Include(v => v.Usuario)
@@ -362,7 +363,7 @@ public class VendaService : IVendaService
 
     public Task<List<Venda>> ListarAsync(DateTime? de = null, DateTime? ate = null, StatusVenda? status = null)
     {
-        var q = _unitOfWork.Vendas.Query().Include(v => v.Cliente).AsQueryable();
+        var q = _unitOfWork.Vendas.Query().AsNoTracking().Include(v => v.Cliente).AsQueryable();
         if (de.HasValue) q = q.Where(v => v.DataVenda >= de.Value);
         if (ate.HasValue) q = q.Where(v => v.DataVenda <= ate.Value);
         if (status.HasValue) q = q.Where(v => v.Status == status.Value);

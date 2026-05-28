@@ -14,7 +14,7 @@ public class ProdutoService : IProdutoService
 
     public Task<List<Produto>> ListarAsync(string? filtro = null)
     {
-        var q = _unitOfWork.Produtos.Query().Include(p => p.Categoria).AsQueryable();
+        var q = _unitOfWork.Produtos.Query().AsNoTracking().Include(p => p.Categoria).AsQueryable();
         if (!string.IsNullOrWhiteSpace(filtro))
         {
             q = q.Where(p => p.Descricao.Contains(filtro)
@@ -27,6 +27,7 @@ public class ProdutoService : IProdutoService
     public Task<List<Produto>> ListarParaVendaAsync(string? filtro = null)
     {
         var q = _unitOfWork.Produtos.Query()
+            .AsNoTracking()
             .Include(p => p.Categoria)
             .Where(p => p.Ativo)
             .AsQueryable();

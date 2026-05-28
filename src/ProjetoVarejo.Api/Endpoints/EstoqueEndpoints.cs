@@ -1,4 +1,5 @@
-using ProjetoVarejo.Application.Services;
+using Microsoft.AspNetCore.Mvc;
+using ProjetoVarejo.Application.Contracts.Services;
 
 namespace ProjetoVarejo.Api.Endpoints;
 
@@ -8,7 +9,7 @@ public static class EstoqueEndpoints
     {
         var g = app.MapGroup("/api/estoque").WithTags("Estoque");
 
-        g.MapGet("/abaixo-minimo", async (EstoqueService svc) =>
+        g.MapGet("/abaixo-minimo", async ([FromServices] IEstoqueService svc) =>
         {
             var lista = await svc.ProdutosAbaixoMinimoAsync();
             return Results.Ok(lista.Select(p => new
@@ -17,7 +18,7 @@ public static class EstoqueEndpoints
             }));
         });
 
-        g.MapGet("/movimentos", async (EstoqueService svc, int? produtoId, DateTime? de, DateTime? ate) =>
+        g.MapGet("/movimentos", async ([FromServices] IEstoqueService svc, [FromQuery] int? produtoId, [FromQuery] DateTime? de, [FromQuery] DateTime? ate) =>
         {
             var lista = await svc.ListarMovimentosAsync(produtoId, de, ate);
             return Results.Ok(lista.Select(m => new

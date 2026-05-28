@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using ProjetoVarejo.Web.Models;
+// ApiResponse<T> is defined in Web.Models.ApiModels
 
 namespace ProjetoVarejo.Web.Services;
 
@@ -54,6 +55,22 @@ public sealed class ProjetoVarejoApi
 
     public Task<ApiResultado<List<ProdutoRankingItem>>> TopProdutosAsync(DateTime de, DateTime ate, int quantidade = 8) =>
         GetListAsync<ProdutoRankingItem>($"api/relatorios/top-produtos?de={Data(de)}&ate={Data(ate)}&n={quantidade}");
+
+    public Task<ApiResultado<List<FornecedorResumo>>> FornecedoresAsync(string? busca = null) =>
+        GetListAsync<FornecedorResumo>($"api/fornecedores/{Query("filtro", busca)}");
+
+    public Task<ApiResultado<List<ContaResumo>>> ContasAsync(string? tipo = null, string? status = null) =>
+        GetListAsync<ContaResumo>($"api/financeiro/contas?{(tipo != null ? $"tipo={tipo}&" : "")}{(status != null ? $"status={status}" : "")}");
+
+    public async Task<ApiResultado<ResumoFinanceiro>> ResumoFinanceiroAsync()
+    {
+        try
+        {
+            var dados = await _http.GetFromJsonAsync<ApiResponse<ResumoFinanceiro>>("api/financeiro/resumo", _json);
+            return dados?.Data != null ? ApiResultado<ResumoFinanceiro>.Ok(dados.Data) : ApiResultado<ResumoFinanceiro>.Falha("Sem dados");
+        }
+        catch (Exception ex) { return ApiResultado<ResumoFinanceiro>.Falha(MensagemErro(ex)); }
+    }
 
     public async Task<ApiResultado<bool>> HealthAsync()
     {

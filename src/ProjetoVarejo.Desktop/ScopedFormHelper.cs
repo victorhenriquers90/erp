@@ -13,27 +13,35 @@ public static class ScopedFormHelper
 {
     /// <summary>
     /// Abre um formulário modal verificando se todos os módulos requeridos estão ativos.
+    /// Usa async void pois é chamado de callbacks de eventos de UI (Action).
     /// </summary>
-    public static void AbrirModal<T>(IWin32Window? owner = null) where T : Form
+    public static async void AbrirModal<T>(IWin32Window? owner = null) where T : Form
     {
-        using var scope = Program.Services.CreateScope();
-        var configService = scope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
-
-        // Verificar se formulário requer módulos
-        var atributo = typeof(T).GetCustomAttribute<ModuloRequeridoAttribute>();
-        if (atributo != null)
+        try
         {
-            var config = configService.ObterConfiguracao().Result;
-            if (!atributo.TodosModulosAtivos(config.ModulosAtivos))
-            {
-                MostrarErroModuloIndisponivel(atributo, owner);
-                return;
-            }
-        }
+            using var scope = Program.Services.CreateScope();
 
-        // Abrir formulário
-        var form = scope.ServiceProvider.GetRequiredService<T>();
-        form.ShowDialog(owner);
+            // Verificar se formulário requer módulos (await evita bloquear a UI thread)
+            var atributo = typeof(T).GetCustomAttribute<ModuloRequeridoAttribute>();
+            if (atributo != null)
+            {
+                var configService = scope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
+                var config = await configService.ObterConfiguracao();
+                if (!atributo.TodosModulosAtivos(config.ModulosAtivos))
+                {
+                    MostrarErroModuloIndisponivel(atributo, owner);
+                    return;
+                }
+            }
+
+            // Abrir formulário
+            var form = scope.ServiceProvider.GetRequiredService<T>();
+            form.ShowDialog(owner);
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: owner);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Enums;
@@ -8,17 +9,18 @@ namespace ProjetoVarejo.Desktop.Forms;
 public class FrmConfiguracao : Form
 {
     private readonly ConfiguracaoNegocioService _configuracao;
+    private readonly ImplantacaoService _implantacao;
     private readonly SessaoApp _sessao;
-    private ComboBox cmbTipo = null!;
     private TextBox txtDescricao = null!;
     private Button btnConfigurar = null!;
     private Panel pnlTipos = null!;
     private Label lblSelecionado = null!;
     private TipoNegocio? _tipoSelecionado;
 
-    public FrmConfiguracao(ConfiguracaoNegocioService configuracao, SessaoApp sessao)
+    public FrmConfiguracao(ConfiguracaoNegocioService configuracao, ImplantacaoService implantacao, SessaoApp sessao)
     {
         _configuracao = configuracao;
+        _implantacao = implantacao;
         _sessao = sessao;
         InitUi();
     }
@@ -227,9 +229,21 @@ public class FrmConfiguracao : Form
         };
     }
 
+    private static string DescricaoTipo(TipoNegocio tipo) => tipo switch
+    {
+        TipoNegocio.Padaria => "🥐 Padaria",
+        TipoNegocio.Acougue => "🥩 Açougue",
+        TipoNegocio.Loja => "🛍️ Loja Varejo",
+        TipoNegocio.Industria => "🏭 Indústria",
+        TipoNegocio.Bazar => "🧺 Bazar/Armarinho",
+        TipoNegocio.Supermercado => "🛒 Supermercado",
+        TipoNegocio.Farmacia => "💊 Farmácia",
+        TipoNegocio.Restaurante => "🍽️ Restaurante/Bar",
+        _ => tipo.ToString()
+    };
+
     private Control CriarBotaoTipo(TipoNegocio tipo)
     {
-        var config = _configuracao.ObterConfiguracao().Result;
         var modulos = ModulosPorTipo.ObterModulosRecomendados(tipo);
         var qtdModulos = ModulosPorTipo.ObterTodosModulos()
             .Count(m => (modulos & m) == m);
@@ -258,7 +272,7 @@ public class FrmConfiguracao : Form
 
         var lblTipo = new Label
         {
-            Text = $"{config.ObterDescricaoTipo()} - {tipo}",
+            Text = DescricaoTipo(tipo),
             Left = 20,
             Top = 8,
             Width = 370,
@@ -310,7 +324,7 @@ public class FrmConfiguracao : Form
         // Resetar cor dos botões anteriores
         foreach (Control ctrl in pnlTipos.Controls)
         {
-            if (ctrl is Panel p && (TipoNegocio)p.Tag != tipo)
+            if (ctrl is Panel p && p.Tag is TipoNegocio panelTipo && panelTipo != tipo)
             {
                 p.BackColor = Tema.CorCardAlt;
                 foreach (Control c in p.Controls)
@@ -324,7 +338,7 @@ public class FrmConfiguracao : Form
             ctrl.BackColor = Tema.CorPrimariaSoft;
 
         // Atualizar detalhes
-        lblSelecionado.Text = _configuracao.ObterConfiguracao().Result.ObterDescricaoTipo();
+        lblSelecionado.Text = DescricaoTipo(tipo);
 
         var modulos = ModulosPorTipo.ObterModulosRecomendados(tipo);
         AtualizarListaModulos(modulos);
@@ -368,7 +382,7 @@ public class FrmConfiguracao : Form
         }
     }
 
-    private async void BtnConfigurar_Click(object sender, EventArgs e)
+    private async void BtnConfigurar_Click(object? sender, EventArgs e)
     {
         if (_tipoSelecionado == null)
         {
@@ -382,10 +396,16 @@ public class FrmConfiguracao : Form
 
         try
         {
-            await _configuracao.ConfigurarNegocio(
-                _tipoSelecionado.Value,
-                txtDescricao.Text.Trim()
-            );
+            var tipo = _tipoSelecionado.Value;
+
+            // Salva no banco (ConfiguracaoNegocio)
+            await _configuracao.ConfigurarNegocio(tipo, txtDescricao.Text.Trim());
+
+            // Sincroniza no arquivo implantacao.json para manter os dois configs alinhados
+            var implantacaoAtual = await _implantacao.ObterAsync();
+            implantacaoAtual.Perfil = tipo;
+            implantacaoAtual.ModulosAtivos = ModulosPorTipo.ObterModulosRecomendados(tipo);
+            await _implantacao.SalvarAsync(implantacaoAtual);
 
             DialogResult = DialogResult.OK;
             Close();

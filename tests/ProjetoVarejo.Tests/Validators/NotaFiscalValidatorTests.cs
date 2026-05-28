@@ -1,6 +1,7 @@
 using FluentValidation.TestHelper;
 using ProjetoVarejo.Application.Validators;
 using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Shared;
 using Xunit;
 
 namespace ProjetoVarejo.Tests.Validators;

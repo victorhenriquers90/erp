@@ -152,21 +152,28 @@ public class FrmBuscarProdutoPdv : Form
 
     private async void SelecionarAtual()
     {
-        if (grid.SelectedRows.Count == 0)
+        try
         {
-            Toast.Mostrar("Selecione um produto.", TipoToast.Info, owner: this);
-            return;
-        }
+            if (grid.SelectedRows.Count == 0)
+            {
+                Toast.Mostrar("Selecione um produto.", TipoToast.Info, owner: this);
+                return;
+            }
 
-        var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
-        ProdutoSelecionado = await _produtos.BuscarPorIdAsync(id);
-        if (ProdutoSelecionado == null)
+            var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+            ProdutoSelecionado = await _produtos.BuscarPorIdAsync(id);
+            if (ProdutoSelecionado == null)
+            {
+                Toast.Mostrar("Produto nao encontrado.", TipoToast.Erro, owner: this);
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+        catch (Exception ex)
         {
-            Toast.Mostrar("Produto nao encontrado.", TipoToast.Erro, owner: this);
-            return;
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
-
-        DialogResult = DialogResult.OK;
-        Close();
     }
 }

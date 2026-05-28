@@ -1,4 +1,4 @@
-using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,15 +7,13 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmSelecionarEmpresa : Form
 {
-    // TODO: PHASE 2.5
-    // private readonly NfceService _svc;
+    private readonly INfceService _svc;
     private readonly SessaoApp _sessao;
     private FlowLayoutPanel pnlEmpresas = null!;
 
-    public FrmSelecionarEmpresa(SessaoApp sessao)
+    public FrmSelecionarEmpresa(INfceService svc, SessaoApp sessao)
     {
-        // TODO: PHASE 2.5 - NfceService refactoring needed
-        // _svc = svc;
+        _svc = svc;
         _sessao = sessao;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
@@ -43,9 +41,7 @@ public class FrmSelecionarEmpresa : Form
 
     private async Task CarregarAsync()
     {
-        // TODO: PHASE 2.5 - Load from NfceService when available
-        // var empresas = await _svc.ListarEmpresasAsync();
-        var empresas = new List<EmpresaConfig>();
+        var empresas = await _svc.ListarEmpresasAsync();
         pnlEmpresas.Controls.Clear();
         foreach (var emp in empresas)
             pnlEmpresas.Controls.Add(CardEmpresa(emp));

@@ -1,5 +1,6 @@
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
 
 namespace ProjetoVarejo.Application.Logging;
 
@@ -53,10 +54,13 @@ public static class LoggingConfiguration
             {
                 config.WriteTo.MSSqlServer(
                     connectionString: connectionString,
-                    tableName: "Logs",
-                    autoCreateSqlTable: true,
-                    batchPostingLimit: 100,
-                    period: TimeSpan.FromSeconds(1));
+                    sinkOptions: new MSSqlServerSinkOptions
+                    {
+                        TableName = "Logs",
+                        AutoCreateSqlTable = true,
+                        BatchPostingLimit = 100,
+                        BatchPeriod = TimeSpan.FromSeconds(1)
+                    });
             }
             catch
             {

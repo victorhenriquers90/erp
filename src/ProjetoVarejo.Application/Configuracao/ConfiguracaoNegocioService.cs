@@ -38,7 +38,7 @@ public class ConfiguracaoNegocioService
                 Id = 1,
                 TipoNegocio = (TipoNegocio)0,
                 ConfiguracaoInicial = false,
-                ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+                ModulosAtivos = ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
                 DataAtualizacao = DateTime.Now,
                 Versao = 1
             };
@@ -153,7 +153,7 @@ public class ConfiguracaoNegocioService
             Id = 1,
             TipoNegocio = (TipoNegocio)0,
             ConfiguracaoInicial = false,
-            ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+            ModulosAtivos = ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
             DataAtualizacao = DateTime.Now,
             Versao = 1
         };

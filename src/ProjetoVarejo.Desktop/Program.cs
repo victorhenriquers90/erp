@@ -186,6 +186,20 @@ static class Program
                 }
             }
 
+            // Aplicar tema visual do segmento configurado.
+            // Deve acontecer APÓS o wizard (que pode ter salvo um segmento novo)
+            // e ANTES de qualquer Form ser criado para que as cores sejam corretas.
+            using (var themeScope = Services.CreateScope())
+            {
+                try
+                {
+                    var configSvc = themeScope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
+                    var cfg = configSvc.ObterConfiguracao().GetAwaiter().GetResult();
+                    Tema.AplicarTema(cfg.TipoNegocio);
+                }
+                catch { }
+            }
+
             // Task de backup rastreada
             var backupTask = Task.Run(async () =>
             {

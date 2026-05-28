@@ -220,7 +220,7 @@ public static class Tema
         SidebarSecao        = Color.FromArgb(128, 148, 170);
     }
 
-    private static Color Escurecer(Color c, float amount)
+    public static Color Escurecer(Color c, float amount)
     {
         var f = Math.Clamp(1f - amount, 0f, 1f);
         return Color.FromArgb(
@@ -229,7 +229,7 @@ public static class Tema
             (int)(c.B * f));
     }
 
-    private static Color Clarear(Color c, float amount)
+    public static Color Clarear(Color c, float amount)
     {
         amount = Math.Clamp(amount, 0f, 1f);
         return Color.FromArgb(

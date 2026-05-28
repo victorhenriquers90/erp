@@ -50,8 +50,9 @@ Source: "..\docs\USER_MANUAL.md"; DestDir: "{app}\docs"; Flags: ignoreversion
 Source: "..\docs\NFCE_SETUP.md"; DestDir: "{app}\docs"; Flags: ignoreversion
 
 [Dirs]
-Name: "{app}\desktop\Backups";   Permissions: users-modify
-Name: "{commonappdata}\{#MyAppName}\Logs"; Permissions: users-modify
+Name: "{app}\desktop\Backups";                     Permissions: users-modify
+Name: "{commonappdata}\{#MyAppName}";              Permissions: users-modify
+Name: "{commonappdata}\{#MyAppName}\Logs";         Permissions: users-modify
 
 [Icons]
 Name: "{group}\{#MyAppName}";         Filename: "{app}\desktop\{#MyAppExeName}"

@@ -36,3 +36,10 @@ appsettings.Staging.json
 chaves-producao.txt
 *.pfx
 *.p12
+.env
+
+# Ferramentas locais (não versionar configurações do editor/agente)
+.claude/
+
+# Artefatos de instalação gerados
+installer/output/

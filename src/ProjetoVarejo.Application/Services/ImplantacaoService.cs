@@ -100,14 +100,16 @@ public class ImplantacaoService
         await _semaphore.WaitAsync();
         try
         {
-            // Escreve em arquivo temporário e troca atomicamente para evitar corrupção
+            // Escreve em arquivo temporário e move atomicamente (MOVEFILE_REPLACE_EXISTING).
+            // File.Move(overwrite:true) funciona mesmo quando o destino ainda não existe
+            // (primeira execução) e evita o IOException que File.Replace lança nesses casos.
             var temp = _arquivo + ".tmp";
             await using (var stream = new FileStream(
                 temp, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 await JsonSerializer.SerializeAsync(stream, normalizado, JsonOptions);
             }
-            File.Replace(temp, _arquivo, null);
+            File.Move(temp, _arquivo, overwrite: true);
         }
         finally
         {

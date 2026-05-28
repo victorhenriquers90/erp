@@ -70,28 +70,31 @@ public class ConfiguracaoNegocioService
     {
         config.DataAtualizacao = DateTime.Now;
 
-        var existente = await _unitOfWork.ConfiguracoesNegocio.Query()
-            .FirstOrDefaultAsync(c => c.Id == config.Id);
+        // GetByIdAsync usa FindAsync — consulta o change tracker antes do banco,
+        // garantindo que sempre trabalhamos com a mesma instância rastreada e
+        // evitando o erro "cannot be tracked because another instance with the same key".
+        var existente = await _unitOfWork.ConfiguracoesNegocio.GetByIdAsync(config.Id);
 
         if (existente == null)
         {
+            // InsertAsync já chama SaveChanges internamente
             await _unitOfWork.ConfiguracoesNegocio.InsertAsync(config);
+            _cacheConfiguracao = config;
         }
         else
         {
+            // Atualizar a instância rastreada diretamente — o change tracker
+            // detecta as alterações automaticamente no SaveChangesAsync
             existente.TipoNegocio = config.TipoNegocio;
             existente.DescricaoNegocio = config.DescricaoNegocio;
             existente.ModulosAtivos = config.ModulosAtivos;
             existente.ConfiguracaoInicial = config.ConfiguracaoInicial;
             existente.DataAtualizacao = config.DataAtualizacao;
             existente.Versao = config.Versao;
-            await _unitOfWork.ConfiguracoesNegocio.UpdateAsync(existente);
+            await _unitOfWork.SaveChangesAsync();
+            // Manter referência à instância rastreada para chamadas subsequentes
+            _cacheConfiguracao = existente;
         }
-
-        await _unitOfWork.SaveChangesAsync();
-
-        // Limpar cache
-        _cacheConfiguracao = config;
     }
 
     /// <summary>

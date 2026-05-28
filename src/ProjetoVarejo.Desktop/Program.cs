@@ -12,6 +12,7 @@ using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Application.Validators;
 using ProjetoVarejo.Desktop.Forms;
+using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Infrastructure.Backup;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Infrastructure.Nfce;
@@ -210,6 +211,20 @@ static class Program
                 catch (System.OperationCanceledException) { }
                 catch { }
             });
+
+            // Aplicar tema do segmento ANTES de criar qualquer Form,
+            // para que FrmLogin e FrmMain já inicializem com as cores corretas.
+            using (var temaScope = Services.CreateScope())
+            {
+                try
+                {
+                    var cfgSvc = temaScope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
+                    var cfg = cfgSvc.ObterConfiguracao().GetAwaiter().GetResult();
+                    if (cfg.ConfiguracaoInicial && cfg.TipoNegocio != 0)
+                        Tema.AplicarTema(cfg.TipoNegocio);
+                }
+                catch { /* falha silenciosa — mantém tema padrão */ }
+            }
 
             using var loginScope = Services.CreateScope();
             var login = loginScope.ServiceProvider.GetRequiredService<FrmLogin>();

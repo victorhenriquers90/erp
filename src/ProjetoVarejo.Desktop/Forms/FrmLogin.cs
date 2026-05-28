@@ -47,20 +47,20 @@ public class FrmLogin : Form
 
         var lblLogoIcone = new Label
         {
-            Text = "\uE719",  // shop glyph
-            Font = new Font("Segoe MDL2 Assets", 56),
+            Text = Tema.NegocioIconeEmoji,
+            Font = new Font("Segoe UI Emoji", 52),
             ForeColor = Tema.Branco,
             Dock = DockStyle.Top,
             Height = 130,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Transparent,
-            Padding = new Padding(0, 60, 0, 0)
+            Padding = new Padding(0, 52, 0, 0)
         };
 
         var lblLogoTitulo = new Label
         {
-            Text = Tema.NomeProduto,
-            Font = new Font(Tema.FontFamily, 24, FontStyle.Bold),
+            Text = Tema.NegocioNome,
+            Font = new Font(Tema.FontFamily, 22, FontStyle.Bold),
             ForeColor = Tema.Branco,
             Dock = DockStyle.Top,
             Height = 50,
@@ -70,13 +70,14 @@ public class FrmLogin : Form
 
         var lblLogoTagline = new Label
         {
-            Text = Tema.TaglineProduto,
-            Font = new Font(Tema.FontFamily, 11),
+            Text = Tema.NegocioTagline,
+            Font = new Font(Tema.FontFamily, 10),
             ForeColor = Color.FromArgb(200, 220, 240),
             Dock = DockStyle.Top,
-            Height = 30,
+            Height = 40,
             TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Transparent
+            BackColor = Color.Transparent,
+            Padding = new Padding(10, 4, 10, 0)
         };
 
         var lblFeatures = new Label

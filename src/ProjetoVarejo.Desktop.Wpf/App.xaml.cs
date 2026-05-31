@@ -30,102 +30,144 @@ public partial class App : WpfApp
     {
         base.OnStartup(e);
 
+        var logPath = System.IO.Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "ProjetoVarejo",
+            "app_startup.log");
+
+        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logPath) ?? "");
+
+        void LogError(string msg, Exception? ex = null)
+        {
+            var text = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] {msg}\n";
+            if (ex != null)
+                text += $"Exception: {ex.GetType().Name}\nMessage: {ex.Message}\nStackTrace: {ex.StackTrace}\n";
+
+            System.IO.File.AppendAllText(logPath, text);
+        }
+
+        try { LogError("=== APP STARTUP ==="); } catch { }
+
+        try
+        {
+            LogError("Iniciando DI Container...");
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureAppConfiguration(cfg =>
+                {
+                    cfg.SetBasePath(AppContext.BaseDirectory)
+                       .AddJsonFile("appsettings.json",             optional: true)
+                       .AddJsonFile("appsettings.Development.json", optional: true);
+                })
+                .ConfigureServices((ctx, sc) =>
+                {
+                    LogError("Configurando services...");
+                    var connStr = ctx.Configuration.GetConnectionString("Default")
+                        ?? @"Server=.\SQLEXPRESS;Database=ProjetoVarejo;Trusted_Connection=True;TrustServerCertificate=True;";
+
+                    LogError($"Connection string: {connStr}");
+
+                    sc.AddDbContext<AppDbContext>(opt =>
+                        opt.UseSqlServer(connStr,
+                            sql => sql.EnableRetryOnFailure(3)));
+
+                    sc.AddScoped<IUnitOfWork, UnitOfWork>();
+                    sc.AddScoped<IAutenticacaoService, AutenticacaoService>();
+                    sc.AddScoped<IProdutoService, ProdutoService>();
+                    sc.AddScoped<IEstoqueService, EstoqueService>();
+                    sc.AddScoped<IFinanceiroService, FinanceiroService>();
+                    sc.AddScoped<ICaixaService, CaixaService>();
+                    sc.AddScoped<IVendaService, VendaService>();
+                    sc.AddScoped<IRelatorioService, RelatorioService>();
+
+                    sc.AddScoped<IValidator<CaixaSessao>, CaixaSessionValidator>();
+                    sc.AddScoped<IValidator<Venda>, VendaValidator>();
+                    sc.AddScoped<IValidator<ItemVenda>, ItemVendaValidator>();
+                    sc.AddScoped<IValidator<PagamentoVenda>, PagamentoVendaValidator>();
+                    sc.AddScoped<IValidator<Cliente>, ClienteValidator>();
+                    sc.AddScoped<IValidator<Fornecedor>, FornecedorValidator>();
+
+                    sc.AddScoped<ClienteService>();
+                    sc.AddScoped<ProdutoService>();
+                    sc.AddScoped<FornecedorService>();
+                    sc.AddScoped<CategoriaService>();
+                    sc.AddScoped<UsuarioService>();
+                    sc.AddScoped<EstoqueService>();
+                    sc.AddScoped<FinanceiroService>();
+                    sc.AddScoped<CaixaService>();
+                    sc.AddScoped<VendaService>();
+                    sc.AddScoped<RelatorioService>();
+                    sc.AddScoped<FilialService>();
+                    sc.AddScoped<AuditLogService>();
+                    sc.AddSingleton<SessaoApp>();
+
+                    sc.AddTransient<LoginViewModel>();
+                    sc.AddTransient<MainViewModel>();
+                    sc.AddTransient<DashboardViewModel>();
+                    sc.AddTransient<ClientesViewModel>();
+                    sc.AddTransient<ProdutosViewModel>();
+                    sc.AddTransient<FornecedoresViewModel>();
+                    sc.AddTransient<EstoqueViewModel>();
+                    sc.AddTransient<FinanceiroViewModel>();
+                    sc.AddTransient<VendasViewModel>();
+                    sc.AddTransient<CaixaViewModel>();
+                    sc.AddTransient<UsuariosViewModel>();
+                    sc.AddTransient<FiliaisViewModel>();
+                    sc.AddTransient<RelatoriosViewModel>();
+                    sc.AddTransient<AuditoriaViewModel>();
+                    sc.AddTransient<FiscalViewModel>();
+                    sc.AddTransient<OperacoesViewModel>();
+                    sc.AddTransient<AdministracaoSistemaViewModel>();
+
+                    sc.AddTransient<LoginWindow>();
+                    sc.AddTransient<MainWindow>();
+
+                    LogError("Services configurados com sucesso");
+                })
+                .Build();
+
+            LogError("DI Container criado");
+            await _host.StartAsync();
+            LogError("Host iniciado");
+
+            Services = _host.Services;
+
+            using (var scope = Services.CreateScope())
+            {
+                LogError("Aplicando migrations...");
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await db.Database.MigrateAsync();
+                LogError("Migrations aplicadas");
+            }
+
+            LogError("Obtendo LoginWindow do DI...");
+            var login = Services.GetRequiredService<LoginWindow>();
+            LogError("Mostrando LoginWindow...");
+            login.Show();
+            LogError("LoginWindow mostrada com sucesso");
+        }
+        catch (Exception ex)
+        {
+            LogError("ERRO NO STARTUP", ex);
+            System.Diagnostics.Debug.WriteLine($"STARTUP ERROR: {ex}");
+            MessageBox.Show($"Erro ao iniciar aplicação:\n\n{ex.GetType().Name}: {ex.Message}\n\nVer log em: %AppData%\\ProjetoVarejo\\app_startup.log",
+                "Erro de Inicialização", MessageBoxButton.OK, MessageBoxImage.Error);
+            Shutdown(1);
+        }
+
         AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
         {
+            LogError("APPDOMAIN UNHANDLED EXCEPTION", ex.ExceptionObject as Exception);
             System.Diagnostics.Debug.WriteLine($"UNHANDLED EXCEPTION: {ex.ExceptionObject}");
             MessageBox.Show($"Erro fatal:\n\n{ex.ExceptionObject}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
         };
 
         DispatcherUnhandledException += (s, ex) =>
         {
+            LogError("DISPATCHER EXCEPTION", ex.Exception);
             System.Diagnostics.Debug.WriteLine($"DISPATCHER EXCEPTION: {ex.Exception}");
             MessageBox.Show($"Erro na UI:\n\n{ex.Exception.Message}\n\n{ex.Exception.InnerException?.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             ex.Handled = true;
         };
-
-        _host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration(cfg =>
-            {
-                cfg.SetBasePath(AppContext.BaseDirectory)
-                   .AddJsonFile("appsettings.json",             optional: true)
-                   .AddJsonFile("appsettings.Development.json", optional: true);
-            })
-            .ConfigureServices((ctx, sc) =>
-            {
-                var connStr = ctx.Configuration.GetConnectionString("Default")
-                    ?? @"Server=.\SQLEXPRESS;Database=ProjetoVarejo;Trusted_Connection=True;TrustServerCertificate=True;";
-
-                sc.AddDbContext<AppDbContext>(opt =>
-                    opt.UseSqlServer(connStr,
-                        sql => sql.EnableRetryOnFailure(3)));
-
-                sc.AddScoped<IUnitOfWork, UnitOfWork>();
-                sc.AddScoped<IAutenticacaoService, AutenticacaoService>();
-                sc.AddScoped<IProdutoService, ProdutoService>();
-                sc.AddScoped<IEstoqueService, EstoqueService>();
-                sc.AddScoped<IFinanceiroService, FinanceiroService>();
-                sc.AddScoped<ICaixaService, CaixaService>();
-                sc.AddScoped<IVendaService, VendaService>();
-                sc.AddScoped<IRelatorioService, RelatorioService>();
-
-                sc.AddScoped<IValidator<CaixaSessao>, CaixaSessionValidator>();
-                sc.AddScoped<IValidator<Venda>, VendaValidator>();
-                sc.AddScoped<IValidator<ItemVenda>, ItemVendaValidator>();
-                sc.AddScoped<IValidator<PagamentoVenda>, PagamentoVendaValidator>();
-                sc.AddScoped<IValidator<Cliente>, ClienteValidator>();
-                sc.AddScoped<IValidator<Fornecedor>, FornecedorValidator>();
-
-                sc.AddScoped<ClienteService>();
-                sc.AddScoped<ProdutoService>();
-                sc.AddScoped<FornecedorService>();
-                sc.AddScoped<CategoriaService>();
-                sc.AddScoped<UsuarioService>();
-                sc.AddScoped<EstoqueService>();
-                sc.AddScoped<FinanceiroService>();
-                sc.AddScoped<CaixaService>();
-                sc.AddScoped<VendaService>();
-                sc.AddScoped<RelatorioService>();
-                sc.AddScoped<FilialService>();
-                sc.AddScoped<AuditLogService>();
-                sc.AddSingleton<SessaoApp>();
-
-                // ViewModels
-                sc.AddTransient<LoginViewModel>();
-                sc.AddTransient<MainViewModel>();
-                sc.AddTransient<DashboardViewModel>();
-                sc.AddTransient<ClientesViewModel>();
-                sc.AddTransient<ProdutosViewModel>();
-                sc.AddTransient<FornecedoresViewModel>();
-                sc.AddTransient<EstoqueViewModel>();
-                sc.AddTransient<FinanceiroViewModel>();
-                sc.AddTransient<VendasViewModel>();
-                sc.AddTransient<CaixaViewModel>();
-                sc.AddTransient<UsuariosViewModel>();
-                sc.AddTransient<FiliaisViewModel>();
-                sc.AddTransient<RelatoriosViewModel>();
-                sc.AddTransient<AuditoriaViewModel>();
-                sc.AddTransient<FiscalViewModel>();
-                sc.AddTransient<OperacoesViewModel>();
-                sc.AddTransient<AdministracaoSistemaViewModel>();
-
-                // Views
-                sc.AddTransient<LoginWindow>();
-                sc.AddTransient<MainWindow>();
-            })
-            .Build();
-
-        await _host.StartAsync();
-        Services = _host.Services;
-
-        // Garante migrações aplicadas
-        using (var scope = Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            await db.Database.MigrateAsync();
-        }
-
-        var login = Services.GetRequiredService<LoginWindow>();
-        login.Show();
     }
 
     protected override async void OnExit(WpfExit e)

@@ -173,8 +173,6 @@ public partial class App : WpfApp
             System.Threading.Thread.Sleep(500); // Dar um tempo para a window renderizar
             LogError($"LoginWindow visível: {login.IsVisible}");
             LogError("=== APP STARTUP COMPLETO ===");
-
-            e.Handled = true; // Previne WPF de fazer sua inicialização padrão sem StartupUri
         }
         catch (Exception ex)
         {

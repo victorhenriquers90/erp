@@ -140,20 +140,27 @@ public partial class App : WpfApp
 
                 try
                 {
-                    // Timeout de 10 segundos para migrations
-                    using (var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                    // Timeout de 15 segundos - usar Task.Wait em vez de await
+                    var migrateTask = db.Database.MigrateAsync();
+                    LogError("Task de migration criada, aguardando...");
+
+                    if (migrateTask.Wait(TimeSpan.FromSeconds(15)))
                     {
-                        await db.Database.MigrateAsync(cts.Token);
                         LogError("Migrations aplicadas com sucesso");
                     }
+                    else
+                    {
+                        LogError("TIMEOUT: Migrations excederam 15s, prosseguindo mesmo assim");
+                    }
                 }
-                catch (OperationCanceledException)
+                catch (AggregateException aex)
                 {
-                    LogError("TIMEOUT: Migrations demorando muito (>10s), prosseguindo mesmo assim");
+                    LogError("ERRO NAS MIGRATIONS (AggregateException)", aex.InnerException);
+                    LogError("Prosseguindo mesmo assim...");
                 }
                 catch (Exception ex)
                 {
-                    LogError("ERRO nas migrations (mas prosseguindo)", ex);
+                    LogError("ERRO NAS MIGRATIONS (mas prosseguindo)", ex);
                 }
             }
 

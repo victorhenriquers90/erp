@@ -10,13 +10,31 @@ public class ClienteService
     private readonly IUnitOfWork _unitOfWork;
     public ClienteService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public Task<List<Cliente>> ListarAsync(string? filtro = null)
+    public async Task<List<Cliente>> ListarAsync(string? filtro = null)
     {
-        var q = _unitOfWork.Clientes.Query().AsQueryable();
-        if (!string.IsNullOrWhiteSpace(filtro))
-            q = q.Where(c => c.Nome.Contains(filtro) ||
-                            (c.CpfCnpj != null && c.CpfCnpj.Contains(filtro)));
-        return q.OrderBy(c => c.Nome).Take(500).ToListAsync();
+        System.Diagnostics.Trace.WriteLine("[ClienteService.ListarAsync] Iniciando...");
+        try
+        {
+            System.Diagnostics.Trace.WriteLine("[ClienteService.ListarAsync] Obtendo query...");
+            var q = _unitOfWork.Clientes.Query().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                System.Diagnostics.Trace.WriteLine($"[ClienteService.ListarAsync] Aplicando filtro: {filtro}");
+                q = q.Where(c => c.Nome.Contains(filtro) ||
+                                (c.CpfCnpj != null && c.CpfCnpj.Contains(filtro)));
+            }
+
+            System.Diagnostics.Trace.WriteLine("[ClienteService.ListarAsync] Executando ToListAsync()...");
+            var resultado = await q.OrderBy(c => c.Nome).Take(500).ToListAsync();
+            System.Diagnostics.Trace.WriteLine($"[ClienteService.ListarAsync] ✅ Retornou {resultado.Count} clientes");
+            return resultado;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.WriteLine($"[ClienteService.ListarAsync] ❌ ERRO: {ex}");
+            throw;
+        }
     }
 
     public Task<Cliente?> BuscarPorIdAsync(int id) =>

@@ -153,6 +153,14 @@ public class FrmConexaoServidor : Form
         btnTestar.Top = 136;
         btnTestar.Click += async (s, e) => await TestarAsync();
 
+        // Bot\u00e3o Buscar Servidores
+        var btnBuscar = Botoes.Primario("Buscar servidores", 160, 38);
+        btnBuscar.Left = 200;
+        btnBuscar.Top = 136;
+        btnBuscar.Click += async (s, e) => await BuscarServidoresAsync();
+
+        corpo.Controls.Add(btnBuscar);
+
         // Painel de status (inicialmente oculto)
         pnlStatus = new Panel
         {
@@ -463,5 +471,23 @@ public class FrmConexaoServidor : Form
             instancia = partes.Length > 1 ? partes[1] : "";
         }
         catch { }
+    }
+
+    private async Task BuscarServidoresAsync()
+    {
+        MostrarStatus("Buscando servidores na rede... aguarde até 5 segundos.", false, aguardando: true);
+
+        var servidores = await ProjetoVarejo.Desktop.Services.BeaconDiscoveryClient.DiscoverServersAsync(5000);
+
+        if (servidores.Count == 0)
+        {
+            MostrarStatus("✗ Nenhum servidor ProjetoVarejo encontrado na rede.", sucesso: false, aguardando: false);
+            return;
+        }
+
+        var primeiro = servidores.First();
+        txtIp.Text = primeiro.Ip;
+        txtInstancia.Text = "SQLEXPRESS";
+        MostrarStatus($"✓ {servidores.Count} servidor(es) encontrado(s). Selecionado: {primeiro.Ip}:{primeiro.Port}", sucesso: true, aguardando: false);
     }
 }

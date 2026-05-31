@@ -5,7 +5,7 @@
 ; NAO cria banco de dados nem exibe wizard de configuracao de segmento.
 ; =============================================================================
 ; Compilar:
-;   dotnet publish src/ProjetoVarejo.Desktop -c Release -r win-x64 --self-contained false -o publish/desktop
+;   dotnet publish src/ProjetoVarejo.Desktop.Wpf -c Release -r win-x64 --self-contained false -o publish/desktop-wpf
 ;   "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\setup-cliente.iss
 ; =============================================================================
 
@@ -13,7 +13,7 @@
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "Sua Empresa Ltda"
 #define MyAppURL     "https://example.com"
-#define MyAppExeName "ProjetoVarejo.Desktop.exe"
+#define MyAppExeName "ProjetoVarejo.Desktop.Wpf.exe"
 #define TipoInstalacao "Terminal"
 
 [Setup]
@@ -42,7 +42,7 @@ Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortugue
 Name: "desktopicon"; Description: "Criar atalho na area de trabalho"; GroupDescription: "Atalhos:"; Flags: unchecked
 
 [Files]
-Source: "..\publish\desktop\*"; DestDir: "{app}\desktop"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\publish\desktop-wpf\*"; DestDir: "{app}\desktop"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\README.md";           DestDir: "{app}";         Flags: ignoreversion
 
 [Dirs]
@@ -81,15 +81,86 @@ begin
   PaginaServidor.Values[1] := 'SQLEXPRESS';
 end;
 
+// ── Testa conexao SQL via PowerShell ─────────────────────────────────────────
+// Retorna True se conseguiu abrir SqlConnection com timeout de 6 segundos.
+// Usa System.Data.SqlClient (disponivel no PowerShell nativo do Windows).
+function TestarConexaoSQL(ServerIP, Instancia: String): Boolean;
+var
+  DataSource, ConnStr, PsScript, PsCmd: String;
+  ResCode: Integer;
+begin
+  if Trim(Instancia) = '' then Instancia := 'SQLEXPRESS';
+  DataSource := ServerIP + '\' + Instancia;
+
+  // Monta connection string
+  ConnStr := 'Server=' + DataSource +
+             ';Database=master;Trusted_Connection=True;' +
+             'TrustServerCertificate=True;Encrypt=False;Connect Timeout=6';
+
+  // Script PowerShell inline — usa aspas duplas internas escapadas
+  PsScript :=
+    'try {' +
+    ' Add-Type -AssemblyName System.Data;' +
+    ' $c = New-Object System.Data.SqlClient.SqlConnection(''' + ConnStr + ''');' +
+    ' $c.Open();' +
+    ' $c.Close();' +
+    ' exit 0' +
+    '} catch {' +
+    ' exit 1' +
+    '}';
+
+  PsCmd := '/c powershell -NonInteractive -WindowStyle Hidden -Command "' + PsScript + '"';
+
+  Exec(ExpandConstant('{cmd}'), PsCmd, '', SW_HIDE, ewWaitUntilTerminated, ResCode);
+  Result := (ResCode = 0);
+end;
+
 function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  ServerIP, Instancia: String;
 begin
   Result := True;
+
   if CurPageID = PaginaServidor.ID then
   begin
-    if Trim(PaginaServidor.Values[0]) = '' then
+    ServerIP  := Trim(PaginaServidor.Values[0]);
+    Instancia := Trim(PaginaServidor.Values[1]);
+
+    // Validacao: campo obrigatorio
+    if ServerIP = '' then
     begin
       MsgBox('O IP ou nome do servidor e obrigatorio.', mbError, MB_OK);
       Result := False;
+      Exit;
+    end;
+
+    // Teste real de conexao SQL
+    WizardForm.NextButton.Enabled := False;
+    WizardForm.NextButton.Caption := 'Testando...';
+
+    if not TestarConexaoSQL(ServerIP, Instancia) then
+    begin
+      WizardForm.NextButton.Enabled := True;
+      WizardForm.NextButton.Caption := 'Avan&car';
+
+      if MsgBox(
+        'Nao foi possivel conectar ao SQL Server em "' + ServerIP + '".' + #13#10 + #13#10 +
+        'Verifique:' + #13#10 +
+        '  - O servidor esta ligado e o SQL Server esta ativo' + #13#10 +
+        '  - A instancia "' + Instancia + '" existe e aceita conexoes remotas' + #13#10 +
+        '  - A porta 1433 esta aberta no firewall do servidor' + #13#10 +
+        '  - O Servico "SQL Server Browser" esta ativo no servidor' + #13#10 + #13#10 +
+        'Deseja tentar continuar mesmo sem conexao confirmada?',
+        mbError, MB_YESNO) = IDNO then
+      begin
+        Result := False;
+        Exit;
+      end;
+    end
+    else
+    begin
+      WizardForm.NextButton.Enabled := True;
+      WizardForm.NextButton.Caption := 'Avan&car';
     end;
   end;
 end;

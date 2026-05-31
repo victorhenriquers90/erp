@@ -15,7 +15,11 @@ public class CaixaSessionValidator : AbstractValidator<CaixaSessao>
 
         RuleFor(c => c.AbertaEm)
             .NotNull().WithMessage("Data de abertura é obrigatória")
-            .LessThanOrEqualTo(DateTime.Now).WithMessage("Data de abertura não pode ser no futuro");
+            // Must() avalia DateTime.Now em tempo de execução (não no construtor).
+            // LessThanOrEqualTo(DateTime.Now) captura o valor UMA VEZ ao construir o
+            // validador, então AbertaEm — definido logo depois — sempre fica "no futuro".
+            .Must(d => d <= DateTime.Now.AddMinutes(1))
+            .WithMessage("Data de abertura não pode ser no futuro");
 
         RuleFor(c => c.ValorFechamentoInformado)
             .GreaterThanOrEqualTo(0).WithMessage("Valor de fechamento informado não pode ser negativo")

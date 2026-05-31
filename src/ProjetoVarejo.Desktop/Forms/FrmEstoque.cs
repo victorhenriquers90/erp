@@ -42,6 +42,7 @@ public class FrmEstoque : Form
         var btnSaida = Botoes.Perigo("Ajustar saída", 180, 40);
         btnSaida.Click += async (s, e) => await LancarAsync(TipoMovimentoEstoque.AjusteSaida);
         var fl = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.LeftToRight, BackColor = Tema.CorFundo };
+        Botoes.ParaPainelToolbar(fl, btnEntrada, btnSaida);
         fl.Controls.Add(btnEntrada);
         fl.Controls.Add(btnSaida);
         pnlAcoes.Controls.Add(fl);
@@ -118,23 +119,7 @@ public class FrmEstoque : Form
 
     private void EstilizarTabs(TabControl tc)
     {
-        tc.DrawItem += (s, e) =>
-        {
-            var g = e.Graphics;
-            var tab = tc.TabPages[e.Index];
-            var rect = tc.GetTabRect(e.Index);
-            var selected = e.Index == tc.SelectedIndex;
-            var bg = selected ? Tema.CorCard : Tema.CorFundo;
-            var fg = selected ? Tema.CorPrimaria : Tema.CorTextoMedio;
-            using (var brush = new SolidBrush(bg)) g.FillRectangle(brush, rect);
-            if (selected)
-            {
-                using var line = new SolidBrush(Tema.CorPrimaria);
-                g.FillRectangle(line, rect.X, rect.Bottom - 3, rect.Width, 3);
-            }
-            TextRenderer.DrawText(g, tab.Text, new Font(Tema.FontFamily, 10, selected ? FontStyle.Bold : FontStyle.Regular),
-                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
-        };
+        Abas.Modernizar(tc);
     }
 
     private async Task CarregarMovimentosAsync()

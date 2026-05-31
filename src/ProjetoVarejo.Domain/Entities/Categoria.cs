@@ -6,4 +6,6 @@ public class Categoria : EntidadeBase
     public string? Descricao { get; set; }
 
     public ICollection<Produto> Produtos { get; set; } = new List<Produto>();
+
+    public override string ToString() => Nome;
 }

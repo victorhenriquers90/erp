@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Hosted Blazor WASM: serve client static files from this server -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.27" />
+    <!-- Windows Service hosting -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
@@ -30,6 +34,8 @@
     <ProjectReference Include="..\ProjetoVarejo.Application\ProjetoVarejo.Application.csproj" />
     <ProjectReference Include="..\ProjetoVarejo.Infrastructure\ProjetoVarejo.Infrastructure.csproj" />
     <ProjectReference Include="..\ProjetoVarejo.Shared\ProjetoVarejo.Shared.csproj" />
+    <!-- Hosted Blazor WASM: include client project so its wwwroot is served -->
+    <ProjectReference Include="..\ProjetoVarejo.Web\ProjetoVarejo.Web.csproj" />
   </ItemGroup>
 
 </Project>

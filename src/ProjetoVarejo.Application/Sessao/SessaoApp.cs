@@ -13,6 +13,7 @@ public class SessaoApp
     public Usuario? UsuarioLogado { get; private set; }
     public CaixaSessao? CaixaAtual { get; set; }
     public EmpresaConfig? EmpresaAtiva { get; set; }
+    public Filial? FilialAtiva { get; set; }
 
     /// <summary>
     /// Hora da última atividade do usuário. Atualizado a cada ação
@@ -59,6 +60,7 @@ public class SessaoApp
         UsuarioLogado = null;
         CaixaAtual = null;
         EmpresaAtiva = null;
+        FilialAtiva = null;
         _ultimaAtividade = null;
     }
 }

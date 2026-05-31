@@ -1,6 +1,8 @@
 @using System.Globalization
 @using System.Net.Http
 @using System.Net.Http.Json
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -11,3 +13,5 @@
 @using ProjetoVarejo.Web.Layout
 @using ProjetoVarejo.Web.Models
 @using ProjetoVarejo.Web.Services
+@using ProjetoVarejo.Web.Shared
+@attribute [Authorize]

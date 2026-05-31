@@ -14,4 +14,11 @@ public interface IAutenticacaoService
     /// Updates last access time and establishes the user session.
     /// </summary>
     Task<Result<Usuario>> LoginAsync(string login, string senha);
+
+    /// <summary>
+    /// Valida credenciais sem alterar a sessão ativa nem atualizar UltimoAcesso.
+    /// Usado pelo desbloqueio de supervisor: o operador continua logado enquanto
+    /// um administrador/gerente digita a senha para autorizar a ação restrita.
+    /// </summary>
+    Task<Result<Usuario>> ValidarCredenciaisAsync(string login, string senha);
 }

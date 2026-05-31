@@ -14,6 +14,7 @@ public class FrmConfiguracao : Form
     private TextBox txtDescricao = null!;
     private Button btnConfigurar = null!;
     private Panel pnlTipos = null!;
+    private FlowLayoutPanel flpModulos = null!;
     private Label lblSelecionado = null!;
     private TipoNegocio? _tipoSelecionado;
 
@@ -124,44 +125,37 @@ public class FrmConfiguracao : Form
         {
             Text = "DESCRIÇÃO DA EMPRESA",
             Dock = DockStyle.Top,
-            Height = 24,
+            Height = 34,
             Font = new Font(Tema.FontFamily, 9, FontStyle.Bold),
             ForeColor = Tema.CorTextoMedio,
-            Padding = new Padding(0, 20, 0, 8),
+            Padding = new Padding(0, 12, 0, 4),
             BackColor = Color.Transparent
         };
 
         txtDescricao = new TextBox
         {
             Dock = DockStyle.Top,
-            Height = 48,
-            BorderStyle = BorderStyle.None,
+            Height = 54,
+            BorderStyle = BorderStyle.FixedSingle,
             Font = new Font(Tema.FontFamily, 11),
-            BackColor = Tema.CorCardAlt,
+            BackColor = Tema.Branco,
             ForeColor = Tema.CorTextoEscuro,
             Multiline = true,
             PlaceholderText = "Ex: Padaria Artesanal do João, Açougue Central, Loja 24 horas..."
         };
-        txtDescricao.Padding = new Padding(12, 8, 12, 8);
-        txtDescricao.Paint += (s, e) =>
-        {
-            using var pen = new Pen(Tema.CorBorda, 1);
-            e.Graphics.DrawRectangle(pen, 0, 0, txtDescricao.Width - 1, txtDescricao.Height - 1);
-        };
-
         var lblModulos = new Label
         {
             Text = "MÓDULOS QUE SERÃO ATIVADOS",
             Dock = DockStyle.Top,
-            Height = 24,
+            Height = 34,
             Font = new Font(Tema.FontFamily, 9, FontStyle.Bold),
             ForeColor = Tema.CorTextoMedio,
-            Padding = new Padding(0, 20, 0, 8),
+            Padding = new Padding(0, 12, 0, 4),
             BackColor = Color.Transparent
         };
 
-        var pnlModulos = new Panel { Dock = DockStyle.Top, Height = 140, BackColor = Color.Transparent };
-        var flpModulos = new FlowLayoutPanel
+        var pnlModulos = new Panel { Dock = DockStyle.Top, Height = 170, BackColor = Color.Transparent };
+        flpModulos = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -200,6 +194,10 @@ public class FrmConfiguracao : Form
         };
         btnConfigurar.FlatAppearance.BorderSize = 0;
         btnConfigurar.FlatAppearance.MouseOverBackColor = Tema.CorPrimariaDark;
+        btnConfigurar = Botoes.Sucesso("CONFIRMAR CONFIGURA\u00c7\u00c3O", 260, 48);
+        btnConfigurar.Dock = DockStyle.Fill;
+        btnConfigurar.Font = new Font(Tema.FontFamily, 12, FontStyle.Bold);
+        btnConfigurar.Enabled = false;
         btnConfigurar.Click += BtnConfigurar_Click;
         pnlBotao.Controls.Add(btnConfigurar);
 
@@ -352,17 +350,7 @@ public class FrmConfiguracao : Form
 
     private void AtualizarListaModulos(ModuloSistema modulos)
     {
-        var pnlModulos = Controls.Cast<Control>()
-            .OfType<Panel>()
-            .SelectMany(p => p.Controls.Cast<Control>())
-            .OfType<Panel>()
-            .SelectMany(p => p.Controls.Cast<Control>())
-            .OfType<FlowLayoutPanel>()
-            .FirstOrDefault(f => f.Tag?.ToString() == "modulos");
-
-        if (pnlModulos == null) return;
-
-        pnlModulos.Controls.Clear();
+        flpModulos.Controls.Clear();
 
         foreach (var modulo in ModulosPorTipo.ObterTodosModulos())
         {
@@ -377,7 +365,7 @@ public class FrmConfiguracao : Form
                     BackColor = Color.Transparent,
                     AutoSize = true
                 };
-                pnlModulos.Controls.Add(lbl);
+                flpModulos.Controls.Add(lbl);
             }
         }
     }

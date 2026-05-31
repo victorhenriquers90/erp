@@ -10,8 +10,21 @@ public static class DbInitializer
     {
         db.Database.Migrate();
 
+        // Filial Matriz — criada antes dos usuários para o FK funcionar
+        if (!db.Filiais.Any())
+        {
+            db.Filiais.Add(new Filial
+            {
+                Codigo  = "001",
+                Nome    = "Matriz",
+                IsMatriz = true
+            });
+            db.SaveChanges();
+        }
+
         if (!db.Usuarios.Any())
         {
+            // Admin sem FilialId = acesso irrestrito a todas as filiais
             db.Usuarios.Add(new Usuario
             {
                 Login = "admin",

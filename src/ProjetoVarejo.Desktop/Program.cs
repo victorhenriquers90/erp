@@ -27,10 +27,30 @@ static class Program
 {
     public static IServiceProvider Services { get; private set; } = null!;
 
+    /// <summary>Sincroniza MaterialSkinManager com Tema.CorPrimaria atual.</summary>
+    internal static void AplicarCorMaterial()
+    {
+        var skin = ReaLTaiizor.Manager.MaterialSkinManager.Instance;
+        skin.ColorScheme = new ReaLTaiizor.Colors.MaterialColorScheme(
+            Tema.CorPrimaria.ToArgb(),
+            Tema.CorPrimariaDark.ToArgb(),
+            Tema.CorPrimariaLight.ToArgb(),
+            Tema.CorInfo.ToArgb(),
+            Tema.Branco.ToArgb());
+    }
+
     [STAThread]
     static void Main()
     {
         ApplicationConfiguration.Initialize();
+
+        // ReaLTaiizor Material Design — deve ser configurado antes de qualquer Form
+        // EnforceBackcolorOnAllComponents = false → impede o MaterialSkin de sobrescrever
+        // BackColor de controles não-Material (impede área preta em Panels/Cards)
+        var skin = ReaLTaiizor.Manager.MaterialSkinManager.Instance;
+        skin.EnforceBackcolorOnAllComponents = false;
+        skin.Theme = ReaLTaiizor.Manager.MaterialSkinManager.Themes.LIGHT;
+        AplicarCorMaterial();
 
         WinFormsApp.ThreadException += (s, e) =>
         {
@@ -44,15 +64,51 @@ static class Program
 
         try
         {
-            var config = new ConfigurationBuilder()
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+            // ── Carrega configuração ──────────────────────────────────────────
+            IConfiguration CarregarConfig() => new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json", optional: true)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .Build();
 
-            // Configurar Serilog PRIMEIRO antes de qualquer outra coisa
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            var config = CarregarConfig();
             var connectionString = config.GetConnectionString("Default") ?? string.Empty;
+
+            // ── Teste de conexão em modo cliente ──────────────────────────────
+            // Modo cliente = connection string aponta para IP/hostname remoto.
+            // Se a conexão falhar, abre FrmConexaoServidor para o usuário corrigir
+            // antes de montar o DI e tentar inicializar o banco.
+            if (FrmConexaoServidor.IsModoCliente(connectionString) &&
+                !FrmConexaoServidor.TestarConexao(connectionString, timeoutSegundos: 5))
+            {
+                bool conectado = false;
+                while (!conectado)
+                {
+                    using var frmConn = new FrmConexaoServidor(connectionString);
+                    var resultado = frmConn.ShowDialog();
+
+                    if (resultado != DialogResult.OK)
+                    {
+                        MessageBox.Show(
+                            "Não é possível iniciar o sistema sem conexão com o servidor.\n\nO aplicativo será encerrado.",
+                            "Conexão Obrigatória",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Recarrega configuração com o novo appsettings.json salvo pelo form
+                    config           = CarregarConfig();
+                    connectionString = config.GetConnectionString("Default") ?? string.Empty;
+
+                    // Valida de novo (o form já testou, mas confirma antes de continuar)
+                    conectado = FrmConexaoServidor.TestarConexao(connectionString, timeoutSegundos: 5);
+                }
+            }
+
+            // Configurar Serilog PRIMEIRO antes de qualquer outra coisa
             LoggingConfiguration.ConfigureSerilog(environment, connectionString);
 
             Log.Information(LogTemplates.AplicacaoIniciada, "1.0.0", environment);
@@ -105,6 +161,7 @@ static class Program
             sc.AddScoped<NfeImporterService>();
             sc.AddScoped<PermissaoService>();
             sc.AddScoped<AuditLogService>();
+            sc.AddScoped<FilialService>();
 
             // PHASE 2.5-3: NfceService Infrastructure Components (NFC-e Generation & Signing)
             sc.AddSingleton<NfceXmlGenerator>();
@@ -136,6 +193,7 @@ static class Program
             sc.AddTransient<FrmAuditoria>();
             sc.AddTransient<FrmChecklistProducao>();
             sc.AddTransient<FrmUsuarios>();
+            sc.AddTransient<FrmFiliais>();
             sc.AddTransient<FrmImplantacao>();
             sc.AddTransient<FrmGerenciadorModulos>();
             sc.AddTransient<FrmFechamentoDia>();
@@ -196,6 +254,8 @@ static class Program
                     var configSvc = themeScope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
                     var cfg = configSvc.ObterConfiguracao().GetAwaiter().GetResult();
                     Tema.AplicarTema(cfg.TipoNegocio);
+                    // Sincroniza MaterialSkinManager com a cor do segmento configurado
+                    AplicarCorMaterial();
                 }
                 catch { }
             }

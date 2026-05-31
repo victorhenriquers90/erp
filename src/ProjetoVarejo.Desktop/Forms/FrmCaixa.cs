@@ -10,6 +10,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 public class FrmCaixa : Form
 {
     private readonly ICaixaService _svc;
+    private readonly IAutenticacaoService _autenticacao;
     private Label _statusIcone = null!, _statusTexto = null!, _statusDetalhe = null!;
     private Card _statusCard = null!;
     private FlowLayoutPanel _kpis = null!;
@@ -18,11 +19,18 @@ public class FrmCaixa : Form
     private Button _btnAbrir = null!, _btnFechar = null!, _btnSangria = null!, _btnSuprimento = null!;
     private CaixaSessao? _caixa;
 
-    public FrmCaixa(ICaixaService svc)
+    public FrmCaixa(ICaixaService svc, IAutenticacaoService autenticacao)
     {
         _svc = svc;
+        _autenticacao = autenticacao;
         InitUi();
         Shown += async (s, e) => await AtualizarAsync();
+    }
+
+    private bool PedirAutorizacao(string descricao, Permissao permissao)
+    {
+        using var dlg = new FrmSupervisorUnlock(_autenticacao, descricao, permissao);
+        return dlg.ShowDialog(this) == DialogResult.OK;
     }
 
     private void InitUi()
@@ -166,6 +174,11 @@ public class FrmCaixa : Form
 
     private async Task AbrirAsync()
     {
+        if (!PedirAutorizacao("Abrir caixa", Permissao.AbrirCaixa))
+        {
+            Toast.Mostrar("Abertura de caixa cancelada — autorização negada.", TipoToast.Aviso, owner: this);
+            return;
+        }
         var s = Microsoft.VisualBasic.Interaction.InputBox(
             "Valor de abertura (R$):", "Abrir Caixa", "0,00");
         if (string.IsNullOrWhiteSpace(s)) return;
@@ -199,6 +212,11 @@ public class FrmCaixa : Form
     private async Task FecharAsync()
     {
         if (_caixa == null) return;
+        if (!PedirAutorizacao("Fechar caixa", Permissao.FecharCaixa))
+        {
+            Toast.Mostrar("Fechamento de caixa cancelado — autorização negada.", TipoToast.Aviso, owner: this);
+            return;
+        }
         var resumo = await _svc.ResumoAsync(_caixa.Id);
         using var dlg = new FrmFechamentoCaixa(resumo);
         if (dlg.ShowDialog(this) != DialogResult.OK) return;

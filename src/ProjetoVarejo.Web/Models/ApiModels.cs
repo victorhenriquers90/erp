@@ -8,6 +8,31 @@ public sealed class ApiResponse<T>
     public string? Message { get; set; }
 }
 
+// Aliases usados no ProjetoVarejoApi.cs para desserializar
+public sealed class ApiSuccessResponse<T>
+{
+    public bool Success { get; set; }
+    public T? Data { get; set; }
+    public string? Message { get; set; }
+}
+
+public sealed class ApiErrorResponse
+{
+    public bool Success { get; set; }
+    public string? Message { get; set; }
+    public int ErrorCode { get; set; }
+}
+
+public sealed class LoginResultado
+{
+    public int UsuarioId { get; set; }
+    public string UsuarioNome { get; set; } = string.Empty;
+    public string UsuarioPerfil { get; set; } = string.Empty;
+    public string Token { get; set; } = string.Empty;
+    public string RefreshToken { get; set; } = string.Empty;
+    public int ExpiresIn { get; set; }
+}
+
 public sealed class ProdutoResumo
 {
     public int Id { get; set; }

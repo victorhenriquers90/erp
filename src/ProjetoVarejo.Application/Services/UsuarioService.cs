@@ -84,10 +84,11 @@ public class UsuarioService
                     return Result.Falha<Usuario>("Usuario nao encontrado.");
                 }
 
-                atual.Login = usuario.Login;
-                atual.Nome = usuario.Nome;
-                atual.Perfil = usuario.Perfil;
-                atual.Ativo = usuario.Ativo;
+                atual.Login    = usuario.Login;
+                atual.Nome     = usuario.Nome;
+                atual.Perfil   = usuario.Perfil;
+                atual.Ativo    = usuario.Ativo;
+                atual.FilialId = usuario.FilialId;
                 atual.AtualizadoEm = DateTime.Now;
 
                 if (!string.IsNullOrWhiteSpace(senha))

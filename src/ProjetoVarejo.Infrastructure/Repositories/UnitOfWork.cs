@@ -34,6 +34,7 @@ public class UnitOfWork : IUnitOfWork
     private IRepository<UsuarioPermissao>? _usuarioPermissoes;
     private IRepository<NotaFiscal>? _notasFiscais;
     private IRepository<ConfiguracaoNegocio>? _configuracoesNegocio;
+    private IRepository<Filial>? _filiais;
 
     public UnitOfWork(AppDbContext context)
     {
@@ -90,6 +91,9 @@ public class UnitOfWork : IUnitOfWork
 
     public IRepository<ConfiguracaoNegocio> ConfiguracoesNegocio =>
         _configuracoesNegocio ??= new GenericRepository<ConfiguracaoNegocio>(_context);
+
+    public IRepository<Filial> Filiais =>
+        _filiais ??= new GenericRepository<Filial>(_context);
 
     /// <summary>
     /// Salva todas as mudanças pendentes

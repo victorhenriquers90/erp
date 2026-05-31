@@ -34,7 +34,7 @@ public class FrmRelatorios : Form
 
         var header = Inputs.HeaderPagina("Relatórios gerenciais", "Análises de vendas, produtos e fluxo de caixa");
 
-        var filtros = new Card { Dock = DockStyle.Top, Height = 80, Padding = new Padding(16) };
+        var filtros = new Card { Dock = DockStyle.Top, Height = 92, Padding = new Padding(16) };
         var pnlFiltros = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard };
         pnlFiltros.Controls.Add(Inputs.Rotulo("DE", 0, 0));
         dtDe = new DateTimePicker { Left = 0, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(-30), Font = Tema.FontCorpo };
@@ -42,15 +42,43 @@ public class FrmRelatorios : Form
         pnlFiltros.Controls.Add(Inputs.Rotulo("ATÉ", 145, 0));
         dtAte = new DateTimePicker { Left = 145, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(1), Font = Tema.FontCorpo };
         pnlFiltros.Controls.Add(dtAte);
-        var btnFiltrar = Botoes.Primario("Atualizar", 110, 32);
+        var btnFiltrar = Botoes.Primario("Atualizar", 130, 40);
         btnFiltrar.Top = 18; btnFiltrar.Left = 290;
         btnFiltrar.Click += async (s, e) => await CarregarAsync();
         pnlFiltros.Controls.Add(btnFiltrar);
-        var btnExp = Botoes.Ghost("Exportar CSV (aba atual)", 240, 32);
+        var btnExp = Botoes.Ghost("Exportar CSV", 170, 40);
         btnExp.Top = 18; btnExp.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         btnExp.Click += (s, e) => ExportarAtualCsv();
         pnlFiltros.Controls.Add(btnExp);
-        pnlFiltros.Resize += (s, e) => btnExp.Left = pnlFiltros.Width - 250;
+        pnlFiltros.Resize += (s, e) => { };
+        pnlFiltros.Controls.Clear();
+
+        var campos = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0)
+        };
+        var acoes = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Right,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0, 18, 0, 0)
+        };
+
+        btnFiltrar.Anchor = AnchorStyles.None;
+        btnExp.Anchor = AnchorStyles.None;
+        Botoes.ParaPainelToolbar(acoes, btnFiltrar, btnExp);
+        campos.Controls.Add(Inputs.CampoFiltro("De", dtDe, 130));
+        campos.Controls.Add(Inputs.CampoFiltro("Ate", dtAte, 130));
+        acoes.Controls.Add(btnFiltrar);
+        acoes.Controls.Add(btnExp);
+        pnlFiltros.Controls.Add(campos);
+        pnlFiltros.Controls.Add(acoes);
         filtros.Controls.Add(pnlFiltros);
 
         _resumo = new Label
@@ -69,7 +97,7 @@ public class FrmRelatorios : Form
             Font = new Font(Tema.FontFamily, 10),
             DrawMode = TabDrawMode.OwnerDrawFixed,
             SizeMode = TabSizeMode.Fixed,
-            ItemSize = new Size(220, 40),
+            ItemSize = new Size(200, 40),
             Appearance = TabAppearance.Normal
         };
         EstilizarTabs(tabs);
@@ -112,23 +140,7 @@ public class FrmRelatorios : Form
 
     private void EstilizarTabs(TabControl tc)
     {
-        tc.DrawItem += (s, e) =>
-        {
-            var g = e.Graphics;
-            var tab = tc.TabPages[e.Index];
-            var rect = tc.GetTabRect(e.Index);
-            var selected = e.Index == tc.SelectedIndex;
-            var bg = selected ? Tema.CorCard : Tema.CorFundo;
-            var fg = selected ? Tema.CorPrimaria : Tema.CorTextoMedio;
-            using (var brush = new SolidBrush(bg)) g.FillRectangle(brush, rect);
-            if (selected)
-            {
-                using var line = new SolidBrush(Tema.CorPrimaria);
-                g.FillRectangle(line, rect.X, rect.Bottom - 3, rect.Width, 3);
-            }
-            TextRenderer.DrawText(g, tab.Text, new Font(Tema.FontFamily, 10, selected ? FontStyle.Bold : FontStyle.Regular),
-                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
-        };
+        Abas.Modernizar(tc);
     }
 
     private async Task CarregarAsync()

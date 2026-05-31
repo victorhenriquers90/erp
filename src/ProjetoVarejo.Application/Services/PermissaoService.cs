@@ -22,6 +22,7 @@ public class PermissaoService
         [PerfilUsuario.Gerente] = new HashSet<Permissao>
         {
             Permissao.AbrirPdv, Permissao.AplicarDesconto, Permissao.CancelarVenda,
+            Permissao.AlterarPrecoItem,
             Permissao.EmitirNfce, Permissao.CancelarNfce, Permissao.InutilizarNfce,
             Permissao.AbrirCaixa, Permissao.FecharCaixa, Permissao.Sangria, Permissao.Suprimento,
             Permissao.GerenciarProdutos, Permissao.GerenciarClientes, Permissao.GerenciarFornecedores,

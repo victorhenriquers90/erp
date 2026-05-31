@@ -27,6 +27,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<UsuarioPermissao> UsuarioPermissoes { get; }
     IRepository<NotaFiscal> NotasFiscais { get; }
     IRepository<ConfiguracaoNegocio> ConfiguracoesNegocio { get; }
+    IRepository<Filial> Filiais { get; }
 
     /// <summary>
     /// Salva todas as mudanças pendentes no banco de dados

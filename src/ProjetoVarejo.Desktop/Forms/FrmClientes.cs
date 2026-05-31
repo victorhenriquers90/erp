@@ -22,6 +22,7 @@ public class FrmClientes : Form
     {
         Text = "Clientes";
         Size = new Size(1100, 680);
+        MinimumSize = new Size(980, 620);
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Tema.CorFundo;
         Padding = new Padding(Tema.EspacamentoGrande);
@@ -29,23 +30,23 @@ public class FrmClientes : Form
         var header = Inputs.HeaderPagina("Clientes", "Cadastro de clientes pessoa física e jurídica");
         lblTotal = Inputs.SubtituloHeader(header);
 
-        var toolbar = new Panel { Dock = DockStyle.Top, Height = 64, BackColor = Tema.CorFundo, Padding = new Padding(0, 10, 0, 10) };
+        var toolbar = new Panel { Dock = DockStyle.Top, Height = 72, BackColor = Tema.CorFundo, Padding = new Padding(0, 16, 0, 16) };
         var (pnlBusca, tb) = Inputs.BarraBusca("Buscar por nome ou CPF/CNPJ...");
         pnlBusca.Dock = DockStyle.Fill;
         txtBusca = tb;
         txtBusca.KeyDown += async (s, e) => { if (e.KeyCode == Keys.Enter) await CarregarAsync(); };
 
-        var pnlBotoes = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 390, FlowDirection = FlowDirection.RightToLeft, WrapContents = false, BackColor = Tema.CorFundo };
-        var btnNovo = Botoes.PrimarioIcone("Novo cliente", "\uE710", 160, 40);
-        btnNovo.Click += (s, e) => Editar(null);
-        var btnEditar = Botoes.GhostIcone("Editar", "\uE70F", 96, 40);
-        btnEditar.Click += (s, e) => EditarSel();
-        var btnExcluir = Botoes.GhostIcone("Excluir", "\uE74D", 104, 40, Tema.CorErro);
+        var pnlBotoes = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 440, FlowDirection = FlowDirection.LeftToRight, WrapContents = false, BackColor = Tema.CorFundo };
+        var btnNovo    = Botoes.PrimarioIcone("Novo cliente", Tema.IconAdicionar, 164, 40);
+        var btnEditar  = Botoes.GhostIcone("Editar",  Tema.IconEditar,  118, 40);
+        var btnExcluir = Botoes.GhostIcone("Excluir", Tema.IconExcluir, 124, 40, Tema.CorErro);
+        btnNovo.Click    += (s, e) => Editar(null);
+        btnEditar.Click  += (s, e) => EditarSel();
         btnExcluir.Click += async (s, e) => await ExcluirAsync();
-        Botoes.ParaToolbar(btnNovo, btnEditar, btnExcluir);
-        pnlBotoes.Controls.Add(btnNovo);
-        pnlBotoes.Controls.Add(btnEditar);
+        Botoes.ParaPainelToolbar(pnlBotoes, btnExcluir, btnEditar, btnNovo);
         pnlBotoes.Controls.Add(btnExcluir);
+        pnlBotoes.Controls.Add(btnEditar);
+        pnlBotoes.Controls.Add(btnNovo);
 
         toolbar.Controls.Add(pnlBusca);
         toolbar.Controls.Add(pnlBotoes);

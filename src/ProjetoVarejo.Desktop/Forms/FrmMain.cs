@@ -151,6 +151,7 @@ public class FrmMain : Form
         AdicionarSeAtivo(sistema, ModuloSistema.Backup, Tema.IconBackup, "Backup", () => ScopedFormHelper.AbrirModal<FrmBackup>(this));
         AdicionarSeAtivo(sistema, ModuloSistema.Auditoria, Tema.IconAuditoria, "Auditoria", () => ScopedFormHelper.AbrirModal<FrmAuditoria>(this));
         AdicionarSeAtivo(sistema, ModuloSistema.Producao, Tema.IconChecklist, "Checklist de Producao", () => ScopedFormHelper.AbrirModal<FrmChecklistProducao>(this));
+        sistema.Add(new SidebarItem { Icone = "🏢", Texto = "Filiais", OnClick = () => ScopedFormHelper.AbrirModal<FrmFiliais>(this) });
         sistema.Add(new SidebarItem { Icone = Tema.IconUsuario, Texto = "Usuarios", OnClick = () => ScopedFormHelper.AbrirModal<FrmUsuarios>(this) });
         sistema.Add(new SidebarItem { Icone = "⚙", Texto = "Gerenciar Módulos", OnClick = () => ScopedFormHelper.AbrirModal<FrmGerenciadorModulos>(this) });
         AdicionarSeAtivo(sistema, ModuloSistema.Relatorios, "📊", "Relat. Configuracao", () => ScopedFormHelper.AbrirModal<FrmRelatorioConfiguracao>(this));

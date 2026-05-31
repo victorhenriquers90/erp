@@ -140,20 +140,30 @@ public class FrmFechamentoDia : Form
 
         // === Rodapé ===
         var rodape = new Panel { Dock = DockStyle.Bottom, Height = 56, BackColor = Tema.CorFundo, Padding = new Padding(0, 12, 0, 0) };
-        var btnExportar = Botoes.GhostIcone("Exportar TXT", Tema.IconUpload, 140, 36);
-        btnExportar.Dock = DockStyle.Left;
+        var btnExportar = Botoes.GhostIcone("Exportar TXT", Tema.IconUpload, 150, 36);
         btnExportar.Click += ExportarTxt;
-        var btnFechar = Botoes.Ghost("Fechar", 100, 36);
-        btnFechar.Dock = DockStyle.Right;
+        var btnFechar = Botoes.Ghost("Fechar", 112, 36);
         btnFechar.Click += (s, e) => Close();
-        rodape.Controls.Add(btnFechar);
-        rodape.Controls.Add(btnExportar);
+        var acoesRodape = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Right,
+            Height = 40,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorFundo
+        };
+        Botoes.ParaPainelToolbar(acoesRodape, btnExportar, btnFechar);
+        acoesRodape.Controls.Add(btnExportar);
+        acoesRodape.Controls.Add(btnFechar);
+        rodape.Controls.Add(acoesRodape);
 
         Controls.Add(corpo);
         Controls.Add(rodape);
         Controls.Add(_pnlKpis);
         Controls.Add(_pnlStatus);
         Controls.Add(header);
+
+        rodape.BringToFront();
     }
 
     private async Task CarregarAsync()

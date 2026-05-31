@@ -1,15 +1,26 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Pagina nao encontrada</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <section class="empty-state" role="alert">
-                <strong>Pagina nao encontrada</strong>
-                <span>Volte para o cockpit ou selecione uma opcao no menu.</span>
-            </section>
-        </LayoutView>
-    </NotFound>
-</Router>
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <RedirectToLogin />
+                </NotAuthorized>
+                <Authorizing>
+                    <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;color:#888;font-size:.95rem;">
+                        Verificando sessão...
+                    </div>
+                </Authorizing>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Pagina nao encontrada</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <section class="empty-state" role="alert">
+                    <strong>Pagina nao encontrada</strong>
+                    <span>Volte para o cockpit ou selecione uma opcao no menu.</span>
+                </section>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

@@ -24,12 +24,22 @@ using Serilog;
 using StackExchange.Redis;
 using Microsoft.Data.SqlClient;
 
+// ── Plano B: suporte a Windows Service ──────────────────────────────────────
+// Quando instalado como serviço, o processo não tem janela nem console.
+// UseWindowsService() é no-op fora do Windows; não afeta desenvolvimento.
+// O instalador passa --environment Development --urls http://0.0.0.0:5094 no binPath,
+// o que faz o ASP.NET Core escutar em todas as interfaces e ignorar a checagem de
+// chaves placeholder (adequado para deploy em rede local / intranet).
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseWindowsService(opts =>
+    opts.ServiceName = "ProjetoVarejo Web");
 
 // PHASE 11: Configure Serilog structured logging
 LoggingConfiguration.ConfigureLogging(builder);
 
-// Bloquear inicialização se chaves placeholder não foram trocadas
+// Bloquear inicialização se chaves placeholder não foram trocadas.
+// Em modo Development (incluindo o serviço Windows instalado pelo Plano B),
+// esta checagem é ignorada — adequado para rede local / intranet.
 if (!builder.Environment.IsDevelopment())
 {
     var jwtKey = builder.Configuration["Jwt:SecretKey"] ?? "";
@@ -112,6 +122,9 @@ builder.Services.AddScoped<EstoqueService>();
 builder.Services.AddScoped<ProducaoGuardService>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddSingleton<ApiKeyValidator>();
+
+// ── Plano B: beacon UDP para descoberta automática na rede local ─────────────
+builder.Services.AddHostedService<ProjetoVarejo.Api.Services.LanBeaconService>();
 
 // PHASE 8: JWT Authentication & Authorization
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -329,6 +342,15 @@ await EnsureDatabaseCreatedAsync();
 // PHASE 10: Response compression middleware
 app.UseResponseCompression();
 
+// ── Plano B: servir Blazor WASM como interface web ──────────────────────────
+// UseBlazorFrameworkFiles serve os arquivos do framework WASM (_framework/*).
+// UseDefaultFiles mapeia "/" para "/index.html".
+// UseStaticFiles serve wwwroot do projeto ProjetoVarejo.Web.
+// MapFallbackToFile captura rotas SPA como /produtos, /estoque, etc.
+app.UseBlazorFrameworkFiles();
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(corsPolicy);
@@ -337,10 +359,10 @@ app.UseCors(corsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Root endpoint
-app.MapGet("/", () => Results.Ok(new { app = "ProjetoVarejo.Api", versao = "1.0", utc = DateTime.UtcNow }))
+// Status da API (movido de "/" para não colidir com o index.html do WASM)
+app.MapGet("/api/status", () => Results.Ok(new { app = "ProjetoVarejo.Api", versao = "1.0", utc = DateTime.UtcNow }))
    .AllowAnonymous()
-   .WithName("Root")
+   .WithName("Status")
    .WithOpenApi();
 
 // PHASE 11: Health check endpoints
@@ -359,6 +381,10 @@ app.MapFinanceiroEndpoints();
 app.MapFornecedoresEndpoints();
 app.MapAuthEndpoints();
 app.MapUsuariosEndpoints();
+
+// ── Plano B: fallback SPA — rotas como /produtos resolvem para index.html ───
+// Deve vir DEPOIS de todos os endpoints de API, pois captura qualquer rota restante.
+app.MapFallbackToFile("index.html");
 
 // Log application startup
 Log.Information("ProjetoVarejo.Api starting - Environment: {Environment}", builder.Environment.EnvironmentName);

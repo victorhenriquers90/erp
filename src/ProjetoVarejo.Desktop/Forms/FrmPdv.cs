@@ -14,8 +14,13 @@ public class FrmPdv : Form
     private readonly ICaixaService _caixaService;
     private readonly ICupomPrinterService _printer;
     private readonly ProducaoGuardService _producaoGuard;
+    private readonly IAutenticacaoService _autenticacao;
     private Venda? _vendaAtual;
     private bool _alertaProntidaoExibido;
+
+    // Desconto máximo que o operador pode aplicar SEM autorização do supervisor.
+    // Acima deste percentual do SubTotal, exige desbloqueio.
+    private const decimal LimiteDescontoOperadorPct = 0.05m; // 5 %
 
     private TextBox txtCodigo = null!;
     private TextBox txtQuantidade = null!;
@@ -28,7 +33,8 @@ public class FrmPdv : Form
     private Button btnFinalizar = null!;
 
     public FrmPdv(IVendaService vendaService, IProdutoService produtoService, ICaixaService caixaService,
-        INfceService nfceService, ICupomPrinterService printer, ProducaoGuardService producaoGuard)
+        INfceService nfceService, ICupomPrinterService printer, ProducaoGuardService producaoGuard,
+        IAutenticacaoService autenticacao)
     {
         _vendaService = vendaService;
         _produtoService = produtoService;
@@ -36,8 +42,21 @@ public class FrmPdv : Form
         _caixaService = caixaService;
         _printer = printer;
         _producaoGuard = producaoGuard;
+        _autenticacao = autenticacao;
         InitUi();
         Shown += async (s, e) => await IniciarNovaVendaAsync();
+    }
+
+    // ── Helper de autorização de supervisor ──────────────────────────────────
+    /// <summary>
+    /// Exibe o dialog de desbloqueio de supervisor.
+    /// Retorna true se um usuário com a permissão exigida autorizou a ação.
+    /// A sessão do operador NÃO é alterada.
+    /// </summary>
+    private bool PedirAutorizacao(string descricao, Permissao permissao)
+    {
+        using var dlg = new FrmSupervisorUnlock(_autenticacao, descricao, permissao);
+        return dlg.ShowDialog(this) == DialogResult.OK;
     }
 
     private void InitUi()
@@ -226,6 +245,8 @@ public class FrmPdv : Form
         };
         var btnDesconto = Botoes.Aviso("Desconto (F4)", 165, 50);
         btnDesconto.Click += async (s, e) => await AplicarDescontoAsync();
+        var btnPreco = Botoes.Aviso("Alterar Preço (F5)", 165, 50);
+        btnPreco.Click += async (s, e) => await AlterarPrecoItemAsync();
         var btnRemover = Botoes.Ghost("Remover item (Del)", 165, 50);
         btnRemover.Click += async (s, e) => await RemoverItemAsync();
         var btnNova = Botoes.Info("Nova venda (F12)", 165, 50);
@@ -233,6 +254,7 @@ public class FrmPdv : Form
         var btnCancelar = Botoes.Perigo("Cancelar (Esc)", 165, 50);
         btnCancelar.Click += async (s, e) => await CancelarAsync();
         fl.Controls.Add(btnDesconto);
+        fl.Controls.Add(btnPreco);
         fl.Controls.Add(btnRemover);
         fl.Controls.Add(btnNova);
         fl.Controls.Add(btnCancelar);
@@ -274,6 +296,7 @@ public class FrmPdv : Form
         {
             case Keys.F2: _ = BuscarProdutoDialogAsync(); e.Handled = true; break;
             case Keys.F4: _ = AplicarDescontoAsync(); e.Handled = true; break;
+            case Keys.F5: _ = AlterarPrecoItemAsync(); e.Handled = true; break;
             case Keys.F10: _ = FinalizarAsync(); e.Handled = true; break;
             case Keys.F12: _ = IniciarNovaVendaAsync(); e.Handled = true; break;
             case Keys.Delete:
@@ -497,9 +520,68 @@ public class FrmPdv : Form
             "Informe o valor do desconto (R$):", "Desconto", _vendaAtual.Desconto.ToString("N2"));
         if (string.IsNullOrWhiteSpace(s)) return;
         if (!decimal.TryParse(s.Replace('.', ','), out var d)) { Toast.Mostrar("Valor inválido.", TipoToast.Erro, owner: this); return; }
+
+        // Desconto acima do limite do operador → exige autorização de supervisor
+        var limiteValor = _vendaAtual.SubTotal * LimiteDescontoOperadorPct;
+        if (d > limiteValor)
+        {
+            var pct = LimiteDescontoOperadorPct * 100;
+            if (!PedirAutorizacao(
+                    $"Desconto de {d:C} na venda {_vendaAtual.Numero} (acima de {pct:N0}% = {limiteValor:C})",
+                    Permissao.AplicarDesconto))
+            {
+                Toast.Mostrar("Desconto cancelado — autorização negada.", TipoToast.Aviso, owner: this);
+                return;
+            }
+        }
+
         var res = await _vendaService.AplicarDescontoAsync(_vendaAtual.Id, d);
         if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro", TipoToast.Erro, owner: this); return; }
         await RecarregarItensAsync();
+    }
+
+    private async Task AlterarPrecoItemAsync()
+    {
+        if (_vendaAtual == null) return;
+        if (grid.SelectedRows.Count == 0)
+        {
+            Toast.Mostrar("Selecione um item na lista para alterar o preço.", TipoToast.Aviso, owner: this);
+            return;
+        }
+        var itemId = (int)grid.SelectedRows[0].Cells["Id"].Value;
+        var descricaoItem = grid.SelectedRows[0].Cells["Descricao"].Value?.ToString() ?? "item";
+        var precoAtual = grid.SelectedRows[0].Cells["Preco"].Value?.ToString() ?? "0";
+
+        // Sempre exige autorização de supervisor para alterar preço
+        if (!PedirAutorizacao(
+                $"Alterar preço unitário de '{descricaoItem}' (venda {_vendaAtual.Numero})",
+                Permissao.AlterarPrecoItem))
+        {
+            Toast.Mostrar("Alteração de preço cancelada — autorização negada.", TipoToast.Aviso, owner: this);
+            return;
+        }
+
+        var s = Microsoft.VisualBasic.Interaction.InputBox(
+            $"Novo preço unitário para '{descricaoItem}' (R$):", "Alterar Preço", precoAtual);
+        if (string.IsNullOrWhiteSpace(s)) return;
+        if (!decimal.TryParse(s.Replace('.', ','), out var novoPreco) || novoPreco <= 0)
+        {
+            Toast.Mostrar("Preço inválido.", TipoToast.Erro, owner: this);
+            return;
+        }
+
+        // Remove o item atual e adiciona de novo com o novo preço
+        var res = await _vendaService.RemoverItemAsync(itemId);
+        if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro ao remover item", TipoToast.Erro, owner: this); return; }
+
+        var item = _vendaAtual.Itens.FirstOrDefault(i => i.Id == itemId);
+        if (item == null) { await RecarregarItensAsync(); return; }
+
+        var resAdd = await _vendaService.AdicionarItemAsync(_vendaAtual.Id, item.ProdutoId, item.Quantidade, novoPreco);
+        if (!resAdd.Sucesso) { Toast.Mostrar(resAdd.Erro ?? "Erro ao re-adicionar item", TipoToast.Erro, owner: this); return; }
+
+        await RecarregarItensAsync();
+        Toast.Mostrar($"Preço alterado para {novoPreco:C}", TipoToast.Sucesso, owner: this);
     }
 
     private async Task BuscarProdutoDialogAsync()
@@ -529,15 +611,41 @@ public class FrmPdv : Form
     private async Task CancelarAsync()
     {
         if (_vendaAtual == null || _vendaAtual.Status != StatusVenda.EmAberto) return;
+
+        // Venda vazia — cancela sem pedir autorização
         if (!_vendaAtual.Itens.Any())
         {
             await _vendaService.CancelarAsync(_vendaAtual.Id, "Vazia");
             await IniciarNovaVendaAsync();
             return;
         }
-        if (MessageBox.Show("Cancelar venda atual?", "Confirmação",
-            MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
-        var res = await _vendaService.CancelarAsync(_vendaAtual.Id, "Cancelada pelo operador");
+
+        // Venda com itens — exige confirmação + autorização de supervisor
+        if (MessageBox.Show(
+                $"Cancelar a venda {_vendaAtual.Numero} com {_vendaAtual.Itens.Count} item(ns)?\n\n" +
+                "Será solicitada autorização de supervisor.",
+                "Cancelar Venda",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning) != DialogResult.Yes)
+            return;
+
+        if (!PedirAutorizacao(
+                $"Cancelar venda {_vendaAtual.Numero} ({_vendaAtual.Itens.Count} itens, total {_vendaAtual.Total:C})",
+                Permissao.CancelarVenda))
+        {
+            Toast.Mostrar("Cancelamento negado — autorização não concedida.", TipoToast.Aviso, owner: this);
+            return;
+        }
+
+        var motivo = Microsoft.VisualBasic.Interaction.InputBox(
+            "Motivo do cancelamento (obrigatório):", "Cancelar Venda", "");
+        if (string.IsNullOrWhiteSpace(motivo))
+        {
+            Toast.Mostrar("Informe o motivo do cancelamento.", TipoToast.Aviso, owner: this);
+            return;
+        }
+
+        var res = await _vendaService.CancelarAsync(_vendaAtual.Id, motivo);
         if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro", TipoToast.Erro, owner: this); return; }
         await IniciarNovaVendaAsync();
     }

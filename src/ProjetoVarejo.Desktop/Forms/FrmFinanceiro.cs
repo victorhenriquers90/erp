@@ -30,6 +30,7 @@ public class FrmFinanceiro : Form
     {
         Text = "Financeiro";
         Size = new Size(1250, 750);
+        MinimumSize = new Size(1120, 640);
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Tema.CorFundo;
         Padding = new Padding(Tema.EspacamentoGrande);
@@ -46,26 +47,37 @@ public class FrmFinanceiro : Form
             Padding = new Padding(0, 4, 0, 12)
         };
 
-        var filtros = new Card { Dock = DockStyle.Top, Height = 80, Padding = new Padding(16) };
+        var filtros = new Card { Dock = DockStyle.Top, Height = 92, Padding = new Padding(16) };
         var pnlFiltros = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard };
+        var campos = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0)
+        };
+        var acoes = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Right,
+            Width = 440,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0, 18, 0, 0)
+        };
 
-        Inputs.Rotulo("TIPO", 0, 0); pnlFiltros.Controls.Add(Inputs.Rotulo("TIPO", 0, 0));
-        cboTipo = new ComboBox { Left = 0, Top = 18, Width = 140, DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
+        cboTipo = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
         cboTipo.Items.Add("Todos");
         foreach (TipoConta t in Enum.GetValues(typeof(TipoConta))) cboTipo.Items.Add(t);
         cboTipo.SelectedIndex = 0;
-        pnlFiltros.Controls.Add(cboTipo);
 
-        pnlFiltros.Controls.Add(Inputs.Rotulo("STATUS", 160, 0));
-        cboStatus = new ComboBox { Left = 160, Top = 18, Width = 160, DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
+        cboStatus = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
         cboStatus.Items.Add("Todos");
         foreach (StatusConta s in Enum.GetValues(typeof(StatusConta))) cboStatus.Items.Add(s);
         cboStatus.SelectedIndex = 0;
-        pnlFiltros.Controls.Add(cboStatus);
 
-        pnlFiltros.Controls.Add(Inputs.Rotulo("DE", 340, 0));
-        dtDe = new DateTimePicker { Left = 340, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(-30), Font = Tema.FontCorpo };
-        pnlFiltros.Controls.Add(dtDe);
+        dtDe = new DateTimePicker { Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(-30), Font = Tema.FontCorpo };
 
         pnlFiltros.Controls.Add(Inputs.Rotulo("ATÉ", 485, 0));
         dtAte = new DateTimePicker { Left = 485, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(60), Font = Tema.FontCorpo };
@@ -90,6 +102,28 @@ public class FrmFinanceiro : Form
             btnNovo.Left = pnlFiltros.Width - 260;
         };
 
+        pnlFiltros.Controls.Clear();
+
+        campos.Controls.Add(CriarCampoFiltro("Tipo", cboTipo, 140));
+        campos.Controls.Add(CriarCampoFiltro("Status", cboStatus, 160));
+        campos.Controls.Add(CriarCampoFiltro("De", dtDe, 130));
+        campos.Controls.Add(CriarCampoFiltro("Ate", dtAte, 130));
+
+        var btnFiltrarToolbar = Botoes.Primario("Filtrar", 122, 40);
+        btnFiltrarToolbar.Click += async (s, e) => await CarregarAsync();
+        var btnNovoToolbar = Botoes.Info("Nova conta", 152, 40);
+        btnNovoToolbar.Click += (s, e) => Editar(null);
+        var btnQuitarToolbar = Botoes.Sucesso("Quitar", 122, 40);
+        btnQuitarToolbar.Click += async (s, e) => await QuitarSelAsync();
+        Botoes.ParaPainelToolbar(acoes, btnFiltrarToolbar, btnNovoToolbar, btnQuitarToolbar);
+
+        acoes.Controls.Add(btnFiltrarToolbar);
+        acoes.Controls.Add(btnNovoToolbar);
+        acoes.Controls.Add(btnQuitarToolbar);
+
+        pnlFiltros.Controls.Add(campos);
+        pnlFiltros.Controls.Add(acoes);
+
         filtros.Controls.Add(pnlFiltros);
 
         var cardGrid = new Card { Dock = DockStyle.Fill, Padding = new Padding(0) };
@@ -113,6 +147,24 @@ public class FrmFinanceiro : Form
         Controls.Add(filtros);
         Controls.Add(_kpis);
         Controls.Add(header);
+    }
+
+    private static Panel CriarCampoFiltro(string label, Control controle, int width)
+    {
+        var panel = new Panel
+        {
+            Width = width,
+            Height = 58,
+            Margin = new Padding(0, 0, 14, 0),
+            BackColor = Tema.CorCard
+        };
+
+        var rotulo = Inputs.Rotulo(label, 0, 0, width);
+        controle.SetBounds(0, 22, width, 30);
+
+        panel.Controls.Add(rotulo);
+        panel.Controls.Add(controle);
+        return panel;
     }
 
     private async Task CarregarAsync()

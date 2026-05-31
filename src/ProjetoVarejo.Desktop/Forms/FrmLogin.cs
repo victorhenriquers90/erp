@@ -264,6 +264,9 @@ public class FrmLogin : Form
         btnEntrar.FlatAppearance.BorderSize = 0;
         btnEntrar.FlatAppearance.MouseOverBackColor = Tema.CorPrimariaDark;
         btnEntrar.FlatAppearance.MouseDownBackColor = Tema.ShellBarFundo;
+        btnEntrar = Botoes.Primario("ENTRAR", 220, 48);
+        btnEntrar.Dock = DockStyle.Fill;
+        btnEntrar.Font = new Font(Tema.FontFamily, 11, FontStyle.Bold);
         btnEntrar.Click += async (s, e) => await EntrarAsync();
         pnlBotao.Controls.Add(btnEntrar);
         AcceptButton = btnEntrar;

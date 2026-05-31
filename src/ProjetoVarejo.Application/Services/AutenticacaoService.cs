@@ -31,4 +31,18 @@ public class AutenticacaoService : IAutenticacaoService
         _sessao.DefinirUsuario(usuario);
         return Result.Ok(usuario);
     }
+
+    /// <summary>
+    /// Valida credenciais sem alterar a sessão ativa.
+    /// Usado pelo desbloqueio de supervisor no PDV.
+    /// </summary>
+    public async Task<Result<Usuario>> ValidarCredenciaisAsync(string login, string senha)
+    {
+        var usuario = await _unitOfWork.Usuarios.Query()
+            .FirstOrDefaultAsync(u => u.Login == login && u.Ativo);
+        if (usuario == null) return Result.Falha<Usuario>("Usuário não encontrado.");
+        if (!SenhaHasher.Verifica(senha, usuario.SenhaHash))
+            return Result.Falha<Usuario>("Senha inválida.");
+        return Result.Ok(usuario);
+    }
 }

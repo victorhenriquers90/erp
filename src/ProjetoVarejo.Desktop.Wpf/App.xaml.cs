@@ -134,9 +134,11 @@ public partial class App : WpfApp
             using (var scope = Services.CreateScope())
             {
                 LogError("Aplicando migrations...");
+                LogError("Obtendo AppDbContext...");
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                LogError("AppDbContext obtido, iniciando MigrateAsync...");
                 await db.Database.MigrateAsync();
-                LogError("Migrations aplicadas");
+                LogError("Migrations aplicadas com sucesso");
             }
 
             LogError("Obtendo LoginWindow do DI...");
@@ -144,6 +146,9 @@ public partial class App : WpfApp
             LogError("Mostrando LoginWindow...");
             login.Show();
             LogError("LoginWindow mostrada com sucesso");
+
+            await Task.Delay(100); // Dar um tempo para a window aparecer
+            LogError("=== APP STARTUP COMPLETO ===");
         }
         catch (Exception ex)
         {

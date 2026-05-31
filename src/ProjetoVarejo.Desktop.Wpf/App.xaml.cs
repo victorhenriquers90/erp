@@ -14,6 +14,7 @@ using ProjetoVarejo.Desktop.Wpf.ViewModels;
 using ProjetoVarejo.Desktop.Wpf.Views;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Infrastructure.Repositories;
+using System.Windows;
 using WpfApp = System.Windows.Application;
 using WpfStartup = System.Windows.StartupEventArgs;
 using WpfExit = System.Windows.ExitEventArgs;
@@ -28,6 +29,19 @@ public partial class App : WpfApp
     protected override async void OnStartup(WpfStartup e)
     {
         base.OnStartup(e);
+
+        AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
+        {
+            System.Diagnostics.Debug.WriteLine($"UNHANDLED EXCEPTION: {ex.ExceptionObject}");
+            MessageBox.Show($"Erro fatal:\n\n{ex.ExceptionObject}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+        };
+
+        DispatcherUnhandledException += (s, ex) =>
+        {
+            System.Diagnostics.Debug.WriteLine($"DISPATCHER EXCEPTION: {ex.Exception}");
+            MessageBox.Show($"Erro na UI:\n\n{ex.Exception.Message}\n\n{ex.Exception.InnerException?.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            ex.Handled = true;
+        };
 
         _host = Host.CreateDefaultBuilder()
             .ConfigureAppConfiguration(cfg =>

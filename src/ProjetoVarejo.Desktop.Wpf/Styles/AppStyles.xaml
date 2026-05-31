@@ -5,7 +5,7 @@
 
     <!-- Converters -->
     <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    <BooleanToVisibilityConverter     x:Key="BooleanToVisibilityConverter"/>
+    <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
     <!-- Botão da sidebar -->
     <Style x:Key="SidebarButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">

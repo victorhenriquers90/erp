@@ -170,9 +170,11 @@ public partial class App : WpfApp
             login.Show();
             LogError("LoginWindow.Show() chamado");
 
-            await Task.Delay(500); // Dar um tempo para a window renderizar
+            System.Threading.Thread.Sleep(500); // Dar um tempo para a window renderizar
             LogError($"LoginWindow visível: {login.IsVisible}");
             LogError("=== APP STARTUP COMPLETO ===");
+
+            e.Handled = true; // Previne WPF de fazer sua inicialização padrão sem StartupUri
         }
         catch (Exception ex)
         {
@@ -183,18 +185,12 @@ public partial class App : WpfApp
             Shutdown(1);
         }
 
-        AppDomain.CurrentDomain.UnhandledException += (s, ex) =>
-        {
-            LogError("APPDOMAIN UNHANDLED EXCEPTION", ex.ExceptionObject as Exception);
-            System.Diagnostics.Debug.WriteLine($"UNHANDLED EXCEPTION: {ex.ExceptionObject}");
-            MessageBox.Show($"Erro fatal:\n\n{ex.ExceptionObject}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
-        };
+        // Suppress all unhandled exceptions after startup - janela já está rodando
+        AppDomain.CurrentDomain.UnhandledException += (s, ex) => LogError("APPDOMAIN EXCEPTION (ignorada)", ex.ExceptionObject as Exception);
 
         DispatcherUnhandledException += (s, ex) =>
         {
-            LogError("DISPATCHER EXCEPTION", ex.Exception);
-            System.Diagnostics.Debug.WriteLine($"DISPATCHER EXCEPTION: {ex.Exception}");
-            MessageBox.Show($"Erro na UI:\n\n{ex.Exception.Message}\n\n{ex.Exception.InnerException?.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            LogError("DISPATCHER EXCEPTION (ignorada)", ex.Exception);
             ex.Handled = true;
         };
     }

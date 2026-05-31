@@ -30,9 +30,9 @@ public partial class App : WpfApp
     {
         base.OnStartup(e);
 
+        // Tenta salvar o log em um local acessível
         var logPath = System.IO.Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "ProjetoVarejo",
+            AppContext.BaseDirectory,  // Pasta do executável
             "app_startup.log");
 
         System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(logPath) ?? "");
@@ -149,7 +149,7 @@ public partial class App : WpfApp
         {
             LogError("ERRO NO STARTUP", ex);
             System.Diagnostics.Debug.WriteLine($"STARTUP ERROR: {ex}");
-            MessageBox.Show($"Erro ao iniciar aplicação:\n\n{ex.GetType().Name}: {ex.Message}\n\nVer log em: %AppData%\\ProjetoVarejo\\app_startup.log",
+            MessageBox.Show($"Erro ao iniciar aplicação:\n\n{ex.GetType().Name}: {ex.Message}\n\nVer log em:\n{logPath}",
                 "Erro de Inicialização", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown(1);
         }

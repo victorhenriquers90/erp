@@ -1,0 +1,66 @@
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.EstoqueView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding CarregarCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Margin="0,0,0,20">
+            <Button DockPanel.Dock="Right" Command="{Binding CarregarCommand}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}" Height="40">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Refresh" Width="18" Height="18"/>
+                    <TextBlock Text="Atualizar" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <StackPanel>
+                <TextBlock Text="Estoque" Style="{StaticResource SectionHeaderStyle}"/>
+                <TextBlock Text="{Binding Resumo}" Style="{StaticResource SectionSubtitleStyle}"/>
+            </StackPanel>
+        </DockPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.9*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="1.1*"/>
+            </Grid.ColumnDefinitions>
+            <md:Card Padding="0" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Abaixo do minimo" FontWeight="Bold" FontSize="15" Margin="16"/>
+                    <DataGrid ItemsSource="{Binding Alertas}" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" BorderThickness="0" Style="{StaticResource MaterialDesignDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" Width="90"/>
+                            <DataGridTextColumn Header="Produto" Binding="{Binding Descricao}" Width="*"/>
+                            <DataGridTextColumn Header="Estoque" Binding="{Binding Estoque, StringFormat=N3}" Width="100"/>
+                            <DataGridTextColumn Header="Minimo" Binding="{Binding EstoqueMinimo, StringFormat=N3}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </md:Card>
+            <md:Card Grid.Column="2" Padding="0" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="Movimentos recentes" FontWeight="Bold" FontSize="15" Margin="16"/>
+                    <DataGrid ItemsSource="{Binding Movimentos}" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False" BorderThickness="0" Style="{StaticResource MaterialDesignDataGrid}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Data" Binding="{Binding CriadoEm, StringFormat=dd/MM HH:mm}" Width="110"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="120"/>
+                            <DataGridTextColumn Header="Produto" Binding="{Binding Produto.Descricao}" Width="*"/>
+                            <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade, StringFormat=N3}" Width="90"/>
+                            <DataGridTextColumn Header="Saldo" Binding="{Binding SaldoAtual, StringFormat=N3}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </md:Card>
+        </Grid>
+    </Grid>
+</UserControl>

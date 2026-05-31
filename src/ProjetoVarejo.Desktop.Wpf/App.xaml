@@ -1,0 +1,35 @@
+<Application x:Class="ProjetoVarejo.Desktop.Wpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light"
+                                             PrimaryColor="Amber"
+                                             SecondaryColor="Amber"
+                                             ColorAdjustment="{materialDesign:ColorAdjustment}" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+                <ResourceDictionary Source="Styles/AppStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Paleta do sistema -->
+            <SolidColorBrush x:Key="AppPrimaryBrush"    Color="#C47412"/>
+            <SolidColorBrush x:Key="AppSidebarBrush"    Color="#141E2E"/>
+            <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F5F7FA"/>
+            <SolidColorBrush x:Key="AppCardBrush"       Color="#FFFFFF"/>
+            <SolidColorBrush x:Key="AppTextDarkBrush"   Color="#1C2737"/>
+            <SolidColorBrush x:Key="AppTextMediumBrush" Color="#5B697B"/>
+            <SolidColorBrush x:Key="AppBorderBrush"     Color="#D6DCE5"/>
+            <SolidColorBrush x:Key="AppSuccessBrush"    Color="#258C58"/>
+            <SolidColorBrush x:Key="AppErrorBrush"      Color="#BB2B2B"/>
+
+            <!-- Estilos globais -->
+            <Style x:Key="CardStyle" TargetType="materialDesign:Card">
+                <Setter Property="Padding"     Value="20"/>
+                <Setter Property="UniformCornerRadius" Value="12"/>
+                <Setter Property="materialDesign:ElevationAssist.Elevation" Value="Dp2"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

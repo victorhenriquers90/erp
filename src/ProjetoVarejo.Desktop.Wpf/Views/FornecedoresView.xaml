@@ -1,0 +1,57 @@
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FornecedoresView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding CarregarCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Fornecedores" Style="{StaticResource SectionHeaderStyle}"/>
+            <TextBlock Text="{Binding Total}" Style="{StaticResource SectionSubtitleStyle}"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Filtro, UpdateSourceTrigger=PropertyChanged}"
+                     md:HintAssist.Hint="Buscar por razao social, fantasia ou CNPJ"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     Height="44"
+                     Margin="0,0,12,0"/>
+            <Button Grid.Column="1" Command="{Binding CarregarCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Background="{StaticResource AppPrimaryBrush}" Foreground="White"
+                    Height="44" Padding="18,0" md:ButtonAssist.CornerRadius="8">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="Magnify" Width="18" Height="18"/>
+                    <TextBlock Text="Buscar" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <md:Card Grid.Row="2" Padding="0" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+            <DataGrid ItemsSource="{Binding Fornecedores}" SelectedItem="{Binding FornecedorSelecionado}"
+                      AutoGenerateColumns="False" IsReadOnly="True" RowHeight="52"
+                      CanUserAddRows="False" BorderThickness="0"
+                      Style="{StaticResource MaterialDesignDataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Razao Social" Binding="{Binding RazaoSocial}" Width="*" MinWidth="220"/>
+                    <DataGridTextColumn Header="Fantasia" Binding="{Binding NomeFantasia}" Width="180"/>
+                    <DataGridTextColumn Header="CNPJ" Binding="{Binding Cnpj}" Width="150"/>
+                    <DataGridTextColumn Header="Telefone" Binding="{Binding Telefone}" Width="130"/>
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="220"/>
+                    <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding Ativo}" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </md:Card>
+    </Grid>
+</UserControl>

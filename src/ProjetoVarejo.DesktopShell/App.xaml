@@ -1,0 +1,10 @@
+<Application x:Class="ProjetoVarejo.DesktopShell.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="ShellBackground" Color="#F4F7FB" />
+        <SolidColorBrush x:Key="ShellText" Color="#0B1F3A" />
+        <SolidColorBrush x:Key="ShellMuted" Color="#64748B" />
+        <SolidColorBrush x:Key="ShellAccent" Color="#D28222" />
+    </Application.Resources>
+</Application>

@@ -14,3 +14,14 @@ public class StringToVisibilityConverter : IValueConverter
     public object ConvertBack(object value, Type t, object p, CultureInfo c)
         => throw new NotImplementedException();
 }
+
+/// <summary>True → Visible; False → Collapsed</summary>
+[ValueConversion(typeof(bool), typeof(Visibility))]
+public class BooleanToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type t, object p, CultureInfo c)
+        => (bool)value ? Visibility.Visible : Visibility.Collapsed;
+
+    public object ConvertBack(object value, Type t, object p, CultureInfo c)
+        => (Visibility)value == Visibility.Visible;
+}

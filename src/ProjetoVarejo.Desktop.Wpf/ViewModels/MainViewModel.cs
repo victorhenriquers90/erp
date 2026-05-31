@@ -15,23 +15,30 @@ public partial class MainViewModel : BaseViewModel
     [ObservableProperty] private string _empresa      = "Loja Exemplo";
     [ObservableProperty] private string _paginaTitulo = "Painel";
     [ObservableProperty] private bool   _menuAberto   = true;
+    [ObservableProperty] private string _erro         = string.Empty;
 
     public MainViewModel(SessaoApp sessao, IServiceProvider sp)
     {
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] Construtor iniciado");
         _sessao = sessao;
         _sp     = sp;
         NomeUsuario  = sessao.UsuarioLogado?.Nome ?? "Administrador";
         Empresa      = sessao.EmpresaAtiva?.NomeFantasia ?? "Loja Exemplo";
 
-        // Abre Dashboard por padrão
-        AbrirDashboard();
-    }
+        System.Diagnostics.Trace.WriteLine($"[MainViewModel] Usuário: {NomeUsuario}, Empresa: {Empresa}");
 
-    [RelayCommand]
-    private void AbrirDashboard()
-    {
-        PaginaTitulo = "Painel";
-        PaginaAtual  = _sp.GetRequiredService<DashboardViewModel>();
+        // FIX DEADLOCK: Carregar Dashboard SINCRONAMENTE no construtor, SEM await
+        try
+        {
+            System.Diagnostics.Trace.WriteLine("[MainViewModel] Carregando Dashboard NO CONSTRUTOR (síncrono)...");
+            AbrirDashboard();
+            System.Diagnostics.Trace.WriteLine("[MainViewModel] ✅ Dashboard carregado com sucesso");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel] ❌ ERRO ao abrir Dashboard: {ex}");
+            Erro = $"Erro ao carregar Dashboard: {ex.Message}";
+        }
     }
 
     [RelayCommand]
@@ -67,7 +74,7 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task AbrirVendasAsync()
     {
-        await AbrirAsync<VendasViewModel>("PDV / Vendas", vm => vm.CarregarCommand.ExecuteAsync(null));
+        await AbrirAsync<VendasViewModel>("Vendas", vm => vm.CarregarCommand.ExecuteAsync(null));
     }
 
     [RelayCommand]
@@ -79,7 +86,7 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task AbrirUsuariosAsync()
     {
-        await AbrirAsync<UsuariosViewModel>("Usuarios", vm => vm.CarregarCommand.ExecuteAsync(null));
+        await AbrirAsync<UsuariosViewModel>("Usuários", vm => vm.CarregarCommand.ExecuteAsync(null));
     }
 
     [RelayCommand]
@@ -91,7 +98,7 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task AbrirRelatoriosAsync()
     {
-        await AbrirAsync<RelatoriosViewModel>("Relatorios", vm => vm.CarregarCommand.ExecuteAsync(null));
+        await AbrirAsync<RelatoriosViewModel>("Relatórios", vm => vm.CarregarCommand.ExecuteAsync(null));
     }
 
     [RelayCommand]
@@ -103,33 +110,53 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private void AbrirFiscal()
     {
-        PaginaTitulo = "Fiscal e pagamentos";
+        PaginaTitulo = "Fiscal";
         PaginaAtual = _sp.GetRequiredService<FiscalViewModel>();
     }
 
     [RelayCommand]
     private void AbrirOperacoes()
     {
-        PaginaTitulo = "Operacoes de loja";
+        PaginaTitulo = "Operações";
         PaginaAtual = _sp.GetRequiredService<OperacoesViewModel>();
     }
 
     [RelayCommand]
     private void AbrirAdministracaoSistema()
     {
-        PaginaTitulo = "Administracao do sistema";
+        PaginaTitulo = "Administração";
         PaginaAtual = _sp.GetRequiredService<AdministracaoSistemaViewModel>();
     }
 
     [RelayCommand]
     private void ToggleMenu() => MenuAberto = !MenuAberto;
 
-    private async Task AbrirAsync<TViewModel>(string titulo, Func<TViewModel, Task> carregar)
+    private void AbrirDashboard()
+    {
+        System.Diagnostics.Trace.WriteLine("[MainViewModel.AbrirDashboard] Obtendo DashboardViewModel...");
+        PaginaTitulo = "Painel";
+        PaginaAtual = _sp.GetRequiredService<DashboardViewModel>();
+        System.Diagnostics.Trace.WriteLine("[MainViewModel.AbrirDashboard] ✅ DashboardViewModel obtido e definido");
+    }
+
+    private async Task AbrirAsync<TViewModel>(string titulo, Func<TViewModel, Task> carregador)
         where TViewModel : BaseViewModel
     {
-        PaginaTitulo = titulo;
-        var vm = _sp.GetRequiredService<TViewModel>();
-        PaginaAtual = vm;
-        await carregar(vm);
+        try
+        {
+            SetBusy(true, $"Carregando {titulo}...");
+            PaginaTitulo = titulo;
+            var vm = _sp.GetRequiredService<TViewModel>();
+            PaginaAtual = vm;
+            await carregador(vm);
+        }
+        catch (Exception ex)
+        {
+            Erro = $"Erro ao carregar {titulo}: {ex.Message}";
+        }
+        finally
+        {
+            SetBusy(false);
+        }
     }
 }

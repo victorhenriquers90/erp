@@ -26,6 +26,15 @@ public partial class App : WpfApp
     private IHost _host = null!;
     public static IServiceProvider Services { get; private set; } = null!;
 
+    static App()
+    {
+        // Redirecionar Trace.WriteLine para arquivo (mais funcional que Debug)
+        var debugLogPath = System.IO.Path.Combine(AppContext.BaseDirectory, "debug.log");
+        var debugFile = new System.IO.StreamWriter(debugLogPath, true) { AutoFlush = true };
+        System.Diagnostics.Trace.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(debugFile));
+        System.Diagnostics.Trace.WriteLine("=== TRACE LOG INICIADO ===");
+    }
+
     protected override async void OnStartup(WpfStartup e)
     {
         base.OnStartup(e);

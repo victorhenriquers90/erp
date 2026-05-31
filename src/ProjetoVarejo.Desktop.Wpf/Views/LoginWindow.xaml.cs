@@ -34,9 +34,22 @@ public partial class LoginWindow : Window
 
         if (_vm.LoginOk)
         {
-            var main = App.Services.GetRequiredService<MainWindow>();
-            main.Show();
-            Close();
+            System.Diagnostics.Trace.WriteLine("[LoginWindow] Login OK, obtendo MainWindow do DI...");
+            try
+            {
+                var main = App.Services.GetRequiredService<MainWindow>();
+                System.Diagnostics.Trace.WriteLine("[LoginWindow] MainWindow obtida, chamando Show()...");
+                main.Show();
+                System.Diagnostics.Trace.WriteLine("[LoginWindow] MainWindow mostrada, fechando LoginWindow...");
+                Close();
+                System.Diagnostics.Trace.WriteLine("[LoginWindow] LoginWindow fechada");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"[LoginWindow] ERRO ao abrir MainWindow: {ex}");
+                TxtErro.Text = $"Erro ao abrir painel: {ex.Message}";
+                TxtErro.Visibility = Visibility.Visible;
+            }
         }
         else
         {

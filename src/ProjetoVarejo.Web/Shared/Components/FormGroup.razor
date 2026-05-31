@@ -1,0 +1,179 @@
+@namespace ProjetoVarejo.Web.Shared.Components
+
+<div class="form-group">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="form-label" for="@FieldId">
+            @Label
+            @if (Required)
+            {
+                <span class="required">*</span>
+            }
+        </label>
+    }
+
+    <div class="form-control-wrapper">
+        @if (ChildContent != null)
+        {
+            @ChildContent
+        }
+        else if (InputType == "textarea")
+        {
+            <textarea id="@FieldId"
+                      class="form-control @(HasError ? "form-control-error" : "")"
+                      value="@Value"
+                      placeholder="@Placeholder"
+                      disabled="@Disabled"
+                      rows="@(Rows > 0 ? Rows : 3)"
+                      @onchange="OnValueChanged"
+                      @attributes="AdditionalAttributes">
+            </textarea>
+        }
+        else
+        {
+            <input id="@FieldId"
+                   type="@InputType"
+                   class="form-control @(HasError ? "form-control-error" : "")"
+                   value="@Value"
+                   placeholder="@Placeholder"
+                   disabled="@Disabled"
+                   @onchange="OnValueChanged"
+                   @attributes="AdditionalAttributes" />
+        }
+
+        @if (HasError)
+        {
+            <div class="form-error-icon">✕</div>
+        }
+        else if (!string.IsNullOrEmpty(Value) && ShowSuccess)
+        {
+            <div class="form-success-icon">✓</div>
+        }
+    </div>
+
+    @if (HasError && !string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="form-feedback error">@ErrorMessage</div>
+    }
+
+    @if (ShowHelp && !string.IsNullOrEmpty(HelpText))
+    {
+        <div class="form-feedback help">@HelpText</div>
+    }
+</div>
+
+<style>
+    .form-group {
+        margin-bottom: 20px;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .required {
+        color: #f44336;
+        margin-left: 4px;
+    }
+
+    .form-control-wrapper {
+        position: relative;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: all 0.2s;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #2196f3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+    }
+
+    .form-control:disabled {
+        background-color: #f5f5f5;
+        color: #999;
+        cursor: not-allowed;
+    }
+
+    .form-control-error {
+        border-color: #f44336;
+    }
+
+    .form-control-error:focus {
+        box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+    }
+
+    .form-error-icon,
+    .form-success-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .form-error-icon {
+        color: #f44336;
+    }
+
+    .form-success-icon {
+        color: #4caf50;
+    }
+
+    .form-feedback {
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .form-feedback.error {
+        color: #f44336;
+    }
+
+    .form-feedback.help {
+        color: #999;
+    }
+
+    textarea.form-control {
+        resize: vertical;
+        padding: 12px 16px;
+    }
+</style>
+
+@code {
+    [Parameter] public string Label { get; set; } = string.Empty;
+    [Parameter] public string FieldId { get; set; } = $"field-{Guid.NewGuid()}";
+    [Parameter] public string Value { get; set; } = string.Empty;
+    [Parameter] public string InputType { get; set; } = "text";
+    [Parameter] public string Placeholder { get; set; } = string.Empty;
+    [Parameter] public bool Required { get; set; }
+    [Parameter] public bool HasError { get; set; }
+    [Parameter] public string ErrorMessage { get; set; } = string.Empty;
+    [Parameter] public string HelpText { get; set; } = string.Empty;
+    [Parameter] public bool ShowHelp { get; set; }
+    [Parameter] public bool ShowSuccess { get; set; } = true;
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public int Rows { get; set; }
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; } = null!;
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; } = new();
+
+    private async Task OnValueChanged(ChangeEventArgs e)
+    {
+        var newValue = e.Value?.ToString() ?? string.Empty;
+        await ValueChanged.InvokeAsync(newValue);
+    }
+}

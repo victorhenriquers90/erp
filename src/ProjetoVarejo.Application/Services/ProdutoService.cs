@@ -12,16 +12,32 @@ public class ProdutoService : IProdutoService
 
     public ProdutoService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public Task<List<Produto>> ListarAsync(string? filtro = null)
+    public async Task<List<Produto>> ListarAsync(string? filtro = null)
     {
-        var q = _unitOfWork.Produtos.Query().AsNoTracking().Include(p => p.Categoria).AsQueryable();
-        if (!string.IsNullOrWhiteSpace(filtro))
+        System.Diagnostics.Trace.WriteLine("[ProdutoService.ListarAsync] Iniciando...");
+        try
         {
-            q = q.Where(p => p.Descricao.Contains(filtro)
-                          || p.Codigo.Contains(filtro)
-                          || (p.CodigoBarras != null && p.CodigoBarras.Contains(filtro)));
+            System.Diagnostics.Trace.WriteLine("[ProdutoService.ListarAsync] Obtendo query com Include(Categoria)...");
+            var q = _unitOfWork.Produtos.Query().AsNoTracking().Include(p => p.Categoria).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                System.Diagnostics.Trace.WriteLine($"[ProdutoService.ListarAsync] Aplicando filtro: {filtro}");
+                q = q.Where(p => p.Descricao.Contains(filtro)
+                              || p.Codigo.Contains(filtro)
+                              || (p.CodigoBarras != null && p.CodigoBarras.Contains(filtro)));
+            }
+
+            System.Diagnostics.Trace.WriteLine("[ProdutoService.ListarAsync] Executando ToListAsync()...");
+            var resultado = await q.OrderBy(p => p.Descricao).Take(500).ToListAsync();
+            System.Diagnostics.Trace.WriteLine($"[ProdutoService.ListarAsync] ✅ Retornou {resultado.Count} produtos");
+            return resultado;
         }
-        return q.OrderBy(p => p.Descricao).Take(500).ToListAsync();
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.WriteLine($"[ProdutoService.ListarAsync] ❌ ERRO: {ex}");
+            throw;
+        }
     }
 
     public Task<List<Produto>> ListarParaVendaAsync(string? filtro = null)

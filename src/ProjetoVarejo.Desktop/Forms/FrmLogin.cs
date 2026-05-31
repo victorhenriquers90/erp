@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 
@@ -5,14 +6,14 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmLogin : Form
 {
-    private readonly AutenticacaoService _auth;
+    private readonly IAutenticacaoService _auth;
     private TextBox txtLogin = null!;
     private TextBox txtSenha = null!;
     private Button btnEntrar = null!;
     private Panel pnlErro = null!;
     private Label lblErro = null!;
 
-    public FrmLogin(AutenticacaoService auth)
+    public FrmLogin(IAutenticacaoService auth)
     {
         _auth = auth;
         InitUi();
@@ -31,78 +32,120 @@ public class FrmLogin : Form
         var lateral = new Panel { Dock = DockStyle.Left, Width = 360, BackColor = Tema.ShellBarFundo };
         lateral.Paint += (s, e) =>
         {
-            // Gradiente sutil
-            using var brush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                lateral.ClientRectangle, Tema.ShellBarFundo, Tema.SidebarFundo,
-                System.Drawing.Drawing2D.LinearGradientMode.Vertical);
-            e.Graphics.FillRectangle(brush, lateral.ClientRectangle);
+            var g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            var r = lateral.ClientRectangle;
 
-            // Círculos decorativos
-            using var circulo = new SolidBrush(Color.FromArgb(20, 255, 255, 255));
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.FillEllipse(circulo, -100, -100, 280, 280);
-            e.Graphics.FillEllipse(circulo, lateral.Width - 180, lateral.Height - 180, 320, 320);
+            // Gradiente diagonal: escuro no topo-esquerda, toque da cor primária no fundo-direita
+            using var brush = new System.Drawing.Drawing2D.LinearGradientBrush(
+                new Point(0, 0), new Point(r.Width, r.Height),
+                Tema.SidebarFundo,
+                Tema.Misturar(Tema.SidebarFundo, Tema.CorPrimaria, 0.30f));
+            g.FillRectangle(brush, r);
+
+            // Círculo decorativo grande no canto superior direito
+            using var c1 = new SolidBrush(Color.FromArgb(18, 255, 255, 255));
+            g.FillEllipse(c1, r.Width - 145, -110, 300, 300);
+
+            // Círculo decorativo no canto inferior esquerdo
+            using var c2 = new SolidBrush(Color.FromArgb(10, 255, 255, 255));
+            g.FillEllipse(c2, -80, r.Height - 190, 300, 300);
+
+            // Faixa de acento com a cor do segmento na base do painel
+            using var accent = new SolidBrush(Tema.CorPrimaria);
+            g.FillRectangle(accent, 0, r.Height - 5, r.Width, 5);
         };
 
         var lblLogoIcone = new Label
         {
-            Text = "\uE719",  // shop glyph
-            Font = new Font("Segoe MDL2 Assets", 56),
+            Text = Tema.NegocioIconeEmoji,
+            Font = new Font("Segoe UI Emoji", 56),
             ForeColor = Tema.Branco,
             Dock = DockStyle.Top,
-            Height = 130,
+            Height = 140,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Transparent,
-            Padding = new Padding(0, 60, 0, 0)
+            Padding = new Padding(0, 48, 0, 0)
         };
 
         var lblLogoTitulo = new Label
         {
-            Text = Tema.NomeProduto,
-            Font = new Font(Tema.FontFamily, 24, FontStyle.Bold),
+            Text = Tema.NegocioNome,
+            Font = new Font(Tema.FontFamily, 20, FontStyle.Bold),
             ForeColor = Tema.Branco,
             Dock = DockStyle.Top,
-            Height = 50,
+            Height = 44,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Transparent
         };
 
         var lblLogoTagline = new Label
         {
-            Text = Tema.TaglineProduto,
-            Font = new Font(Tema.FontFamily, 11),
-            ForeColor = Color.FromArgb(200, 220, 240),
+            Text = Tema.NegocioTagline,
+            Font = new Font(Tema.FontFamily, 9),
+            ForeColor = Color.FromArgb(185, 208, 232),
             Dock = DockStyle.Top,
-            Height = 30,
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Transparent
+            Height = 48,
+            TextAlign = ContentAlignment.TopCenter,
+            BackColor = Color.Transparent,
+            Padding = new Padding(20, 8, 20, 0)
         };
 
-        var lblFeatures = new Label
+        // Separador sutil
+        var lblSeparador = new Label
         {
-            Text = "PDV  |  Estoque  |  Fiscal  |  Financeiro\nMultiempresa  |  Relatorios  |  PIX",
-            Font = new Font(Tema.FontFamily, 9),
-            ForeColor = Color.FromArgb(180, 200, 220),
-            Dock = DockStyle.Bottom,
-            Height = 70,
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Transparent,
-            Padding = new Padding(0, 0, 0, 30)
+            Dock = DockStyle.Top,
+            Height = 1,
+            BackColor = Color.FromArgb(40, 255, 255, 255),
+            Margin = new Padding(24, 0, 24, 0)
         };
+        var pnlSep = new Panel { Dock = DockStyle.Top, Height = 20, BackColor = Color.Transparent };
+
+        // Lista de recursos com bullets coloridos
+        var features = new[]
+        {
+            "PDV moderno · Estoque inteligente",
+            "Fiscal NFC-e · PIX integrado",
+            "Financeiro · Relatórios · Backup"
+        };
+        var pnlFeatures = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Bottom,
+            Height = 82,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            BackColor = Color.Transparent,
+            Padding = new Padding(28, 6, 0, 0)
+        };
+        foreach (var feat in features)
+        {
+            pnlFeatures.Controls.Add(new Label
+            {
+                Text = "● " + feat,
+                Font = new Font(Tema.FontFamily, 9),
+                ForeColor = Color.FromArgb(175, 200, 225),
+                AutoSize = false,
+                Width = 300,
+                Height = 22,
+                BackColor = Color.Transparent
+            });
+        }
 
         var lblVersao = new Label
         {
-            Text = "v1.0.0",
+            Text = "ProjetoVarejo ERP  ·  v1.0.0",
             Font = new Font(Tema.FontFamily, 8),
-            ForeColor = Color.FromArgb(150, 170, 190),
+            ForeColor = Color.FromArgb(110, 140, 170),
             Dock = DockStyle.Bottom,
-            Height = 30,
+            Height = 28,
             TextAlign = ContentAlignment.MiddleCenter,
             BackColor = Color.Transparent
         };
 
         lateral.Controls.Add(lblVersao);
-        lateral.Controls.Add(lblFeatures);
+        lateral.Controls.Add(pnlFeatures);
+        lateral.Controls.Add(pnlSep);
+        lateral.Controls.Add(lblSeparador);
         lateral.Controls.Add(lblLogoTagline);
         lateral.Controls.Add(lblLogoTitulo);
         lateral.Controls.Add(lblLogoIcone);
@@ -116,20 +159,20 @@ public class FrmLogin : Form
 
         var lblBemVindo = new Label
         {
-            Text = "Acesso ao ERP",
-            Font = new Font(Tema.FontFamily, 20, FontStyle.Bold),
+            Text = "Bem-vindo",
+            Font = new Font(Tema.FontFamily, 22, FontStyle.Bold),
             ForeColor = Tema.CorTextoEscuro,
             Dock = DockStyle.Top,
-            Height = 45,
+            Height = 48,
             TextAlign = ContentAlignment.BottomLeft
         };
         var lblSub = new Label
         {
-            Text = "Entre com suas credenciais para operar a empresa",
+            Text = "Entre com suas credenciais para continuar",
             Font = new Font(Tema.FontFamily, 10),
             ForeColor = Tema.CorTextoMedio,
             Dock = DockStyle.Top,
-            Height = 40,
+            Height = 38,
             TextAlign = ContentAlignment.TopLeft
         };
 
@@ -221,6 +264,9 @@ public class FrmLogin : Form
         btnEntrar.FlatAppearance.BorderSize = 0;
         btnEntrar.FlatAppearance.MouseOverBackColor = Tema.CorPrimariaDark;
         btnEntrar.FlatAppearance.MouseDownBackColor = Tema.ShellBarFundo;
+        btnEntrar = Botoes.Primario("ENTRAR", 220, 48);
+        btnEntrar.Dock = DockStyle.Fill;
+        btnEntrar.Font = new Font(Tema.FontFamily, 11, FontStyle.Bold);
         btnEntrar.Click += async (s, e) => await EntrarAsync();
         pnlBotao.Controls.Add(btnEntrar);
         AcceptButton = btnEntrar;
@@ -297,11 +343,14 @@ public class FrmLogin : Form
         // Permite arrastar a janela pela área branca (já que não tem TitleBar)
         AdicionarArrasto(lateral);
 
-        // Borda sutil ao redor
+        // Borda sutil + faixa de acento no topo do lado direito
         Paint += (s, e) =>
         {
             using var pen = new Pen(Tema.CorBorda, 1);
             e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+            // Linha de acento colorida no topo da área de formulário
+            using var accent = new SolidBrush(Tema.CorPrimaria);
+            e.Graphics.FillRectangle(accent, lateral.Width, 0, Width - lateral.Width, 4);
         };
     }
 

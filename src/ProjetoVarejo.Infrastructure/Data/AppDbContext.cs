@@ -25,6 +25,7 @@ public class AppDbContext : DbContext
     public DbSet<MovimentoCaixa> MovimentosCaixa => Set<MovimentoCaixa>();
     public DbSet<EmpresaConfig> EmpresaConfigs => Set<EmpresaConfig>();
     public DbSet<ConfiguracaoNegocio> ConfiguracaoNegocio => Set<ConfiguracaoNegocio>();
+    public DbSet<Filial> Filiais => Set<Filial>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -69,12 +70,24 @@ public class AppDbContext : DbContext
             e.HasIndex(x => x.Cnpj).IsUnique();
         });
 
+        b.Entity<Filial>(e =>
+        {
+            e.Property(x => x.Codigo).HasMaxLength(10).IsRequired();
+            e.Property(x => x.Nome).HasMaxLength(120).IsRequired();
+            e.Property(x => x.Cnpj).HasMaxLength(20);
+            e.Property(x => x.Endereco).HasMaxLength(300);
+            e.Property(x => x.Telefone).HasMaxLength(20);
+            e.HasIndex(x => x.Codigo).IsUnique();
+        });
+
         b.Entity<Usuario>(e =>
         {
             e.Property(x => x.Login).HasMaxLength(50).IsRequired();
             e.Property(x => x.Nome).HasMaxLength(150).IsRequired();
             e.Property(x => x.SenhaHash).HasMaxLength(200).IsRequired();
             e.HasIndex(x => x.Login).IsUnique();
+            e.HasOne(x => x.Filial).WithMany(f => f.Usuarios)
+                .HasForeignKey(x => x.FilialId).OnDelete(DeleteBehavior.SetNull);
         });
 
         b.Entity<UsuarioPermissao>(e =>

@@ -5,6 +5,7 @@ using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Enums;
+using ProjetoVarejo.Domain.Configuracao;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
 using static ProjetoVarejo.Application.Configuracao.TemasNegocio;
@@ -27,9 +28,41 @@ public class FrmMain : Form
         _sessao = sessao;
         _implantacaoService = implantacaoService;
         _configuracaoService = configuracaoService;
-        _implantacao = _implantacaoService.ObterAsync().GetAwaiter().GetResult();
-        _configuracaoNegocio = _configuracaoService.ObterConfiguracao().GetAwaiter().GetResult();
+
+        // Use defaults initially - load async in Load event
+        _implantacao = new ImplantacaoConfig();
+        _configuracaoNegocio = new ProjetoVarejo.Domain.Configuracao.ConfiguracaoNegocio
+        {
+            Id = 1,
+            TipoNegocio = (TipoNegocio)0,
+            ConfiguracaoInicial = false,
+            ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+            DataAtualizacao = DateTime.Now,
+            Versao = 1
+        };
+
         InitUi();
+
+        // Load actual configuration asynchronously after UI is created
+        Shown += async (s, e) => await CarregarConfiguraçaoAsync();
+    }
+
+    private async Task CarregarConfiguraçaoAsync()
+    {
+        try
+        {
+            _implantacao = await _implantacaoService.ObterAsync();
+            _configuracaoNegocio = await _configuracaoService.ObterConfiguracao();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Aviso ao carregar configurações:\n\n{ex.Message}",
+                "Aviso",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning);
+            // Continue with defaults
+        }
     }
 
     private void InitUi()
@@ -86,7 +119,7 @@ public class FrmMain : Form
                 Titulo = "Principal",
                 Itens = new()
                 {
-                    new() { Icone = Tema.IconHome, Texto = "Cockpit", OnClick = MostrarDashboard }
+                    new() { Icone = Tema.IconHome, Texto = "Painel", OnClick = MostrarDashboard }
                 }
             }
         };
@@ -111,14 +144,17 @@ public class FrmMain : Form
         var gestao = new List<SidebarItem>();
         AdicionarSeAtivo(gestao, ModuloSistema.Financeiro, Tema.IconFinanceiro, "Financeiro", () => ScopedFormHelper.AbrirModal<FrmFinanceiro>(this));
         AdicionarSeAtivo(gestao, ModuloSistema.Relatorios, Tema.IconRelatorios, "Relatorios", () => ScopedFormHelper.AbrirModal<FrmRelatorios>(this));
+        AdicionarSeAtivo(gestao, ModuloSistema.PDV | ModuloSistema.Financeiro, "📋", "Fechamento do Dia", () => ScopedFormHelper.AbrirModal<FrmFechamentoDia>(this));
         AdicionarSecaoSeTiverItens(secoes, "Gestao", gestao);
 
         var sistema = new List<SidebarItem>();
         AdicionarSeAtivo(sistema, ModuloSistema.Backup, Tema.IconBackup, "Backup", () => ScopedFormHelper.AbrirModal<FrmBackup>(this));
         AdicionarSeAtivo(sistema, ModuloSistema.Auditoria, Tema.IconAuditoria, "Auditoria", () => ScopedFormHelper.AbrirModal<FrmAuditoria>(this));
         AdicionarSeAtivo(sistema, ModuloSistema.Producao, Tema.IconChecklist, "Checklist de Producao", () => ScopedFormHelper.AbrirModal<FrmChecklistProducao>(this));
+        sistema.Add(new SidebarItem { Icone = "🏢", Texto = "Filiais", OnClick = () => ScopedFormHelper.AbrirModal<FrmFiliais>(this) });
         sistema.Add(new SidebarItem { Icone = Tema.IconUsuario, Texto = "Usuarios", OnClick = () => ScopedFormHelper.AbrirModal<FrmUsuarios>(this) });
         sistema.Add(new SidebarItem { Icone = "⚙", Texto = "Gerenciar Módulos", OnClick = () => ScopedFormHelper.AbrirModal<FrmGerenciadorModulos>(this) });
+        AdicionarSeAtivo(sistema, ModuloSistema.Relatorios, "📊", "Relat. Configuracao", () => ScopedFormHelper.AbrirModal<FrmRelatorioConfiguracao>(this));
         sistema.Add(new SidebarItem { Icone = Tema.IconConfig, Texto = "Configuracoes", OnClick = () => ScopedFormHelper.AbrirModal<FrmConfigEmpresa>(this) });
         sistema.Add(new SidebarItem { Icone = Tema.IconConfig, Texto = "Perfil de Implantacao", OnClick = AbrirImplantacao });
         AdicionarSecaoSeTiverItens(secoes, "Sistema", sistema);
@@ -150,17 +186,17 @@ public class FrmMain : Form
         return _implantacaoService.ModuloAtivo(_implantacao, modulo);
     }
 
-    private void AbrirImplantacao()
+    private async void AbrirImplantacao()
     {
         using var scope = Program.Services.CreateScope();
         using var form = scope.ServiceProvider.GetRequiredService<FrmImplantacao>();
         if (form.ShowDialog(this) == DialogResult.OK)
-            RecarregarShell();
+            await RecarregarShellAsync();
     }
 
-    private void RecarregarShell()
+    private async Task RecarregarShellAsync()
     {
-        _implantacao = _implantacaoService.ObterAsync().GetAwaiter().GetResult();
+        _implantacao = await _implantacaoService.ObterAsync();
         Controls.Clear();
         InitUi();
     }
@@ -188,24 +224,62 @@ public class FrmMain : Form
             TextAlign = ContentAlignment.MiddleLeft
         };
 
+        var lblDb = new Label
+        {
+            Text = "● DB",
+            Dock = DockStyle.Right,
+            Width = 52,
+            Font = Tema.FontMicro,
+            ForeColor = Tema.CorTextoMedio,
+            TextAlign = ContentAlignment.MiddleCenter,
+            Cursor = Cursors.Help
+        };
+        lblDb.MouseHover += (s, e) =>
+            new ToolTip().SetToolTip(lblDb, lblDb.Tag?.ToString() ?? "Verificando banco de dados...");
+
         var ambiente = new Label
         {
             Text = $"Usuario: {usuario}   |   Perfil: {perfil}   |   Desktop   |   {Tema.NomeProduto}",
             Dock = DockStyle.Right,
-            Width = 660,
-            Padding = new Padding(0, 0, 18, 0),
+            Width = 620,
+            Padding = new Padding(0, 0, 8, 0),
             Font = Tema.FontMicro,
             ForeColor = Tema.CorTextoMedio,
             TextAlign = ContentAlignment.MiddleRight
         };
 
         statusbar.Controls.Add(contexto);
+        statusbar.Controls.Add(lblDb);
         statusbar.Controls.Add(ambiente);
         statusbar.Paint += (s, e) =>
         {
             using var pen = new Pen(Tema.CorBorda, 1);
             e.Graphics.DrawLine(pen, 0, 0, statusbar.Width, 0);
         };
+
+        // Verificar DB em background ao abrir
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1500);
+            try
+            {
+                using var scope = Program.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ProjetoVarejo.Infrastructure.Data.AppDbContext>();
+                var ok = await db.Database.CanConnectAsync();
+                if (lblDb.IsDisposed) return;
+                lblDb.Invoke(() =>
+                {
+                    lblDb.Text = ok ? "● DB" : "● DB";
+                    lblDb.ForeColor = ok ? Tema.CorSucesso : Tema.CorErro;
+                    lblDb.Tag = ok ? $"Banco conectado — {DateTime.Now:HH:mm:ss}" : "Banco INDISPONÍVEL";
+                });
+            }
+            catch
+            {
+                if (!lblDb.IsDisposed)
+                    lblDb.Invoke(() => { lblDb.ForeColor = Tema.CorErro; lblDb.Tag = "Erro ao verificar banco."; });
+            }
+        });
 
         return statusbar;
     }
@@ -215,27 +289,10 @@ public class FrmMain : Form
         _conteudo.Controls.Clear();
 
         // === Cabeçalho ===
-        var header = new Panel { Dock = DockStyle.Top, Height = 84, BackColor = Tema.CorFundo };
-        var titulo = new Label
-        {
-            Text = "Cockpit operacional",
-            Dock = DockStyle.Top, Height = 36,
-            Font = Tema.FontTituloGrande,
-            ForeColor = Tema.CorTextoEscuro,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-        var sub = new Label
-        {
-            Text = "Indicadores, processos e módulos principais para operação diária",
-            Dock = DockStyle.Top, Height = 24,
-            Font = Tema.FontCorpo,
-            ForeColor = Tema.CorTextoMedio,
-            TextAlign = ContentAlignment.MiddleLeft
-        };
-        var linha = new Panel { Dock = DockStyle.Bottom, Height = 1, BackColor = Tema.CorBordaSuave };
-        header.Controls.Add(linha);
-        header.Controls.Add(sub);
-        header.Controls.Add(titulo);
+        var header = Inputs.HeaderPagina(
+            "Painel operacional",
+            "Indicadores, processos e módulos principais para operação diária",
+            84);
 
         // === KPIs ===
         _kpis = new FlowLayoutPanel

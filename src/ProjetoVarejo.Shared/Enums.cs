@@ -69,6 +69,7 @@ public enum Permissao
     EmitirNfce = 103,
     CancelarNfce = 104,
     InutilizarNfce = 105,
+    AlterarPrecoItem = 106,    // precoOverride no item de venda
     // Caixa
     AbrirCaixa = 200,
     FecharCaixa = 201,

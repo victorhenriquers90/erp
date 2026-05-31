@@ -1,0 +1,207 @@
+name: Deploy - Staging & Production
+
+# Trigger on release or manual workflow_dispatch
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/api
+
+jobs:
+  # Job 1: Validate deployment prerequisites
+  pre-deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Docker image exists
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          echo "Checking for image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$IMAGE_TAG"
+          # In real scenario, would use docker manifest inspect or similar
+
+      - name: Validate Kubernetes manifests
+        run: |
+          echo "Validating K8s manifests..."
+          # Would run kubectl --dry-run=client here if K8s is used
+
+  # Job 2: Deploy to Staging
+  deploy-staging:
+    needs: pre-deployment
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging-api.example.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Staging via Docker Compose
+        env:
+          STAGING_DOCKER_HOST: ${{ secrets.STAGING_DOCKER_HOST }}
+          STAGING_API_PORT: 5000
+        run: |
+          echo "Deploying to staging environment..."
+          # SSH into staging server and run:
+          # docker-compose pull && docker-compose up -d
+
+      - name: Run database migrations (Staging)
+        env:
+          STAGING_DB_CONNECTION: ${{ secrets.STAGING_DB_CONNECTION }}
+        run: |
+          echo "Running migrations on staging database..."
+          # Would run dotnet ef database update here against staging DB
+
+      - name: Wait for health check
+        run: |
+          echo "Waiting for staging API to be healthy..."
+          for i in {1..30}; do
+            if curl -f https://staging-api.example.com/health > /dev/null; then
+              echo "✅ Staging API is healthy"
+              exit 0
+            fi
+            echo "Attempt $i/30 - waiting..."
+            sleep 10
+          done
+          echo "❌ Staging API health check failed"
+          exit 1
+
+      - name: Run smoke tests (Staging)
+        run: |
+          echo "Running smoke tests against staging..."
+          # Would run API tests here against staging environment
+
+      - name: Notify deployment result
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: "Staging deployment ${{ job.status }}"
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+  # Job 3: Manual approval for production
+  approve-production:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production-approval
+
+    steps:
+      - name: Approve production deployment
+        run: |
+          echo "Waiting for manual approval to deploy to production..."
+          # GitHub will pause here, requiring manual approval via environment settings
+
+  # Job 4: Deploy to Production
+  deploy-production:
+    needs: approve-production
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://api.example.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Backup production database
+        env:
+          PROD_DB_CONNECTION: ${{ secrets.PROD_DB_CONNECTION }}
+        run: |
+          echo "Backing up production database..."
+          # Would create snapshot/backup here
+
+      - name: Deploy to Production (Blue-Green)
+        env:
+          PROD_DOCKER_HOST: ${{ secrets.PROD_DOCKER_HOST }}
+          PROD_API_PORT: 5000
+        run: |
+          echo "Starting blue-green deployment..."
+          # Deploy new version to 'green' containers
+          # Run health checks on green
+          # Switch traffic from blue to green
+          # Keep blue as fallback
+
+      - name: Run database migrations (Production)
+        env:
+          PROD_DB_CONNECTION: ${{ secrets.PROD_DB_CONNECTION }}
+        run: |
+          echo "Running migrations on production database..."
+          # Would run dotnet ef database update in production
+
+      - name: Wait for health check (Production)
+        run: |
+          echo "Verifying production deployment..."
+          for i in {1..30}; do
+            if curl -f https://api.example.com/health > /dev/null; then
+              echo "✅ Production API is healthy"
+              exit 0
+            fi
+            echo "Attempt $i/30 - waiting..."
+            sleep 10
+          done
+          echo "❌ Production health check failed - rolling back"
+          exit 1
+
+      - name: Smoke tests (Production)
+        run: |
+          echo "Running critical smoke tests against production..."
+          # Test authentication, main endpoints, etc.
+
+      - name: Rollback on failure
+        if: failure()
+        env:
+          PROD_DOCKER_HOST: ${{ secrets.PROD_DOCKER_HOST }}
+        run: |
+          echo "⚠️ Deployment failed - initiating rollback..."
+          # Switch traffic back to blue deployment
+          # Alert team
+
+      - name: Notify production deployment
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          text: |
+            Production deployment ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: Create deployment record
+        if: success()
+        run: |
+          echo "Recording deployment in deployment history..."
+          # Could send to a deployment tracking service
+
+  # Job 5: Post-deployment monitoring
+  post-deployment:
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Monitor application metrics
+        run: |
+          echo "Monitoring Application Insights metrics..."
+          # Check response times, error rates, etc.
+
+      - name: Verify end-to-end functionality
+        run: |
+          echo "Running end-to-end tests against production..."
+          # Full workflow tests (login, transactions, etc.)

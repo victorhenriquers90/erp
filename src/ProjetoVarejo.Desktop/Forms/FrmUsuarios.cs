@@ -1,21 +1,24 @@
-using ProjetoVarejo.Application.Services;
+﻿using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
 using ProjetoVarejo.Shared;
+using System.Collections.Generic;
 
 namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmUsuarios : Form
 {
     private readonly UsuarioService _svc;
+    private readonly FilialService _filialSvc;
     private TextBox txtBusca = null!;
-    private CheckBox chkInativos = null!;
+    private Button btnFiltroInativos = null!;
     private StyledGrid grid = null!;
     private Label lblTotal = null!;
 
-    public FrmUsuarios(UsuarioService svc)
+    public FrmUsuarios(UsuarioService svc, FilialService filialSvc)
     {
         _svc = svc;
+        _filialSvc = filialSvc;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
     }
@@ -32,50 +35,42 @@ public class FrmUsuarios : Form
         var header = Inputs.HeaderPagina("Usuarios", "Acessos, perfis operacionais e troca de senha");
         lblTotal = Inputs.SubtituloHeader(header);
 
-        var toolbar = new Panel { Dock = DockStyle.Top, Height = 64, BackColor = Tema.CorFundo, Padding = new Padding(0, 10, 0, 10) };
+        var toolbar = new Panel { Dock = DockStyle.Top, Height = 72, BackColor = Tema.CorFundo, Padding = new Padding(0, 16, 0, 16) };
         var (pnlBusca, tb) = Inputs.BarraBusca("Buscar por nome ou login...");
         pnlBusca.Dock = DockStyle.Fill;
         txtBusca = tb;
         txtBusca.KeyDown += async (s, e) => { if (e.KeyCode == Keys.Enter) await CarregarAsync(); };
 
-        chkInativos = new CheckBox
-        {
-            Text = "Inativos",
-            Dock = DockStyle.Right,
-            Width = 78,
-            Font = Tema.FontPequenaBold,
-            ForeColor = Tema.CorTextoMedio,
-            BackColor = Tema.CorFundo,
-            TextAlign = ContentAlignment.MiddleCenter,
-            Checked = true
-        };
-        chkInativos.CheckedChanged += async (s, e) => await CarregarAsync();
+        btnFiltroInativos = Botoes.Toggle("Inativos", true);
+        btnFiltroInativos.Click += async (s, e) => await CarregarAsync();
 
         var pnlBotoes = new FlowLayoutPanel
         {
             Dock = DockStyle.Right,
-            Width = 548,
-            FlowDirection = FlowDirection.RightToLeft,
+            Width = 760,
+            FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             BackColor = Tema.CorFundo
         };
 
-        var btnNovo = Botoes.PrimarioIcone("Novo usuario", Tema.IconAdicionar, 156, 40);
+        var btnNovo = Botoes.PrimarioIcone("Novo usuario", Tema.IconAdicionar, 168, 40);
         btnNovo.Click += (s, e) => Editar(null);
-        var btnEditar = Botoes.GhostIcone("Editar", Tema.IconEditar, 96, 40);
+        var btnEditar = Botoes.GhostIcone("Editar", Tema.IconEditar, 118, 40);
         btnEditar.Click += (s, e) => EditarSelecionado();
-        var btnSenha = Botoes.GhostIcone("Senha", Tema.IconConfig, 94, 40);
+        var btnSenha = Botoes.GhostIcone("Senha", Tema.IconConfig, 116, 40);
         btnSenha.Click += (s, e) => RedefinirSenha();
-        var btnAtivo = Botoes.GhostIcone("Ativar/Inativar", Tema.IconUsuario, 142, 40, Tema.CorAlerta);
+        var btnAtivo = Botoes.GhostIcone("Ativar/Inativar", Tema.IconUsuario, 178, 40, Tema.CorAlerta);
         btnAtivo.Click += async (s, e) => await AlternarAtivoAsync();
-        Botoes.ParaToolbar(btnNovo, btnEditar, btnSenha, btnAtivo);
-        pnlBotoes.Controls.Add(btnNovo);
-        pnlBotoes.Controls.Add(btnAtivo);
-        pnlBotoes.Controls.Add(btnSenha);
+        btnFiltroInativos.Width = 128;
+        Botoes.ParaPainelToolbar(pnlBotoes, btnFiltroInativos, btnEditar, btnSenha, btnAtivo, btnNovo);
+        pnlBotoes.Controls.Add(btnFiltroInativos);
         pnlBotoes.Controls.Add(btnEditar);
+        pnlBotoes.Controls.Add(btnSenha);
+        pnlBotoes.Controls.Add(btnAtivo);
+        pnlBotoes.Controls.Add(btnNovo);
 
         toolbar.Controls.Add(pnlBusca);
-        toolbar.Controls.Add(chkInativos);
+        
         toolbar.Controls.Add(pnlBotoes);
 
         var cardGrid = new Card { Dock = DockStyle.Fill, Padding = new Padding(0) };
@@ -102,7 +97,7 @@ public class FrmUsuarios : Form
 
     private async Task CarregarAsync()
     {
-        var lista = await _svc.ListarAsync(txtBusca.Text, chkInativos.Checked);
+        var lista = await _svc.ListarAsync(txtBusca.Text, Botoes.ToggleAtivo(btnFiltroInativos));
         grid.Rows.Clear();
 
         foreach (var u in lista)
@@ -137,14 +132,21 @@ public class FrmUsuarios : Form
 
     private async void Editar(int? id)
     {
-        Usuario? usuario = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Usuario { Ativo = true, Perfil = PerfilUsuario.Caixa };
-        if (usuario == null) return;
-
-        using var dlg = new FrmUsuarioEdit(usuario, _svc);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Usuario salvo.", TipoToast.Sucesso, owner: this);
+            Usuario? usuario = id.HasValue ? await _svc.BuscarPorIdAsync(id.Value) : new Usuario { Ativo = true, Perfil = PerfilUsuario.Caixa };
+            if (usuario == null) return;
+
+            using var dlg = new FrmUsuarioEdit(usuario, _svc, _filialSvc);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Usuario salvo.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 
@@ -203,23 +205,26 @@ public class FrmUsuarioEdit : Form
 {
     private readonly Usuario _usuario;
     private readonly UsuarioService _svc;
+    private readonly FilialService _filialSvc;
     private TextBox txtNome = null!, txtLogin = null!, txtSenha = null!, txtConfirmar = null!;
-    private ComboBox cboPerfil = null!;
+    private ComboBox cboPerfil = null!, cboFilial = null!;
     private CheckBox chkAtivo = null!;
+    private List<Filial> _filiais = [];
 
-    public FrmUsuarioEdit(Usuario usuario, UsuarioService svc)
+    public FrmUsuarioEdit(Usuario usuario, UsuarioService svc, FilialService filialSvc)
     {
-        _usuario = usuario;
-        _svc = svc;
+        _usuario  = usuario;
+        _svc      = svc;
+        _filialSvc = filialSvc;
         InitUi();
-        Preencher();
+        _ = PreencherAsync();
     }
 
     private void InitUi()
     {
         Text = _usuario.Id == 0 ? "Novo Usuario" : "Editar Usuario";
-        Size = new Size(680, 540);
-        MinimumSize = new Size(640, 500);
+        Size = new Size(680, 590);
+        MinimumSize = new Size(640, 550);
         StartPosition = FormStartPosition.CenterParent;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         BackColor = Tema.CorFundo;
@@ -239,6 +244,11 @@ public class FrmUsuarioEdit : Form
         cboPerfil = Inputs.CampoCombo(pnl, "Perfil", 280, y, 280);
         cboPerfil.Items.AddRange(Enum.GetValues<PerfilUsuario>().Cast<object>().ToArray());
         y += 64;
+
+        // Filial — null = acesso irrestrito (somente Admin deve deixar em branco)
+        cboFilial = Inputs.CampoCombo(pnl, "Filial (vazio = irrestrito)", 0, y, 560);
+        y += 64;
+
         chkAtivo = Inputs.CampoCheck(pnl, "Usuario ativo", 0, y, 180, true);
         y += 42;
 
@@ -278,17 +288,41 @@ public class FrmUsuarioEdit : Form
         Controls.Add(header);
     }
 
-    private void Preencher()
+    private async Task PreencherAsync()
     {
-        txtNome.Text = _usuario.Nome;
-        txtLogin.Text = _usuario.Login;
-        cboPerfil.SelectedItem = _usuario.Perfil == 0 ? PerfilUsuario.Caixa : _usuario.Perfil;
-        chkAtivo.Checked = _usuario.Ativo;
+        // Carrega filiais ativas para o ComboBox
+        _filiais = await _filialSvc.ListarAsync(incluirInativas: false);
+
+        if (!IsHandleCreated) return;
+        Invoke(() =>
+        {
+            cboFilial.Items.Clear();
+            cboFilial.Items.Add("(Acesso irrestrito)");
+            foreach (var f in _filiais)
+                cboFilial.Items.Add($"{f.Codigo} – {f.Nome}");
+
+            // Seleciona a filial atual
+            if (_usuario.FilialId.HasValue)
+            {
+                var idx = _filiais.FindIndex(f => f.Id == _usuario.FilialId.Value);
+                cboFilial.SelectedIndex = idx >= 0 ? idx + 1 : 0; // +1 porque item 0 é "(Irrestrito)"
+            }
+            else
+            {
+                cboFilial.SelectedIndex = 0;
+            }
+
+            // Preenche os demais campos agora que já temos a lista
+            txtNome.Text  = _usuario.Nome;
+            txtLogin.Text = _usuario.Login;
+            cboPerfil.SelectedItem = _usuario.Perfil == 0 ? PerfilUsuario.Caixa : _usuario.Perfil;
+            chkAtivo.Checked = _usuario.Ativo;
+        });
     }
 
     private async Task SalvarAsync()
     {
-        var senha = txtSenha.Text;
+        var senha    = txtSenha.Text;
         var confirmar = txtConfirmar.Text;
 
         if (!string.IsNullOrWhiteSpace(senha) || !string.IsNullOrWhiteSpace(confirmar) || _usuario.Id == 0)
@@ -300,10 +334,16 @@ public class FrmUsuarioEdit : Form
             }
         }
 
-        _usuario.Nome = txtNome.Text.Trim();
-        _usuario.Login = txtLogin.Text.Trim();
+        _usuario.Nome   = txtNome.Text.Trim();
+        _usuario.Login  = txtLogin.Text.Trim();
         _usuario.Perfil = (PerfilUsuario)(cboPerfil.SelectedItem ?? PerfilUsuario.Caixa);
-        _usuario.Ativo = chkAtivo.Checked;
+        _usuario.Ativo  = chkAtivo.Checked;
+
+        // Filial selecionada (índice 0 = irrestrito)
+        var filialIdx = cboFilial.SelectedIndex;
+        _usuario.FilialId = (filialIdx > 0 && filialIdx - 1 < _filiais.Count)
+            ? _filiais[filialIdx - 1].Id
+            : (int?)null;
 
         var res = await _svc.SalvarAsync(_usuario, string.IsNullOrWhiteSpace(senha) ? null : senha);
         if (!res.Sucesso)

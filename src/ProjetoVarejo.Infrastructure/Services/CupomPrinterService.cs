@@ -1,0 +1,159 @@
+using ProjetoVarejo.Application.Contracts.Services;
+using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Domain.Enums;
+using ProjetoVarejo.Infrastructure.Nfce;
+using ProjetoVarejo.Infrastructure.Printing;
+using ProjetoVarejo.Shared;
+
+namespace ProjetoVarejo.Infrastructure.Services;
+
+/// <summary>
+/// Prints sale receipts (cupom fiscal / DANFE NFC-e) on ESC/POS thermal printers.
+/// Lives in Infrastructure because it depends on EscPosPrinter, EscPosBuilder, and NFC-e QR-code helpers.
+/// </summary>
+public class CupomPrinterService : ICupomPrinterService
+{
+    public async Task<Result> ImprimirVendaAsync(Venda venda, EmpresaConfig empresa, NotaFiscal? nota = null)
+    {
+        try
+        {
+            var cfg = new ImpressoraConfig
+            {
+                Tipo = (TipoImpressora)empresa.ImpressoraTipo,
+                Destino = empresa.ImpressoraDestino,
+                Porta = empresa.ImpressoraPorta,
+                Baud = empresa.ImpressoraBaud,
+                Colunas = empresa.ImpressoraColunas
+            };
+
+            if (string.IsNullOrWhiteSpace(cfg.Destino))
+                return Result.Falha("Impressora não configurada (Menu → Configurações → Empresa).");
+
+            var bytes = ConstruirCupom(venda, empresa, nota, cfg.Colunas);
+            await EscPosPrinter.ImprimirAsync(bytes, cfg);
+            return Result.Ok();
+        }
+        catch (Exception ex)
+        {
+            return Result.Falha("Erro ao imprimir: " + ex.Message);
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // Builder
+    // ──────────────────────────────────────────────────────────────────────────
+
+    private static byte[] ConstruirCupom(Venda venda, EmpresaConfig empresa, NotaFiscal? nota, int colunas)
+    {
+        var b = new EscPosBuilder();
+
+        // Cabeçalho empresa
+        b.Centro().Negrito(true).Linha(empresa.NomeFantasia ?? empresa.RazaoSocial).Negrito(false);
+        b.Linha(empresa.RazaoSocial);
+        b.Linha($"CNPJ: {FormatarCnpj(empresa.Cnpj)}");
+        b.Linha($"IE: {empresa.InscricaoEstadual}");
+        b.Linha($"{empresa.Logradouro}, {empresa.Numero}");
+        b.Linha($"{empresa.Bairro} - {empresa.Cidade}/{empresa.Uf}");
+        if (!string.IsNullOrWhiteSpace(empresa.Telefone)) b.Linha($"Fone: {empresa.Telefone}");
+        b.Pular();
+
+        // Identificação do documento
+        if (nota != null && nota.Status == StatusNotaFiscal.Autorizada)
+        {
+            b.Negrito(true).Linha($"DANFE NFC-e nº {nota.Numero} série {nota.Serie}").Negrito(false);
+            if (empresa.AmbienteHomologacao)
+                b.Negrito(true).Linha("*** HOMOLOGAÇÃO - SEM VALOR FISCAL ***").Negrito(false);
+        }
+        else
+        {
+            b.Negrito(true).Linha("CUPOM NÃO FISCAL").Negrito(false);
+        }
+        b.Linha($"Venda: {venda.Numero}   {venda.FinalizadaEm:dd/MM/yyyy HH:mm}");
+        b.Separador(colunas);
+
+        // Itens
+        b.Esquerda();
+        b.Linha("CÓD DESCRIÇÃO");
+        b.Linha("  QTD x UN.    VL UN     TOTAL");
+        b.Separador(colunas);
+        foreach (var item in venda.Itens)
+        {
+            var desc = item.Produto?.Descricao ?? $"Produto {item.ProdutoId}";
+            if (desc.Length > colunas - 5) desc = desc[..(colunas - 5)];
+            b.Linha($"{Truncar(item.Produto?.Codigo ?? "", 4)} {desc}");
+            b.Linha($"  {item.Quantidade,8:N3} x {item.PrecoUnitario,9:N2}   {item.Total,10:N2}");
+        }
+        b.Separador(colunas);
+
+        // Totais
+        b.ColunaDupla("SUBTOTAL", venda.SubTotal.ToString("N2"), colunas);
+        if (venda.Desconto > 0)
+            b.ColunaDupla("DESCONTO", "-" + venda.Desconto.ToString("N2"), colunas);
+        b.Negrito(true);
+        b.ColunaDupla("TOTAL R$", venda.Total.ToString("N2"), colunas);
+        b.Negrito(false);
+        b.Pular();
+
+        // Pagamentos
+        b.Linha("FORMAS DE PAGAMENTO:");
+        foreach (var p in venda.Pagamentos)
+            b.ColunaDupla(p.FormaPagamento.ToString(), p.Valor.ToString("N2"), colunas);
+        if (venda.Troco > 0)
+            b.ColunaDupla("TROCO", venda.Troco.ToString("N2"), colunas);
+        b.Pular();
+
+        // Dados fiscais NFC-e (chave + QR-code)
+        if (nota != null && nota.Status == StatusNotaFiscal.Autorizada && !string.IsNullOrWhiteSpace(nota.ChaveAcesso))
+        {
+            b.Separador(colunas);
+            b.Centro();
+            b.Linha("Consulte pela chave de acesso em:");
+            b.Linha(QrCodeNfce.UrlConsulta(empresa.AmbienteHomologacao));
+            b.Pular();
+            b.Linha("CHAVE DE ACESSO:");
+            b.Linha(FormatarChave(nota.ChaveAcesso));
+            if (!string.IsNullOrWhiteSpace(nota.Protocolo))
+                b.Linha($"Protocolo: {nota.Protocolo}");
+            b.Pular();
+
+            try
+            {
+                var urlQr = QrCodeNfce.GerarUrl(
+                    nota.ChaveAcesso, empresa.AmbienteHomologacao,
+                    empresa.CscId, empresa.CscToken,
+                    nota.AutorizadaEm, venda.Total);
+                b.QrCode(urlQr, 6);
+                b.Pular();
+            }
+            catch { /* QR-code é opcional, não falha a impressão */ }
+        }
+
+        b.Centro().Linha("Obrigado e volte sempre!");
+        b.Pular(3);
+        b.Cortar();
+        return b.Build();
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // Helpers
+    // ──────────────────────────────────────────────────────────────────────────
+
+    private static string Truncar(string s, int n) => s.Length > n ? s[..n] : s.PadRight(n);
+
+    private static string FormatarCnpj(string cnpj)
+    {
+        var d = ChaveAcessoNfce.SoNumeros(cnpj);
+        return d.Length == 14
+            ? $"{d[..2]}.{d.Substring(2, 3)}.{d.Substring(5, 3)}/{d.Substring(8, 4)}-{d.Substring(12, 2)}"
+            : cnpj;
+    }
+
+    private static string FormatarChave(string chave)
+    {
+        if (chave.Length != 44) return chave;
+        var sb = new System.Text.StringBuilder();
+        for (int i = 0; i < chave.Length; i += 4)
+            sb.Append(chave.Substring(i, Math.Min(4, chave.Length - i))).Append(' ');
+        return sb.ToString().Trim();
+    }
+}

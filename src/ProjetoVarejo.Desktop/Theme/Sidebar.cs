@@ -55,7 +55,7 @@ public class Sidebar : Panel
             };
             var subtitulo = new Label
             {
-                Text = "ERP de varejo",
+                Text = Tema.NegocioTagline,
                 Dock = DockStyle.Top,
                 Height = 20,
                 Font = Tema.FontPequena,

@@ -1,9 +1,9 @@
+using ProjetoVarejo.Application.Contracts.Repositories;
 using System.Globalization;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
 
 namespace ProjetoVarejo.Application.Services;
@@ -11,12 +11,12 @@ namespace ProjetoVarejo.Application.Services;
 public class NfeImporterService
 {
     private static readonly XNamespace Ns = "http://www.portalfiscal.inf.br/nfe";
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly SessaoApp _sessao;
 
-    public NfeImporterService(AppDbContext db, SessaoApp sessao)
+    public NfeImporterService(IUnitOfWork unitOfWork, SessaoApp sessao)
     {
-        _db = db; _sessao = sessao;
+        _unitOfWork = unitOfWork; _sessao = sessao;
     }
 
     public class ItemImportacao
@@ -73,7 +73,7 @@ public class NfeImporterService
             };
 
             if (!string.IsNullOrWhiteSpace(previa.CnpjEmitente))
-                previa.FornecedorExistente = await _db.Fornecedores
+                previa.FornecedorExistente = await _unitOfWork.Fornecedores.Query()
                     .FirstOrDefaultAsync(f => f.Cnpj == previa.CnpjEmitente);
 
             foreach (var det in infNFe.Elements(Ns + "det"))
@@ -127,7 +127,7 @@ public class NfeImporterService
     {
         if (!string.IsNullOrWhiteSpace(ean))
         {
-            var p = await _db.Produtos.FirstOrDefaultAsync(x => x.CodigoBarras == ean);
+            var p = await _unitOfWork.Produtos.Query().FirstOrDefaultAsync(x => x.CodigoBarras == ean);
             if (p != null) return p;
         }
         return null;
@@ -138,12 +138,12 @@ public class NfeImporterService
         if (_sessao.UsuarioLogado == null) return Result.Falha<int>("Usuário não autenticado.");
         if (!previa.Itens.Any()) return Result.Falha<int>("XML sem itens.");
 
-        var jaImportada = await _db.MovimentosEstoque.AnyAsync(m =>
+        var jaImportada = await _unitOfWork.MovimentosEstoque.Query().AnyAsync(m =>
             m.Documento != null && m.Documento.Contains(previa.ChaveAcesso));
         if (jaImportada)
             return Result.Falha<int>("Este XML já foi importado anteriormente (movimentação existente com a chave).");
 
-        using var tx = await _db.Database.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync();
         try
         {
             var fornecedor = previa.FornecedorExistente;
@@ -154,8 +154,8 @@ public class NfeImporterService
                     RazaoSocial = previa.RazaoSocialEmitente,
                     Cnpj = previa.CnpjEmitente
                 };
-                _db.Fornecedores.Add(fornecedor);
-                await _db.SaveChangesAsync();
+                await _unitOfWork.Fornecedores.InsertAsync(fornecedor);
+                await _unitOfWork.SaveChangesAsync();
             }
 
             int produtosCriados = 0;
@@ -163,7 +163,7 @@ public class NfeImporterService
             foreach (var item in previa.Itens)
             {
                 Produto? produto = item.ProdutoIdExistente.HasValue
-                    ? await _db.Produtos.FindAsync(item.ProdutoIdExistente.Value)
+                    ? await _unitOfWork.Produtos.Query().FirstOrDefaultAsync(p => p.Id == item.ProdutoIdExistente.Value)
                     : null;
 
                 if (produto == null)
@@ -182,8 +182,8 @@ public class NfeImporterService
                         PrecoVenda = Math.Round(item.ValorUnitario * 1.30m, 2),
                         ControlaEstoque = true
                     };
-                    _db.Produtos.Add(produto);
-                    await _db.SaveChangesAsync();
+                    await _unitOfWork.Produtos.InsertAsync(produto);
+                    await _unitOfWork.SaveChangesAsync();
                     produtosCriados++;
                 }
 
@@ -192,7 +192,7 @@ public class NfeImporterService
                 produto.PrecoCusto = item.ValorUnitario;
                 produto.AtualizadoEm = DateTime.Now;
 
-                _db.MovimentosEstoque.Add(new MovimentoEstoque
+                await _unitOfWork.MovimentosEstoque.InsertAsync(new MovimentoEstoque
                 {
                     ProdutoId = produto.Id,
                     Tipo = TipoMovimentoEstoque.Entrada,
@@ -214,7 +214,7 @@ public class NfeImporterService
                 {
                     for (int i = 0; i < previa.ValoresDuplicatas.Count; i++)
                     {
-                        _db.ContasFinanceiras.Add(new ContaFinanceira
+                        await _unitOfWork.ContasFinanceiras.InsertAsync(new ContaFinanceira
                         {
                             Tipo = TipoConta.Pagar,
                             Descricao = $"NF-e {previa.Numero} - {fornecedor.RazaoSocial} - parcela {i + 1}/{previa.ValoresDuplicatas.Count}",
@@ -228,7 +228,7 @@ public class NfeImporterService
                 }
                 else
                 {
-                    _db.ContasFinanceiras.Add(new ContaFinanceira
+                    await _unitOfWork.ContasFinanceiras.InsertAsync(new ContaFinanceira
                     {
                         Tipo = TipoConta.Pagar,
                         Descricao = $"NF-e {previa.Numero} - {fornecedor.RazaoSocial}",
@@ -241,13 +241,13 @@ public class NfeImporterService
                 }
             }
 
-            await _db.SaveChangesAsync();
-            await tx.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitAsync();
             return Result.Ok(movimentosCriados);
         }
         catch (Exception ex)
         {
-            await tx.RollbackAsync();
+            await _unitOfWork.RollbackAsync();
             return Result.Falha<int>("Falha na importação: " + ex.Message);
         }
     }

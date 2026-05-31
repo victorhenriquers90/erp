@@ -1,18 +1,18 @@
-using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoVarejo.Application.Services;
 
 public class FornecedorService
 {
-    private readonly AppDbContext _db;
-    public FornecedorService(AppDbContext db) => _db = db;
+    private readonly IUnitOfWork _unitOfWork;
+    public FornecedorService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
     public Task<List<Fornecedor>> ListarAsync(string? filtro = null)
     {
-        var q = _db.Fornecedores.AsQueryable();
+        var q = _unitOfWork.Fornecedores.Query().AsQueryable();
         if (!string.IsNullOrWhiteSpace(filtro))
             q = q.Where(f => f.RazaoSocial.Contains(filtro) ||
                             (f.NomeFantasia != null && f.NomeFantasia.Contains(filtro)) ||
@@ -21,7 +21,7 @@ public class FornecedorService
     }
 
     public Task<Fornecedor?> BuscarPorIdAsync(int id) =>
-        _db.Fornecedores.FirstOrDefaultAsync(f => f.Id == id);
+        _unitOfWork.Fornecedores.Query().FirstOrDefaultAsync(f => f.Id == id);
 
     public async Task<Result<Fornecedor>> SalvarAsync(Fornecedor f)
     {
@@ -30,22 +30,23 @@ public class FornecedorService
         if (string.IsNullOrWhiteSpace(f.Cnpj))
             return Result.Falha<Fornecedor>("CNPJ é obrigatório.");
 
-        var duplicado = await _db.Fornecedores.AnyAsync(x => x.Cnpj == f.Cnpj && x.Id != f.Id);
+        var duplicado = await _unitOfWork.Fornecedores.Query().AnyAsync(x => x.Cnpj == f.Cnpj && x.Id != f.Id);
         if (duplicado) return Result.Falha<Fornecedor>("CNPJ já cadastrado.");
 
-        if (f.Id == 0) _db.Fornecedores.Add(f);
-        else { f.AtualizadoEm = DateTime.Now; _db.Fornecedores.Update(f); }
-        await _db.SaveChangesAsync();
+        if (f.Id == 0) await _unitOfWork.Fornecedores.InsertAsync(f);
+        else { f.AtualizadoEm = DateTime.Now; await _unitOfWork.Fornecedores.UpdateAsync(f); }
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(f);
     }
 
     public async Task<Result> ExcluirAsync(int id)
     {
-        var f = await _db.Fornecedores.FindAsync(id);
+        var f = await _unitOfWork.Fornecedores.GetByIdAsync(id);
         if (f == null) return Result.Falha("Fornecedor não encontrado.");
         f.Ativo = false;
         f.AtualizadoEm = DateTime.Now;
-        await _db.SaveChangesAsync();
+        await _unitOfWork.Fornecedores.UpdateAsync(f);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
     }
 }

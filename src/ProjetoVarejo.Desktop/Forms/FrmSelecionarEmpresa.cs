@@ -1,4 +1,4 @@
-using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,13 +7,14 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmSelecionarEmpresa : Form
 {
-    private readonly NfceService _svc;
+    private readonly INfceService _svc;
     private readonly SessaoApp _sessao;
     private FlowLayoutPanel pnlEmpresas = null!;
 
-    public FrmSelecionarEmpresa(NfceService svc, SessaoApp sessao)
+    public FrmSelecionarEmpresa(INfceService svc, SessaoApp sessao)
     {
-        _svc = svc; _sessao = sessao;
+        _svc = svc;
+        _sessao = sessao;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
     }

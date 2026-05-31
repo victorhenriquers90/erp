@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,13 +8,13 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmProdutos : Form
 {
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly CategoriaService _categorias;
     private TextBox txtBusca = null!;
     private StyledGrid grid = null!;
     private Label lblTotal = null!;
 
-    public FrmProdutos(ProdutoService produtos, CategoriaService categorias)
+    public FrmProdutos(IProdutoService produtos, CategoriaService categorias)
     {
         _produtos = produtos;
         _categorias = categorias;
@@ -25,6 +26,7 @@ public class FrmProdutos : Form
     {
         Text = "Produtos";
         Size = new Size(1200, 700);
+        MinimumSize = new Size(1080, 620);
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Tema.CorFundo;
         Padding = new Padding(Tema.EspacamentoGrande);
@@ -35,59 +37,31 @@ public class FrmProdutos : Form
         // === Toolbar ===
         var toolbar = new Panel { Dock = DockStyle.Top, Height = 64, BackColor = Tema.CorFundo, Padding = new Padding(0, 10, 0, 10) };
 
-        var pnlBusca = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard };
-        pnlBusca.Paint += (s, e) =>
-        {
-            var g = e.Graphics;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            using var path = Tema.PathArredondado(new Rectangle(0, 0, pnlBusca.Width - 1, pnlBusca.Height - 1), 6);
-            using var brush = new SolidBrush(Tema.CorCard);
-            g.FillPath(brush, path);
-            using var pen = new Pen(Tema.CorBorda, 1);
-            g.DrawPath(pen, path);
-        };
-        var lblBuscaIcone = new Label
-        {
-            Text = Tema.IconBusca,
-            Dock = DockStyle.Left, Width = 40,
-            Font = new Font("Segoe MDL2 Assets", 12),
-            ForeColor = Tema.CorTextoMedio,
-            TextAlign = ContentAlignment.MiddleCenter,
-            BackColor = Color.Transparent
-        };
-        txtBusca = new TextBox
-        {
-            Dock = DockStyle.Fill,
-            BorderStyle = BorderStyle.None,
-            Font = new Font(Tema.FontFamily, 10),
-            BackColor = Tema.CorCard,
-            PlaceholderText = "Buscar por código, código de barras ou descrição..."
-        };
+        // Barra de busca — usa Region para clip correto (sem retângulo duplo)
+        var (pnlBusca, tb) = Inputs.BarraBusca("Buscar por código, código de barras ou descrição...");
+        pnlBusca.Dock = DockStyle.Fill;
+        txtBusca = tb;
         txtBusca.KeyDown += async (s, e) => { if (e.KeyCode == Keys.Enter) await CarregarAsync(); };
-        var inner = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard, Padding = new Padding(0, 12, 14, 0) };
-        inner.Controls.Add(txtBusca);
-        pnlBusca.Controls.Add(inner);
-        pnlBusca.Controls.Add(lblBuscaIcone);
 
         var pnlBotoes = new FlowLayoutPanel
         {
             Dock = DockStyle.Right,
-            Width = 390,
-            FlowDirection = FlowDirection.RightToLeft,
+            Width = 456,
+            FlowDirection = FlowDirection.LeftToRight,
             WrapContents = false,
             BackColor = Tema.CorFundo
         };
-        var btnNovo = Botoes.PrimarioIcone("Novo produto", "\uE710", 160, 40);
+        var btnNovo = Botoes.PrimarioIcone("Novo produto", "\uE710", 174, 40);
         btnNovo.Font = new Font(Tema.FontFamily, 9, FontStyle.Bold);
         btnNovo.Click += (s, e) => EditarProduto(null);
-        var btnEditar = Botoes.GhostIcone("Editar", "\uE70F", 96, 40);
+        var btnEditar = Botoes.GhostIcone("Editar", "\uE70F", 118, 40);
         btnEditar.Click += (s, e) => EditarSelecionado();
-        var btnExcluir = Botoes.GhostIcone("Excluir", "\uE74D", 104, 40, Tema.CorErro);
+        var btnExcluir = Botoes.GhostIcone("Excluir", "\uE74D", 124, 40, Tema.CorErro);
         btnExcluir.Click += async (s, e) => await ExcluirSelecionadoAsync();
-        Botoes.ParaToolbar(btnNovo, btnEditar, btnExcluir);
-        pnlBotoes.Controls.Add(btnNovo);
-        pnlBotoes.Controls.Add(btnEditar);
+        Botoes.ParaPainelToolbar(pnlBotoes, btnExcluir, btnEditar, btnNovo);
         pnlBotoes.Controls.Add(btnExcluir);
+        pnlBotoes.Controls.Add(btnEditar);
+        pnlBotoes.Controls.Add(btnNovo);
 
         toolbar.Controls.Add(pnlBusca);
         toolbar.Controls.Add(pnlBotoes);
@@ -156,13 +130,20 @@ public class FrmProdutos : Form
 
     private async void EditarProduto(int? id)
     {
-        Produto? produto = id.HasValue ? await _produtos.BuscarPorIdAsync(id.Value) : new Produto();
-        if (produto == null) return;
-        using var dlg = new FrmProdutoEdit(produto, _produtos, _categorias);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            await CarregarAsync();
-            Toast.Mostrar("Produto salvo com sucesso.", TipoToast.Sucesso, owner: this);
+            Produto? produto = id.HasValue ? await _produtos.BuscarPorIdAsync(id.Value) : new Produto();
+            if (produto == null) return;
+            using var dlg = new FrmProdutoEdit(produto, _produtos, _categorias);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Produto salvo com sucesso.", TipoToast.Sucesso, owner: this);
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 
@@ -190,7 +171,7 @@ public class FrmProdutos : Form
 public class FrmProdutoEdit : Form
 {
     private readonly Produto _produto;
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly CategoriaService _categorias;
 
     private TextBox txtCodigo = null!, txtBarras = null!, txtDescricao = null!;
@@ -199,7 +180,7 @@ public class FrmProdutoEdit : Form
     private TextBox txtNcm = null!, txtCfop = null!, txtCstIcms = null!, txtAliqIcms = null!;
     private CheckBox chkAtivo = null!, chkControla = null!;
 
-    public FrmProdutoEdit(Produto produto, ProdutoService produtos, CategoriaService categorias)
+    public FrmProdutoEdit(Produto produto, IProdutoService produtos, CategoriaService categorias)
     {
         _produto = produto;
         _produtos = produtos;
@@ -233,6 +214,9 @@ public class FrmProdutoEdit : Form
         var card = new Card { Dock = DockStyle.Fill, Padding = new Padding(18) };
 
         var pnl = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard, AutoScroll = true };
+        // DoubleBuffer explícito no painel scrollável evita área preta com Card transparente
+        typeof(Panel).GetMethod("SetStyle", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            ?.Invoke(pnl, new object[] { ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true });
 
         int y = 0;
         AddSecao(pnl, "Identificação", ref y);
@@ -313,7 +297,7 @@ public class FrmProdutoEdit : Form
         });
         tb = new TextBox
         {
-            Left = left, Top = top + 20, Width = width, Height = 28,
+            Left = left, Top = top + 20, Width = width,
             Font = new Font(Tema.FontFamily, 10),
             BorderStyle = BorderStyle.FixedSingle,
             BackColor = Tema.Branco,

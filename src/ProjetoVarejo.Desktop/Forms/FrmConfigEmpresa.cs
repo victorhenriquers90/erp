@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -6,7 +7,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmConfigEmpresa : Form
 {
-    private readonly NfceService _svc;
+    private readonly INfceService _svc;
     private EmpresaConfig _emp = null!;
 
     private TextBox txtRazao = null!, txtFantasia = null!, txtCnpj = null!, txtIe = null!, txtIm = null!;
@@ -23,7 +24,7 @@ public class FrmConfigEmpresa : Form
 
     private TabControl tabs = null!;
 
-    public FrmConfigEmpresa(NfceService svc)
+    public FrmConfigEmpresa(INfceService svc)
     {
         _svc = svc;
         InitUi();
@@ -45,7 +46,7 @@ public class FrmConfigEmpresa : Form
             Dock = DockStyle.Fill,
             DrawMode = TabDrawMode.OwnerDrawFixed,
             SizeMode = TabSizeMode.Fixed,
-            ItemSize = new Size(180, 40),
+            ItemSize = new Size(200, 40),
             Appearance = TabAppearance.Normal
         };
         EstilizarTabs(tabs);
@@ -222,23 +223,7 @@ public class FrmConfigEmpresa : Form
 
     private void EstilizarTabs(TabControl tc)
     {
-        tc.DrawItem += (s, e) =>
-        {
-            var g = e.Graphics;
-            var tab = tc.TabPages[e.Index];
-            var rect = tc.GetTabRect(e.Index);
-            var selected = e.Index == tc.SelectedIndex;
-            var bg = selected ? Tema.CorCard : Tema.CorFundo;
-            var fg = selected ? Tema.CorPrimaria : Tema.CorTextoMedio;
-            using (var brush = new SolidBrush(bg)) g.FillRectangle(brush, rect);
-            if (selected)
-            {
-                using var line = new SolidBrush(Tema.CorPrimaria);
-                g.FillRectangle(line, rect.X, rect.Bottom - 3, rect.Width, 3);
-            }
-            TextRenderer.DrawText(g, tab.Text, new Font(Tema.FontFamily, 10, selected ? FontStyle.Bold : FontStyle.Regular),
-                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-        };
+        Abas.Modernizar(tc);
     }
 
     private async Task CarregarAsync()
@@ -341,8 +326,8 @@ public class FrmConfigEmpresa : Form
         _emp.PixCidade = txtPixCidade.Text.Trim();
 
         var res = await _svc.SalvarEmpresaAsync(_emp);
-        if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro", TipoToast.Erro, owner: this); return; }
-        Toast.Mostrar("Configurações salvas.", TipoToast.Sucesso, owner: this);
+        if (!res.Sucesso) { Toast.Mostrar(res.Erro ?? "Erro ao salvar", TipoToast.Erro, owner: this); return; }
+        Toast.Mostrar("Configurações salvas com sucesso!", TipoToast.Sucesso, owner: this);
         DialogResult = DialogResult.OK;
         Close();
     }

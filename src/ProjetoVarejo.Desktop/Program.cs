@@ -1,14 +1,24 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjetoVarejo.Application.Auditing;
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Application.Contracts.Services;
+using ProjetoVarejo.Application.Logging;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
+using ProjetoVarejo.Application.Validators;
 using ProjetoVarejo.Desktop.Forms;
+using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Infrastructure.Backup;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Infrastructure.Nfce;
+using ProjetoVarejo.Infrastructure.Repositories;
+using ProjetoVarejo.Infrastructure.Services;
+using Serilog;
 using WinFormsApp = System.Windows.Forms.Application;
 
 namespace ProjetoVarejo.Desktop;
@@ -17,60 +27,150 @@ static class Program
 {
     public static IServiceProvider Services { get; private set; } = null!;
 
+    /// <summary>Sincroniza MaterialSkinManager com Tema.CorPrimaria atual.</summary>
+    internal static void AplicarCorMaterial()
+    {
+        var skin = ReaLTaiizor.Manager.MaterialSkinManager.Instance;
+        skin.ColorScheme = new ReaLTaiizor.Colors.MaterialColorScheme(
+            Tema.CorPrimaria.ToArgb(),
+            Tema.CorPrimariaDark.ToArgb(),
+            Tema.CorPrimariaLight.ToArgb(),
+            Tema.CorInfo.ToArgb(),
+            Tema.Branco.ToArgb());
+    }
+
     [STAThread]
     static void Main()
     {
         ApplicationConfiguration.Initialize();
 
+        // ReaLTaiizor Material Design — deve ser configurado antes de qualquer Form
+        // EnforceBackcolorOnAllComponents = false → impede o MaterialSkin de sobrescrever
+        // BackColor de controles não-Material (impede área preta em Panels/Cards)
+        var skin = ReaLTaiizor.Manager.MaterialSkinManager.Instance;
+        skin.EnforceBackcolorOnAllComponents = false;
+        skin.Theme = ReaLTaiizor.Manager.MaterialSkinManager.Themes.LIGHT;
+        AplicarCorMaterial();
+
         WinFormsApp.ThreadException += (s, e) =>
         {
-            File.WriteAllText("startup_error.log", $"ThreadException:\n{e.Exception}\n");
+            Log.Error(e.Exception, "ThreadException não tratada");
             MessageBox.Show("Erro: " + e.Exception.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         };
         AppDomain.CurrentDomain.UnhandledException += (s, e) =>
         {
-            File.WriteAllText("startup_error.log", $"UnhandledException:\n{e.ExceptionObject}\n");
+            Log.Fatal((Exception)e.ExceptionObject, "UnhandledException não tratada");
         };
 
         try
         {
-            var config = new ConfigurationBuilder()
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+
+            // ── Carrega configuração ──────────────────────────────────────────
+            IConfiguration CarregarConfig() => new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .Build();
+
+            var config = CarregarConfig();
+            var connectionString = config.GetConnectionString("Default") ?? string.Empty;
+
+            // ── Teste de conexão em modo cliente ──────────────────────────────
+            // Modo cliente = connection string aponta para IP/hostname remoto.
+            // Se a conexão falhar, abre FrmConexaoServidor para o usuário corrigir
+            // antes de montar o DI e tentar inicializar o banco.
+            if (FrmConexaoServidor.IsModoCliente(connectionString) &&
+                !FrmConexaoServidor.TestarConexao(connectionString, timeoutSegundos: 5))
+            {
+                bool conectado = false;
+                while (!conectado)
+                {
+                    using var frmConn = new FrmConexaoServidor(connectionString);
+                    var resultado = frmConn.ShowDialog();
+
+                    if (resultado != DialogResult.OK)
+                    {
+                        MessageBox.Show(
+                            "Não é possível iniciar o sistema sem conexão com o servidor.\n\nO aplicativo será encerrado.",
+                            "Conexão Obrigatória",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Recarrega configuração com o novo appsettings.json salvo pelo form
+                    config           = CarregarConfig();
+                    connectionString = config.GetConnectionString("Default") ?? string.Empty;
+
+                    // Valida de novo (o form já testou, mas confirma antes de continuar)
+                    conectado = FrmConexaoServidor.TestarConexao(connectionString, timeoutSegundos: 5);
+                }
+            }
+
+            // Configurar Serilog PRIMEIRO antes de qualquer outra coisa
+            LoggingConfiguration.ConfigureSerilog(environment, connectionString);
+
+            Log.Information(LogTemplates.AplicacaoIniciada, "1.0.0", environment);
 
             var sc = new ServiceCollection();
             sc.AddSingleton<IConfiguration>(config);
             sc.AddSingleton<SessaoApp>();
             sc.AddScoped<AuditSaveChangesInterceptor>();
             sc.AddDbContext<AppDbContext>((sp, opt) =>
-                opt.UseSqlServer(config.GetConnectionString("Default"))
+                opt.UseSqlServer(config.GetConnectionString("Default"),
+                    sqlOpt => sqlOpt.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(3),
+                        errorNumbersToAdd: null))
                    .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
-            sc.AddScoped<AutenticacaoService>();
-            sc.AddScoped<ProdutoService>();
+
+            // 🏗️ FASE 2: Dependency Inversion - Repository Pattern + Unit of Work
+            sc.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // PHASE 5: FluentValidation - Centralized Validation
+            sc.AddScoped<IValidator<Usuario>, UsuarioValidator>();
+            sc.AddScoped<IValidator<Produto>, ProdutoValidator>();
+            sc.AddScoped<IValidator<Venda>, VendaValidator>();
+            sc.AddScoped<IValidator<ItemVenda>, ItemVendaValidator>();
+            sc.AddScoped<IValidator<PagamentoVenda>, PagamentoVendaValidator>();
+            sc.AddScoped<IValidator<CaixaSessao>, CaixaSessionValidator>();
+            sc.AddScoped<IValidator<NotaFiscal>, NotaFiscalValidator>();
+            sc.AddScoped<IValidator<Categoria>, CategoriaValidator>();
+
+            // PHASE 3: Service Interfaces for Abstraction
+            sc.AddScoped<IAutenticacaoService, AutenticacaoService>();
+            sc.AddScoped<IProdutoService, ProdutoService>();
+            sc.AddScoped<IEstoqueService, EstoqueService>();
+            sc.AddScoped<IVendaService, VendaService>();
+            sc.AddScoped<IFinanceiroService, FinanceiroService>();
+            sc.AddScoped<ICaixaService, CaixaService>();
+            sc.AddScoped<IRelatorioService, RelatorioService>();
+            sc.AddScoped<INfceService, NfceService>(); // PHASE 2.5-3: NfceService (Infrastructure.Services)
+            sc.AddScoped<ICupomPrinterService, CupomPrinterService>(); // PHASE 2.5: CupomPrinterService (Infrastructure.Services)
+
+            // Services without interfaces (can be added in future phases)
             sc.AddScoped<ClienteService>();
             sc.AddScoped<FornecedorService>();
             sc.AddScoped<CategoriaService>();
-            sc.AddScoped<EstoqueService>();
-            sc.AddScoped<VendaService>();
-            sc.AddScoped<FinanceiroService>();
-            sc.AddScoped<CaixaService>();
-            sc.AddScoped<RelatorioService>();
             sc.AddScoped<ChecklistProducaoService>();
             sc.AddScoped<UsuarioService>();
             sc.AddScoped<ProducaoGuardService>();
             sc.AddSingleton<ImplantacaoService>();
-            sc.AddSingleton<CupomPrinterService>();
             sc.AddScoped<BackupService>();
             sc.AddScoped<NfeImporterService>();
             sc.AddScoped<PermissaoService>();
             sc.AddScoped<AuditLogService>();
+            sc.AddScoped<FilialService>();
+
+            // PHASE 2.5-3: NfceService Infrastructure Components (NFC-e Generation & Signing)
             sc.AddSingleton<NfceXmlGenerator>();
             sc.AddSingleton<NfceAssinador>();
             sc.AddSingleton<SefazSpClient>();
             sc.AddSingleton<NfceCancelamentoBuilder>();
             sc.AddSingleton<NfceInutilizacaoBuilder>();
-            sc.AddScoped<NfceService>();
+            // NfceService itself registered above with INfceService interface
+
             sc.AddScoped<ConfiguracaoNegocioService>();
             sc.AddScoped<ValidadorSetupInicial>();
 
@@ -93,8 +193,10 @@ static class Program
             sc.AddTransient<FrmAuditoria>();
             sc.AddTransient<FrmChecklistProducao>();
             sc.AddTransient<FrmUsuarios>();
+            sc.AddTransient<FrmFiliais>();
             sc.AddTransient<FrmImplantacao>();
             sc.AddTransient<FrmGerenciadorModulos>();
+            sc.AddTransient<FrmFechamentoDia>();
 
             Services = sc.BuildServiceProvider();
 
@@ -104,31 +206,62 @@ static class Program
                 DbInitializer.Inicializar(db);
             }
 
+            // O instalador cria firstrun.flag na pasta do app.
+            // Enquanto esse arquivo existir, o wizard de configuração é exibido
+            // independente do estado do banco — cobre fresh installs e reinstalações.
+            var flagFile = Path.Combine(AppContext.BaseDirectory, "firstrun.flag");
+            var primeiraVez = File.Exists(flagFile);
+
             // Verificar se precisa fazer setup inicial
             using (var setupScope = Services.CreateScope())
             {
                 var validador = setupScope.ServiceProvider.GetRequiredService<ValidadorSetupInicial>();
-                var precisaSetup = validador.PrecisaDeSetupInicial().GetAwaiter().GetResult();
+                var naoConfigurado = validador.PrecisaDeSetupInicial().GetAwaiter().GetResult();
 
-                if (precisaSetup)
+                if (primeiraVez || naoConfigurado)
                 {
                     var frmSetup = setupScope.ServiceProvider.GetRequiredService<FrmConfiguracao>();
                     frmSetup.ShowDialog();
 
+                    // Apagar a flag independente do resultado — não queremos mostrar
+                    // de novo na próxima abertura
+                    try { if (File.Exists(flagFile)) File.Delete(flagFile); } catch { }
+
                     if (frmSetup.DialogResult != DialogResult.OK)
                     {
-                        // Usuário cancelou o setup
-                        MessageBox.Show(
-                            "O sistema não foi configurado. A aplicação será encerrada.",
-                            "Setup Cancelado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Warning);
-                        return;
+                        if (naoConfigurado)
+                        {
+                            // Sem nenhuma configuração válida — não tem como continuar
+                            MessageBox.Show(
+                                "O sistema não foi configurado. A aplicação será encerrada.",
+                                "Setup Cancelado",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                            return;
+                        }
+                        // Reinstalação: usuário cancelou mas já havia config no banco — continua normalmente
                     }
                 }
             }
 
-            _ = Task.Run(async () =>
+            // Aplicar tema visual do segmento configurado.
+            // Deve acontecer APÓS o wizard (que pode ter salvo um segmento novo)
+            // e ANTES de qualquer Form ser criado para que as cores sejam corretas.
+            using (var themeScope = Services.CreateScope())
+            {
+                try
+                {
+                    var configSvc = themeScope.ServiceProvider.GetRequiredService<ConfiguracaoNegocioService>();
+                    var cfg = configSvc.ObterConfiguracao().GetAwaiter().GetResult();
+                    Tema.AplicarTema(cfg.TipoNegocio);
+                    // Sincroniza MaterialSkinManager com a cor do segmento configurado
+                    AplicarCorMaterial();
+                }
+                catch { }
+            }
+
+            // Task de backup rastreada
+            var backupTask = Task.Run(async () =>
             {
                 try
                 {
@@ -149,6 +282,7 @@ static class Program
                     var r = await bk.ExecutarAsync(pasta);
                     if (r.Sucesso) File.WriteAllText(ultimoFile, DateTime.Now.ToString("o"));
                 }
+                catch (System.OperationCanceledException) { }
                 catch { }
             });
 
@@ -156,12 +290,26 @@ static class Program
             var login = loginScope.ServiceProvider.GetRequiredService<FrmLogin>();
             WinFormsApp.Run(login);
 
+            // Aguardar task de backup ao fechar (máximo 5 segundos)
+            try
+            {
+                if (!backupTask.Wait(TimeSpan.FromSeconds(5)))
+                {
+                    Log.Warning("Task de backup não completou no tempo esperado");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Erro ao aguardar task de backup");
+            }
+
             var sessao = Services.GetRequiredService<SessaoApp>();
             if (sessao.Autenticado)
             {
+                // Seleção de empresa ativa (se houver mais de uma cadastrada)
                 using (var seScope = Services.CreateScope())
                 {
-                    var nfceSvc = seScope.ServiceProvider.GetRequiredService<NfceService>();
+                    var nfceSvc = seScope.ServiceProvider.GetRequiredService<INfceService>();
                     var empresas = nfceSvc.ListarEmpresasAsync().GetAwaiter().GetResult();
                     if (empresas.Count > 1)
                     {
@@ -181,9 +329,15 @@ static class Program
         }
         catch (Exception ex)
         {
+            Log.Fatal(ex, "Erro fatal ao iniciar aplicação");
             MessageBox.Show(
                 $"Erro ao iniciar:\n\n{ex.Message}\n\nDetalhe:\n{ex.InnerException?.Message}",
                 "Erro fatal", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            Log.Information(LogTemplates.AplicacaoFinalizada);
+            LoggingConfiguration.FlushAndClose();
         }
     }
 }

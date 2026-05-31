@@ -28,17 +28,26 @@ public class Card : Panel
         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
         // Área do card (encolhe para deixar espaço pra sombra)
-        var inset = ComSombra ? 2 : 0;
+        var inset = ComSombra ? 4 : 0;
         var rect = new Rectangle(inset, inset, Width - inset * 2 - 1, Height - inset * 2 - 1);
 
         if (ComSombra)
         {
-            Tema.DesenharSombra(g, rect, Raio, distancia: 1, profundidade: 2);
+            for (var i = 4; i >= 1; i--)
+            {
+                var sombra = new Rectangle(rect.X - i, rect.Y + i, rect.Width + i * 2, rect.Height + i);
+                using var shadowPath = Tema.PathArredondado(sombra, Raio + i);
+                using var shadowBrush = new SolidBrush(Color.FromArgb(3 + i * 3, 0, 0, 0));
+                g.FillPath(shadowBrush, shadowPath);
+            }
         }
 
         using var path = Tema.PathArredondado(rect, Raio);
-        using var brush = new SolidBrush(Tema.CorCard);
-        g.FillPath(brush, path);
+        using (var brush = new LinearGradientBrush(rect, Color.White, Tema.CorCardAlt, LinearGradientMode.Vertical))
+            g.FillPath(brush, path);
+
+        using (var highlight = new Pen(Color.FromArgb(170, Color.White), 1))
+            g.DrawLine(highlight, rect.X + Raio, rect.Y + 1, rect.Right - Raio, rect.Y + 1);
 
         using var pen = new Pen(CorBorda, 1);
         g.DrawPath(pen, path);
@@ -48,11 +57,12 @@ public class Card : Panel
 
     protected override void OnPaintBackground(PaintEventArgs e)
     {
-        // Não chamar base — evita o flicker do BackColor sólido
-        if (Parent != null)
-        {
-            using var brush = new SolidBrush(Parent.BackColor);
-            e.Graphics.FillRectangle(brush, ClientRectangle);
-        }
+        // Pinta com a cor real do fundo (pai ou CorFundo como fallback)
+        // Evita área preta quando Parent.BackColor é Transparent ou não está disponível
+        var bgColor = Parent?.BackColor ?? Tema.CorFundo;
+        if (bgColor == Color.Transparent || bgColor.A == 0)
+            bgColor = Tema.CorFundo;
+        using var brush = new SolidBrush(bgColor);
+        e.Graphics.FillRectangle(brush, ClientRectangle);
     }
 }

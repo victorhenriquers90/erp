@@ -1,16 +1,24 @@
 using System.Drawing.Drawing2D;
+using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Domain.Enums;
 
 namespace ProjetoVarejo.Desktop.Theme;
 
 /// <summary>
 /// Sistema de design central com linguagem ERP corporativa.
 /// Paleta clara, alta densidade visual, bordas discretas e acentos institucionais.
+/// Chamar AplicarTema() na inicialização para aplicar as cores do segmento configurado.
 /// </summary>
 public static class Tema
 {
     public const string NomeProduto = "ProjetoVarejo ERP";
     public const string NomeProdutoCurto = "ProjetoVarejo";
     public const string TaglineProduto = "Gestao integrada para varejo";
+
+    // Identidade do negócio — preenchidos por AplicarTema()
+    public static string NegocioNome { get; private set; } = NomeProduto;
+    public static string NegocioIconeEmoji { get; private set; } = "🏪";
+    public static string NegocioTagline { get; private set; } = TaglineProduto;
 
     // === Paleta principal ===
     // Azul institucional, proximo de suites ERP corporativas.
@@ -33,11 +41,11 @@ public static class Tema
 
     // === Neutros ===
     public static Color Branco = Color.White;
-    public static Color CorFundo = Color.FromArgb(245, 247, 250);
+    public static Color CorFundo = Color.FromArgb(242, 245, 249);
     public static Color CorCard = Color.White;
-    public static Color CorCardAlt = Color.FromArgb(250, 251, 253);
-    public static Color CorBorda = Color.FromArgb(214, 220, 229);
-    public static Color CorBordaSuave = Color.FromArgb(231, 235, 241);
+    public static Color CorCardAlt = Color.FromArgb(247, 249, 252);
+    public static Color CorBorda = Color.FromArgb(219, 226, 235);
+    public static Color CorBordaSuave = Color.FromArgb(232, 237, 244);
     public static Color CorTextoEscuro = Color.FromArgb(28, 39, 55);
     public static Color CorTextoMedio = Color.FromArgb(91, 105, 123);
     public static Color CorTextoClaro = Color.FromArgb(141, 154, 171);
@@ -56,9 +64,9 @@ public static class Tema
     public static Color SidebarSecao = Color.FromArgb(130, 148, 170);  // label de secao
 
     // === Sombras ===
-    public static Color SombraSuave = Color.FromArgb(8, 0, 0, 0);
-    public static Color SombraMedia = Color.FromArgb(16, 0, 0, 0);
-    public static Color SombraForte = Color.FromArgb(28, 0, 0, 0);
+    public static Color SombraSuave = Color.FromArgb(12, 0, 0, 0);
+    public static Color SombraMedia = Color.FromArgb(22, 0, 0, 0);
+    public static Color SombraForte = Color.FromArgb(36, 0, 0, 0);
 
     // === Fontes ===
     public const string FontFamily = "Segoe UI";
@@ -77,8 +85,8 @@ public static class Tema
     public static Font FontMono = new(FontFamilyMono, 10);
 
     // === Métricas ===
-    public const int RaioCard = 6;
-    public const int RaioBotao = 4;
+    public const int RaioCard = 8;
+    public const int RaioBotao = 8;
     public const int RaioBadge = 10;
     public const int Espacamento = 14;
     public const int EspacamentoGrande = 22;
@@ -167,5 +175,66 @@ public static class Tema
             (int)(a.R * (1 - pct) + b.R * pct),
             (int)(a.G * (1 - pct) + b.G * pct),
             (int)(a.B * (1 - pct) + b.B * pct));
+    }
+
+    // =========================================================
+    // TEMA POR SEGMENTO
+    // =========================================================
+
+    /// <summary>
+    /// Aplica o tema visual do segmento configurado.
+    /// Deve ser chamado em Program.cs antes de criar qualquer Form.
+    /// </summary>
+    public static void AplicarTema(TipoNegocio tipo)
+    {
+        if (tipo == 0) return; // não configurado, mantém padrão
+
+        var t = TemasNegocio.ObterTema(tipo);
+        var p = t.CorPrimaria;
+
+        // Identidade
+        NegocioNome = t.Nome;
+        NegocioIconeEmoji = t.Icone;
+        NegocioTagline = t.Descricao;
+
+        // Família de cores primárias
+        CorPrimaria      = p;
+        CorPrimariaDark  = Escurecer(p, 0.32f);
+        CorPrimariaLight = Clarear(p, 0.22f);
+        CorPrimariaSoft  = Clarear(p, 0.87f);   // fundo muito claro para itens selecionados
+
+        // Shell escuro (sidebar + topbar)
+        ShellBarFundo       = t.CorShell;
+        ShellBarHover       = Clarear(t.CorShell, 0.18f);
+        ShellBarTexto       = Color.FromArgb(238, 245, 255);
+        ShellBarTextoSuave  = Clarear(t.CorShell, 0.52f);
+
+        SidebarFundo        = Escurecer(t.CorShell, 0.18f);
+        SidebarHover        = Clarear(t.CorShell, 0.14f);
+        SidebarAtivo        = Color.FromArgb(
+                                  Math.Clamp((int)(p.R * 0.72f), 0, 255),
+                                  Math.Clamp((int)(p.G * 0.72f), 0, 255),
+                                  Math.Clamp((int)(p.B * 0.72f), 0, 255));
+        SidebarTexto        = Color.FromArgb(192, 208, 224);
+        SidebarTextoAtivo   = Color.White;
+        SidebarSecao        = Color.FromArgb(128, 148, 170);
+    }
+
+    public static Color Escurecer(Color c, float amount)
+    {
+        var f = Math.Clamp(1f - amount, 0f, 1f);
+        return Color.FromArgb(
+            (int)(c.R * f),
+            (int)(c.G * f),
+            (int)(c.B * f));
+    }
+
+    public static Color Clarear(Color c, float amount)
+    {
+        amount = Math.Clamp(amount, 0f, 1f);
+        return Color.FromArgb(
+            (int)(c.R + (255 - c.R) * amount),
+            (int)(c.G + (255 - c.G) * amount),
+            (int)(c.B + (255 - c.B) * amount));
     }
 }

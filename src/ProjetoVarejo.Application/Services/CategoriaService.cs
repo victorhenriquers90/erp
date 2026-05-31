@@ -1,14 +1,14 @@
-using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 
+using Microsoft.EntityFrameworkCore;
 namespace ProjetoVarejo.Application.Services;
 
 public class CategoriaService
 {
-    private readonly AppDbContext _db;
-    public CategoriaService(AppDbContext db) => _db = db;
+    private readonly IUnitOfWork _unitOfWork;
+    public CategoriaService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
     public Task<List<Categoria>> ListarAsync() =>
-        _db.Categorias.Where(c => c.Ativo).OrderBy(c => c.Nome).ToListAsync();
+        _unitOfWork.Categorias.Query().Where(c => c.Ativo).OrderBy(c => c.Nome).ToListAsync();
 }

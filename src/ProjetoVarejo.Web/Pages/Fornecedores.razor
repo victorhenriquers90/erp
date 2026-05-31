@@ -1,0 +1,102 @@
+@page "/fornecedores"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Fornecedores | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Cadastros</div>
+        <h1 class="page-title">Fornecedores</h1>
+        <p class="page-subtitle">Base de fornecedores para consulta e gestao de compras.</p>
+    </div>
+    <span class="badge">@fornecedores.Count fornecedor(es)</span>
+</header>
+
+<section class="panel panel-pad">
+    <div class="toolbar">
+        <label class="search-box">
+            <span>⌕</span>
+            <input placeholder="Buscar por razao social, CNPJ ou contato" @bind-value="busca" @bind-value:event="oninput" @onkeydown="AoPressionarTecla" />
+        </label>
+        <button class="btn" @onclick="CarregarAsync" disabled="@carregando">
+            <span>⌕</span>
+            Buscar
+        </button>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(erro))
+    {
+        <div class="alert-state">@erro</div>
+    }
+    else if (carregando)
+    {
+        <div class="empty-state">Carregando fornecedores...</div>
+    }
+    else if (fornecedores.Count == 0)
+    {
+        <div class="empty-state">Nenhum fornecedor encontrado.</div>
+    }
+    else
+    {
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Razao Social / Fantasia</th>
+                        <th>CNPJ</th>
+                        <th>Contato</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var f in fornecedores)
+                    {
+                        <tr>
+                            <td>
+                                <span class="cell-title">@(string.IsNullOrWhiteSpace(f.NomeFantasia) ? f.RazaoSocial : f.NomeFantasia)</span>
+                                @if (!string.IsNullOrWhiteSpace(f.NomeFantasia))
+                                {
+                                    <small class="cell-sub">@f.RazaoSocial</small>
+                                }
+                            </td>
+                            <td>@f.Cnpj</td>
+                            <td>@f.Contato</td>
+                            <td>@f.Telefone</td>
+                            <td>@f.Email</td>
+                            <td>
+                                <span class="badge @(f.Ativo ? "success" : "")">@(f.Ativo ? "Ativo" : "Inativo")</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@code {
+    private List<FornecedorResumo> fornecedores = new();
+    private string? busca;
+    private bool carregando = true;
+    private string? erro;
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+        var resultado = await Api.FornecedoresAsync(busca);
+        fornecedores = resultado.Dados ?? new();
+        erro = resultado.Erro;
+        carregando = false;
+    }
+
+    private async Task AoPressionarTecla(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+            await CarregarAsync();
+    }
+}

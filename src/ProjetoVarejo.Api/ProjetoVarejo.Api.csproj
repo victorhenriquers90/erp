@@ -7,9 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Hosted Blazor WASM: serve client static files from this server -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.27" />
+    <!-- Windows Service hosting -->
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.16.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.16.0" />
+    <!-- PHASE 10: Caching & Performance -->
+    <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
+    <!-- PHASE 11: Monitoring & Logging -->
+    <PackageReference Include="Serilog" Version="4.3.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.2" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +34,8 @@
     <ProjectReference Include="..\ProjetoVarejo.Application\ProjetoVarejo.Application.csproj" />
     <ProjectReference Include="..\ProjetoVarejo.Infrastructure\ProjetoVarejo.Infrastructure.csproj" />
     <ProjectReference Include="..\ProjetoVarejo.Shared\ProjetoVarejo.Shared.csproj" />
+    <!-- Hosted Blazor WASM: include client project so its wwwroot is served -->
+    <ProjectReference Include="..\ProjetoVarejo.Web\ProjetoVarejo.Web.csproj" />
   </ItemGroup>
 
 </Project>

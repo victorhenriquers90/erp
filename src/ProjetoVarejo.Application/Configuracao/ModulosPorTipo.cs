@@ -7,9 +7,11 @@ namespace ProjetoVarejo.Application.Configuracao;
 /// </summary>
 public static class ModulosPorTipo
 {
-    /// <summary>Módulos obrigatórios em todas as instalações</summary>
-    private static readonly ModuloSistema ModulosObrigatorios =
-        ModuloSistema.PDV |
+    /// <summary>
+    /// Módulos presentes em TODAS as instalações independente do segmento.
+    /// PDV NÃO está aqui — varia conforme o tipo de negócio.
+    /// </summary>
+    private static readonly ModuloSistema ModulosBase =
         ModuloSistema.Estoque |
         ModuloSistema.Cadastros |
         ModuloSistema.Financeiro |
@@ -18,45 +20,54 @@ public static class ModulosPorTipo
         ModuloSistema.Backup;
 
     /// <summary>
-    /// Obtém os módulos recomendados para um tipo de negócio.
+    /// Obtém os módulos recomendados para cada segmento de negócio.
     /// </summary>
     public static ModuloSistema ObterModulosRecomendados(TipoNegocio tipo)
     {
         return tipo switch
         {
-            TipoNegocio.Padaria => ModulosObrigatorios |
+            // Padaria: frente de caixa, produção própria, venda por peso, fiscal
+            TipoNegocio.Padaria => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Producao |
                 ModuloSistema.Pesagem |
                 ModuloSistema.Pix,
 
-            TipoNegocio.Acougue => ModulosObrigatorios |
+            // Açougue: PDV com balança, produção, fiscal, pagamento eletrônico
+            TipoNegocio.Acougue => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Producao |
                 ModuloSistema.Pesagem |
                 ModuloSistema.Pix |
                 ModuloSistema.Tef,
 
-            TipoNegocio.Loja => ModulosObrigatorios |
+            // Loja varejo: PDV, pré-venda, comissões de vendedores, fiscal completo
+            TipoNegocio.Loja => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Prevenda |
                 ModuloSistema.Comissoes |
                 ModuloSistema.Pix |
                 ModuloSistema.Tef,
 
-            TipoNegocio.Industria => ModulosObrigatorios |
+            // Indústria: SEM PDV (venda atacado/B2B), foco em produção, fiscal NF-e e comissões
+            TipoNegocio.Industria => ModulosBase |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Producao |
-                ModuloSistema.Comissoes |
-                ModuloSistema.Pix |
-                ModuloSistema.Tef,
+                ModuloSistema.Comissoes,
 
-            TipoNegocio.Bazar => ModulosObrigatorios |
+            // Bazar: PDV simples, pré-venda, fiscal básico
+            TipoNegocio.Bazar => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Prevenda |
                 ModuloSistema.Pix,
 
-            TipoNegocio.Supermercado => ModulosObrigatorios |
+            // Supermercado: PDV com balança, pré-venda, comissões, fiscal completo, TEF
+            TipoNegocio.Supermercado => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Prevenda |
                 ModuloSistema.Pesagem |
@@ -64,20 +75,24 @@ public static class ModulosPorTipo
                 ModuloSistema.Pix |
                 ModuloSistema.Tef,
 
-            TipoNegocio.Farmacia => ModulosObrigatorios |
+            // Farmácia: PDV com controle de receitas, fiscal, pagamento eletrônico
+            TipoNegocio.Farmacia => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Receitas |
                 ModuloSistema.Pix |
                 ModuloSistema.Tef,
 
-            TipoNegocio.Restaurante => ModulosObrigatorios |
+            // Restaurante: PDV com comandas/mesas, produção de pratos, fiscal, TEF
+            TipoNegocio.Restaurante => ModulosBase |
+                ModuloSistema.PDV |
                 ModuloSistema.Fiscal |
                 ModuloSistema.Comandas |
                 ModuloSistema.Producao |
                 ModuloSistema.Pix |
                 ModuloSistema.Tef,
 
-            _ => ModulosObrigatorios
+            _ => ModulosBase
         };
     }
 
@@ -136,6 +151,6 @@ public static class ModulosPorTipo
     /// </summary>
     public static bool EObrigatorio(ModuloSistema modulo)
     {
-        return (ModulosObrigatorios & modulo) == modulo;
+        return (ModulosBase & modulo) == modulo;
     }
 }

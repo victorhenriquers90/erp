@@ -58,7 +58,7 @@ public class SidebarBuilderDinamico
         secoes.Add(new
         {
             Titulo = "Principal",
-            Itens = new List<dynamic> { new { Icone = "home", Texto = "Cockpit", OnClick = (Action)(() => { }) } }
+            Itens = new List<dynamic> { new { Icone = "home", Texto = "Painel", OnClick = (Action)(() => { }) } }
         });
 
         // === Seção Vendas (PDV, Caixa, Notas sempre presentes) ===

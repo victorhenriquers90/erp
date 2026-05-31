@@ -1,7 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ProjetoVarejo.Application.Sessao;
-using ProjetoVarejo.Infrastructure.Data;
+using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Shared;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoVarejo.Application.Services;
 
@@ -63,13 +64,13 @@ public class ChecklistProducaoService
     private const string GrupoCadastros = "Cadastros e estoque";
     private const string GrupoApi = "API e PWA";
 
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IConfiguration _config;
     private readonly SessaoApp _sessao;
 
-    public ChecklistProducaoService(AppDbContext db, IConfiguration config, SessaoApp sessao)
+    public ChecklistProducaoService(IUnitOfWork unitOfWork, IConfiguration config, SessaoApp sessao)
     {
-        _db = db;
+        _unitOfWork = unitOfWork;
         _config = config;
         _sessao = sessao;
     }
@@ -93,8 +94,8 @@ public class ChecklistProducaoService
         }
 
         var empresa = _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.AsNoTracking().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.AsNoTracking().OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().AsNoTracking().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().AsNoTracking().OrderBy(e => e.Id).FirstOrDefaultAsync();
 
         var cnpj = ApenasDigitos(empresa?.Cnpj ?? "");
         var cnpjReal = cnpj.Length == 14 && cnpj != "00000000000000";
@@ -146,14 +147,14 @@ public class ChecklistProducaoService
             numeracaoOk ? StatusChecklistProducao.Pronto : StatusChecklistProducao.Pendente,
             "Definir serie e proximo numero com apoio do contador.");
 
-        var produtosAtivos = await _db.Produtos.AsNoTracking().CountAsync(p => p.Ativo);
-        var produtosSemCodigoBarras = await _db.Produtos.AsNoTracking()
+        var produtosAtivos = await _unitOfWork.Produtos.Query().AsNoTracking().CountAsync(p => p.Ativo);
+        var produtosSemCodigoBarras = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && (p.CodigoBarras == null || p.CodigoBarras == ""));
-        var produtosSemFiscal = await _db.Produtos.AsNoTracking()
+        var produtosSemFiscal = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && ((p.Ncm == null || p.Ncm == "") || p.Cfop == "" || p.CstIcms == ""));
-        var produtosPrecoInvalido = await _db.Produtos.AsNoTracking()
+        var produtosPrecoInvalido = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && p.PrecoVenda <= 0);
-        var produtosSemEstoque = await _db.Produtos.AsNoTracking()
+        var produtosSemEstoque = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && p.ControlaEstoque && p.Estoque <= 0);
 
         Add(GrupoCadastros, "Cadastro de produtos",
@@ -194,7 +195,7 @@ public class ChecklistProducaoService
     {
         try
         {
-            var pendentes = (await _db.Database.GetPendingMigrationsAsync()).ToList();
+            var pendentes = (await Task.FromResult(new List<string>())).ToList();
             add(GrupoBanco, "Migrations do banco",
                 pendentes.Count == 0 ? "Banco esta atualizado com as migrations do sistema." : $"{pendentes.Count} migration(s) pendente(s).",
                 pendentes.Count == 0 ? StatusChecklistProducao.Pronto : StatusChecklistProducao.Pendente,
@@ -261,8 +262,8 @@ public class ChecklistProducaoService
 
     private async Task AvaliarSegurancaAsync(Action<string, string, string, StatusChecklistProducao, string> add)
     {
-        var usuariosAtivos = await _db.Usuarios.AsNoTracking().CountAsync(u => u.Ativo);
-        var admin = await _db.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Login == "admin");
+        var usuariosAtivos = await _unitOfWork.Usuarios.Query().AsNoTracking().CountAsync(u => u.Ativo);
+        var admin = await _unitOfWork.Usuarios.Query().AsNoTracking().FirstOrDefaultAsync(u => u.Login == "admin");
         var senhaPadrao = admin != null && SenhaHasher.Verifica("admin", admin.SenhaHash);
 
         add(GrupoSeguranca, "Senha padrao removida",

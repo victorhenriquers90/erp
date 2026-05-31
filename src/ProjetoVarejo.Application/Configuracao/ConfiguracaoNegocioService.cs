@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjetoVarejo.Domain.Configuracao;
 using ProjetoVarejo.Domain.Enums;
-using ProjetoVarejo.Infrastructure.Data;
+using ProjetoVarejo.Application.Contracts.Repositories;
 
 namespace ProjetoVarejo.Application.Configuracao;
 
@@ -10,12 +10,12 @@ namespace ProjetoVarejo.Application.Configuracao;
 /// </summary>
 public class ConfiguracaoNegocioService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private ConfiguracaoNegocio? _cacheConfiguracao;
 
-    public ConfiguracaoNegocioService(AppDbContext db)
+    public ConfiguracaoNegocioService(IUnitOfWork unitOfWork)
     {
-        _db = db;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public class ConfiguracaoNegocioService
         if (_cacheConfiguracao != null)
             return _cacheConfiguracao;
 
-        _cacheConfiguracao = await _db.ConfiguracaoNegocio
+        _cacheConfiguracao = await _unitOfWork.ConfiguracoesNegocio.Query()
             .OrderBy(c => c.Id)
             .FirstOrDefaultAsync();
 
@@ -38,7 +38,7 @@ public class ConfiguracaoNegocioService
                 Id = 1,
                 TipoNegocio = (TipoNegocio)0,
                 ConfiguracaoInicial = false,
-                ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+                ModulosAtivos = ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
                 DataAtualizacao = DateTime.Now,
                 Versao = 1
             };
@@ -70,22 +70,31 @@ public class ConfiguracaoNegocioService
     {
         config.DataAtualizacao = DateTime.Now;
 
-        var existente = await _db.ConfiguracaoNegocio
-            .FirstOrDefaultAsync(c => c.Id == config.Id);
+        // GetByIdAsync usa FindAsync — consulta o change tracker antes do banco,
+        // garantindo que sempre trabalhamos com a mesma instância rastreada e
+        // evitando o erro "cannot be tracked because another instance with the same key".
+        var existente = await _unitOfWork.ConfiguracoesNegocio.GetByIdAsync(config.Id);
 
         if (existente == null)
         {
-            _db.ConfiguracaoNegocio.Add(config);
+            // InsertAsync já chama SaveChanges internamente
+            await _unitOfWork.ConfiguracoesNegocio.InsertAsync(config);
+            _cacheConfiguracao = config;
         }
         else
         {
-            _db.Entry(existente).CurrentValues.SetValues(config);
+            // Atualizar a instância rastreada diretamente — o change tracker
+            // detecta as alterações automaticamente no SaveChangesAsync
+            existente.TipoNegocio = config.TipoNegocio;
+            existente.DescricaoNegocio = config.DescricaoNegocio;
+            existente.ModulosAtivos = config.ModulosAtivos;
+            existente.ConfiguracaoInicial = config.ConfiguracaoInicial;
+            existente.DataAtualizacao = config.DataAtualizacao;
+            existente.Versao = config.Versao;
+            await _unitOfWork.SaveChangesAsync();
+            // Manter referência à instância rastreada para chamadas subsequentes
+            _cacheConfiguracao = existente;
         }
-
-        await _db.SaveChangesAsync();
-
-        // Limpar cache
-        _cacheConfiguracao = config;
     }
 
     /// <summary>
@@ -147,7 +156,7 @@ public class ConfiguracaoNegocioService
             Id = 1,
             TipoNegocio = (TipoNegocio)0,
             ConfiguracaoInicial = false,
-            ModulosAtivos = ModuloSistema.PDV | ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
+            ModulosAtivos = ModuloSistema.Estoque | ModuloSistema.Cadastros | ModuloSistema.Financeiro,
             DataAtualizacao = DateTime.Now,
             Versao = 1
         };

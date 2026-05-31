@@ -22,6 +22,43 @@ namespace ProjetoVarejo.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ProjetoVarejo.Domain.Configuracao.ConfiguracaoNegocio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ConfiguracaoInicial")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("DataAtualizacao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("DescricaoNegocio")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ModulosAtivos")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoNegocio")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Versao")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ConfiguracaoNegocio");
+                });
+
             modelBuilder.Entity("ProjetoVarejo.Domain.Entities.AuditLog", b =>
                 {
                     b.Property<int>("Id")
@@ -454,6 +491,56 @@ namespace ProjetoVarejo.Infrastructure.Migrations
                     b.ToTable("EmpresaConfigs");
                 });
 
+            modelBuilder.Entity("ProjetoVarejo.Domain.Entities.Filial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("AtualizadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Cnpj")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Endereco")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsMatriz")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
+                    b.ToTable("Filiais");
+                });
+
             modelBuilder.Entity("ProjetoVarejo.Domain.Entities.Fornecedor", b =>
                 {
                     b.Property<int>("Id")
@@ -881,6 +968,11 @@ namespace ProjetoVarejo.Infrastructure.Migrations
                     b.Property<decimal>("PrecoVenda")
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<int>("Unidade")
                         .HasColumnType("int");
 
@@ -913,6 +1005,9 @@ namespace ProjetoVarejo.Infrastructure.Migrations
                     b.Property<DateTime>("CriadoEm")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FilialId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -935,6 +1030,8 @@ namespace ProjetoVarejo.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FilialId");
 
                     b.HasIndex("Login")
                         .IsUnique();
@@ -1204,6 +1301,16 @@ namespace ProjetoVarejo.Infrastructure.Migrations
                     b.Navigation("Categoria");
                 });
 
+            modelBuilder.Entity("ProjetoVarejo.Domain.Entities.Usuario", b =>
+                {
+                    b.HasOne("ProjetoVarejo.Domain.Entities.Filial", "Filial")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("FilialId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Filial");
+                });
+
             modelBuilder.Entity("ProjetoVarejo.Domain.Entities.UsuarioPermissao", b =>
                 {
                     b.HasOne("ProjetoVarejo.Domain.Entities.Usuario", "Usuario")
@@ -1248,6 +1355,11 @@ namespace ProjetoVarejo.Infrastructure.Migrations
             modelBuilder.Entity("ProjetoVarejo.Domain.Entities.Cliente", b =>
                 {
                     b.Navigation("Vendas");
+                });
+
+            modelBuilder.Entity("ProjetoVarejo.Domain.Entities.Filial", b =>
+                {
+                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("ProjetoVarejo.Domain.Entities.NotaFiscal", b =>

@@ -1,4 +1,6 @@
 @inherits LayoutComponentBase
+@inject JwtAuthStateProvider Auth
+@inject NavigationManager Nav
 
 <div class="app-shell">
     <aside class="shell-sidebar">
@@ -6,7 +8,7 @@
             <div class="brand-mark">PV</div>
             <div>
                 <div class="brand-name">ProjetoVarejo</div>
-                <div class="brand-caption">ERP web</div>
+                <div class="brand-caption">Desktop ERP</div>
             </div>
         </div>
 
@@ -17,11 +19,14 @@
         <header class="shell-topbar">
             <div>
                 <div class="topbar-label">Ambiente conectado</div>
-                <strong>Operacao varejo</strong>
+                <div class="topbar-title">Operacao varejo</div>
             </div>
             <div class="topbar-actions">
-                <span class="status-dot"></span>
-                <span>API local</span>
+                <span class="status-pill"><span class="status-dot"></span>API local</span>
+                <div class="topbar-user">
+                    <span class="topbar-user-name">@_nomeUsuario</span>
+                    <button class="btn-logout" @onclick="SairAsync">Sair</button>
+                </div>
             </div>
         </header>
 
@@ -33,19 +38,34 @@
 
 <nav class="mobile-nav" aria-label="Navegacao principal">
     <NavLink href="" Match="NavLinkMatch.All">
-        <span>⌂</span>
-        Cockpit
+        <span class="nav-icon nav-home" aria-hidden="true"></span>
+        Painel
     </NavLink>
     <NavLink href="produtos">
-        <span>□</span>
+        <span class="nav-icon nav-box" aria-hidden="true"></span>
         Produtos
     </NavLink>
     <NavLink href="clientes">
-        <span>◌</span>
+        <span class="nav-icon nav-user" aria-hidden="true"></span>
         Clientes
     </NavLink>
     <NavLink href="estoque">
-        <span>▤</span>
+        <span class="nav-icon nav-stack" aria-hidden="true"></span>
         Estoque
     </NavLink>
 </nav>
+
+@code {
+    private string _nomeUsuario = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _nomeUsuario = await Auth.ObterNomeAsync() ?? "";
+    }
+
+    private async Task SairAsync()
+    {
+        await Auth.LogoutAsync();
+        Nav.NavigateTo("login");
+    }
+}

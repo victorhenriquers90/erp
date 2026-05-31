@@ -1,3 +1,4 @@
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -7,8 +8,8 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmEstoque : Form
 {
-    private readonly EstoqueService _estoque;
-    private readonly ProdutoService _produtos;
+    private readonly IEstoqueService _estoque;
+    private readonly IProdutoService _produtos;
     private readonly FornecedorService _fornecedores;
     private TabControl tabs = null!;
     private StyledGrid gridMov = null!;
@@ -16,7 +17,7 @@ public class FrmEstoque : Form
     private DateTimePicker dtDe = null!, dtAte = null!;
     private TextBox txtFiltroProd = null!;
 
-    public FrmEstoque(EstoqueService estoque, ProdutoService produtos, FornecedorService fornecedores)
+    public FrmEstoque(IEstoqueService estoque, IProdutoService produtos, FornecedorService fornecedores)
     {
         _estoque = estoque;
         _produtos = produtos;
@@ -41,6 +42,7 @@ public class FrmEstoque : Form
         var btnSaida = Botoes.Perigo("Ajustar saída", 180, 40);
         btnSaida.Click += async (s, e) => await LancarAsync(TipoMovimentoEstoque.AjusteSaida);
         var fl = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.LeftToRight, BackColor = Tema.CorFundo };
+        Botoes.ParaPainelToolbar(fl, btnEntrada, btnSaida);
         fl.Controls.Add(btnEntrada);
         fl.Controls.Add(btnSaida);
         pnlAcoes.Controls.Add(fl);
@@ -51,7 +53,7 @@ public class FrmEstoque : Form
             Font = new Font(Tema.FontFamily, 10),
             DrawMode = TabDrawMode.OwnerDrawFixed,
             SizeMode = TabSizeMode.Fixed,
-            ItemSize = new Size(180, 40),
+            ItemSize = new Size(200, 40),
             Appearance = TabAppearance.Normal
         };
         EstilizarTabs(tabs);
@@ -117,23 +119,7 @@ public class FrmEstoque : Form
 
     private void EstilizarTabs(TabControl tc)
     {
-        tc.DrawItem += (s, e) =>
-        {
-            var g = e.Graphics;
-            var tab = tc.TabPages[e.Index];
-            var rect = tc.GetTabRect(e.Index);
-            var selected = e.Index == tc.SelectedIndex;
-            var bg = selected ? Tema.CorCard : Tema.CorFundo;
-            var fg = selected ? Tema.CorPrimaria : Tema.CorTextoMedio;
-            using (var brush = new SolidBrush(bg)) g.FillRectangle(brush, rect);
-            if (selected)
-            {
-                using var line = new SolidBrush(Tema.CorPrimaria);
-                g.FillRectangle(line, rect.X, rect.Bottom - 3, rect.Width, 3);
-            }
-            TextRenderer.DrawText(g, tab.Text, new Font(Tema.FontFamily, 10, selected ? FontStyle.Bold : FontStyle.Regular),
-                rect, fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-        };
+        Abas.Modernizar(tc);
     }
 
     private async Task CarregarMovimentosAsync()
@@ -188,15 +174,15 @@ public class FrmEstoque : Form
 public class FrmLancamentoEstoque : Form
 {
     private readonly TipoMovimentoEstoque _tipo;
-    private readonly EstoqueService _estoque;
-    private readonly ProdutoService _produtos;
+    private readonly IEstoqueService _estoque;
+    private readonly IProdutoService _produtos;
     private readonly FornecedorService _fornecedores;
     private TextBox txtCodigo = null!, txtQtd = null!, txtCusto = null!, txtDoc = null!, txtObs = null!;
     private ComboBox cboForn = null!;
     private Label lblProduto = null!;
     private Produto? _selecionado;
 
-    public FrmLancamentoEstoque(TipoMovimentoEstoque tipo, EstoqueService estoque, ProdutoService produtos, FornecedorService fornecedores)
+    public FrmLancamentoEstoque(TipoMovimentoEstoque tipo, IEstoqueService estoque, IProdutoService produtos, FornecedorService fornecedores)
     {
         _tipo = tipo; _estoque = estoque; _produtos = produtos; _fornecedores = fornecedores;
         InitUi();

@@ -1,0 +1,137 @@
+@page "/financeiro"
+@inject ProjetoVarejoApi Api
+
+<PageTitle>Financeiro | ProjetoVarejo</PageTitle>
+
+<header class="page-head">
+    <div>
+        <div class="eyebrow">Financeiro</div>
+        <h1 class="page-title">Contas a Pagar e Receber</h1>
+        <p class="page-subtitle">Visao geral das obrigacoes financeiras e recebimentos esperados.</p>
+    </div>
+    <button class="btn secondary" @onclick="CarregarAsync" disabled="@carregando">
+        <span>↻</span>
+        Atualizar
+    </button>
+</header>
+
+@if (!string.IsNullOrWhiteSpace(erro))
+{
+    <div class="alert-state">@erro</div>
+}
+
+@if (resumo != null)
+{
+    <section class="grid-kpis">
+        <article class="panel kpi success">
+            <div>
+                <div class="kpi-label">A Receber</div>
+                <div class="kpi-value">@Moeda(resumo.TotalReceber)</div>
+            </div>
+            <div class="kpi-help">Valores em aberto a receber</div>
+        </article>
+        <article class="panel kpi warning">
+            <div>
+                <div class="kpi-label">A Pagar</div>
+                <div class="kpi-value">@Moeda(resumo.TotalPagar)</div>
+            </div>
+            <div class="kpi-help">Valores em aberto a pagar</div>
+        </article>
+        <article class="panel kpi @(resumo.SaldoPrevisto >= 0 ? "success" : "danger")">
+            <div>
+                <div class="kpi-label">Saldo Previsto</div>
+                <div class="kpi-value">@Moeda(resumo.SaldoPrevisto)</div>
+            </div>
+            <div class="kpi-help">Receber - Pagar</div>
+        </article>
+        <article class="panel kpi">
+            <div>
+                <div class="kpi-label">Vendas Hoje</div>
+                <div class="kpi-value">@Moeda(resumo.VendasHoje)</div>
+            </div>
+            <div class="kpi-help">Faturamento do dia atual</div>
+        </article>
+    </section>
+}
+
+<section class="work-grid">
+    <article class="panel panel-pad">
+        <div class="section-head">
+            <h2 class="section-title">Contas em Aberto</h2>
+            <span class="badge warning">@contasAbertas.Count conta(s)</span>
+        </div>
+
+        @if (carregando)
+        {
+            <div class="empty-state">Carregando...</div>
+        }
+        else if (contasAbertas.Count == 0)
+        {
+            <div class="empty-state">Nenhuma conta em aberto.</div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descricao</th>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in contasAbertas)
+                        {
+                            <tr>
+                                <td><span class="badge @(c.Tipo == "Receber" ? "success" : "warning")">@c.Tipo</span></td>
+                                <td><span class="cell-title">@c.Descricao</span></td>
+                                <td class="@(c.DataVencimento < DateTime.Today ? "text-danger" : "")">@c.DataVencimento.ToString("dd/MM/yyyy")</td>
+                                <td>@Moeda(c.Valor)</td>
+                                <td><span class="badge @BadgeConta(c.Status)">@c.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </article>
+</section>
+
+@code {
+    private List<ContaResumo> contasAbertas = new();
+    private ResumoFinanceiro? resumo;
+    private bool carregando = true;
+    private string? erro;
+
+    protected override async Task OnInitializedAsync() => await CarregarAsync();
+
+    private async Task CarregarAsync()
+    {
+        carregando = true;
+        erro = null;
+
+        var resContas = await Api.ContasAsync(status: "0"); // StatusConta.EmAberto = 0
+        var resResumo = await Api.ResumoFinanceiroAsync();
+
+        contasAbertas = resContas.Dados ?? new();
+        resumo = resResumo.Dados;
+
+        if (!string.IsNullOrWhiteSpace(resContas.Erro)) erro = resContas.Erro;
+        else if (!string.IsNullOrWhiteSpace(resResumo.Erro)) erro = resResumo.Erro;
+
+        carregando = false;
+    }
+
+    private static string Moeda(decimal v) => v.ToString("C2", new System.Globalization.CultureInfo("pt-BR"));
+
+    private static string BadgeConta(string? status) => status switch
+    {
+        "Paga" => "success",
+        "Atrasada" => "danger",
+        "Cancelada" => "",
+        _ => "warning"
+    };
+}

@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Enums;
@@ -8,17 +9,19 @@ namespace ProjetoVarejo.Desktop.Forms;
 public class FrmConfiguracao : Form
 {
     private readonly ConfiguracaoNegocioService _configuracao;
+    private readonly ImplantacaoService _implantacao;
     private readonly SessaoApp _sessao;
-    private ComboBox cmbTipo = null!;
     private TextBox txtDescricao = null!;
     private Button btnConfigurar = null!;
     private Panel pnlTipos = null!;
+    private FlowLayoutPanel flpModulos = null!;
     private Label lblSelecionado = null!;
     private TipoNegocio? _tipoSelecionado;
 
-    public FrmConfiguracao(ConfiguracaoNegocioService configuracao, SessaoApp sessao)
+    public FrmConfiguracao(ConfiguracaoNegocioService configuracao, ImplantacaoService implantacao, SessaoApp sessao)
     {
         _configuracao = configuracao;
+        _implantacao = implantacao;
         _sessao = sessao;
         InitUi();
     }
@@ -122,44 +125,37 @@ public class FrmConfiguracao : Form
         {
             Text = "DESCRIÇÃO DA EMPRESA",
             Dock = DockStyle.Top,
-            Height = 24,
+            Height = 34,
             Font = new Font(Tema.FontFamily, 9, FontStyle.Bold),
             ForeColor = Tema.CorTextoMedio,
-            Padding = new Padding(0, 20, 0, 8),
+            Padding = new Padding(0, 12, 0, 4),
             BackColor = Color.Transparent
         };
 
         txtDescricao = new TextBox
         {
             Dock = DockStyle.Top,
-            Height = 48,
-            BorderStyle = BorderStyle.None,
+            Height = 54,
+            BorderStyle = BorderStyle.FixedSingle,
             Font = new Font(Tema.FontFamily, 11),
-            BackColor = Tema.CorCardAlt,
+            BackColor = Tema.Branco,
             ForeColor = Tema.CorTextoEscuro,
             Multiline = true,
             PlaceholderText = "Ex: Padaria Artesanal do João, Açougue Central, Loja 24 horas..."
         };
-        txtDescricao.Padding = new Padding(12, 8, 12, 8);
-        txtDescricao.Paint += (s, e) =>
-        {
-            using var pen = new Pen(Tema.CorBorda, 1);
-            e.Graphics.DrawRectangle(pen, 0, 0, txtDescricao.Width - 1, txtDescricao.Height - 1);
-        };
-
         var lblModulos = new Label
         {
             Text = "MÓDULOS QUE SERÃO ATIVADOS",
             Dock = DockStyle.Top,
-            Height = 24,
+            Height = 34,
             Font = new Font(Tema.FontFamily, 9, FontStyle.Bold),
             ForeColor = Tema.CorTextoMedio,
-            Padding = new Padding(0, 20, 0, 8),
+            Padding = new Padding(0, 12, 0, 4),
             BackColor = Color.Transparent
         };
 
-        var pnlModulos = new Panel { Dock = DockStyle.Top, Height = 140, BackColor = Color.Transparent };
-        var flpModulos = new FlowLayoutPanel
+        var pnlModulos = new Panel { Dock = DockStyle.Top, Height = 170, BackColor = Color.Transparent };
+        flpModulos = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -198,6 +194,10 @@ public class FrmConfiguracao : Form
         };
         btnConfigurar.FlatAppearance.BorderSize = 0;
         btnConfigurar.FlatAppearance.MouseOverBackColor = Tema.CorPrimariaDark;
+        btnConfigurar = Botoes.Sucesso("CONFIRMAR CONFIGURA\u00c7\u00c3O", 260, 48);
+        btnConfigurar.Dock = DockStyle.Fill;
+        btnConfigurar.Font = new Font(Tema.FontFamily, 12, FontStyle.Bold);
+        btnConfigurar.Enabled = false;
         btnConfigurar.Click += BtnConfigurar_Click;
         pnlBotao.Controls.Add(btnConfigurar);
 
@@ -227,9 +227,21 @@ public class FrmConfiguracao : Form
         };
     }
 
+    private static string DescricaoTipo(TipoNegocio tipo) => tipo switch
+    {
+        TipoNegocio.Padaria => "🥐 Padaria",
+        TipoNegocio.Acougue => "🥩 Açougue",
+        TipoNegocio.Loja => "🛍️ Loja Varejo",
+        TipoNegocio.Industria => "🏭 Indústria",
+        TipoNegocio.Bazar => "🧺 Bazar/Armarinho",
+        TipoNegocio.Supermercado => "🛒 Supermercado",
+        TipoNegocio.Farmacia => "💊 Farmácia",
+        TipoNegocio.Restaurante => "🍽️ Restaurante/Bar",
+        _ => tipo.ToString()
+    };
+
     private Control CriarBotaoTipo(TipoNegocio tipo)
     {
-        var config = _configuracao.ObterConfiguracao().Result;
         var modulos = ModulosPorTipo.ObterModulosRecomendados(tipo);
         var qtdModulos = ModulosPorTipo.ObterTodosModulos()
             .Count(m => (modulos & m) == m);
@@ -258,7 +270,7 @@ public class FrmConfiguracao : Form
 
         var lblTipo = new Label
         {
-            Text = $"{config.ObterDescricaoTipo()} - {tipo}",
+            Text = DescricaoTipo(tipo),
             Left = 20,
             Top = 8,
             Width = 370,
@@ -310,7 +322,7 @@ public class FrmConfiguracao : Form
         // Resetar cor dos botões anteriores
         foreach (Control ctrl in pnlTipos.Controls)
         {
-            if (ctrl is Panel p && (TipoNegocio)p.Tag != tipo)
+            if (ctrl is Panel p && p.Tag is TipoNegocio panelTipo && panelTipo != tipo)
             {
                 p.BackColor = Tema.CorCardAlt;
                 foreach (Control c in p.Controls)
@@ -324,7 +336,7 @@ public class FrmConfiguracao : Form
             ctrl.BackColor = Tema.CorPrimariaSoft;
 
         // Atualizar detalhes
-        lblSelecionado.Text = _configuracao.ObterConfiguracao().Result.ObterDescricaoTipo();
+        lblSelecionado.Text = DescricaoTipo(tipo);
 
         var modulos = ModulosPorTipo.ObterModulosRecomendados(tipo);
         AtualizarListaModulos(modulos);
@@ -338,17 +350,7 @@ public class FrmConfiguracao : Form
 
     private void AtualizarListaModulos(ModuloSistema modulos)
     {
-        var pnlModulos = Controls.Cast<Control>()
-            .OfType<Panel>()
-            .SelectMany(p => p.Controls.Cast<Control>())
-            .OfType<Panel>()
-            .SelectMany(p => p.Controls.Cast<Control>())
-            .OfType<FlowLayoutPanel>()
-            .FirstOrDefault(f => f.Tag?.ToString() == "modulos");
-
-        if (pnlModulos == null) return;
-
-        pnlModulos.Controls.Clear();
+        flpModulos.Controls.Clear();
 
         foreach (var modulo in ModulosPorTipo.ObterTodosModulos())
         {
@@ -363,12 +365,12 @@ public class FrmConfiguracao : Form
                     BackColor = Color.Transparent,
                     AutoSize = true
                 };
-                pnlModulos.Controls.Add(lbl);
+                flpModulos.Controls.Add(lbl);
             }
         }
     }
 
-    private async void BtnConfigurar_Click(object sender, EventArgs e)
+    private async void BtnConfigurar_Click(object? sender, EventArgs e)
     {
         if (_tipoSelecionado == null)
         {
@@ -382,10 +384,16 @@ public class FrmConfiguracao : Form
 
         try
         {
-            await _configuracao.ConfigurarNegocio(
-                _tipoSelecionado.Value,
-                txtDescricao.Text.Trim()
-            );
+            var tipo = _tipoSelecionado.Value;
+
+            // Salva no banco (ConfiguracaoNegocio)
+            await _configuracao.ConfigurarNegocio(tipo, txtDescricao.Text.Trim());
+
+            // Sincroniza no arquivo implantacao.json para manter os dois configs alinhados
+            var implantacaoAtual = await _implantacao.ObterAsync();
+            implantacaoAtual.Perfil = tipo;
+            implantacaoAtual.ModulosAtivos = ModulosPorTipo.ObterModulosRecomendados(tipo);
+            await _implantacao.SalvarAsync(implantacaoAtual);
 
             DialogResult = DialogResult.OK;
             Close();

@@ -1,127 +1,125 @@
 namespace ProjetoVarejo.Desktop.Theme;
 
 /// <summary>
-/// Fábrica de botões padronizados, todos seguem o tema.
+/// Fabrica central de botoes do sistema.
+/// Usa desenho proprio para evitar glitches de componentes externos e glyphs quebrados.
 /// </summary>
 public static class Botoes
 {
-    public static Button Primario(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorPrimaria, Tema.Branco);
+    public static Button Primario(string texto, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Primario);
 
-    public static Button PrimarioIcone(string texto, string icone, int width = 132, int height = 34)
-        => ComIcone(Primario(texto, width, height), icone);
+    public static Button PrimarioIcone(string texto, string icone, int width = 148, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Primario);
 
-    public static Button Sucesso(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorSucesso, Tema.Branco);
+    public static Button Ghost(string texto, int width = 108, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Ghost);
 
-    public static Button SucessoIcone(string texto, string icone, int width = 132, int height = 34)
-        => ComIcone(Sucesso(texto, width, height), icone);
-
-    public static Button Perigo(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorErro, Tema.Branco);
-
-    public static Button PerigoIcone(string texto, string icone, int width = 132, int height = 34)
-        => ComIcone(Perigo(texto, width, height), icone);
-
-    public static Button Aviso(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorAlerta, Tema.Branco);
-
-    public static Button Info(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorInfo, Tema.Branco);
-
-    public static Button InfoIcone(string texto, string icone, int width = 132, int height = 34)
-        => ComIcone(Info(texto, width, height), icone);
-
-    public static Button Secundario(string texto, int width = 132, int height = 34)
-        => Construir(texto, width, height, Tema.CorCardAlt, Tema.CorTextoEscuro);
-
-    public static Button Ghost(string texto, int width = 132, int height = 34)
+    public static Button GhostIcone(string texto, string icone, int width = 108, int height = 40, Color? cor = null)
     {
-        var b = Construir(texto, width, height, Color.Transparent, Tema.CorPrimaria);
-        b.FlatAppearance.BorderColor = Tema.CorPrimaria;
-        b.FlatAppearance.BorderSize = 1;
+        var variante = cor == Tema.CorErro
+            ? BotaoModerno.Variante.Perigo
+            : cor == Tema.CorAlerta
+                ? BotaoModerno.Variante.Aviso
+                : BotaoModerno.Variante.Ghost;
+
+        return Criar(texto, width, height, variante);
+    }
+
+    public static Button Sucesso(string texto, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Sucesso);
+
+    public static Button SucessoIcone(string texto, string icone, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Sucesso);
+
+    public static Button Perigo(string texto, int width = 108, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Perigo);
+
+    public static Button PerigoIcone(string texto, string icone, int width = 108, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Perigo);
+
+    public static Button Aviso(string texto, int width = 108, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Aviso);
+
+    public static Button Info(string texto, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Ghost);
+
+    public static Button InfoIcone(string texto, string icone, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Ghost);
+
+    public static Button Secundario(string texto, int width = 132, int height = 40)
+        => Criar(texto, width, height, BotaoModerno.Variante.Ghost);
+
+    public static Button Toggle(string label, bool ativo = true, int width = 112)
+    {
+        var b = (BotaoModerno)Criar(label, width, 40, BotaoModerno.Variante.Toggle);
+        b.Toggled = ativo;
         return b;
     }
 
-    public static Button GhostIcone(string texto, string icone, int width = 132, int height = 34, Color? cor = null)
-    {
-        var b = Ghost(texto, width, height);
-        if (cor.HasValue)
-        {
-            b.ForeColor = cor.Value;
-            b.FlatAppearance.BorderColor = cor.Value;
-            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(20, cor.Value);
-        }
-
-        return ComIcone(b, icone);
-    }
+    public static bool ToggleAtivo(Button btn)
+        => btn is BotaoModerno moderno
+            ? moderno.Toggled
+            : btn.Tag is bool ativo && ativo;
 
     public static void ParaToolbar(params Button[] botoes)
     {
-        foreach (var botao in botoes)
+        foreach (var b in botoes)
         {
-            botao.Height = 40;
-            botao.Margin = new Padding(6, 0, 0, 0);
-            botao.AutoEllipsis = true;
+            b.Height = 40;
+            b.Margin = new Padding(8, 0, 0, 0);
+            b.AutoEllipsis = true;
+            b.AutoSize = false;
+            b.Width = Math.Max(b.Width, CalcularLarguraMinima(b));
+            b.MinimumSize = new Size(b.Width, b.Height);
         }
     }
 
-    private static Button Construir(string texto, int width, int height, Color bg, Color fg)
+    public static void ParaPainelToolbar(FlowLayoutPanel painel, params Button[] botoes)
     {
-        var b = new Button
+        ParaToolbar(botoes);
+
+        for (var i = 0; i < botoes.Length; i++)
+            botoes[i].Margin = new Padding(i == 0 ? 0 : 8, 0, 0, 0);
+
+        painel.FlowDirection = FlowDirection.LeftToRight;
+        painel.WrapContents = false;
+        painel.AutoScroll = false;
+        painel.Width = LarguraPainelToolbar(botoes);
+    }
+
+    public static int LarguraPainelToolbar(params Button[] botoes)
+        => botoes.Sum(b => b.Width + b.Margin.Horizontal) + 2;
+
+    public static Color Misturar(Color a, Color b, float pct)
+        => Tema.Misturar(a, b, pct);
+
+    private static Button Criar(string texto, int width, int height, BotaoModerno.Variante variante)
+    {
+        var b = new BotaoModerno
         {
             Text = texto,
             Width = width,
             Height = height,
-            BackColor = bg,
-            ForeColor = fg,
-            FlatStyle = FlatStyle.Flat,
-            Font = new Font(Tema.FontFamily, 9, FontStyle.Bold),
+            Estilo = variante,
+            Font = Tema.FontPequenaBold,
             Cursor = Cursors.Hand,
-            UseVisualStyleBackColor = false,
             TextAlign = ContentAlignment.MiddleCenter,
-            Padding = new Padding(10, 0, 12, 0)
+            Padding = new Padding(14, 0, 14, 0),
+            AutoEllipsis = true
         };
-        b.FlatAppearance.BorderSize = bg == Tema.CorCardAlt ? 1 : 0;
-        b.FlatAppearance.BorderColor = Tema.CorBorda;
-        if (bg != Color.Transparent)
-        {
-            b.FlatAppearance.MouseOverBackColor = Misturar(bg, Color.Black, 0.10f);
-            b.FlatAppearance.MouseDownBackColor = Misturar(bg, Color.Black, 0.20f);
-        }
-        else
-        {
-            b.FlatAppearance.MouseOverBackColor = Color.FromArgb(20, fg);
-        }
+
+        b.Width = Math.Max(b.Width, CalcularLarguraMinima(b));
+        b.MinimumSize = new Size(b.Width, b.Height);
         return b;
     }
 
-    private static Button ComIcone(Button botao, string icone)
+    private static int CalcularLarguraMinima(Button b)
     {
-        botao.Image = CriarIcone(icone, botao.ForeColor, 16);
-        botao.ImageAlign = ContentAlignment.MiddleLeft;
-        botao.TextAlign = ContentAlignment.MiddleCenter;
-        botao.TextImageRelation = TextImageRelation.ImageBeforeText;
-        return botao;
-    }
+        var larguraTexto = TextRenderer.MeasureText(b.Text ?? "", b.Font).Width;
+        if (string.Equals((b.Text ?? "").Trim(), "...", StringComparison.Ordinal))
+            return Math.Max(48, larguraTexto + 36);
 
-    private static Image CriarIcone(string icone, Color cor, int tamanho)
-    {
-        var bmp = new Bitmap(tamanho, tamanho);
-        using var g = Graphics.FromImage(bmp);
-        g.Clear(Color.Transparent);
-        using var fonte = Tema.FontIcone(tamanho - 2);
-        TextRenderer.DrawText(g, icone, fonte, new Rectangle(0, 0, tamanho, tamanho), cor,
-            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
-        return bmp;
-    }
-
-    public static Color Misturar(Color a, Color b, float pct)
-    {
-        pct = Math.Clamp(pct, 0f, 1f);
-        return Color.FromArgb(
-            (int)(a.R * (1 - pct) + b.R * pct),
-            (int)(a.G * (1 - pct) + b.G * pct),
-            (int)(a.B * (1 - pct) + b.B * pct));
+        return Math.Max(104, larguraTexto + 58);
     }
 }

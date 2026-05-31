@@ -1,4 +1,4 @@
-using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
 
@@ -6,7 +6,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 
 public class FrmBuscarProdutoPdv : Form
 {
-    private readonly ProdutoService _produtos;
+    private readonly IProdutoService _produtos;
     private readonly string _termoInicial;
     private TextBox txtBusca = null!;
     private StyledGrid grid = null!;
@@ -14,7 +14,7 @@ public class FrmBuscarProdutoPdv : Form
 
     public Produto? ProdutoSelecionado { get; private set; }
 
-    public FrmBuscarProdutoPdv(ProdutoService produtos, string? termoInicial = null)
+    public FrmBuscarProdutoPdv(IProdutoService produtos, string? termoInicial = null)
     {
         _produtos = produtos;
         _termoInicial = termoInicial?.Trim() ?? "";
@@ -152,21 +152,28 @@ public class FrmBuscarProdutoPdv : Form
 
     private async void SelecionarAtual()
     {
-        if (grid.SelectedRows.Count == 0)
+        try
         {
-            Toast.Mostrar("Selecione um produto.", TipoToast.Info, owner: this);
-            return;
-        }
+            if (grid.SelectedRows.Count == 0)
+            {
+                Toast.Mostrar("Selecione um produto.", TipoToast.Info, owner: this);
+                return;
+            }
 
-        var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
-        ProdutoSelecionado = await _produtos.BuscarPorIdAsync(id);
-        if (ProdutoSelecionado == null)
+            var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+            ProdutoSelecionado = await _produtos.BuscarPorIdAsync(id);
+            if (ProdutoSelecionado == null)
+            {
+                Toast.Mostrar("Produto nao encontrado.", TipoToast.Erro, owner: this);
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+        catch (Exception ex)
         {
-            Toast.Mostrar("Produto nao encontrado.", TipoToast.Erro, owner: this);
-            return;
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
-
-        DialogResult = DialogResult.OK;
-        Close();
     }
 }

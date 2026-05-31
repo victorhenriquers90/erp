@@ -17,6 +17,8 @@ public sealed record ModuloSistemaInfo(ModuloSistema Id, string Nome, string Des
 public class ImplantacaoService
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    // Garante que leitura e escrita nunca ocorram simultaneamente no mesmo arquivo
+    private static readonly SemaphoreSlim _semaphore = new(1, 1);
     private readonly string _arquivo;
 
     public ImplantacaoService(string? arquivo = null)
@@ -38,7 +40,7 @@ public class ImplantacaoService
 
     public IReadOnlyList<ModuloSistemaInfo> ModulosDisponiveis { get; } = new List<ModuloSistemaInfo>
     {
-        new(ModuloSistema.PDV, "PDV", "Frente de caixa e venda balcao.", true),
+        new(ModuloSistema.PDV, "PDV", "Frente de caixa e venda balcao."),          // Opcional: depende do segmento
         new(ModuloSistema.Estoque, "Estoque", "Entradas, saidas, inventario e alertas.", true),
         new(ModuloSistema.Cadastros, "Cadastros", "Produtos, clientes e fornecedores.", true),
         new(ModuloSistema.Financeiro, "Financeiro", "Contas a pagar, receber e quitacoes.", true),
@@ -58,11 +60,13 @@ public class ImplantacaoService
 
     public async Task<ImplantacaoConfig> ObterAsync()
     {
+        await _semaphore.WaitAsync();
         try
         {
             if (File.Exists(_arquivo))
             {
-                await using var stream = File.OpenRead(_arquivo);
+                await using var stream = new FileStream(
+                    _arquivo, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var config = await JsonSerializer.DeserializeAsync<ImplantacaoConfig>(stream, JsonOptions);
                 if (config != null)
                     return Normalizar(config);
@@ -71,6 +75,10 @@ public class ImplantacaoService
         catch
         {
             // Falha de leitura nao pode impedir a abertura do sistema.
+        }
+        finally
+        {
+            _semaphore.Release();
         }
 
         return Normalizar(new ImplantacaoConfig
@@ -89,8 +97,24 @@ public class ImplantacaoService
         if (!string.IsNullOrWhiteSpace(pasta))
             Directory.CreateDirectory(pasta);
 
-        await using var stream = File.Create(_arquivo);
-        await JsonSerializer.SerializeAsync(stream, normalizado, JsonOptions);
+        await _semaphore.WaitAsync();
+        try
+        {
+            // Escreve em arquivo temporário e move atomicamente (MOVEFILE_REPLACE_EXISTING).
+            // File.Move(overwrite:true) funciona mesmo quando o destino ainda não existe
+            // (primeira execução) e evita o IOException que File.Replace lança nesses casos.
+            var temp = _arquivo + ".tmp";
+            await using (var stream = new FileStream(
+                temp, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                await JsonSerializer.SerializeAsync(stream, normalizado, JsonOptions);
+            }
+            File.Move(temp, _arquivo, overwrite: true);
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public ModuloSistema ModulosRecomendados(TipoNegocio perfil)
@@ -115,9 +139,11 @@ public class ImplantacaoService
         if (config.ModulosAtivos == 0)
             config.ModulosAtivos = ModulosRecomendados(config.Perfil);
 
-        // Adicionar módulos essenciais
-        var essenciais = ModulosDisponiveis.Where(m => m.Essencial).Select(m => m.Id)
-            .Aggregate(ModuloSistema.PDV, (a, b) => a | b);
+        // Garantir que módulos base (não PDV) estejam sempre ativos
+        var essenciais = ModulosDisponiveis
+            .Where(m => m.Essencial)
+            .Select(m => m.Id)
+            .Aggregate((ModuloSistema)0, (a, b) => a | b);
 
         config.ModulosAtivos |= essenciais;
 

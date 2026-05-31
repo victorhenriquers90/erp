@@ -1,23 +1,33 @@
 <nav class="side-nav" aria-label="Menu principal">
     <div class="nav-section">Principal</div>
     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-        <span class="nav-icon">⌂</span>
-        <span>Cockpit</span>
+        <span class="nav-icon nav-home" aria-hidden="true"></span>
+        <span>Painel</span>
     </NavLink>
 
     <div class="nav-section">Cadastros</div>
     <NavLink class="nav-link" href="produtos">
-        <span class="nav-icon">□</span>
+        <span class="nav-icon nav-box" aria-hidden="true"></span>
         <span>Produtos</span>
     </NavLink>
     <NavLink class="nav-link" href="clientes">
-        <span class="nav-icon">◌</span>
+        <span class="nav-icon nav-user" aria-hidden="true"></span>
         <span>Clientes</span>
+    </NavLink>
+    <NavLink class="nav-link" href="fornecedores">
+        <span class="nav-icon nav-truck" aria-hidden="true"></span>
+        <span>Fornecedores</span>
     </NavLink>
 
     <div class="nav-section">Operacao</div>
     <NavLink class="nav-link" href="estoque">
-        <span class="nav-icon">▤</span>
+        <span class="nav-icon nav-stack" aria-hidden="true"></span>
         <span>Estoque</span>
+    </NavLink>
+
+    <div class="nav-section">Financeiro</div>
+    <NavLink class="nav-link" href="financeiro">
+        <span class="nav-icon nav-money" aria-hidden="true"></span>
+        <span>Financeiro</span>
     </NavLink>
 </nav>

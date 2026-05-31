@@ -1,19 +1,20 @@
-using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoVarejo.Application.Services;
 
-public class ProdutoService
+public class ProdutoService : IProdutoService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProdutoService(AppDbContext db) => _db = db;
+    public ProdutoService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
     public Task<List<Produto>> ListarAsync(string? filtro = null)
     {
-        var q = _db.Produtos.Include(p => p.Categoria).AsQueryable();
+        var q = _unitOfWork.Produtos.Query().AsNoTracking().Include(p => p.Categoria).AsQueryable();
         if (!string.IsNullOrWhiteSpace(filtro))
         {
             q = q.Where(p => p.Descricao.Contains(filtro)
@@ -25,7 +26,8 @@ public class ProdutoService
 
     public Task<List<Produto>> ListarParaVendaAsync(string? filtro = null)
     {
-        var q = _db.Produtos
+        var q = _unitOfWork.Produtos.Query()
+            .AsNoTracking()
             .Include(p => p.Categoria)
             .Where(p => p.Ativo)
             .AsQueryable();
@@ -41,11 +43,11 @@ public class ProdutoService
     }
 
     public Task<Produto?> BuscarPorCodigoAsync(string codigo) =>
-        _db.Produtos.FirstOrDefaultAsync(p => p.Ativo &&
+        _unitOfWork.Produtos.Query().FirstOrDefaultAsync(p => p.Ativo &&
             (p.Codigo == codigo || p.CodigoBarras == codigo));
 
     public Task<Produto?> BuscarPorIdAsync(int id) =>
-        _db.Produtos.Include(p => p.Categoria).FirstOrDefaultAsync(p => p.Id == id);
+        _unitOfWork.Produtos.Query().Include(p => p.Categoria).FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<Result<Produto>> SalvarAsync(Produto produto)
     {
@@ -56,39 +58,40 @@ public class ProdutoService
         if (produto.PrecoVenda <= 0)
             return Result.Falha<Produto>("Preço de venda deve ser maior que zero.");
 
-        var duplicado = await _db.Produtos.AnyAsync(p =>
+        var duplicado = await _unitOfWork.Produtos.Query().AnyAsync(p =>
             p.Codigo == produto.Codigo && p.Id != produto.Id);
         if (duplicado)
             return Result.Falha<Produto>("Já existe um produto com este código.");
 
         if (produto.Id == 0)
         {
-            _db.Produtos.Add(produto);
+            await _unitOfWork.Produtos.InsertAsync(produto);
         }
         else
         {
             produto.AtualizadoEm = DateTime.Now;
-            _db.Produtos.Update(produto);
+            await _unitOfWork.Produtos.UpdateAsync(produto);
         }
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(produto);
     }
 
     public async Task<Result> ExcluirAsync(int id)
     {
-        var produto = await _db.Produtos.FindAsync(id);
+        var produto = await _unitOfWork.Produtos.GetByIdAsync(id);
         if (produto == null) return Result.Falha("Produto não encontrado.");
-        var temVendas = await _db.ItensVenda.AnyAsync(i => i.ProdutoId == id);
+        var temVendas = await _unitOfWork.ItensVenda.Query().AnyAsync(i => i.ProdutoId == id);
         if (temVendas)
         {
             produto.Ativo = false;
             produto.AtualizadoEm = DateTime.Now;
+            await _unitOfWork.Produtos.UpdateAsync(produto);
         }
         else
         {
-            _db.Produtos.Remove(produto);
+            await _unitOfWork.Produtos.DeleteAsync(id);
         }
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
     }
 }

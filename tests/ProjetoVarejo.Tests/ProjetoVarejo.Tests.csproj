@@ -12,9 +12,11 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="FluentAssertions" Version="6.12.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
@@ -28,6 +30,7 @@
     <ProjectReference Include="..\..\src\ProjetoVarejo.Application\ProjetoVarejo.Application.csproj" />
     <ProjectReference Include="..\..\src\ProjetoVarejo.Infrastructure\ProjetoVarejo.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\ProjetoVarejo.Shared\ProjetoVarejo.Shared.csproj" />
+    <ProjectReference Include="..\..\src\ProjetoVarejo.Api\ProjetoVarejo.Api.csproj" />
   </ItemGroup>
 
 </Project>

@@ -34,30 +34,30 @@ public class StyledGrid : DataGridView
         AdvancedCellBorderStyle.Top = DataGridViewAdvancedCellBorderStyle.None;
 
         // Header
-        ColumnHeadersDefaultCellStyle.BackColor = Tema.CorCardAlt;
+        ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(239, 244, 250);
         ColumnHeadersDefaultCellStyle.ForeColor = Tema.CorTextoMedio;
         ColumnHeadersDefaultCellStyle.Font = new Font(Tema.FontFamily, 9, FontStyle.Bold);
-        ColumnHeadersDefaultCellStyle.Padding = new Padding(10, 7, 10, 7);
+        ColumnHeadersDefaultCellStyle.Padding = new Padding(12, 8, 12, 8);
         ColumnHeadersDefaultCellStyle.SelectionBackColor = Tema.CorCardAlt;
         ColumnHeadersDefaultCellStyle.SelectionForeColor = Tema.CorTextoMedio;
         ColumnHeadersDefaultCellStyle.WrapMode = DataGridViewTriState.False;
-        ColumnHeadersHeight = 40;
+        ColumnHeadersHeight = 42;
 
         // Linhas
         DefaultCellStyle.BackColor = Tema.CorCard;
         DefaultCellStyle.ForeColor = Tema.CorTextoEscuro;
         DefaultCellStyle.Font = Tema.FontCorpo;
-        DefaultCellStyle.Padding = new Padding(10, 5, 10, 5);
-        DefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 236, 252);
+        DefaultCellStyle.Padding = new Padding(12, 6, 12, 6);
+        DefaultCellStyle.SelectionBackColor = Tema.CorPrimariaSoft;
         DefaultCellStyle.SelectionForeColor = Tema.CorTextoEscuro;
         DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
         AlternatingRowsDefaultCellStyle.BackColor = Tema.CorCardAlt;
-        AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 236, 252);
+        AlternatingRowsDefaultCellStyle.SelectionBackColor = Tema.CorPrimariaSoft;
         AlternatingRowsDefaultCellStyle.SelectionForeColor = Tema.CorTextoEscuro;
 
-        RowTemplate.Height = 36;
-        RowsDefaultCellStyle.Padding = new Padding(10, 5, 10, 5);
+        RowTemplate.Height = 40;
+        RowsDefaultCellStyle.Padding = new Padding(12, 6, 12, 6);
 
         // Hover (CellMouseEnter/Leave)
         int linhaAnterior = -1;
@@ -67,7 +67,7 @@ public class StyledGrid : DataGridView
             if (linhaAnterior >= 0 && linhaAnterior < Rows.Count && !Rows[linhaAnterior].Selected)
                 Rows[linhaAnterior].DefaultCellStyle.BackColor = e.RowIndex % 2 == 0 ? Tema.CorCard : Tema.CorCardAlt;
             if (!Rows[e.RowIndex].Selected)
-                Rows[e.RowIndex].DefaultCellStyle.BackColor = Tema.CorFundo;
+                Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(236, 243, 251);
             linhaAnterior = e.RowIndex;
         };
         CellMouseLeave += (s, e) =>

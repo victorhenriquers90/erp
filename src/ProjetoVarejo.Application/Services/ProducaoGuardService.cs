@@ -1,8 +1,9 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
+using ProjetoVarejo.Shared;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ProjetoVarejo.Application.Services;
 
@@ -45,13 +46,13 @@ public sealed class ResultadoProntidaoProducao
 
 public class ProducaoGuardService
 {
-    private readonly AppDbContext _db;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IConfiguration _config;
     private readonly SessaoApp _sessao;
 
-    public ProducaoGuardService(AppDbContext db, IConfiguration config, SessaoApp sessao)
+    public ProducaoGuardService(IUnitOfWork unitOfWork, IConfiguration config, SessaoApp sessao)
     {
-        _db = db;
+        _unitOfWork = unitOfWork;
         _config = config;
         _sessao = sessao;
     }
@@ -95,10 +96,10 @@ public class ProducaoGuardService
             "Certificado A1 ou CSC/token NFC-e nao estao prontos.",
             "Configure certificado A1 e CSC antes de vender em producao.", SeveridadeProntidao.Bloqueio);
 
-        var produtosAtivos = await _db.Produtos.AsNoTracking().CountAsync(p => p.Ativo);
-        var produtosSemFiscal = await _db.Produtos.AsNoTracking()
+        var produtosAtivos = await _unitOfWork.Produtos.Query().AsNoTracking().CountAsync(p => p.Ativo);
+        var produtosSemFiscal = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && (p.Ncm == null || p.Ncm == "" || p.Cfop == "" || p.CstIcms == "" || p.CstPisCofins == ""));
-        var produtosPrecoInvalido = await _db.Produtos.AsNoTracking()
+        var produtosPrecoInvalido = await _unitOfWork.Produtos.Query().AsNoTracking()
             .CountAsync(p => p.Ativo && p.PrecoVenda <= 0);
 
         Add(produtosAtivos == 0, "Sem produtos",
@@ -113,7 +114,7 @@ public class ProducaoGuardService
             $"{produtosPrecoInvalido} produto(s) ativo(s) estao sem preco de venda valido.",
             "Corrija precos antes de liberar o PDV.", SeveridadeProntidao.Bloqueio);
 
-        var admin = await _db.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.Login == "admin");
+        var admin = await _unitOfWork.Usuarios.Query().AsNoTracking().FirstOrDefaultAsync(u => u.Login == "admin");
         var senhaPadrao = admin != null && SenhaHasher.Verifica("admin", admin.SenhaHash);
         Add(senhaPadrao, "Senha padrao",
             "O usuario admin ainda usa a senha padrao.",
@@ -170,7 +171,7 @@ public class ProducaoGuardService
         if (empresa.SerieNfce <= 0 || empresa.ProximoNumeroNfce <= 0)
             Bloquear("Numeracao NFC-e", "Serie ou proximo numero da NFC-e estao invalidos.", "Revise a numeracao fiscal.");
 
-        var venda = await _db.Vendas
+        var venda = await _unitOfWork.Vendas.Query()
             .Include(v => v.Itens).ThenInclude(i => i.Produto)
             .FirstOrDefaultAsync(v => v.Id == vendaId);
 
@@ -212,8 +213,8 @@ public class ProducaoGuardService
 
     private async Task<EmpresaConfig?> ObterEmpresaAsync() =>
         _sessao.EmpresaAtiva != null
-            ? await _db.EmpresaConfigs.AsNoTracking().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
-            : await _db.EmpresaConfigs.AsNoTracking().OrderBy(e => e.Id).FirstOrDefaultAsync();
+            ? await _unitOfWork.Configuracoes.Query().AsNoTracking().FirstOrDefaultAsync(e => e.Id == _sessao.EmpresaAtiva.Id)
+            : await _unitOfWork.Configuracoes.Query().AsNoTracking().OrderBy(e => e.Id).FirstOrDefaultAsync();
 
     private static bool BackupAutomaticoConfigurado()
     {

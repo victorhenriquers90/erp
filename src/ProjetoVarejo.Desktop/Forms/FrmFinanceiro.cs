@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -10,7 +11,7 @@ namespace ProjetoVarejo.Desktop.Forms;
 [ModuloRequerido(ModuloSistema.Financeiro)]
 public class FrmFinanceiro : Form
 {
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private readonly ClienteService _clientes;
     private readonly FornecedorService _fornecedores;
     private ComboBox cboTipo = null!, cboStatus = null!;
@@ -18,7 +19,7 @@ public class FrmFinanceiro : Form
     private StyledGrid grid = null!;
     private FlowLayoutPanel _kpis = null!;
 
-    public FrmFinanceiro(FinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
+    public FrmFinanceiro(IFinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
     {
         _svc = svc; _clientes = clientes; _fornecedores = fornecedores;
         InitUi();
@@ -29,6 +30,7 @@ public class FrmFinanceiro : Form
     {
         Text = "Financeiro";
         Size = new Size(1250, 750);
+        MinimumSize = new Size(1120, 640);
         StartPosition = FormStartPosition.CenterParent;
         BackColor = Tema.CorFundo;
         Padding = new Padding(Tema.EspacamentoGrande);
@@ -45,26 +47,37 @@ public class FrmFinanceiro : Form
             Padding = new Padding(0, 4, 0, 12)
         };
 
-        var filtros = new Card { Dock = DockStyle.Top, Height = 80, Padding = new Padding(16) };
+        var filtros = new Card { Dock = DockStyle.Top, Height = 92, Padding = new Padding(16) };
         var pnlFiltros = new Panel { Dock = DockStyle.Fill, BackColor = Tema.CorCard };
+        var campos = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0)
+        };
+        var acoes = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Right,
+            Width = 440,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Tema.CorCard,
+            Padding = new Padding(0, 18, 0, 0)
+        };
 
-        Inputs.Rotulo("TIPO", 0, 0); pnlFiltros.Controls.Add(Inputs.Rotulo("TIPO", 0, 0));
-        cboTipo = new ComboBox { Left = 0, Top = 18, Width = 140, DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
+        cboTipo = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
         cboTipo.Items.Add("Todos");
         foreach (TipoConta t in Enum.GetValues(typeof(TipoConta))) cboTipo.Items.Add(t);
         cboTipo.SelectedIndex = 0;
-        pnlFiltros.Controls.Add(cboTipo);
 
-        pnlFiltros.Controls.Add(Inputs.Rotulo("STATUS", 160, 0));
-        cboStatus = new ComboBox { Left = 160, Top = 18, Width = 160, DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
+        cboStatus = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Font = Tema.FontCorpo, FlatStyle = FlatStyle.Flat };
         cboStatus.Items.Add("Todos");
         foreach (StatusConta s in Enum.GetValues(typeof(StatusConta))) cboStatus.Items.Add(s);
         cboStatus.SelectedIndex = 0;
-        pnlFiltros.Controls.Add(cboStatus);
 
-        pnlFiltros.Controls.Add(Inputs.Rotulo("DE", 340, 0));
-        dtDe = new DateTimePicker { Left = 340, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(-30), Font = Tema.FontCorpo };
-        pnlFiltros.Controls.Add(dtDe);
+        dtDe = new DateTimePicker { Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(-30), Font = Tema.FontCorpo };
 
         pnlFiltros.Controls.Add(Inputs.Rotulo("ATÉ", 485, 0));
         dtAte = new DateTimePicker { Left = 485, Top = 18, Width = 130, Format = DateTimePickerFormat.Short, Value = DateTime.Today.AddDays(60), Font = Tema.FontCorpo };
@@ -89,6 +102,28 @@ public class FrmFinanceiro : Form
             btnNovo.Left = pnlFiltros.Width - 260;
         };
 
+        pnlFiltros.Controls.Clear();
+
+        campos.Controls.Add(CriarCampoFiltro("Tipo", cboTipo, 140));
+        campos.Controls.Add(CriarCampoFiltro("Status", cboStatus, 160));
+        campos.Controls.Add(CriarCampoFiltro("De", dtDe, 130));
+        campos.Controls.Add(CriarCampoFiltro("Ate", dtAte, 130));
+
+        var btnFiltrarToolbar = Botoes.Primario("Filtrar", 122, 40);
+        btnFiltrarToolbar.Click += async (s, e) => await CarregarAsync();
+        var btnNovoToolbar = Botoes.Info("Nova conta", 152, 40);
+        btnNovoToolbar.Click += (s, e) => Editar(null);
+        var btnQuitarToolbar = Botoes.Sucesso("Quitar", 122, 40);
+        btnQuitarToolbar.Click += async (s, e) => await QuitarSelAsync();
+        Botoes.ParaPainelToolbar(acoes, btnFiltrarToolbar, btnNovoToolbar, btnQuitarToolbar);
+
+        acoes.Controls.Add(btnFiltrarToolbar);
+        acoes.Controls.Add(btnNovoToolbar);
+        acoes.Controls.Add(btnQuitarToolbar);
+
+        pnlFiltros.Controls.Add(campos);
+        pnlFiltros.Controls.Add(acoes);
+
         filtros.Controls.Add(pnlFiltros);
 
         var cardGrid = new Card { Dock = DockStyle.Fill, Padding = new Padding(0) };
@@ -112,6 +147,24 @@ public class FrmFinanceiro : Form
         Controls.Add(filtros);
         Controls.Add(_kpis);
         Controls.Add(header);
+    }
+
+    private static Panel CriarCampoFiltro(string label, Control controle, int width)
+    {
+        var panel = new Panel
+        {
+            Width = width,
+            Height = 58,
+            Margin = new Padding(0, 0, 14, 0),
+            BackColor = Tema.CorCard
+        };
+
+        var rotulo = Inputs.Rotulo(label, 0, 0, width);
+        controle.SetBounds(0, 22, width, 30);
+
+        panel.Controls.Add(rotulo);
+        panel.Controls.Add(controle);
+        return panel;
     }
 
     private async Task CarregarAsync()
@@ -159,21 +212,28 @@ public class FrmFinanceiro : Form
 
     private async void Editar(int? id)
     {
-        ContaFinanceira c;
-        if (id.HasValue)
+        try
         {
-            var lista = await _svc.ListarAsync();
-            c = lista.FirstOrDefault(x => x.Id == id.Value) ?? new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30) };
+            ContaFinanceira c;
+            if (id.HasValue)
+            {
+                var lista = await _svc.ListarAsync();
+                c = lista.FirstOrDefault(x => x.Id == id.Value) ?? new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30) };
+            }
+            else
+            {
+                c = new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30), Tipo = TipoConta.Pagar };
+            }
+            using var dlg = new FrmContaEdit(c, _svc, _clientes, _fornecedores);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                await CarregarAsync();
+                Toast.Mostrar("Conta salva.", TipoToast.Sucesso, owner: this);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            c = new ContaFinanceira { DataVencimento = DateTime.Today.AddDays(30), Tipo = TipoConta.Pagar };
-        }
-        using var dlg = new FrmContaEdit(c, _svc, _clientes, _fornecedores);
-        if (dlg.ShowDialog(this) == DialogResult.OK)
-        {
-            await CarregarAsync();
-            Toast.Mostrar("Conta salva.", TipoToast.Sucesso, owner: this);
+            Toast.Mostrar(ex.Message, TipoToast.Erro, owner: this);
         }
     }
 
@@ -193,7 +253,7 @@ public class FrmFinanceiro : Form
 public class FrmContaEdit : Form
 {
     private readonly ContaFinanceira _c;
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private readonly ClienteService _clientes;
     private readonly FornecedorService _fornecedores;
     private ComboBox cboTipo = null!;
@@ -201,7 +261,7 @@ public class FrmContaEdit : Form
     private DateTimePicker dtVenc = null!, dtEmissao = null!;
     private ComboBox cboCliente = null!, cboFornecedor = null!;
 
-    public FrmContaEdit(ContaFinanceira c, FinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
+    public FrmContaEdit(ContaFinanceira c, IFinanceiroService svc, ClienteService clientes, FornecedorService fornecedores)
     {
         _c = c; _svc = svc; _clientes = clientes; _fornecedores = fornecedores;
         InitUi();
@@ -308,12 +368,12 @@ public class FrmContaEdit : Form
 public class FrmQuitacao : Form
 {
     private readonly int _contaId;
-    private readonly FinanceiroService _svc;
+    private readonly IFinanceiroService _svc;
     private DateTimePicker dtPag = null!;
     private TextBox txtValor = null!, txtJuros = null!, txtMulta = null!, txtDesc = null!;
     private ComboBox cboForma = null!;
 
-    public FrmQuitacao(int contaId, FinanceiroService svc)
+    public FrmQuitacao(int contaId, IFinanceiroService svc)
     {
         _contaId = contaId; _svc = svc;
         InitUi();

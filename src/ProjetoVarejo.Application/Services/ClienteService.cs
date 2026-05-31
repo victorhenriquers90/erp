@@ -1,18 +1,18 @@
-using Microsoft.EntityFrameworkCore;
+using ProjetoVarejo.Application.Contracts.Repositories;
 using ProjetoVarejo.Domain.Entities;
-using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoVarejo.Application.Services;
 
 public class ClienteService
 {
-    private readonly AppDbContext _db;
-    public ClienteService(AppDbContext db) => _db = db;
+    private readonly IUnitOfWork _unitOfWork;
+    public ClienteService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
     public Task<List<Cliente>> ListarAsync(string? filtro = null)
     {
-        var q = _db.Clientes.AsQueryable();
+        var q = _unitOfWork.Clientes.Query().AsQueryable();
         if (!string.IsNullOrWhiteSpace(filtro))
             q = q.Where(c => c.Nome.Contains(filtro) ||
                             (c.CpfCnpj != null && c.CpfCnpj.Contains(filtro)));
@@ -20,7 +20,7 @@ public class ClienteService
     }
 
     public Task<Cliente?> BuscarPorIdAsync(int id) =>
-        _db.Clientes.FirstOrDefaultAsync(c => c.Id == id);
+        _unitOfWork.Clientes.Query().FirstOrDefaultAsync(c => c.Id == id);
 
     public async Task<Result<Cliente>> SalvarAsync(Cliente cliente)
     {
@@ -28,24 +28,24 @@ public class ClienteService
             return Result.Falha<Cliente>("Nome é obrigatório.");
 
         if (cliente.Id == 0)
-            _db.Clientes.Add(cliente);
+            await _unitOfWork.Clientes.InsertAsync(cliente);
         else
         {
             cliente.AtualizadoEm = DateTime.Now;
-            _db.Clientes.Update(cliente);
+            await _unitOfWork.Clientes.UpdateAsync(cliente);
         }
-        await _db.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(cliente);
     }
 
     public async Task<Result> ExcluirAsync(int id)
     {
-        var c = await _db.Clientes.FindAsync(id);
+        var c = await _unitOfWork.Clientes.GetByIdAsync(id);
         if (c == null) return Result.Falha("Cliente não encontrado.");
-        var temVenda = await _db.Vendas.AnyAsync(v => v.ClienteId == id);
-        if (temVenda) { c.Ativo = false; c.AtualizadoEm = DateTime.Now; }
-        else _db.Clientes.Remove(c);
-        await _db.SaveChangesAsync();
+        var temVenda = await _unitOfWork.Vendas.Query().AnyAsync(v => v.ClienteId == id);
+        if (temVenda) { c.Ativo = false; c.AtualizadoEm = DateTime.Now; await _unitOfWork.Clientes.UpdateAsync(c); }
+        else await _unitOfWork.Clientes.DeleteAsync(id);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok();
     }
 }

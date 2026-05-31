@@ -1,4 +1,5 @@
 using ProjetoVarejo.Application.Configuracao;
+using ProjetoVarejo.Application.Contracts.Services;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Desktop.Theme;
 using ProjetoVarejo.Domain.Entities;
@@ -10,16 +11,17 @@ namespace ProjetoVarejo.Desktop.Forms;
 [ModuloRequerido(ModuloSistema.Fiscal)]
 public class FrmNotasFiscais : Form
 {
-    private readonly NfceService _svc;
+    private readonly INfceService _svc;
     private readonly VendaService _vendas;
     private DateTimePicker dtDe = null!, dtAte = null!;
     private ComboBox cboStatus = null!;
     private StyledGrid grid = null!;
     private Label lblTotal = null!;
 
-    public FrmNotasFiscais(NfceService svc, VendaService vendas)
+    public FrmNotasFiscais(INfceService svc, VendaService vendas)
     {
-        _svc = svc; _vendas = vendas;
+        _svc = svc;
+        _vendas = vendas;
         InitUi();
         Shown += async (s, e) => await CarregarAsync();
     }
@@ -138,6 +140,7 @@ public class FrmNotasFiscais : Form
     {
         StatusNotaFiscal? status = cboStatus.SelectedItem is StatusNotaFiscal sn ? sn : null;
         var lista = await _svc.ListarAsync(dtDe.Value.Date, dtAte.Value.Date.AddDays(1), status);
+
         grid.Rows.Clear();
         foreach (var n in lista)
         {
@@ -167,11 +170,9 @@ public class FrmNotasFiscais : Form
             return;
         }
         var id = (int)grid.SelectedRows[0].Cells["Id"].Value;
-
         using var dlg = new FrmJustificativa("Justificativa de Cancelamento",
             "Informe o motivo (mín. 15, máx. 255 caracteres):");
         if (dlg.ShowDialog(this) != DialogResult.OK) return;
-
         UseWaitCursor = true;
         try
         {

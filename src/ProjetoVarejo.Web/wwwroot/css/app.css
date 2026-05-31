@@ -1044,3 +1044,202 @@ a {
         min-width: 680px;
     }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LOGIN PAGE STYLES
+   ────────────────────────────────────────────────────────────────────────────*/
+
+.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background:
+        linear-gradient(135deg, rgba(210, 130, 34, .12), transparent 34%),
+        radial-gradient(circle at 86% 8%, rgba(15, 139, 141, .18), transparent 28%),
+        var(--page);
+    padding: 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 40px 32px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-soft);
+}
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.brand-mark {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue), var(--teal));
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.brand-caption {
+    font-size: 12px;
+    color: var(--text-soft);
+    margin-top: 2px;
+}
+
+.login-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.login-sub {
+    font-size: 14px;
+    color: var(--text-soft);
+    margin-bottom: 24px;
+}
+
+.field-group {
+    margin-bottom: 20px;
+}
+
+.field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.field-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface-alt);
+    transition: all 180ms ease;
+    outline: none;
+}
+
+.field-input:hover {
+    border-color: var(--border);
+    background: var(--surface);
+}
+
+.field-input:focus {
+    border-color: var(--blue);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px var(--blue-soft);
+}
+
+.field-input:disabled {
+    background: var(--border-soft);
+    color: var(--muted);
+    cursor: not-allowed;
+}
+
+.field-input::placeholder {
+    color: var(--muted);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--blue), #1d4ed8);
+    color: white;
+    cursor: pointer;
+    transition: all 200ms ease;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, .2);
+}
+
+.login-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(37, 99, 235, .3);
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+.login-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(37, 99, 235, .2);
+}
+
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.alert-state {
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    background: var(--danger-soft);
+    border: 1px solid var(--danger);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--danger);
+    display: flex;
+    align-items: center;
+}
+
+.login-brand-footer {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-soft);
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 32px 24px;
+    }
+
+    .login-title {
+        font-size: 20px;
+    }
+
+    .login-sub {
+        font-size: 13px;
+    }
+
+    .brand-mark {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .brand-name {
+        font-size: 16px;
+    }
+}

@@ -137,8 +137,24 @@ public partial class App : WpfApp
                 LogError("Obtendo AppDbContext...");
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 LogError("AppDbContext obtido, iniciando MigrateAsync...");
-                await db.Database.MigrateAsync();
-                LogError("Migrations aplicadas com sucesso");
+
+                try
+                {
+                    // Timeout de 10 segundos para migrations
+                    using (var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                    {
+                        await db.Database.MigrateAsync(cts.Token);
+                        LogError("Migrations aplicadas com sucesso");
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    LogError("TIMEOUT: Migrations demorando muito (>10s), prosseguindo mesmo assim");
+                }
+                catch (Exception ex)
+                {
+                    LogError("ERRO nas migrations (mas prosseguindo)", ex);
+                }
             }
 
             LogError("Obtendo LoginWindow do DI...");

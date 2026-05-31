@@ -168,9 +168,10 @@ public partial class App : WpfApp
             var login = Services.GetRequiredService<LoginWindow>();
             LogError("Mostrando LoginWindow...");
             login.Show();
-            LogError("LoginWindow mostrada com sucesso");
+            LogError("LoginWindow.Show() chamado");
 
-            await Task.Delay(100); // Dar um tempo para a window aparecer
+            await Task.Delay(500); // Dar um tempo para a window renderizar
+            LogError($"LoginWindow visível: {login.IsVisible}");
             LogError("=== APP STARTUP COMPLETO ===");
         }
         catch (Exception ex)

@@ -10,14 +10,32 @@ public class FornecedorService
     private readonly IUnitOfWork _unitOfWork;
     public FornecedorService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-    public Task<List<Fornecedor>> ListarAsync(string? filtro = null)
+    public async Task<List<Fornecedor>> ListarAsync(string? filtro = null)
     {
-        var q = _unitOfWork.Fornecedores.Query().AsQueryable();
-        if (!string.IsNullOrWhiteSpace(filtro))
-            q = q.Where(f => f.RazaoSocial.Contains(filtro) ||
-                            (f.NomeFantasia != null && f.NomeFantasia.Contains(filtro)) ||
-                             f.Cnpj.Contains(filtro));
-        return q.OrderBy(f => f.RazaoSocial).Take(500).ToListAsync();
+        System.Diagnostics.Trace.WriteLine("[FornecedorService.ListarAsync] Iniciando...");
+        try
+        {
+            System.Diagnostics.Trace.WriteLine("[FornecedorService.ListarAsync] Obtendo query...");
+            var q = _unitOfWork.Fornecedores.Query().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filtro))
+            {
+                System.Diagnostics.Trace.WriteLine($"[FornecedorService.ListarAsync] Aplicando filtro: {filtro}");
+                q = q.Where(f => f.RazaoSocial.Contains(filtro) ||
+                                (f.NomeFantasia != null && f.NomeFantasia.Contains(filtro)) ||
+                                 f.Cnpj.Contains(filtro));
+            }
+
+            System.Diagnostics.Trace.WriteLine("[FornecedorService.ListarAsync] Executando ToListAsync()...");
+            var resultado = await q.OrderBy(f => f.RazaoSocial).Take(500).ToListAsync();
+            System.Diagnostics.Trace.WriteLine($"[FornecedorService.ListarAsync] ✅ Retornou {resultado.Count} fornecedores");
+            return resultado;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Trace.WriteLine($"[FornecedorService.ListarAsync] ❌ ERRO: {ex}");
+            throw;
+        }
     }
 
     public Task<Fornecedor?> BuscarPorIdAsync(int id) =>

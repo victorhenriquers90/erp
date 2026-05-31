@@ -44,19 +44,25 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task AbrirClientesAsync()
     {
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirClientesAsync iniciado");
         await AbrirAsync<ClientesViewModel>("Clientes", vm => vm.CarregarCommand.ExecuteAsync(null));
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirClientesAsync finalizado");
     }
 
     [RelayCommand]
     private async Task AbrirProdutosAsync()
     {
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirProdutosAsync iniciado");
         await AbrirAsync<ProdutosViewModel>("Produtos", vm => vm.CarregarCommand.ExecuteAsync(null));
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirProdutosAsync finalizado");
     }
 
     [RelayCommand]
     private async Task AbrirFornecedoresAsync()
     {
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirFornecedoresAsync iniciado");
         await AbrirAsync<FornecedoresViewModel>("Fornecedores", vm => vm.CarregarCommand.ExecuteAsync(null));
+        System.Diagnostics.Trace.WriteLine("[MainViewModel] AbrirFornecedoresAsync finalizado");
     }
 
     [RelayCommand]
@@ -144,14 +150,23 @@ public partial class MainViewModel : BaseViewModel
     {
         try
         {
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] Abrindo {titulo}...");
             SetBusy(true, $"Carregando {titulo}...");
+
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] Obtendo {typeof(TViewModel).Name} do DI...");
             PaginaTitulo = titulo;
             var vm = _sp.GetRequiredService<TViewModel>();
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] ViewModel obtido, definindo PaginaAtual...");
+
             PaginaAtual = vm;
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] Executando carregador...");
+
             await carregador(vm);
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] ✅ {titulo} carregado com sucesso");
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] ❌ ERRO ao carregar {titulo}: {ex}");
             Erro = $"Erro ao carregar {titulo}: {ex.Message}";
         }
         finally

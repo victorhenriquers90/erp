@@ -43,8 +43,10 @@
                 </Border>
 
                 <!-- Menu Sections -->
-                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel>
+                <ScrollViewer Grid.Row="1"
+                              Style="{StaticResource ModernScrollViewerStyle}"
+                              Padding="0,8,0,8">
+                    <StackPanel Margin="0">
                         <!-- MAIN -->
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PRINCIPAL" />
                         <Button Content="📊 Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />

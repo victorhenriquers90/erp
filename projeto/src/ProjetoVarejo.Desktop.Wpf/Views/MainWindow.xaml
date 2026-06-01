@@ -183,7 +183,8 @@
             </Border>
 
             <!-- CONTEÚDO -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid Grid.Row="1">
+            <ScrollViewer x:Name="DashboardRoot" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel Margin="24">
 
                     <!-- Saudação -->
@@ -310,6 +311,10 @@
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
+
+            <!-- Host dos módulos (navegação dentro da janela) -->
+            <ContentControl x:Name="ContentHost" Visibility="Collapsed" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>

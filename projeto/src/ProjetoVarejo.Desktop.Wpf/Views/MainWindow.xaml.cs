@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ProjetoVarejo.Application.Sessao;
@@ -10,6 +11,9 @@ public partial class MainWindow : Window
 {
     private readonly SessaoApp _sessao;
     private readonly IServiceProvider _services;
+
+    // Escopo de DI do módulo atualmente exibido (mantém o DbContext vivo enquanto a tela está aberta).
+    private IServiceScope? _moduloScope;
 
     public MainWindow(SessaoApp sessao, IServiceProvider services)
     {
@@ -64,16 +68,41 @@ public partial class MainWindow : Window
         }
     }
 
-    private void Painel_Click(object sender, RoutedEventArgs e) => _ = CarregarKpisAsync();
+    // ───────────── Navegação do shell ─────────────
 
-    private void Clientes_Click(object sender, RoutedEventArgs e)
+    /// <summary>Exibe um módulo (UserControl) embutido na janela, trocando o conteúdo central.</summary>
+    private void NavegarModulo<TView>(string titulo, string breadcrumb) where TView : UserControl
     {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ClientesWindow>();
-        win.Owner = this;
-        win.ShowDialog();
+        _moduloScope?.Dispose();
+        _moduloScope = _services.CreateScope();
+
+        var view = _moduloScope.ServiceProvider.GetRequiredService<TView>();
+        ContentHost.Content = view;
+        ContentHost.Visibility = Visibility.Visible;
+        DashboardRoot.Visibility = Visibility.Collapsed;
+
+        LblPagina.Text = titulo;
+        LblBreadcrumb.Text = "Início · " + breadcrumb;
+    }
+
+    /// <summary>Volta para o painel (dashboard).</summary>
+    private void MostrarDashboard()
+    {
+        ContentHost.Content = null;
+        ContentHost.Visibility = Visibility.Collapsed;
+        DashboardRoot.Visibility = Visibility.Visible;
+        _moduloScope?.Dispose();
+        _moduloScope = null;
+
+        LblPagina.Text = "Painel";
+        LblBreadcrumb.Text = "Início · Visão geral";
         _ = CarregarKpisAsync();
     }
+
+    private void Painel_Click(object sender, RoutedEventArgs e) => MostrarDashboard();
+
+    private void Clientes_Click(object sender, RoutedEventArgs e)
+        => NavegarModulo<ClientesWindow>("Clientes", "Cadastros · Clientes");
 
     private void Produtos_Click(object sender, RoutedEventArgs e)
     {

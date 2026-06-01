@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FiscalWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FiscalWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -12,7 +12,7 @@
                        FontWeight="Bold"
                        Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
-                       Text="Acompanhamento de NFC-e, contingÃªncia e conformidade cadastral."
+                       Text="Acompanhamento de NFC-e, contingência e conformidade cadastral."
                        FontSize="14"
                        Foreground="{StaticResource TextSoft}" />
         </StackPanel>
@@ -30,7 +30,7 @@
                     <DatePicker x:Name="DtDe" Width="140" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                    <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                    <TextBlock Text="Até" FontWeight="SemiBold" />
                     <DatePicker x:Name="DtAte" Width="140" />
                 </StackPanel>
                 <UniformGrid Grid.Column="2" Columns="5" Margin="20,0,0,0">
@@ -54,7 +54,7 @@
                     </Border>
                     <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="ContingÃªncia" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Contingência" Foreground="{StaticResource TextSoft}" />
                             <TextBlock x:Name="LblContingencia" Margin="0,6,0,0" FontSize="20" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
@@ -79,8 +79,8 @@
                 <TabItem Header="Notas fiscais">
                     <DataGrid x:Name="DgNotas" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="NÃºmero" Binding="{Binding Numero}" Width="1*" />
-                            <DataGridTextColumn Header="SÃ©rie" Binding="{Binding Serie}" Width="0.8*" />
+                            <DataGridTextColumn Header="Número" Binding="{Binding Numero}" Width="1*" />
+                            <DataGridTextColumn Header="Série" Binding="{Binding Serie}" Width="0.8*" />
                             <DataGridTextColumn Header="Venda" Binding="{Binding Venda}" Width="1.2*" />
                             <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.3*" />
                             <DataGridTextColumn Header="Autorizada em" Binding="{Binding AutorizadaEm}" Width="1.6*" />
@@ -93,7 +93,7 @@
                     <DataGrid x:Name="DgConformidade" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Item" Binding="{Binding Item}" Width="2.2*" />
-                            <DataGridTextColumn Header="SituaÃ§Ã£o" Binding="{Binding Situacao}" Width="1.2*" />
+                            <DataGridTextColumn Header="Situação" Binding="{Binding Situacao}" Width="1.2*" />
                             <DataGridTextColumn Header="Detalhe" Binding="{Binding Detalhe}" Width="3.8*" />
                         </DataGrid.Columns>
                     </DataGrid>

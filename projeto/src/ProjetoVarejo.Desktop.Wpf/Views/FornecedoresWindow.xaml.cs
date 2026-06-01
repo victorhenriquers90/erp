@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Domain.Entities;

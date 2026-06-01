@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FinanceiroWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FinanceiroWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -13,7 +13,7 @@
                        FontWeight="Bold"
                        Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
-                       Text="Contas a pagar, contas a receber e quitaÃ§Ãµes."
+                       Text="Contas a pagar, contas a receber e quitações."
                        FontSize="14"
                        Foreground="{StaticResource TextSoft}" />
         </StackPanel>
@@ -39,7 +39,7 @@
             </Border>
             <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="14">
                 <StackPanel>
-                    <TextBlock Text="MOVIMENTAÃ‡Ã•ES" Foreground="{StaticResource TextSoft}" FontWeight="SemiBold" />
+                    <TextBlock Text="MOVIMENTAÇÕES" Foreground="{StaticResource TextSoft}" FontWeight="SemiBold" />
                     <TextBlock x:Name="LblMovimentos" Margin="0,8,0,0" FontSize="30" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
                 </StackPanel>
             </Border>
@@ -74,7 +74,7 @@
                         <DatePicker x:Name="DtDe" Width="140" SelectedDateChanged="FiltroDataMudou" />
                     </StackPanel>
                     <StackPanel Grid.Column="3" Margin="10,0,0,0">
-                        <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                        <TextBlock Text="Até" FontWeight="SemiBold" />
                         <DatePicker x:Name="DtAte" Width="140" SelectedDateChanged="FiltroDataMudou" />
                     </StackPanel>
 
@@ -116,7 +116,7 @@
                       MouseDoubleClick="DgFinanceiro_MouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="1*" />
-                    <DataGridTextColumn Header="DescriÃ§Ã£o" Binding="{Binding Descricao}" Width="3*" />
+                    <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="3*" />
                     <DataGridTextColumn Header="Cliente/Fornecedor" Binding="{Binding Pessoa}" Width="2.4*" />
                     <DataGridTextColumn Header="Vencimento" Binding="{Binding Vencimento}" Width="1.4*" />
                     <DataGridTextColumn Header="Valor" Binding="{Binding Valor}" Width="1.3*" />

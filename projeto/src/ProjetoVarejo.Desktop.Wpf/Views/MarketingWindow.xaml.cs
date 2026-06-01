@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
@@ -68,14 +68,14 @@ public partial class MarketingWindow : UserControl
                 Segmento = "VIP (maior faturamento)",
                 Clientes = segmentoVipClientes.ToString("N0", _ptBr),
                 Potencial = porCliente.OrderByDescending(c => c.Faturamento).Take(50).Sum(c => c.Faturamento).ToString("C", _ptBr),
-                Acao = "Campanha premium com benefÃ­cio exclusivo e atendimento dedicado."
+                Acao = "Campanha premium com benefício exclusivo e atendimento dedicado."
             },
             new
             {
                 Segmento = "Frequentes",
                 Clientes = segmentoFrequentes.ToString("N0", _ptBr),
                 Potencial = porCliente.Where(c => c.Compras >= 5).Sum(c => c.Faturamento).ToString("C", _ptBr),
-                Acao = "Programa de fidelidade com bÃ´nus por recorrÃªncia."
+                Acao = "Programa de fidelidade com bônus por recorrência."
             },
             new
             {
@@ -86,10 +86,10 @@ public partial class MarketingWindow : UserControl
             },
             new
             {
-                Segmento = "Dormindo / reativaÃ§Ã£o",
+                Segmento = "Dormindo / reativação",
                 Clientes = segmentoDormindo.ToString("N0", _ptBr),
                 Potencial = porCliente.Where(c => c.UltimaCompra < corteReativacao).Sum(c => c.Faturamento).ToString("C", _ptBr),
-                Acao = "Campanha de reativaÃ§Ã£o com cupom de retorno."
+                Acao = "Campanha de reativação com cupom de retorno."
             }
         };
 

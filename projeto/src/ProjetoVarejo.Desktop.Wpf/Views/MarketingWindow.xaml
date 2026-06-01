@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.MarketingWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.MarketingWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -7,12 +7,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="AutomaÃ§Ã£o de marketing"
+            <TextBlock Text="Automação de marketing"
                        FontSize="30"
                        FontWeight="Bold"
                        Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
-                       Text="SegmentaÃ§Ã£o e oportunidades de campanha com base no histÃ³rico de vendas."
+                       Text="Segmentação e oportunidades de campanha com base no histórico de vendas."
                        FontSize="14"
                        Foreground="{StaticResource TextSoft}" />
         </StackPanel>
@@ -30,7 +30,7 @@
                     <DatePicker x:Name="DtDe" Width="140" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                    <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                    <TextBlock Text="Até" FontWeight="SemiBold" />
                     <DatePicker x:Name="DtAte" Width="140" />
                 </StackPanel>
                 <UniformGrid Grid.Column="2" Columns="4" Margin="20,0,0,0">
@@ -48,13 +48,13 @@
                     </Border>
                     <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="ReativaÃ§Ã£o" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Reativação" Foreground="{StaticResource TextSoft}" />
                             <TextBlock x:Name="LblReativacao" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
                     <Border Style="{StaticResource Card3DStyle}" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="Ticket mÃ©dio" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Ticket médio" Foreground="{StaticResource TextSoft}" />
                             <TextBlock x:Name="LblTicket" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
@@ -76,7 +76,7 @@
                             <DataGridTextColumn Header="Segmento" Binding="{Binding Segmento}" Width="2.4*" />
                             <DataGridTextColumn Header="Clientes" Binding="{Binding Clientes}" Width="1*" />
                             <DataGridTextColumn Header="Potencial" Binding="{Binding Potencial}" Width="1.4*" />
-                            <DataGridTextColumn Header="AÃ§Ã£o sugerida" Binding="{Binding Acao}" Width="3*" />
+                            <DataGridTextColumn Header="Ação sugerida" Binding="{Binding Acao}" Width="3*" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
@@ -86,7 +86,7 @@
                             <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}" Width="2.6*" />
                             <DataGridTextColumn Header="Compras" Binding="{Binding Compras}" Width="1*" />
                             <DataGridTextColumn Header="Faturamento" Binding="{Binding Faturamento}" Width="1.5*" />
-                            <DataGridTextColumn Header="Ãšltima compra" Binding="{Binding UltimaCompra}" Width="1.5*" />
+                            <DataGridTextColumn Header="Última compra" Binding="{Binding UltimaCompra}" Width="1.5*" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>

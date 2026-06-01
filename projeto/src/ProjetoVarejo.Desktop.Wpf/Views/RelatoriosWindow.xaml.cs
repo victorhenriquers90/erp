@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -98,7 +98,7 @@ public partial class RelatoriosWindow : UserControl
         DgFluxo.ItemsSource = _fluxoRows;
 
         var totalVendido = dia.Sum(x => x.Total);
-        LblResumo.Text = $"Periodo {de:dd/MM/yyyy} a {ate.AddDays(-1):dd/MM/yyyy}  â€¢  Total vendido: {totalVendido.ToString("C", _ptBr)}";
+        LblResumo.Text = $"Periodo {de:dd/MM/yyyy} a {ate.AddDays(-1):dd/MM/yyyy}  •  Total vendido: {totalVendido.ToString("C", _ptBr)}";
     }
 
     private async void Atualizar_Click(object sender, RoutedEventArgs e)

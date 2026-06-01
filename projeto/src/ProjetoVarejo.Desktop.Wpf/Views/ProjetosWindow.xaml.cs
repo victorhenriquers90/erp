@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
@@ -26,19 +26,19 @@ public partial class ProjetosWindow : UserControl
 
         var projetos = new List<ProjetoLinha>
         {
-            new("ExpansÃ£o do CRM", "Administrativo", "Comercial", DateTime.Today.AddDays(45), "Em execuÃ§Ã£o", 65),
-            new("Portal de AquisiÃ§Ã£o", "Suprimentos", "Compras", DateTime.Today.AddDays(60), "Em execuÃ§Ã£o", 52),
-            new("OrquestraÃ§Ã£o de ProduÃ§Ã£o", "OperaÃ§Ãµes", "PCP", DateTime.Today.AddDays(90), "Planejamento", 30),
-            new("Torre de Controle LogÃ­stico", "Suprimentos", "LogÃ­stica", DateTime.Today.AddDays(75), "Em execuÃ§Ã£o", 48),
-            new("Dashboard Financeiro Executivo", "Financeiro", "Controladoria", DateTime.Today.AddDays(30), "ConcluÃ­do", 100),
-            new("GovernanÃ§a de Auditoria", "BI e Controle", "TI", DateTime.Today.AddDays(20), "ConcluÃ­do", 100),
+            new("Expansão do CRM", "Administrativo", "Comercial", DateTime.Today.AddDays(45), "Em execução", 65),
+            new("Portal de Aquisição", "Suprimentos", "Compras", DateTime.Today.AddDays(60), "Em execução", 52),
+            new("Orquestração de Produção", "Operações", "PCP", DateTime.Today.AddDays(90), "Planejamento", 30),
+            new("Torre de Controle Logístico", "Suprimentos", "Logística", DateTime.Today.AddDays(75), "Em execução", 48),
+            new("Dashboard Financeiro Executivo", "Financeiro", "Controladoria", DateTime.Today.AddDays(30), "Concluído", 100),
+            new("Governança de Auditoria", "BI e Controle", "TI", DateTime.Today.AddDays(20), "Concluído", 100),
             new("Conector Ecommerce", "Digital", "Marketing", DateTime.Today.AddDays(80), "Planejamento", 25),
-            new("AutomaÃ§Ã£o de Marketing", "Digital", "Marketing", DateTime.Today.AddDays(95), "Planejamento", 18),
-            new($"Saneamento de cadastros ({clientes + produtos + fornecedores:N0} registros)", "Administrativo", "Backoffice", DateTime.Today.AddDays(50), "Em execuÃ§Ã£o", 58)
+            new("Automação de Marketing", "Digital", "Marketing", DateTime.Today.AddDays(95), "Planejamento", 18),
+            new($"Saneamento de cadastros ({clientes + produtos + fornecedores:N0} registros)", "Administrativo", "Backoffice", DateTime.Today.AddDays(50), "Em execução", 58)
         };
 
-        var ativos = projetos.Count(p => p.Status != "ConcluÃ­do");
-        var concluidos = projetos.Count(p => p.Status == "ConcluÃ­do");
+        var ativos = projetos.Count(p => p.Status != "Concluído");
+        var concluidos = projetos.Count(p => p.Status == "Concluído");
         var progressoMedio = projetos.Average(p => p.Percentual);
 
         LblAtivos.Text = ativos.ToString("N0", _ptBr);

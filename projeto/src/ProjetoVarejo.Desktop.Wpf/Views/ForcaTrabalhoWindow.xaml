@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ForcaTrabalhoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ForcaTrabalhoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -7,12 +7,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="GestÃ£o da forÃ§a de trabalho"
+            <TextBlock Text="Gestão da força de trabalho"
                        FontSize="30"
                        FontWeight="Bold"
                        Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
-                       Text="VisÃ£o de equipe, perfis de acesso e produtividade operacional."
+                       Text="Visão de equipe, perfis de acesso e produtividade operacional."
                        FontSize="14"
                        Foreground="{StaticResource TextSoft}" />
         </StackPanel>
@@ -64,7 +64,7 @@
                     <DataGridTextColumn Header="Nome" Binding="{Binding Nome}" Width="2.2*" />
                     <DataGridTextColumn Header="Login" Binding="{Binding Login}" Width="1.4*" />
                     <DataGridTextColumn Header="Perfil" Binding="{Binding Perfil}" Width="1.4*" />
-                    <DataGridTextColumn Header="Ãšltimo acesso" Binding="{Binding UltimoAcesso}" Width="1.6*" />
+                    <DataGridTextColumn Header="Último acesso" Binding="{Binding UltimoAcesso}" Width="1.6*" />
                     <DataGridTextColumn Header="Vendas (30d)" Binding="{Binding Vendas}" Width="1*" />
                     <DataGridTextColumn Header="Faturamento (30d)" Binding="{Binding Faturamento}" Width="1.4*" />
                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1*" />

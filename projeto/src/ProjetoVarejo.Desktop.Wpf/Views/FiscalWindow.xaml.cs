@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
@@ -72,7 +72,7 @@ public partial class FiscalWindow : UserControl
         var lista = new List<object>();
         if (empresa == null)
         {
-            lista.Add(new { Item = "Cadastro da empresa", Situacao = "Pendente", Detalhe = "Empresa nÃ£o configurada para operaÃ§Ã£o fiscal." });
+            lista.Add(new { Item = "Cadastro da empresa", Situacao = "Pendente", Detalhe = "Empresa não configurada para operação fiscal." });
             return lista.Cast<object>().ToList();
         }
 
@@ -94,17 +94,17 @@ public partial class FiscalWindow : UserControl
 
         lista.Add(new
         {
-            Item = "SequÃªncia de numeraÃ§Ã£o NFC-e",
+            Item = "Sequência de numeração NFC-e",
             Situacao = empresa.ProximoNumeroNfce > 0 ? "OK" : "Ajustar",
-            Detalhe = $"PrÃ³ximo nÃºmero configurado: {empresa.ProximoNumeroNfce:N0}"
+            Detalhe = $"Próximo número configurado: {empresa.ProximoNumeroNfce:N0}"
         });
 
         var rejeitadas = notas.Count(n => n.Status == StatusNotaFiscal.Rejeitada);
         lista.Add(new
         {
-            Item = "Taxa de rejeiÃ§Ã£o no perÃ­odo",
-            Situacao = rejeitadas == 0 ? "OK" : "AtenÃ§Ã£o",
-            Detalhe = rejeitadas == 0 ? "Sem rejeiÃ§Ãµes no perÃ­odo selecionado." : $"{rejeitadas:N0} nota(s) rejeitada(s)."
+            Item = "Taxa de rejeição no período",
+            Situacao = rejeitadas == 0 ? "OK" : "Atenção",
+            Detalhe = rejeitadas == 0 ? "Sem rejeições no período selecionado." : $"{rejeitadas:N0} nota(s) rejeitada(s)."
         });
 
         return lista.Cast<object>().ToList();

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.RelatoriosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.RelatoriosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -8,12 +8,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="RelatÃ³rios gerenciais"
+            <TextBlock Text="Relatórios gerenciais"
                        FontSize="30"
                        FontWeight="Bold"
                        Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
-                       Text="AnÃ¡lises de vendas, produtos e fluxo de caixa."
+                       Text="Análises de vendas, produtos e fluxo de caixa."
                        FontSize="14"
                        Foreground="{StaticResource TextSoft}" />
         </StackPanel>
@@ -39,7 +39,7 @@
                     <DatePicker x:Name="DtDe" Width="140" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                    <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                    <TextBlock Text="Até" FontWeight="SemiBold" />
                     <DatePicker x:Name="DtAte" Width="140" />
                 </StackPanel>
                 <Button Grid.Column="2"
@@ -88,15 +88,15 @@
                         <DataGridTextColumn Header="Vendedor" Binding="{Binding Vendedor}" Width="2.4*" />
                         <DataGridTextColumn Header="Qtd Vendas" Binding="{Binding Qtd}" Width="1.2*" />
                         <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="1.6*" />
-                        <DataGridTextColumn Header="Ticket MÃ©dio" Binding="{Binding Ticket}" Width="1.6*" />
+                        <DataGridTextColumn Header="Ticket Médio" Binding="{Binding Ticket}" Width="1.6*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
             <TabItem Header="Curva ABC">
                 <DataGrid x:Name="DgAbc" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="CÃ³digo" Binding="{Binding Codigo}" Width="1.2*" />
-                        <DataGridTextColumn Header="DescriÃ§Ã£o" Binding="{Binding Descricao}" Width="3*" />
+                        <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="1.2*" />
+                        <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="3*" />
                         <DataGridTextColumn Header="Quantidade" Binding="{Binding Quantidade}" Width="1.4*" />
                         <DataGridTextColumn Header="Faturamento" Binding="{Binding Faturamento}" Width="1.8*" />
                         <DataGridTextColumn Header="Classe" Binding="{Binding Classe}" Width="1*" />
@@ -106,8 +106,8 @@
             <TabItem Header="Top produtos">
                 <DataGrid x:Name="DgTop" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="CÃ³digo" Binding="{Binding Codigo}" Width="1.2*" />
-                        <DataGridTextColumn Header="DescriÃ§Ã£o" Binding="{Binding Descricao}" Width="3*" />
+                        <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="1.2*" />
+                        <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="3*" />
                         <DataGridTextColumn Header="Quantidade" Binding="{Binding Quantidade}" Width="1.4*" />
                         <DataGridTextColumn Header="Faturamento" Binding="{Binding Faturamento}" Width="1.8*" />
                     </DataGrid.Columns>
@@ -118,7 +118,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Dia" Binding="{Binding Dia}" Width="1.8*" />
                         <DataGridTextColumn Header="Entradas" Binding="{Binding Entradas}" Width="1.8*" />
-                        <DataGridTextColumn Header="SaÃ­das" Binding="{Binding Saidas}" Width="1.8*" />
+                        <DataGridTextColumn Header="Saídas" Binding="{Binding Saidas}" Width="1.8*" />
                         <DataGridTextColumn Header="Saldo" Binding="{Binding Saldo}" Width="1.8*" />
                     </DataGrid.Columns>
                 </DataGrid>

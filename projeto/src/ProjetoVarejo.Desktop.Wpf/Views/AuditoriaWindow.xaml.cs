@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,7 +59,7 @@ public partial class AuditoriaWindow : UserControl
     private static string MontarResumo(AuditLog log)
     {
         if (log.Entidade != "AutorizacaoSupervisorPDV")
-            return "AlteraÃ§Ã£o registrada.";
+            return "Alteração registrada.";
 
         try
         {
@@ -80,11 +80,11 @@ public partial class AuditoriaWindow : UserControl
             if (operacao == Permissao.CancelarVenda.ToString())
                 return $"Supervisor {supervisor} autorizou cancelamento para operador {operador}.";
 
-            return $"Supervisor {supervisor} autorizou operaÃ§Ã£o {operacao} para operador {operador}.";
+            return $"Supervisor {supervisor} autorizou operação {operacao} para operador {operador}.";
         }
         catch
         {
-            return "AutorizaÃ§Ã£o de supervisor no PDV.";
+            return "Autorização de supervisor no PDV.";
         }
     }
 

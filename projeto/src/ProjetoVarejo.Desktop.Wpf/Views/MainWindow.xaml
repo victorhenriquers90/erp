@@ -49,56 +49,56 @@
                     <StackPanel Margin="0">
                         <!-- MAIN -->
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PRINCIPAL" />
-                        <Button Content="📊 Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />
+                        <Button Content="Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />
 
                         <!-- MANAGEMENT -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● CADASTROS" />
-                        <Button Content="👥 Clientes" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Clientes_Click" />
-                        <Button Content="📦 Produtos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Produtos_Click" />
-                        <Button Content="🏭 Fornecedores" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fornecedores_Click" />
-                        <Button Content="🏢 Filiais" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Clientes" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Clientes_Click" />
+                        <Button Content="Produtos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Produtos_Click" />
+                        <Button Content="Fornecedores" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fornecedores_Click" />
+                        <Button Content="Filiais" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
 
                         <!-- OPERATIONS -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● OPERAÇÕES" />
-                        <Button Content="📋 Pedidos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Pedidos_Click" />
-                        <Button Content="📦 Estoque" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Estoque_Click" />
-                        <Button Content="🏗 Armazém" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Armazem_Click" />
-                        <Button Content="🚚 Cadeia de Suprimentos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="CadeiaSuprimentos_Click" />
+                        <Button Content="Pedidos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Pedidos_Click" />
+                        <Button Content="Estoque" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Estoque_Click" />
+                        <Button Content="Armazém" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Armazem_Click" />
+                        <Button Content="Cadeia de Suprimentos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="CadeiaSuprimentos_Click" />
 
                         <!-- SALES & COMMERCE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● VENDAS" />
-                        <Button Content="💳 PDV (Ponto de Venda)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
-                        <Button Content="💰 Caixa" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
-                        <Button Content="📱 E-Commerce" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Ecommerce_Click" />
-                        <Button Content="📢 Marketing" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Marketing_Click" />
+                        <Button Content="PDV (Ponto de Venda)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Caixa" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="E-Commerce" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Ecommerce_Click" />
+                        <Button Content="Marketing" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Marketing_Click" />
 
                         <!-- FINANCIAL -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● FINANCEIRO" />
-                        <Button Content="💵 Contas a Pagar" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Financeiro_Click" />
-                        <Button Content="📊 Relatórios" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Relatorios_Click" />
+                        <Button Content="Contas a Pagar" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Financeiro_Click" />
+                        <Button Content="Relatórios" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Relatorios_Click" />
 
                         <!-- PRODUCTION -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● MANUFATURA" />
-                        <Button Content="⚙️ Produção" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Producao_Click" />
-                        <Button Content="📋 Projetos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Projetos_Click" />
+                        <Button Content="Produção" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Producao_Click" />
+                        <Button Content="Projetos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Projetos_Click" />
 
                         <!-- HR & PEOPLE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PESSOAS" />
-                        <Button Content="👨‍💼 Força de Trabalho" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ForcaTrabalho_Click" />
-                        <Button Content="⏰ Apontamento de Horas" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Horas_Click" />
+                        <Button Content="Força de Trabalho" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ForcaTrabalho_Click" />
+                        <Button Content="Apontamento de Horas" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Horas_Click" />
 
                         <!-- COMPLIANCE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● ADMINISTRAÇÃO" />
-                        <Button Content="📄 Fiscal/NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
-                        <Button Content="🔍 Auditoria" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Auditoria_Click" />
-                        <Button Content="⚙️ Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Fiscal / NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Auditoria" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Auditoria_Click" />
+                        <Button Content="Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
                     </StackPanel>
                 </ScrollViewer>
 

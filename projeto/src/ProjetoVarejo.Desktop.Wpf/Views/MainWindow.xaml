@@ -47,10 +47,10 @@
                               VerticalScrollBarVisibility="Hidden"
                               HorizontalScrollBarVisibility="Disabled"
                               Padding="0,8,0,8">
-                    <StackPanel Margin="0">
+                    <StackPanel x:Name="MenuPanel" Margin="0">
                         <!-- MAIN -->
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PRINCIPAL" />
-                        <Button Content="Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />
+                        <Button x:Name="BtnPainel" Content="Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />
 
                         <!-- MANAGEMENT -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />

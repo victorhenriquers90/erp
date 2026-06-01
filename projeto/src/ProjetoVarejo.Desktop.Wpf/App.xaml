@@ -134,6 +134,13 @@
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
+                                <!-- Item ATIVO (modulo atual) - persiste apos o clique -->
+                                <Trigger Property="Tag" Value="active">
+                                    <Setter TargetName="Accent" Property="Opacity" Value="1" />
+                                    <Setter TargetName="Bd" Property="Background" Value="#15324F" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="HoverBg" Property="Opacity" Value="0.08" />
                                     <Setter TargetName="Bd" Property="Background" Value="{StaticResource SidebarAccent}" />
@@ -142,11 +149,6 @@
                                 <Trigger Property="IsPressed" Value="True">
                                     <Setter TargetName="HoverBg" Property="Opacity" Value="0.15" />
                                     <Setter TargetName="Accent" Property="Opacity" Value="1" />
-                                    <Setter Property="Foreground" Value="#FFFFFF" />
-                                </Trigger>
-                                <Trigger Property="IsFocused" Value="True">
-                                    <Setter TargetName="Accent" Property="Opacity" Value="1" />
-                                    <Setter TargetName="Bd" Property="Background" Value="{StaticResource SidebarAccent}" />
                                     <Setter Property="Foreground" Value="#FFFFFF" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">

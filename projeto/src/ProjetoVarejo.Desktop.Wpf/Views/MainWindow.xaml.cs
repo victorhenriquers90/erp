@@ -40,7 +40,27 @@ public partial class MainWindow : Window
         LblData.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM 'de' yyyy",
             new System.Globalization.CultureInfo("pt-BR"));
 
+        // Realce do item ativo: um unico handler captura o clique de qualquer botao do menu.
+        MenuPanel.AddHandler(Button.ClickEvent, new RoutedEventHandler(OnMenuButtonClick));
+        MarcarMenuAtivo(BtnPainel);
+
         _ = CarregarKpisAsync();
+    }
+
+    // ───────────── Realce do item de menu ativo ─────────────
+    private Button? _menuAtivo;
+
+    private void OnMenuButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is Button b)
+            MarcarMenuAtivo(b);
+    }
+
+    private void MarcarMenuAtivo(Button botao)
+    {
+        if (_menuAtivo != null) _menuAtivo.Tag = null;
+        botao.Tag = "active";
+        _menuAtivo = botao;
     }
 
     private async Task CarregarKpisAsync()

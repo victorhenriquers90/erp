@@ -64,12 +64,8 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="2"
-                Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource StrokeSoft}"
-                BorderThickness="1"
-                CornerRadius="8"
-                Padding="8">
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <Grid>
             <DataGrid x:Name="DgFornecedores"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
@@ -86,6 +82,24 @@
                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1*" />
                 </DataGrid.Columns>
             </DataGrid>
+
+                <!-- Estado vazio -->
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, ElementName=DgFornecedores}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="38" Foreground="#C9D2DE" HorizontalAlignment="Center" />
+                    <TextBlock Text="Nenhum registro encontrado" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                    <TextBlock Text="Ajuste a busca ou cadastre um novo item." FontSize="12" Foreground="{StaticResource TextPlaceholder}" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

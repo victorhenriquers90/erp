@@ -13,13 +13,17 @@
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BgApp}">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- ========== PROFESSIONAL SIDEBAR (SAP/ORACLE STYLE) ========== -->
-        <Border Grid.Column="0" Background="{StaticResource SidebarBg}">
+        <Border Grid.Row="0" Grid.Column="0" Background="{StaticResource SidebarBg}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -316,5 +320,35 @@
             <ContentControl x:Name="ContentHost" Visibility="Collapsed" />
             </Grid>
         </Grid>
+
+        <!-- ══════ BARRA DE STATUS ══════ -->
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                Background="{StaticResource SidebarBg}" Height="26">
+            <Grid Margin="14,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="8" Height="8" Fill="#10B981" VerticalAlignment="Center" />
+                    <TextBlock Text="Conectado" Foreground="#C5D5E8" FontSize="11" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    <TextBlock Text="|" Foreground="#3A5A7F" FontSize="11" Margin="12,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="LblStatusEmpresa" Text="Empresa" Foreground="#C5D5E8" FontSize="11" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" Text="ProjetoVarejo ERP" Foreground="#7E9BBD" FontSize="11"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="LblStatusUsuario" Text="Usuário" Foreground="#C5D5E8" FontSize="11" VerticalAlignment="Center" />
+                    <TextBlock Text="|" Foreground="#3A5A7F" FontSize="11" Margin="12,0" VerticalAlignment="Center" />
+                    <TextBlock Text="v1.0.0" Foreground="#C5D5E8" FontSize="11" VerticalAlignment="Center" />
+                    <TextBlock Text="|" Foreground="#3A5A7F" FontSize="11" Margin="12,0" VerticalAlignment="Center" />
+                    <TextBlock x:Name="LblRelogio" Text="--:--" Foreground="#FFFFFF" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -44,7 +44,23 @@ public partial class MainWindow : Window
         MenuPanel.AddHandler(Button.ClickEvent, new RoutedEventHandler(OnMenuButtonClick));
         MarcarMenuAtivo(BtnPainel);
 
+        // Barra de status
+        LblStatusUsuario.Text = nomeUsuario;
+        LblStatusEmpresa.Text = nomeEmpresa;
+        IniciarRelogio();
+
         _ = CarregarKpisAsync();
+    }
+
+    private void IniciarRelogio()
+    {
+        LblRelogio.Text = DateTime.Now.ToString("HH:mm");
+        var timer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(10)
+        };
+        timer.Tick += (_, _) => LblRelogio.Text = DateTime.Now.ToString("HH:mm");
+        timer.Start();
     }
 
     // ───────────── Realce do item de menu ativo ─────────────

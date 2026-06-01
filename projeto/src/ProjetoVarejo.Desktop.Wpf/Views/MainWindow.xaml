@@ -42,9 +42,9 @@
                     </Grid>
                 </Border>
 
-                <!-- Menu Sections - Sleek Scrollbar -->
+                <!-- Menu Sections - Sem Scrollbar Visual -->
                 <ScrollViewer Grid.Row="1"
-                              VerticalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Hidden"
                               HorizontalScrollBarVisibility="Disabled"
                               Padding="0,8,0,8">
                     <StackPanel Margin="0">

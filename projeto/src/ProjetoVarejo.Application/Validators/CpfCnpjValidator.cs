@@ -62,29 +62,27 @@ public static class CpfCnpjValidator
             return false;
 
         // Calcula primeiro dígito verificador
-        int[] tamanho = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+        int[] multiplicadores = { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
         int soma = 0;
 
         for (int i = 0; i < 12; i++)
-            soma += (cnpj[i] - '0') * tamanho[i];
+            soma += int.Parse(cnpj[i].ToString()) * multiplicadores[i];
 
-        int resto = soma % 11;
-        int digito1 = resto < 2 ? 0 : 11 - resto;
+        int digito1 = (11 - (soma % 11)) % 10;
 
-        if ((cnpj[12] - '0') != digito1)
+        if (int.Parse(cnpj[12].ToString()) != digito1)
             return false;
 
         // Calcula segundo dígito verificador
-        tamanho = new[] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3 };
+        multiplicadores = new[] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
         soma = 0;
 
         for (int i = 0; i < 13; i++)
-            soma += (cnpj[i] - '0') * tamanho[i];
+            soma += int.Parse(cnpj[i].ToString()) * multiplicadores[i];
 
-        resto = soma % 11;
-        int digito2 = resto < 2 ? 0 : 11 - resto;
+        int digito2 = (11 - (soma % 11)) % 10;
 
-        return (cnpj[13] - '0') == digito2;
+        return int.Parse(cnpj[13].ToString()) == digito2;
     }
 
     /// <summary>

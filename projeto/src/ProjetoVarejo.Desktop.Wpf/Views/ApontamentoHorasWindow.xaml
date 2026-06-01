@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ApontamentoHorasWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="GestÃ£o de apontamento de horas"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextStrong}" />
+            <TextBlock Margin="0,8,0,0"
+                       Text="ConsolidaÃ§Ã£o de horas por colaborador a partir das sessÃµes de caixa."
+                       FontSize="14"
+                       Foreground="{StaticResource TextSoft}" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Padding="12" Margin="0,16,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="De" FontWeight="SemiBold" />
+                    <DatePicker x:Name="DtDe" Width="140" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                    <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                    <DatePicker x:Name="DtAte" Width="140" />
+                </StackPanel>
+                <UniformGrid Grid.Column="2" Columns="3" Margin="20,0,0,0">
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Horas totais" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblHorasTotais" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="SessÃµes fechadas" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblSessoes" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="MÃ©dia por colaborador" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblMedia" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+                <Button Grid.Column="3"
+                        Width="120"
+                        Height="36"
+                        Margin="12,20,0,0"
+                        Content="Filtrar"
+                        Click="Filtrar_Click" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <DataGrid x:Name="DgHoras" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Colaborador" Binding="{Binding Colaborador}" Width="2.2*" />
+                    <DataGridTextColumn Header="Perfil" Binding="{Binding Perfil}" Width="1.3*" />
+                    <DataGridTextColumn Header="SessÃµes" Binding="{Binding Sessoes}" Width="1*" />
+                    <DataGridTextColumn Header="Horas trabalhadas" Binding="{Binding Horas}" Width="1.4*" />
+                    <DataGridTextColumn Header="MÃ©dia/sessÃ£o" Binding="{Binding MediaSessao}" Width="1.4*" />
+                    <DataGridTextColumn Header="Ãšltimo fechamento" Binding="{Binding UltimoFechamento}" Width="1.7*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

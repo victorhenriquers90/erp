@@ -105,133 +105,53 @@ public partial class MainWindow : Window
         => NavegarModulo<ClientesWindow>("Clientes", "Cadastros · Clientes");
 
     private void Produtos_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ProdutosWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-        _ = CarregarKpisAsync();
-    }
+        => NavegarModulo<ProdutosWindow>("Produtos", "Cadastros · Produtos");
 
     private void Fornecedores_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<FornecedoresWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-        _ = CarregarKpisAsync();
-    }
+        => NavegarModulo<FornecedoresWindow>("Fornecedores", "Cadastros · Fornecedores");
 
     private void Aquisicao_Click(object sender, RoutedEventArgs e) => Fornecedores_Click(sender, e);
 
     private void CadeiaSuprimentos_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<CadeiaSuprimentosWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<CadeiaSuprimentosWindow>("Cadeia de Suprimentos", "Operações · Suprimentos");
 
     private void Estoque_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<EstoqueWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-        _ = CarregarKpisAsync();
-    }
+        => NavegarModulo<EstoqueWindow>("Estoque", "Operações · Estoque");
 
     private void Financeiro_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<FinanceiroWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-        _ = CarregarKpisAsync();
-    }
+        => NavegarModulo<FinanceiroWindow>("Financeiro", "Financeiro · Contas");
 
     private void Armazem_Click(object sender, RoutedEventArgs e) => Estoque_Click(sender, e);
 
     private void Pedidos_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<PedidosWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-        _ = CarregarKpisAsync();
-    }
+        => NavegarModulo<PedidosWindow>("Pedidos", "Operações · Pedidos");
 
     private void Producao_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ProducaoWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<ProducaoWindow>("Produção", "Manufatura · Produção");
 
     private void Projetos_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ProjetosWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<ProjetosWindow>("Projetos", "Manufatura · Projetos");
 
     private void ForcaTrabalho_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ForcaTrabalhoWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<ForcaTrabalhoWindow>("Força de Trabalho", "Pessoas · Força de Trabalho");
 
     private void Horas_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<ApontamentoHorasWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<ApontamentoHorasWindow>("Apontamento de Horas", "Pessoas · Horas");
 
     private void Relatorios_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<RelatoriosWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<RelatoriosWindow>("Relatórios", "Financeiro · Relatórios");
 
     private void Auditoria_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<AuditoriaWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<AuditoriaWindow>("Auditoria", "Administração · Auditoria");
 
     private void Ecommerce_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<EcommerceWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<EcommerceWindow>("E-Commerce", "Vendas · E-Commerce");
 
     private void Marketing_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<MarketingWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<MarketingWindow>("Marketing", "Vendas · Marketing");
 
     private void Indisponivel_Click(object sender, RoutedEventArgs e)
-    {
-        using var scope = _services.CreateScope();
-        var win = scope.ServiceProvider.GetRequiredService<FiscalWindow>();
-        win.Owner = this;
-        win.ShowDialog();
-    }
+        => NavegarModulo<FiscalWindow>("Fiscal / NFC-e", "Administração · Fiscal");
 
     private void AbrirModuloPlanejado(string nomeModulo)
     {

@@ -1,0 +1,136 @@
+<Window x:Class="ProjetoVarejo.Desktop.Wpf.Views.AuditoriaDetalhesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Detalhes da Auditoria"
+        Height="760"
+        Width="980"
+        MinHeight="620"
+        MinWidth="860"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgApp}">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Detalhes da auditoria"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource TextStrong}" />
+
+        <Border Grid.Row="1"
+                Margin="0,12,0,10"
+                Style="{StaticResource Card3DStyle}"
+                Padding="14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Data:" FontWeight="SemiBold" Margin="0,0,8,0" />
+                <TextBlock x:Name="TxtData" Grid.Column="1" />
+
+                <TextBlock Grid.Column="2" Text="Usuario:" FontWeight="SemiBold" Margin="16,0,8,0" />
+                <TextBlock x:Name="TxtUsuario" Grid.Column="3" />
+
+                <TextBlock Grid.Column="4" Text="Tipo:" FontWeight="SemiBold" Margin="16,0,8,0" />
+                <TextBlock x:Name="TxtTipo" Grid.Column="5" />
+
+                <TextBlock Grid.Row="1" Text="Entidade:" FontWeight="SemiBold" Margin="0,10,8,0" />
+                <TextBlock x:Name="TxtEntidade" Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" />
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Registro:" FontWeight="SemiBold" Margin="16,10,8,0" />
+                <TextBlock x:Name="TxtRegistro" Grid.Row="1" Grid.Column="3" Margin="0,10,0,0" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                Margin="0,0,0,10"
+                Style="{StaticResource Card3DStyle}"
+                Padding="10">
+            <TabControl>
+                <TabItem Header="Antes">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                            <TextBlock DockPanel.Dock="Left"
+                                       VerticalAlignment="Center"
+                                       Text="ValoresAntes (JSON)"
+                                       FontWeight="SemiBold" />
+                            <Button DockPanel.Dock="Right"
+                                    Width="130"
+                                    Height="34"
+                                    Content="Copiar Antes"
+                                    Click="CopiarAntes_Click" />
+                        </DockPanel>
+                        <TextBox x:Name="TxtValoresAntes"
+                                 Grid.Row="1"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 AcceptsReturn="True"
+                                 AcceptsTab="True"
+                                 TextWrapping="NoWrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 IsReadOnly="True" />
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Depois">
+                    <Grid Margin="6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <DockPanel LastChildFill="False" Margin="0,0,0,8">
+                            <TextBlock DockPanel.Dock="Left"
+                                       VerticalAlignment="Center"
+                                       Text="ValoresDepois (JSON)"
+                                       FontWeight="SemiBold" />
+                            <Button DockPanel.Dock="Right"
+                                    Width="130"
+                                    Height="34"
+                                    Content="Copiar Depois"
+                                    Click="CopiarDepois_Click" />
+                        </DockPanel>
+                        <TextBox x:Name="TxtValoresDepois"
+                                 Grid.Row="1"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 AcceptsReturn="True"
+                                 AcceptsTab="True"
+                                 TextWrapping="NoWrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 IsReadOnly="True" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Border>
+
+        <StackPanel Grid.Row="3"
+                    Margin="0,12,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Width="110"
+                    Height="36"
+                    Content="Fechar"
+                    Click="Fechar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

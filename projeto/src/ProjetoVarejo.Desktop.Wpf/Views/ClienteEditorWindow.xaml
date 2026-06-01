@@ -1,0 +1,134 @@
+<Window x:Class="ProjetoVarejo.Desktop.Wpf.Views.ClienteEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cliente"
+        Height="640"
+        Width="880"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgApp}">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Background="{StaticResource BgCard}"
+                BorderBrush="{StaticResource StrokeSoft}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="16">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.ColumnSpan="2"
+                               Text="Cadastro de cliente"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextStrong}" />
+
+                    <StackPanel Grid.Row="1" Margin="0,14,8,0">
+                        <TextBlock Text="Nome" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtNome" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="8,14,0,0">
+                        <TextBlock Text="CPF/CNPJ" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtCpfCnpj" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Margin="0,10,8,0">
+                        <TextBlock Text="Telefone" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtTelefone" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="8,10,0,0">
+                        <TextBlock Text="Email" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtEmail" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Margin="0,10,8,0">
+                        <TextBlock Text="CEP" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtCep" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="8,10,0,0">
+                        <TextBlock Text="Logradouro" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtLogradouro" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="4" Margin="0,10,8,0">
+                        <TextBlock Text="Número" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtNumero" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Margin="8,10,0,0">
+                        <TextBlock Text="Bairro" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtBairro" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="5" Margin="0,10,8,0">
+                        <TextBlock Text="Cidade" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtCidade" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Grid.Column="1" Margin="8,10,0,0">
+                        <TextBlock Text="UF" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtUf" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="6" Margin="0,10,8,0">
+                        <TextBlock Text="Limite de crédito" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtLimiteCredito" Height="38" VerticalContentAlignment="Center" Padding="10,0" Text="0,00" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Margin="8,10,0,0">
+                        <TextBlock Text="Complemento" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtComplemento" Height="38" VerticalContentAlignment="Center" Padding="10,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Margin="0,10,0,0">
+                        <TextBlock Text="Observação" FontWeight="SemiBold" />
+                        <TextBox x:Name="TxtObservacao"
+                                 Height="92"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalContentAlignment="Top"
+                                 Padding="10,8" />
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+        </Border>
+
+        <StackPanel Grid.Row="1"
+                    Margin="0,14,0,0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <CheckBox x:Name="ChkAtivo"
+                      Margin="0,0,20,0"
+                      VerticalAlignment="Center"
+                      IsChecked="True"
+                      Content="Cliente ativo" />
+            <Button Content="Cancelar"
+                    Width="112"
+                    Height="40"
+                    Margin="0,0,10,0"
+                    Click="Cancelar_Click" />
+            <Button x:Name="BtnSalvar"
+                    Content="Salvar"
+                    Width="130"
+                    Height="40"
+                    Background="{StaticResource Primary}"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Click="Salvar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

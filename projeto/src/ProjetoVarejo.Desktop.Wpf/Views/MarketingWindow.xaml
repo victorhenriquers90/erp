@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.MarketingWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="AutomaÃ§Ã£o de marketing"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextStrong}" />
+            <TextBlock Margin="0,8,0,0"
+                       Text="SegmentaÃ§Ã£o e oportunidades de campanha com base no histÃ³rico de vendas."
+                       FontSize="14"
+                       Foreground="{StaticResource TextSoft}" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Padding="12" Margin="0,16,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="De" FontWeight="SemiBold" />
+                    <DatePicker x:Name="DtDe" Width="140" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                    <TextBlock Text="AtÃ©" FontWeight="SemiBold" />
+                    <DatePicker x:Name="DtAte" Width="140" />
+                </StackPanel>
+                <UniformGrid Grid.Column="2" Columns="4" Margin="20,0,0,0">
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Clientes ativos" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblClientesAtivos" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Recorrentes" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblRecorrentes" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="ReativaÃ§Ã£o" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblReativacao" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Ticket mÃ©dio" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblTicket" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
+                <Button Grid.Column="3"
+                        Width="120"
+                        Height="36"
+                        Margin="12,20,0,0"
+                        Content="Atualizar"
+                        Click="Atualizar_Click" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <TabControl>
+                <TabItem Header="Segmentos de campanha">
+                    <DataGrid x:Name="DgSegmentos" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Segmento" Binding="{Binding Segmento}" Width="2.4*" />
+                            <DataGridTextColumn Header="Clientes" Binding="{Binding Clientes}" Width="1*" />
+                            <DataGridTextColumn Header="Potencial" Binding="{Binding Potencial}" Width="1.4*" />
+                            <DataGridTextColumn Header="AÃ§Ã£o sugerida" Binding="{Binding Acao}" Width="3*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Top clientes">
+                    <DataGrid x:Name="DgTopClientes" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Cliente" Binding="{Binding Cliente}" Width="2.6*" />
+                            <DataGridTextColumn Header="Compras" Binding="{Binding Compras}" Width="1*" />
+                            <DataGridTextColumn Header="Faturamento" Binding="{Binding Faturamento}" Width="1.5*" />
+                            <DataGridTextColumn Header="Ãšltima compra" Binding="{Binding UltimaCompra}" Width="1.5*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Border>
+    </Grid>
+</UserControl>

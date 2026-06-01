@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ProjetosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="GestÃ£o de projetos"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextStrong}" />
+            <TextBlock Margin="0,8,0,0"
+                       Text="PortfÃ³lio de iniciativas estratÃ©gicas para evoluÃ§Ã£o do ERP."
+                       FontSize="14"
+                       Foreground="{StaticResource TextSoft}" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,16,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Projetos ativos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblAtivos" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="ConcluÃ­dos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblConcluidos" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Progresso mÃ©dio" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblProgressoMedio" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Button Grid.Column="3"
+                    Width="120"
+                    Height="36"
+                    Margin="0,16,0,0"
+                    Content="Atualizar"
+                    Click="Atualizar_Click" />
+        </Grid>
+
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <DataGrid x:Name="DgProjetos" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Projeto" Binding="{Binding Nome}" Width="2.8*" />
+                    <DataGridTextColumn Header="Ãrea" Binding="{Binding Area}" Width="1.4*" />
+                    <DataGridTextColumn Header="ResponsÃ¡vel" Binding="{Binding Responsavel}" Width="1.6*" />
+                    <DataGridTextColumn Header="Prazo" Binding="{Binding Prazo}" Width="1.2*" />
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="1.2*" />
+                    <DataGridTextColumn Header="Progresso" Binding="{Binding Progresso}" Width="1*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,64 @@
+<Window x:Class="ProjetoVarejo.Desktop.Wpf.Views.ProdutoBuscaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Buscar Produto"
+        Height="700"
+        Width="1100"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgApp}">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource Card3DStyle}" Padding="14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Buscar produto por código, barras ou descrição"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextStrong}" />
+                    <TextBox x:Name="TxtFiltro"
+                             Margin="0,8,0,0"
+                             Height="40"
+                             VerticalContentAlignment="Center"
+                             Padding="10,0"
+                             TextChanged="TxtFiltro_TextChanged" />
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Margin="10,22,0,0"
+                        Width="120"
+                        Height="40"
+                        Content="Atualizar"
+                        Click="Atualizar_Click" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Margin="0,12,0,12" Style="{StaticResource Card3DStyle}" Padding="8">
+            <DataGrid x:Name="DgProdutos"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal"
+                      MouseDoubleClick="DgProdutos_MouseDoubleClick">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Código" Binding="{Binding Codigo}" Width="1.2*" />
+                    <DataGridTextColumn Header="Código de barras" Binding="{Binding CodigoBarras}" Width="1.8*" />
+                    <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="3*" />
+                    <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" Width="1.8*" />
+                    <DataGridTextColumn Header="Preço" Binding="{Binding Preco}" Width="1.2*" />
+                    <DataGridTextColumn Header="Estoque" Binding="{Binding Estoque}" Width="1.2*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancelar" Width="110" Height="40" Margin="0,0,10,0" Click="Cancelar_Click" />
+            <Button Content="Selecionar" Width="130" Height="40" Background="{StaticResource Primary}" Foreground="White" BorderThickness="0" Click="Selecionar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

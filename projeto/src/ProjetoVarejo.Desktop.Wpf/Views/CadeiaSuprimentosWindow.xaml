@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.CadeiaSuprimentosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Gestao da cadeia de suprimentos"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource TextStrong}" />
+            <TextBlock Margin="0,8,0,0"
+                       Text="Monitoramento de fornecedores, cobertura de estoque e reposicao."
+                       FontSize="14"
+                       Foreground="{StaticResource TextSoft}" />
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,16,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Fornecedores ativos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblFornecedores" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Produtos criticos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblCriticos" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Entradas 30 dias" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblEntradas" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="3" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="Saidas 30 dias" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock x:Name="LblSaidas" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
+                </StackPanel>
+            </Border>
+            <Button Grid.Column="4"
+                    Width="120"
+                    Height="36"
+                    Margin="0,16,0,0"
+                    Content="Atualizar"
+                    Click="Atualizar_Click" />
+        </Grid>
+
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <DataGrid x:Name="DgSuprimentos" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Produto" Binding="{Binding Produto}" Width="2.8*" />
+                    <DataGridTextColumn Header="Categoria" Binding="{Binding Categoria}" Width="1.5*" />
+                    <DataGridTextColumn Header="Estoque" Binding="{Binding Estoque}" Width="1*" />
+                    <DataGridTextColumn Header="Minimo" Binding="{Binding Minimo}" Width="1*" />
+                    <DataGridTextColumn Header="Cobertura" Binding="{Binding Cobertura}" Width="1.2*" />
+                    <DataGridTextColumn Header="Ultimo fornecedor" Binding="{Binding Fornecedor}" Width="1.8*" />
+                    <DataGridTextColumn Header="Ultima entrada" Binding="{Binding UltimaEntrada}" Width="1.5*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

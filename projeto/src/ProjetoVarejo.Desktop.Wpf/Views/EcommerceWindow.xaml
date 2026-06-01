@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Ecommerce"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Desempenho digital com base nas vendas consolidadas do ERP."
                        FontSize="14"

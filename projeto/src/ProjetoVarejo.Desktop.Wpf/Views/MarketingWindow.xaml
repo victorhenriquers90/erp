@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Automação de marketing"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Segmentação e oportunidades de campanha com base no histórico de vendas."
                        FontSize="14"

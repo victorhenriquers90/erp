@@ -260,7 +260,8 @@
                 <Setter Property="Background" Value="{StaticResource BgCard}" />
                 <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="4" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Effect" Value="{DynamicResource CardShadowSoft}" />
             </Style>
 
             <!-- 🎯 SIDEBAR PROFESSIONAL STYLES -->

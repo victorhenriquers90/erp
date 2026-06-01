@@ -8,10 +8,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Financeiro"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Contas a pagar, contas a receber e quitações."
                        FontSize="14"
@@ -49,7 +45,7 @@
                 Background="{StaticResource BgCard}"
                 BorderBrush="{StaticResource StrokeSoft}"
                 BorderThickness="1"
-                CornerRadius="14"
+                CornerRadius="8"
                 Padding="14">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -107,7 +103,7 @@
                 Background="{StaticResource BgCard}"
                 BorderBrush="{StaticResource StrokeSoft}"
                 BorderThickness="1"
-                CornerRadius="14"
+                CornerRadius="8"
                 Padding="8">
             <DataGrid x:Name="DgFinanceiro"
                       AutoGenerateColumns="False"

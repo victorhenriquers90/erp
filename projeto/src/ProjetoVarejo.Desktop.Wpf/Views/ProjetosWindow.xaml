@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Gestão de projetos"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Portfólio de iniciativas estratégicas para evolução do ERP."
                        FontSize="14"

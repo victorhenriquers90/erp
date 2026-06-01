@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Gestão de produção"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Visão operacional de entradas e saídas de produção no período."
                        FontSize="14"

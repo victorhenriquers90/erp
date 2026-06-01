@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Gestão da força de trabalho"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Visão de equipe, perfis de acesso e produtividade operacional."
                        FontSize="14"

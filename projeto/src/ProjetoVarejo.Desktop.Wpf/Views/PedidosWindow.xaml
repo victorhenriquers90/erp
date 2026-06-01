@@ -8,10 +8,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Gestão de pedidos"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Acompanhamento de pedidos com base nas vendas do ERP."
                        FontSize="14"

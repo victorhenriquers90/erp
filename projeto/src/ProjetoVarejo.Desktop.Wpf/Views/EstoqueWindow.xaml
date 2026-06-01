@@ -7,10 +7,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Estoque"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock Margin="0,8,0,0"
                        Text="Movimentações de entrada/saída e alertas de estoque mínimo."
                        FontSize="14"
@@ -46,7 +42,7 @@
                     <Border Background="{StaticResource BgCard}"
                             BorderBrush="{StaticResource StrokeSoft}"
                             BorderThickness="1"
-                            CornerRadius="14"
+                            CornerRadius="8"
                             Padding="14">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -85,7 +81,7 @@
                             Background="{StaticResource BgCard}"
                             BorderBrush="{StaticResource StrokeSoft}"
                             BorderThickness="1"
-                            CornerRadius="14"
+                            CornerRadius="8"
                             Padding="8">
                         <DataGrid x:Name="DgMovimentos"
                                   AutoGenerateColumns="False"
@@ -111,7 +107,7 @@
                         Background="{StaticResource BgCard}"
                         BorderBrush="{StaticResource StrokeSoft}"
                         BorderThickness="1"
-                        CornerRadius="14"
+                        CornerRadius="8"
                         Padding="8">
                     <DataGrid x:Name="DgMinimo"
                               AutoGenerateColumns="False"

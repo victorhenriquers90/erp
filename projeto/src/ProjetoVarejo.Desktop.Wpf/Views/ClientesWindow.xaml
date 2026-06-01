@@ -10,10 +10,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Clientes"
-                       FontSize="30"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
             <TextBlock x:Name="LblResumo"
                        Margin="0,8,0,0"
                        Text="0 cliente(s)"
@@ -27,7 +23,7 @@
                 Background="{StaticResource BgCard}"
                 BorderBrush="{StaticResource StrokeSoft}"
                 BorderThickness="1"
-                CornerRadius="14">
+                CornerRadius="8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -76,7 +72,7 @@
                 Background="{StaticResource BgCard}"
                 BorderBrush="{StaticResource StrokeSoft}"
                 BorderThickness="1"
-                CornerRadius="14"
+                CornerRadius="8"
                 Padding="8">
             <DataGrid x:Name="DgClientes"
                       AutoGenerateColumns="False"

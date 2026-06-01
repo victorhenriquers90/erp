@@ -93,44 +93,39 @@
             </Style>
 
             <Style x:Key="SidebarButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Background" Value="#21363E" />
-                <Setter Property="Foreground" Value="#9DE6F2" />
+                <Setter Property="Background" Value="{StaticResource SidebarBg}" />
+                <Setter Property="Foreground" Value="#FFFFFF" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Padding" Value="0" />
+                <Setter Property="Padding" Value="12,10" />
                 <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="FontSize" Value="13" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Bd"
                                     Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="0"
-                                    Padding="0,6">
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0,0,3,0"
+                                    CornerRadius="0">
                                 <Grid>
                                     <Rectangle x:Name="Accent"
                                                Width="3"
                                                Fill="{StaticResource Primary}"
                                                HorizontalAlignment="Left"
                                                Opacity="0" />
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <TextBlock Text="{TemplateBinding Tag}"
-                                                   FontFamily="Segoe MDL2 Assets"
-                                                   FontSize="18"
-                                                   HorizontalAlignment="Center" />
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                                          Margin="0,3,0,0" />
-                                    </StackPanel>
+                                    <ContentPresenter HorizontalAlignment="Left"
+                                                      VerticalAlignment="Center"
+                                                      Margin="{TemplateBinding Padding}" />
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#29434C" />
+                                    <Setter TargetName="Bd" Property="Background" Value="#374151" />
                                     <Setter TargetName="Accent" Property="Opacity" Value="1" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#1A2A30" />
+                                    <Setter TargetName="Bd" Property="Background" Value="#1E293B" />
                                     <Setter TargetName="Accent" Property="Opacity" Value="1" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">

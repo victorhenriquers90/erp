@@ -129,98 +129,185 @@
             </Grid>
         </Border>
 
+        <!-- ══════ ÁREA PRINCIPAL ══════ -->
         <Grid Grid.Column="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled">
-                <StackPanel Margin="14">
-                    <Border Background="{StaticResource BgCard}"
-                            BorderBrush="{StaticResource StrokeSoft}"
-                            BorderThickness="1"
-                            Padding="18,12"
-                            CornerRadius="4">
-                        <StackPanel>
-                            <Border Width="2" Height="36" Background="{StaticResource Primary}" HorizontalAlignment="Left" />
-                            <TextBlock Text="PAINEL ERP"
-                                       Margin="0,8,0,0"
-                                       FontSize="38"
-                                       FontWeight="Light"
-                                       Foreground="{StaticResource TextStrong}" />
-                        </StackPanel>
-                    </Border>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-                    <Border Margin="0,12,0,10"
-                            Padding="14"
-                            Background="{StaticResource BgCard}"
-                            BorderBrush="{StaticResource StrokeSoft}"
-                            BorderThickness="1"
-                            CornerRadius="4">
-                        <Grid>
+            <!-- TOP BAR -->
+            <Border Grid.Row="0" Background="{StaticResource BgCard}" BorderBrush="#E0E5F1" BorderThickness="0,0,0,1" Height="64">
+                <Grid Margin="24,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="LblPagina" Text="Painel" Style="{StaticResource PageTitleStyle}" />
+                        <TextBlock x:Name="LblBreadcrumb" Text="Início · Visão geral" Style="{StaticResource PageSubtitleStyle}" />
+                    </StackPanel>
+
+                    <!-- Busca global -->
+                    <Border Grid.Column="1" Background="#F1F3F7" CornerRadius="18" Height="36" MaxWidth="440"
+                            HorizontalAlignment="Left" Margin="32,0,0,0">
+                        <Grid Margin="14,0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="18" />
-                                <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="18" />
-                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <StackPanel>
-                                <TextBlock Text="Tipo de status" Foreground="{StaticResource TextSoft}" />
-                                <ComboBox Height="38" Margin="0,6,0,0">
-                                    <ComboBoxItem Content="Todos" IsSelected="True" />
-                                    <ComboBoxItem Content="Ativo" />
-                                    <ComboBoxItem Content="Inativo" />
-                                </ComboBox>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Busca geral" Foreground="{StaticResource TextSoft}" />
-                                <TextBox Height="38" Margin="0,6,0,0" />
-                            </StackPanel>
-                            <Button Grid.Column="4"
-                                    Height="38"
-                                    Margin="0,24,0,0"
-                                    Content="Buscar"
-                                    Style="{StaticResource PrimaryButtonStyle}" />
+                            <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                       Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" BorderThickness="0" Background="Transparent"
+                                     VerticalContentAlignment="Center" FontSize="13" />
                         </Grid>
                     </Border>
 
-                    <UniformGrid Columns="4" Margin="0,0,0,10">
-                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                    <!-- Ações + usuário -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Style="{StaticResource IconButtonStyle}" Content="&#xE7E7;" ToolTip="Notificações" />
+                        <Button Style="{StaticResource IconButtonStyle}" Content="&#xE713;" ToolTip="Configurações" Click="Indisponivel_Click" />
+                        <Border Width="1" Height="28" Background="#E0E5F1" Margin="10,0" />
+                        <Border Width="38" Height="38" CornerRadius="19" Background="{StaticResource Primary}">
+                            <TextBlock x:Name="LblAvatar" Text="A" Foreground="White" FontWeight="Bold" FontSize="15"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock x:Name="LblTopUsuario" Text="Usuário" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                            <TextBlock x:Name="LblTopEmpresa" Text="Empresa" FontSize="11" Foreground="{StaticResource TextSoft}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- CONTEÚDO -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="24">
+
+                    <!-- Saudação -->
+                    <StackPanel Margin="0,4,0,20">
+                        <TextBlock x:Name="LblSaudacao" Text="Bem-vindo!" FontSize="22" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                        <TextBlock x:Name="LblData" Text="" FontSize="13" Foreground="{StaticResource TextSoft}" Margin="0,4,0,0" />
+                    </StackPanel>
+
+                    <!-- KPIs -->
+                    <UniformGrid Columns="4">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
                             <StackPanel>
-                                <TextBlock Text="Clientes ativos" Foreground="{StaticResource TextSoft}" />
-                                <TextBlock x:Name="LblKpiClientes" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#EAF1FB" HorizontalAlignment="Left">
+                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE716;" Foreground="{StaticResource Primary}" />
+                                </Border>
+                                <TextBlock Text="Clientes ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                <TextBlock x:Name="LblKpiClientes" Text="-" Style="{StaticResource KpiValueStyle}" />
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
                             <StackPanel>
-                                <TextBlock Text="Produtos ativos" Foreground="{StaticResource TextSoft}" />
-                                <TextBlock x:Name="LblKpiProdutos" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#E9F7EF" HorizontalAlignment="Left">
+                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE7B8;" Foreground="#10B981" />
+                                </Border>
+                                <TextBlock Text="Produtos ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                <TextBlock x:Name="LblKpiProdutos" Text="-" Style="{StaticResource KpiValueStyle}" />
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
                             <StackPanel>
-                                <TextBlock Text="Fornecedores" Foreground="{StaticResource TextSoft}" />
-                                <TextBlock x:Name="LblKpiFornecedores" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#FEF3E2" HorizontalAlignment="Left">
+                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE8D1;" Foreground="#F59E0B" />
+                                </Border>
+                                <TextBlock Text="Fornecedores" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                <TextBlock x:Name="LblKpiFornecedores" Text="-" Style="{StaticResource KpiValueStyle}" />
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource Card3DStyle}" Padding="12">
+                        <Border Style="{StaticResource CardStyle}" Padding="18">
                             <StackPanel>
-                                <TextBlock Text="Contas em aberto" Foreground="{StaticResource TextSoft}" />
-                                <TextBlock x:Name="LblKpiFinanceiro" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                                <Border Width="40" Height="40" CornerRadius="10" Background="#FCEBEC" HorizontalAlignment="Left">
+                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xEAFD;" Foreground="#EF4444" />
+                                </Border>
+                                <TextBlock Text="Contas em aberto" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                <TextBlock x:Name="LblKpiFinanceiro" Text="-" Style="{StaticResource KpiValueStyle}" />
                             </StackPanel>
                         </Border>
                     </UniformGrid>
 
-                    <Border Style="{StaticResource Card3DStyle}" Padding="8" Height="420">
-                        <DataGrid x:Name="GridResumo" AutoGenerateColumns="False" IsReadOnly="True">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
-                                <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" Width="100" />
-                                <DataGridTextColumn Header="Descricao" Binding="{Binding Descricao}" Width="*" />
-                                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="120" />
-                                <DataGridTextColumn Header="Qtd." Binding="{Binding Quantidade}" Width="90" />
-                                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="120" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Border>
+                    <!-- Atalhos + Atividade -->
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.3*" />
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Atalhos rápidos -->
+                        <Border Style="{StaticResource CardStyle}" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="Atalhos rápidos" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <TextBlock Text="Acesse os módulos mais usados do dia a dia." Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,16" />
+                                <UniformGrid Columns="2">
+                                    <Button Margin="0,0,8,8" Height="80" Click="Clientes_Click"
+                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                        <StackPanel>
+                                            <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{StaticResource Primary}" HorizontalAlignment="Center" />
+                                            <TextBlock Text="Clientes" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Margin="8,0,0,8" Height="80" Click="Produtos_Click"
+                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                        <StackPanel>
+                                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#10B981" HorizontalAlignment="Center" />
+                                            <TextBlock Text="Produtos" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Margin="0,8,8,0" Height="80" Click="Estoque_Click"
+                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                        <StackPanel>
+                                            <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#F59E0B" HorizontalAlignment="Center" />
+                                            <TextBlock Text="Estoque" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Margin="8,8,0,0" Height="80" Click="Relatorios_Click"
+                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                        <StackPanel>
+                                            <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#3B82F6" HorizontalAlignment="Center" />
+                                            <TextBlock Text="Relatórios" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                        </StackPanel>
+                                    </Button>
+                                </UniformGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Atividade / status -->
+                        <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="Status do sistema" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <StackPanel Margin="0,16,0,0">
+                                    <Grid Margin="0,0,0,14">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="8" Height="8" CornerRadius="4" Background="#10B981" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="Banco de dados conectado" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid Margin="0,0,0,14">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="8" Height="8" CornerRadius="4" Background="#F59E0B" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="NFC-e em homologação" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Width="8" Height="8" CornerRadius="4" Background="#10B981" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="Backup ativo" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

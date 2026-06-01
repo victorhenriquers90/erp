@@ -44,7 +44,8 @@
 
                 <!-- Menu Sections -->
                 <ScrollViewer Grid.Row="1"
-                              Style="{StaticResource ModernScrollViewerStyle}"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
                               Padding="0,8,0,8">
                     <StackPanel Margin="0">
                         <!-- MAIN -->

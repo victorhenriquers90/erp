@@ -3,24 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <!-- 🎨 NOVA PALETA MINIMALISTA MODERNA -->
+            <!-- 🎨 PALETA PROFISSIONAL ENTERPRISE (SAP/ORACLE STYLE) -->
 
             <!-- Backgrounds -->
-            <SolidColorBrush x:Key="BgApp" Color="#F8F9FB" />
+            <SolidColorBrush x:Key="BgApp" Color="#F5F6FA" />
             <SolidColorBrush x:Key="BgCard" Color="#FFFFFF" />
             <SolidColorBrush x:Key="BgInput" Color="#FFFFFF" />
-            <SolidColorBrush x:Key="HeaderGrid" Color="#F3F4F6" />
-            <SolidColorBrush x:Key="SidebarBg" Color="#1F2937" />
+            <SolidColorBrush x:Key="HeaderGrid" Color="#F0F2F7" />
+            <SolidColorBrush x:Key="SidebarBg" Color="#1E3A5F" />
+            <SolidColorBrush x:Key="SidebarAccent" Color="#2D5A96" />
 
-            <!-- Cores Primárias -->
-            <SolidColorBrush x:Key="Primary" Color="#0066CC" />
-            <SolidColorBrush x:Key="PrimaryDark" Color="#003D99" />
-            <SolidColorBrush x:Key="PrimaryLight" Color="#4D94FF" />
+            <!-- Cores Primárias (Navy Blue Professional) -->
+            <SolidColorBrush x:Key="Primary" Color="#0052B4" />
+            <SolidColorBrush x:Key="PrimaryDark" Color="#003A85" />
+            <SolidColorBrush x:Key="PrimaryLight" Color="#4D7FB1" />
 
             <!-- Tipografia -->
-            <SolidColorBrush x:Key="TextStrong" Color="#111827" />
-            <SolidColorBrush x:Key="TextSoft" Color="#6B7280" />
-            <SolidColorBrush x:Key="TextPlaceholder" Color="#9CA3AF" />
+            <SolidColorBrush x:Key="TextStrong" Color="#0A1428" />
+            <SolidColorBrush x:Key="TextSoft" Color="#555A66" />
+            <SolidColorBrush x:Key="TextPlaceholder" Color="#8B92A3" />
 
             <!-- Borders e Strokes -->
             <SolidColorBrush x:Key="StrokeSoft" Color="#E5E7EB" />
@@ -92,41 +93,61 @@
                 <Setter Property="Padding" Value="16,10" />
             </Style>
 
-            <Style x:Key="SidebarButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Style x:Key="SidebarButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="{StaticResource SidebarBg}" />
-                <Setter Property="Foreground" Value="#FFFFFF" />
+                <Setter Property="Foreground" Value="#E8EEF8" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Padding" Value="12,10" />
-                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Padding" Value="18,12,16,12" />
+                <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontSize" Value="13" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="Bd"
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="Transparent"
-                                    BorderThickness="0,0,3,0"
+                                    BorderThickness="4,0,0,0"
                                     CornerRadius="0">
                                 <Grid>
+                                    <!-- Left accent bar (active) -->
                                     <Rectangle x:Name="Accent"
-                                               Width="3"
+                                               Width="4"
                                                Fill="{StaticResource Primary}"
                                                HorizontalAlignment="Left"
                                                Opacity="0" />
-                                    <ContentPresenter HorizontalAlignment="Left"
-                                                      VerticalAlignment="Center"
-                                                      Margin="{TemplateBinding Padding}" />
+
+                                    <!-- Content with proper spacing -->
+                                    <ContentPresenter
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Margin="{TemplateBinding Padding}"
+                                        TextBlock.Foreground="{TemplateBinding Foreground}" />
+
+                                    <!-- Hover background -->
+                                    <Rectangle x:Name="HoverBg"
+                                               Fill="#FFFFFF"
+                                               Opacity="0" />
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#374151" />
-                                    <Setter TargetName="Accent" Property="Opacity" Value="1" />
+                                    <Setter TargetName="HoverBg" Property="Opacity" Value="0.08" />
+                                    <Setter TargetName="Bd" Property="Background" Value="{StaticResource SidebarAccent}" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#1E293B" />
+                                    <Setter TargetName="HoverBg" Property="Opacity" Value="0.15" />
                                     <Setter TargetName="Accent" Property="Opacity" Value="1" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="Accent" Property="Opacity" Value="1" />
+                                    <Setter TargetName="Bd" Property="Background" Value="{StaticResource SidebarAccent}" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
@@ -240,6 +261,114 @@
                 <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="CornerRadius" Value="4" />
+            </Style>
+
+            <!-- 🎯 SIDEBAR PROFESSIONAL STYLES -->
+
+            <!-- Menu Section Header - Professional Title -->
+            <Style x:Key="MenuSectionHeaderStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#9DB5D3" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Margin" Value="18,16,16,8" />
+                <Setter Property="Opacity" Value="0.95" />
+            </Style>
+
+            <!-- Sidebar Separator -->
+            <Style x:Key="MenuSeparatorStyle" TargetType="Separator">
+                <Setter Property="Background" Value="#3A5A7F" />
+                <Setter Property="Height" Value="1" />
+                <Setter Property="Margin" Value="12,8,12,8" />
+                <Setter Property="Opacity" Value="0.3" />
+            </Style>
+
+            <!-- Badge for notifications/counters -->
+            <Style x:Key="BadgeStyle" TargetType="Border">
+                <Setter Property="Background" Value="{StaticResource Primary}" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="6,2" />
+                <Setter Property="MinWidth" Value="20" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="Margin" Value="0,0,8,0" />
+            </Style>
+
+            <Style x:Key="BadgeTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
+
+            <!-- Expandable Menu Group Header -->
+            <Style x:Key="MenuGroupHeaderStyle" TargetType="Button" BasedOn="{StaticResource SidebarButtonStyle}">
+                <Setter Property="Padding" Value="18,14,16,14" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="FontSize" Value="13" />
+            </Style>
+
+            <!-- Submenu Item (indented) -->
+            <Style x:Key="MenuSubmenuItemStyle" TargetType="Button" BasedOn="{StaticResource SidebarButtonStyle}">
+                <Setter Property="Padding" Value="40,10,16,10" />
+                <Setter Property="Foreground" Value="#C5D5E8" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Background" Value="#1A3050" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="Bd"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0">
+                                <Grid>
+                                    <!-- Dot indicator for active -->
+                                    <Ellipse x:Name="DotIndicator"
+                                             Width="6" Height="6"
+                                             Fill="{StaticResource Primary}"
+                                             HorizontalAlignment="Left"
+                                             Margin="22,0,0,0"
+                                             Opacity="0" />
+
+                                    <ContentPresenter
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Margin="{TemplateBinding Padding}" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="#25466B" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="DotIndicator" Property="Opacity" Value="1" />
+                                    <Setter TargetName="Bd" Property="Background" Value="#25466B" />
+                                    <Setter Property="Foreground" Value="#FFFFFF" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Top Header Bar -->
+            <Style x:Key="TopHeaderStyle" TargetType="Border">
+                <Setter Property="Background" Value="#FFFFFF" />
+                <Setter Property="BorderBrush" Value="#E0E5F1" />
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                <Setter Property="Padding" Value="20" />
+            </Style>
+
+            <Style x:Key="TopHeaderTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Primary}" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+
+            <Style x:Key="CompanyNameStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#555A66" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Margin" Value="0,4,0,0" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

@@ -1,0 +1,225 @@
+<Window x:Class="ProjetoVarejo.Desktop.Wpf.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Projeto ERP"
+        Height="900"
+        Width="1500"
+        MinHeight="720"
+        MinWidth="1220"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgApp}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ========== PROFESSIONAL SIDEBAR (SAP/ORACLE STYLE) ========== -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBg}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Logo Header -->
+                <Border BorderBrush="#3A5A7F" BorderThickness="0,0,0,1" Padding="18,16,18,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Width="32" Height="32" Background="{StaticResource Primary}" CornerRadius="4" Opacity="0.9" />
+                        <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="ProjetoVarejo" Foreground="White" FontSize="14" FontWeight="Bold" />
+                            <TextBlock Text="Enterprise" Foreground="#9DB5D3" FontSize="10" Margin="0,2,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Menu Sections -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+                        <!-- MAIN -->
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PRINCIPAL" />
+                        <Button Content="📊 Painel (Dashboard)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Painel_Click" />
+
+                        <!-- MANAGEMENT -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● CADASTROS" />
+                        <Button Content="👥 Clientes" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Clientes_Click" />
+                        <Button Content="📦 Produtos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Produtos_Click" />
+                        <Button Content="🏭 Fornecedores" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fornecedores_Click" />
+                        <Button Content="🏢 Filiais" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+
+                        <!-- OPERATIONS -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● OPERAÇÕES" />
+                        <Button Content="📋 Pedidos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Pedidos_Click" />
+                        <Button Content="📦 Estoque" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Estoque_Click" />
+                        <Button Content="🏗 Armazém" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Armazem_Click" />
+                        <Button Content="🚚 Cadeia de Suprimentos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="CadeiaSuprimentos_Click" />
+
+                        <!-- SALES & COMMERCE -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● VENDAS" />
+                        <Button Content="💳 PDV (Ponto de Venda)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="💰 Caixa" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="📱 E-Commerce" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Ecommerce_Click" />
+                        <Button Content="📢 Marketing" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Marketing_Click" />
+
+                        <!-- FINANCIAL -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● FINANCEIRO" />
+                        <Button Content="💵 Contas a Pagar" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Financeiro_Click" />
+                        <Button Content="📊 Relatórios" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Relatorios_Click" />
+
+                        <!-- PRODUCTION -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● MANUFATURA" />
+                        <Button Content="⚙️ Produção" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Producao_Click" />
+                        <Button Content="📋 Projetos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Projetos_Click" />
+
+                        <!-- HR & PEOPLE -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● PESSOAS" />
+                        <Button Content="👨‍💼 Força de Trabalho" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ForcaTrabalho_Click" />
+                        <Button Content="⏰ Apontamento de Horas" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Horas_Click" />
+
+                        <!-- COMPLIANCE -->
+                        <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
+                        <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● ADMINISTRAÇÃO" />
+                        <Button Content="📄 Fiscal/NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="🔍 Auditoria" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Auditoria_Click" />
+                        <Button Content="⚙️ Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- User & Footer -->
+                <Border Grid.Row="2" BorderBrush="#3A5A7F" BorderThickness="0,1,0,0" Padding="18,16,18,16">
+                    <StackPanel>
+                        <Border Background="#25466B" CornerRadius="4" Padding="12,10" Margin="0,0,0,12">
+                            <StackPanel>
+                                <TextBlock x:Name="LblUsuario"
+                                           Foreground="White"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="LblEmpresa"
+                                           Margin="0,4,0,0"
+                                           Foreground="#9DB5D3"
+                                           FontSize="11"
+                                           TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                        </Border>
+                        <Button Content="🚪 Logout"
+                                Height="Auto"
+                                Style="{StaticResource SidebarButtonStyle}"
+                                Click="Sair_Click" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="14">
+                    <Border Background="{StaticResource BgCard}"
+                            BorderBrush="{StaticResource StrokeSoft}"
+                            BorderThickness="1"
+                            Padding="18,12"
+                            CornerRadius="4">
+                        <StackPanel>
+                            <Border Width="2" Height="36" Background="{StaticResource Primary}" HorizontalAlignment="Left" />
+                            <TextBlock Text="PAINEL ERP"
+                                       Margin="0,8,0,0"
+                                       FontSize="38"
+                                       FontWeight="Light"
+                                       Foreground="{StaticResource TextStrong}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Margin="0,12,0,10"
+                            Padding="14"
+                            Background="{StaticResource BgCard}"
+                            BorderBrush="{StaticResource StrokeSoft}"
+                            BorderThickness="1"
+                            CornerRadius="4">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="18" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="18" />
+                                <ColumnDefinition Width="140" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Tipo de status" Foreground="{StaticResource TextSoft}" />
+                                <ComboBox Height="38" Margin="0,6,0,0">
+                                    <ComboBoxItem Content="Todos" IsSelected="True" />
+                                    <ComboBoxItem Content="Ativo" />
+                                    <ComboBoxItem Content="Inativo" />
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Busca geral" Foreground="{StaticResource TextSoft}" />
+                                <TextBox Height="38" Margin="0,6,0,0" />
+                            </StackPanel>
+                            <Button Grid.Column="4"
+                                    Height="38"
+                                    Margin="0,24,0,0"
+                                    Content="Buscar"
+                                    Style="{StaticResource PrimaryButtonStyle}" />
+                        </Grid>
+                    </Border>
+
+                    <UniformGrid Columns="4" Margin="0,0,0,10">
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Clientes ativos" Foreground="{StaticResource TextSoft}" />
+                                <TextBlock x:Name="LblKpiClientes" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Produtos ativos" Foreground="{StaticResource TextSoft}" />
+                                <TextBlock x:Name="LblKpiProdutos" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Fornecedores" Foreground="{StaticResource TextSoft}" />
+                                <TextBlock x:Name="LblKpiFornecedores" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Padding="12">
+                            <StackPanel>
+                                <TextBlock Text="Contas em aberto" Foreground="{StaticResource TextSoft}" />
+                                <TextBlock x:Name="LblKpiFinanceiro" Margin="0,6,0,0" FontSize="26" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <Border Style="{StaticResource Card3DStyle}" Padding="8" Height="420">
+                        <DataGrid x:Name="GridResumo" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120" />
+                                <DataGridTextColumn Header="Codigo" Binding="{Binding Codigo}" Width="100" />
+                                <DataGridTextColumn Header="Descricao" Binding="{Binding Descricao}" Width="*" />
+                                <DataGridTextColumn Header="Data" Binding="{Binding Data}" Width="120" />
+                                <DataGridTextColumn Header="Qtd." Binding="{Binding Quantidade}" Width="90" />
+                                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="120" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

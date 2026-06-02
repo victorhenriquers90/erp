@@ -140,6 +140,9 @@ public partial class MainWindow : Window
     private void Clientes_Click(object sender, RoutedEventArgs e)
         => NavegarModulo<ClientesWindow>("Clientes", "Cadastros · Clientes");
 
+    private void Filiais_Click(object sender, RoutedEventArgs e)
+        => NavegarModulo<FiliaisWindow>("Filiais / Empresas", "Cadastros · Filiais");
+
     private void Produtos_Click(object sender, RoutedEventArgs e)
         => NavegarModulo<ProdutosWindow>("Produtos", "Cadastros · Produtos");
 

@@ -1,0 +1,234 @@
+<Window x:Class="ProjetoVarejo.Desktop.Wpf.Views.EmpresaEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Empresa / Filial"
+        Height="760"
+        Width="760"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BgApp}">
+    <Window.Resources>
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+            <Setter Property="Margin" Value="0,0,0,5" />
+        </Style>
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+            <Setter Property="Margin" Value="0,0,0,14" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="0,0,0,14">
+            <TextBlock Text="Cadastro de Empresa / Filial" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+            <TextBlock Text="Dados cadastrais e configuração fiscal (NFC-e) da empresa." Style="{StaticResource PageSubtitleStyle}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,8,0">
+
+                <!-- IDENTIFICAÇÃO -->
+                <Border Style="{StaticResource Card3DStyle}" Padding="18" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="Identificação" Style="{StaticResource SectionTitle}" />
+
+                        <TextBlock Text="RAZÃO SOCIAL" Style="{StaticResource FieldLabel}" />
+                        <TextBox x:Name="TxtRazaoSocial" Height="38" Margin="0,0,0,12" />
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="NOME FANTASIA" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtNomeFantasia" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="CNPJ" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtCnpj" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="INSCRIÇÃO ESTADUAL" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtIe" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="REGIME TRIBUTÁRIO" Style="{StaticResource FieldLabel}" />
+                                <ComboBox x:Name="CmbRegime" Height="38">
+                                    <ComboBoxItem Content="1 - Simples Nacional" />
+                                    <ComboBoxItem Content="2 - Simples Nacional (excesso de receita)" />
+                                    <ComboBoxItem Content="3 - Regime Normal" />
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="TELEFONE" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtTelefone" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="E-MAIL" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtEmail" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <CheckBox x:Name="ChkAtivo" Content="Empresa ativa" Margin="0,14,0,0" IsChecked="True" />
+                    </StackPanel>
+                </Border>
+
+                <!-- ENDEREÇO -->
+                <Border Style="{StaticResource Card3DStyle}" Padding="18" Margin="0,0,0,14">
+                    <StackPanel>
+                        <TextBlock Text="Endereço" Style="{StaticResource SectionTitle}" />
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="CEP" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtCep" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="LOGRADOURO" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtLogradouro" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="NÚMERO" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtNumero" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="COMPLEMENTO" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtComplemento" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="140" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="BAIRRO" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtBairro" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="CIDADE" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtCidade" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="UF" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtUf" Height="38" MaxLength="2" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="6">
+                                <TextBlock Text="CÓD. IBGE" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtCodMun" Height="38" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- FISCAL / NFC-e -->
+                <Border Style="{StaticResource Card3DStyle}" Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="Fiscal / NFC-e" Style="{StaticResource SectionTitle}" />
+
+                        <CheckBox x:Name="ChkHomologacao" Content="Ambiente de homologação (testes — sem valor fiscal)" Margin="0,0,0,14" />
+
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="SÉRIE NFC-e" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtSerie" Height="38" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="PRÓXIMO NÚMERO" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtProxNumero" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="CERTIFICADO DIGITAL A1 (.pfx)" Style="{StaticResource FieldLabel}" />
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TxtCertCaminho" Height="38" VerticalContentAlignment="Center" />
+                            <Button Grid.Column="1" Content="Procurar..." Width="110" Height="38" Margin="10,0,0,0" Click="Procurar_Click" />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="240" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="SENHA DO CERTIFICADO" Style="{StaticResource FieldLabel}" />
+                                <PasswordBox x:Name="TxtCertSenha" Height="38" VerticalContentAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="CSC - TOKEN NFC-e" Style="{StaticResource FieldLabel}" />
+                                <TextBox x:Name="TxtCscToken" Height="38" />
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Margin="0,12,0,0" Width="240" HorizontalAlignment="Left">
+                            <TextBlock Text="CSC - ID (cIdToken)" Style="{StaticResource FieldLabel}" />
+                            <TextBox x:Name="TxtCscId" Height="38" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Cancelar" Width="120" Height="42" Margin="0,0,10,0" Click="Cancelar_Click" />
+            <Button x:Name="BtnSalvar" Content="Salvar" Width="150" Height="42"
+                    Style="{StaticResource PrimaryButtonStyle}" Click="Salvar_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

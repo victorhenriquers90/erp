@@ -65,7 +65,7 @@
                         <Button Content="Clientes" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Clientes_Click" />
                         <Button Content="Produtos" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Produtos_Click" />
                         <Button Content="Fornecedores" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fornecedores_Click" />
-                        <Button Content="Filiais" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Filiais" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Filiais_Click" />
 
                         <!-- OPERATIONS -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />

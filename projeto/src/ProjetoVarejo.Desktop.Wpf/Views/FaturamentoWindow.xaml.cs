@@ -33,13 +33,18 @@ public partial class FaturamentoWindow : UserControl
 
     private async Task CarregarAsync()
     {
-        CmbCliente.ItemsSource = await _clienteService.ListarAsync();
-        CmbProduto.ItemsSource = await _produtoService.ListarAsync();
+        var clientes = await _clienteService.ListarAsync();
+        CmbCliente.DisplayMemberPath = null;
+        CmbCliente.ItemsSource = clientes.Select(c => new ClienteOpcao(c.Nome, c.Id, c.CpfCnpj)).ToList();
+
+        var produtos = await _produtoService.ListarAsync();
+        CmbProduto.DisplayMemberPath = null;
+        CmbProduto.ItemsSource = produtos.Select(p => new ProdutoOpcao(p.Id, p.Descricao, p.PrecoVenda)).ToList();
     }
 
     private void AddItem_Click(object sender, RoutedEventArgs e)
     {
-        if (CmbProduto.SelectedItem is not Produto produto)
+        if (CmbProduto.SelectedItem is not ProdutoOpcao produto)
         {
             MessageBox.Show("Selecione um produto.", "Faturamento", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -72,7 +77,7 @@ public partial class FaturamentoWindow : UserControl
     {
         ResultadoBox.Visibility = Visibility.Collapsed;
 
-        if (CmbCliente.SelectedItem is not Cliente cliente)
+        if (CmbCliente.SelectedItem is not ClienteOpcao cliente)
         {
             MessageBox.Show("Selecione o cliente destinatário.", "Faturamento", MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -164,4 +169,17 @@ public partial class FaturamentoWindow : UserControl
         public string PrecoTexto => Preco.ToString("C2", PtBr);
         public string TotalTexto => Total.ToString("C2", PtBr);
     }
+}
+
+// ToString retorna o texto visível — o tema WPF não popula a SelectionBoxItemTemplate
+// a partir de DisplayMemberPath quando a caixa está fechada; sem ToString() apareceria
+// o nome completo do tipo (ex.: "ProjetoVarejo.Domain.Entities.Cliente").
+public sealed record ClienteOpcao(string Nome, int Id, string? CpfCnpj)
+{
+    public override string ToString() => Nome;
+}
+
+public sealed record ProdutoOpcao(int Id, string Descricao, decimal PrecoVenda)
+{
+    public override string ToString() => Descricao;
 }

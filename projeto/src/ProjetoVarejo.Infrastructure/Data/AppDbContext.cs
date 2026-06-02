@@ -45,6 +45,7 @@ public class AppDbContext : DbContext
             e.Property(x => x.Origem).HasMaxLength(1);
             e.Property(x => x.CstIcms).HasMaxLength(3);
             e.Property(x => x.CstPisCofins).HasMaxLength(2);
+            e.Property(x => x.RowVersion).IsRowVersion();
             e.HasIndex(x => x.Codigo).IsUnique();
             e.HasIndex(x => x.CodigoBarras);
             e.HasOne(x => x.Categoria).WithMany(c => c.Produtos)

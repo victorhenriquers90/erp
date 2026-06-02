@@ -21,6 +21,9 @@ builder.Services.AddScoped<AutenticacaoService>();
 builder.Services.AddScoped<VendaService>();
 builder.Services.AddScoped<FinanceiroService>();
 builder.Services.AddScoped<CaixaService>();
+builder.Services.AddSingleton(new ProjetoVarejo.Infrastructure.WhatsApp.WhatsAppConfig());
+builder.Services.AddScoped<ProjetoVarejo.Infrastructure.WhatsApp.WhatsAppService>();
+builder.Services.AddScoped<NotificacaoService>();
 builder.Services.AddSingleton<ApiKeyValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -47,6 +50,7 @@ VendaEndpoints.Map(app);
 FinanceiroEndpoints.Map(app);
 CaixaEndpoints.Map(app);
 UsuarioEndpoints.Map(app);
+NotificacaoEndpoints.Map(app);
 
 app.Run();
 

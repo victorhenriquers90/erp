@@ -17,7 +17,7 @@
         <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Margin="0,16,0,16" Padding="16">
             <StackPanel>
                 <TextBlock Text="DESTINATÁRIO (CLIENTE)" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" Margin="0,0,0,6" />
-                <ComboBox x:Name="CmbCliente" Height="40" DisplayMemberPath="Nome" />
+                <ComboBox x:Name="CmbCliente" Height="40" />
 
                 <TextBlock Text="ADICIONAR PRODUTO" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" Margin="0,16,0,6" />
                 <Grid>
@@ -28,7 +28,7 @@
                         <ColumnDefinition Width="12" />
                         <ColumnDefinition Width="150" />
                     </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="CmbProduto" Height="40" DisplayMemberPath="Descricao" />
+                    <ComboBox x:Name="CmbProduto" Height="40" />
                     <TextBox Grid.Column="2" x:Name="TxtQtd" Height="40" Text="1" VerticalContentAlignment="Center"
                              Padding="10,0" FontSize="14" />
                     <Button Grid.Column="4" Height="40" Content="Adicionar item" Click="AddItem_Click" />

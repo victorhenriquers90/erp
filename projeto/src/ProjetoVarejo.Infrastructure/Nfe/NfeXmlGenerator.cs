@@ -91,7 +91,7 @@ public class NfeXmlGenerator
                 new XElement(Ns + "xLgr", string.IsNullOrWhiteSpace(cliente.Logradouro) ? "NAO INFORMADO" : cliente.Logradouro),
                 new XElement(Ns + "nro", string.IsNullOrWhiteSpace(cliente.Numero) ? "S/N" : cliente.Numero),
                 new XElement(Ns + "xBairro", string.IsNullOrWhiteSpace(cliente.Bairro) ? "NAO INFORMADO" : cliente.Bairro),
-                new XElement(Ns + "cMun", empresa.CodigoMunicipioIbge), // FALLBACK: ver lacuna no topo
+                new XElement(Ns + "cMun", string.IsNullOrWhiteSpace(cliente.CodigoMunicipioIbge) ? empresa.CodigoMunicipioIbge : cliente.CodigoMunicipioIbge),
                 new XElement(Ns + "xMun", string.IsNullOrWhiteSpace(cliente.Cidade) ? empresa.Cidade : cliente.Cidade),
                 new XElement(Ns + "UF", ufDest),
                 new XElement(Ns + "CEP", ChaveAcessoNfce.SoNumeros(string.IsNullOrWhiteSpace(cliente.Cep) ? empresa.Cep : cliente.Cep!)),

@@ -62,6 +62,23 @@
                     </Border>
                 </StackPanel>
             </Border>
+
+            <!-- DADOS DE DEMONSTRAÇÃO -->
+            <Border Style="{StaticResource Card3DStyle}" Padding="20" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="Dados de demonstração" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                    <TextBlock Text="Popula clientes, fornecedores e contas de exemplo (marcados como [DEMO]) para apresentações. Só adiciona se houver poucos registros."
+                               Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,16" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="BtnDemo" Content="Popular dados de demonstração" Width="270" Height="42"
+                                Click="Demo_Click" />
+                    </StackPanel>
+                    <Border x:Name="DemoBox" Margin="0,16,0,0" Background="#EFF6FF" BorderBrush="#BFDBFE"
+                            BorderThickness="1" CornerRadius="8" Padding="12" Visibility="Collapsed">
+                        <TextBlock x:Name="LblDemo" Foreground="#1E40AF" FontSize="12" TextWrapping="Wrap" MaxWidth="640" />
+                    </Border>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

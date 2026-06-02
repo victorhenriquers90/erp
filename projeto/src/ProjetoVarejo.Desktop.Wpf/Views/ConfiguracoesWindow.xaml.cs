@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Infrastructure.Backup;
 
@@ -9,11 +10,13 @@ public partial class ConfiguracoesWindow : UserControl
 {
     private readonly SessaoApp _sessao;
     private readonly BackupService _backupService;
+    private readonly DadosDemoService _dadosDemoService;
 
-    public ConfiguracoesWindow(SessaoApp sessao, BackupService backupService)
+    public ConfiguracoesWindow(SessaoApp sessao, BackupService backupService, DadosDemoService dadosDemoService)
     {
         _sessao = sessao;
         _backupService = backupService;
+        _dadosDemoService = dadosDemoService;
         InitializeComponent();
 
         LblEmpresa.Text = _sessao.EmpresaAtiva?.NomeFantasia
@@ -51,4 +54,36 @@ public partial class ConfiguracoesWindow : UserControl
             BtnBackup.Content = "Fazer backup agora";
         }
     }
+
+    private async void Demo_Click(object sender, RoutedEventArgs e)
+    {
+        BtnDemo.IsEnabled = false;
+        BtnDemo.Content = "Populando...";
+        DemoBox.Visibility = Visibility.Collapsed;
+        try
+        {
+            var result = await _dadosDemoService.PopularAsync();
+            if (result.Sucesso)
+            {
+                LblDemo.Text = result.Valor;
+                DemoBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                MessageBox.Show(result.Erro ?? "Falha ao popular dados.", "Dados de demonstração",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro ao popular dados: {ex.Message}", "Dados de demonstração",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            BtnDemo.IsEnabled = true;
+            BtnDemo.Content = "Popular dados de demonstração";
+        }
+    }
 }
+

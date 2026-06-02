@@ -66,6 +66,7 @@ public partial class App : System.Windows.Application
             sc.AddScoped<RelatorioService>();
             sc.AddSingleton<CupomPrinterService>();
             sc.AddScoped<BackupService>();
+            sc.AddScoped<DadosDemoService>();
             sc.AddScoped<NfeImporterService>();
             sc.AddScoped<PermissaoService>();
             sc.AddScoped<AuditLogService>();

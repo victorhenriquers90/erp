@@ -86,6 +86,7 @@
                         <!-- FINANCIAL -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● FINANCEIRO" />
+                        <Button Content="Faturamento (NF-e)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Faturamento_Click" />
                         <Button Content="Contas a Pagar" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Financeiro_Click" />
                         <Button Content="Relatórios" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Relatorios_Click" />
 

@@ -1,0 +1,87 @@
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FaturamentoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Background="{StaticResource BgApp}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="0,8,0,0" Text="Emita NF-e (modelo 55) de venda para outra empresa."
+                   FontSize="14" Foreground="{StaticResource TextSoft}" />
+
+        <!-- Cabeçalho do faturamento -->
+        <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Margin="0,16,0,16" Padding="16">
+            <StackPanel>
+                <TextBlock Text="DESTINATÁRIO (CLIENTE)" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" Margin="0,0,0,6" />
+                <ComboBox x:Name="CmbCliente" Height="40" DisplayMemberPath="Nome" />
+
+                <TextBlock Text="ADICIONAR PRODUTO" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" Margin="0,16,0,6" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="CmbProduto" Height="40" DisplayMemberPath="Descricao" />
+                    <TextBox Grid.Column="2" x:Name="TxtQtd" Height="40" Text="1" VerticalContentAlignment="Center"
+                             Padding="10,0" FontSize="14" />
+                    <Button Grid.Column="4" Height="40" Content="Adicionar item" Click="AddItem_Click" />
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Itens -->
+        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
+            <Grid>
+                <DataGrid x:Name="DgItens" AutoGenerateColumns="False" IsReadOnly="True"
+                          SelectionMode="Single" HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Produto" Binding="{Binding Descricao}" Width="*" />
+                        <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="100" />
+                        <DataGridTextColumn Header="Preço" Binding="{Binding PrecoTexto}" Width="140" />
+                        <DataGridTextColumn Header="Total" Binding="{Binding TotalTexto}" Width="140" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasItems, ElementName=DgItens}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <TextBlock Text="&#xE7BF;" FontFamily="Segoe MDL2 Assets" FontSize="34" Foreground="#C9D2DE" HorizontalAlignment="Center" />
+                    <TextBlock Text="Nenhum item adicionado" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Rodapé: total + emitir -->
+        <Grid Grid.Row="3" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="TOTAL DA NOTA" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" />
+                <TextBlock x:Name="LblTotal" Text="R$ 0,00" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+            </StackPanel>
+            <Button Grid.Column="1" x:Name="BtnEmitir" Content="Emitir NF-e" Width="200" Height="48"
+                    VerticalAlignment="Center" Style="{StaticResource PrimaryButtonStyle}" Click="Emitir_Click" />
+        </Grid>
+
+        <Border x:Name="ResultadoBox" Grid.Row="3" Margin="0,80,0,0" Padding="12" CornerRadius="8"
+                BorderThickness="1" Visibility="Collapsed" VerticalAlignment="Top">
+            <TextBlock x:Name="LblResultado" FontSize="12" TextWrapping="Wrap" />
+        </Border>
+    </Grid>
+</UserControl>

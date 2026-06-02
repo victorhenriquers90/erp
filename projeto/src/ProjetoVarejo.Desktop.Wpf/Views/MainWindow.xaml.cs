@@ -163,6 +163,9 @@ public partial class MainWindow : Window
     private void Financeiro_Click(object sender, RoutedEventArgs e)
         => NavegarModulo<FinanceiroWindow>("Financeiro", "Financeiro · Contas");
 
+    private void Faturamento_Click(object sender, RoutedEventArgs e)
+        => NavegarModulo<FaturamentoWindow>("Faturamento (NF-e)", "Financeiro · Faturamento");
+
     private void Armazem_Click(object sender, RoutedEventArgs e) => Estoque_Click(sender, e);
 
     private void Pedidos_Click(object sender, RoutedEventArgs e)

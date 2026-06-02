@@ -102,6 +102,7 @@ public partial class App : System.Windows.Application
             sc.AddTransient<FiliaisWindow>();
             sc.AddTransient<EmpresaEditorWindow>();
             sc.AddTransient<ConfiguracoesWindow>();
+            sc.AddTransient<FaturamentoWindow>();
             sc.AddTransient<EstoqueWindow>();
             sc.AddTransient<LancamentoEstoqueWindow>();
             sc.AddTransient<FinanceiroWindow>();

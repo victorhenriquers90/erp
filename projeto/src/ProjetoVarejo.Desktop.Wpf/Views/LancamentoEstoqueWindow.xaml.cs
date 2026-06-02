@@ -139,4 +139,10 @@ public partial class LancamentoEstoqueWindow : Window
     }
 }
 
-public sealed record FornecedorOpcao(string Nome, int? Id);
+// ToString retorna o texto visível — o tema WPF não popula a SelectionBoxItemTemplate
+// a partir de DisplayMemberPath quando a caixa está fechada; sem ToString() apareceria
+// o nome completo do tipo.
+public sealed record FornecedorOpcao(string Nome, int? Id)
+{
+    public override string ToString() => Nome;
+}

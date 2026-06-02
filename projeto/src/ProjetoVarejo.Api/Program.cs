@@ -17,6 +17,7 @@ builder.Services.AddScoped<ProdutoService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<EstoqueService>();
 builder.Services.AddScoped<RelatorioService>();
+builder.Services.AddScoped<ProjetoVarejo.Infrastructure.Reporting.RelatorioExporter>();
 builder.Services.AddScoped<AutenticacaoService>();
 builder.Services.AddScoped<VendaService>();
 builder.Services.AddScoped<FinanceiroService>();

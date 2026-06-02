@@ -46,8 +46,8 @@ public partial class ProdutoEditorWindow : Window
     private async Task CarregarCategoriasAsync()
     {
         _categorias = await _categoriaService.ListarAsync();
-        CmbCategoria.ItemsSource = _categorias;
-        CmbCategoria.DisplayMemberPath = "Nome";
+        CmbCategoria.DisplayMemberPath = null;
+        CmbCategoria.ItemsSource = _categorias.Select(c => new CategoriaOpcao(c.Id, c.Nome)).ToList();
         CmbCategoria.SelectedValuePath = "Id";
         CmbCategoria.SelectedValue = _produtoAtual.CategoriaId;
     }
@@ -106,4 +106,12 @@ public partial class ProdutoEditorWindow : Window
             return v;
         return 0;
     }
+}
+
+// ToString retorna o texto visível — o tema WPF não popula a SelectionBoxItemTemplate
+// a partir de DisplayMemberPath quando a caixa está fechada; sem ToString() apareceria
+// o nome completo do tipo (ex.: "ProjetoVarejo.Domain.Entities.Categoria").
+public sealed record CategoriaOpcao(int Id, string Nome)
+{
+    public override string ToString() => Nome;
 }

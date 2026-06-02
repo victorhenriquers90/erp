@@ -1,0 +1,20 @@
+{
+  "name": "Varejo Flow - PDV e Estoque",
+  "short_name": "Varejo Flow",
+  "description": "PDV, estoque, caixa e vendas para desktop, tablet e smartphone.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f6f1",
+  "theme_color": "#16784f",
+  "categories": ["business", "productivity", "finance"],
+  "icons": [
+    {
+      "src": "icons/varejo-flow-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

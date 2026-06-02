@@ -336,7 +336,7 @@ public partial class MainWindow : Window
     /// <summary>Exibe um módulo (UserControl) embutido na janela, trocando o conteúdo central.</summary>
     private void NavegarModulo<TView>(string titulo, string breadcrumb) where TView : UserControl
     {
-        _moduloScope?.Dispose();
+        AgendarDescarteDeScope(_moduloScope);
         _moduloScope = _services.CreateScope();
 
         var view = _moduloScope.ServiceProvider.GetRequiredService<TView>();
@@ -356,12 +356,27 @@ public partial class MainWindow : Window
         ContentHost.Visibility = Visibility.Collapsed;
         DashboardRoot.Visibility = Visibility.Visible;
         FadeIn(DashboardRoot);
-        _moduloScope?.Dispose();
+        AgendarDescarteDeScope(_moduloScope);
         _moduloScope = null;
 
         LblPagina.Text = "Painel";
         LblBreadcrumb.Text = "Início · Visão geral";
         _ = CarregarKpisAsync();
+    }
+
+    /// <summary>
+    /// Descarta o escopo de DI do módulo anterior de forma adiada. O descarte é agendado
+    /// em prioridade <see cref="System.Windows.Threading.DispatcherPriority.ApplicationIdle"/>,
+    /// ou seja, só ocorre depois que a troca de conteúdo e a animação de fade terminam — assim
+    /// os serviços do escopo (DbContext, ViewModels) não são dispostos enquanto a view de saída
+    /// ainda está referenciada na árvore visual.
+    /// </summary>
+    private void AgendarDescarteDeScope(IServiceScope? scope)
+    {
+        if (scope is null) return;
+        Dispatcher.BeginInvoke(
+            new Action(scope.Dispose),
+            System.Windows.Threading.DispatcherPriority.ApplicationIdle);
     }
 
     /// <summary>Animação sutil de fade + leve subida ao trocar de conteúdo.</summary>

@@ -1,0 +1,66 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isCompanyMember(companyId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/companies/$(companyId)/members/$(request.auth.uid));
+    }
+
+    function memberRole(companyId) {
+      return get(/databases/$(database)/documents/companies/$(companyId)/members/$(request.auth.uid)).data.role;
+    }
+
+    function canManage(companyId) {
+      return isCompanyMember(companyId)
+        && memberRole(companyId) in ["owner", "manager"];
+    }
+
+    match /companies/{companyId} {
+      allow read: if isCompanyMember(companyId);
+      allow create: if signedIn();
+      allow update: if canManage(companyId);
+      allow delete: if false;
+
+      match /members/{memberId} {
+        allow read: if isCompanyMember(companyId);
+        allow create, update: if canManage(companyId);
+        allow delete: if memberRole(companyId) == "owner";
+      }
+
+      match /snapshots/{snapshotId} {
+        allow read, write: if isCompanyMember(companyId);
+      }
+
+      match /products/{docId} {
+        allow read: if isCompanyMember(companyId);
+        allow write: if isCompanyMember(companyId)
+          && memberRole(companyId) in ["owner", "manager", "stock"];
+      }
+
+      match /sales/{docId} {
+        allow read: if isCompanyMember(companyId);
+        allow create: if isCompanyMember(companyId)
+          && memberRole(companyId) in ["owner", "manager", "cashier"];
+        allow update, delete: if canManage(companyId);
+      }
+
+      match /movements/{docId} {
+        allow read: if isCompanyMember(companyId);
+        allow create: if isCompanyMember(companyId)
+          && memberRole(companyId) in ["owner", "manager", "stock", "cashier"];
+        allow update, delete: if canManage(companyId);
+      }
+
+      match /cashSessions/{docId} {
+        allow read: if isCompanyMember(companyId);
+        allow write: if isCompanyMember(companyId)
+          && memberRole(companyId) in ["owner", "manager", "cashier", "accountant"];
+      }
+    }
+  }
+}

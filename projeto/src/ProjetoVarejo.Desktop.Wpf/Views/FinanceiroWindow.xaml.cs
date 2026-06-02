@@ -160,8 +160,18 @@ public partial class FinanceiroWindow : UserControl
     }
 }
 
-public sealed record TipoOpcao(string Nome, TipoConta? Valor);
-public sealed record StatusOpcao(string Nome, StatusConta? Valor);
+// ToString retorna o Nome: o template de ComboBox do tema não popula SelectionBoxItemTemplate
+// a partir do DisplayMemberPath, então a caixa de seleção fechada cai no ToString() do record.
+// Sem isto a seleção exibiria "TipoOpcao { Nome = ... }" em vez do texto amigável.
+public sealed record TipoOpcao(string Nome, TipoConta? Valor)
+{
+    public override string ToString() => Nome;
+}
+
+public sealed record StatusOpcao(string Nome, StatusConta? Valor)
+{
+    public override string ToString() => Nome;
+}
 public sealed record ContaLinhaUi(
     int Id,
     string Tipo,

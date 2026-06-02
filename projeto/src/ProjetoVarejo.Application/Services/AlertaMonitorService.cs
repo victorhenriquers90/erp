@@ -1,105 +1,77 @@
+using Microsoft.Extensions.DependencyInjection;
 using ProjetoVarejo.Infrastructure.WhatsApp;
 
 namespace ProjetoVarejo.Application.Services;
 
 /// <summary>
-/// Serviço de monitoramento automático que verifica o status das filiais
-/// e envia alertas via WhatsApp ao gerente quando detecta problemas.
-/// Instancie uma única vez e mantenha vivo (ex.: campo estático no App).
-/// Chamar <see cref="VerificarAsync"/> periodicamente via timer.
+/// Serviço singleton de monitoramento. Usa IServiceScopeFactory para resolver
+/// FilialPainelService (scoped) e WhatsAppService a cada verificação, evitando
+/// captive dependency.
 /// </summary>
 public class AlertaMonitorService
 {
-    private readonly FilialPainelService _painelService;
-    private readonly WhatsAppService _whatsApp;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    // ── Configuração ──────────────────────────────────────────────────────
     public TimeSpan HorarioCaixaDeveAbrirAte { get; set; } = TimeSpan.FromHours(9);
     public string? TelefoneGerente { get; set; }
     public bool AlertasAtivos { get; set; } = false;
 
-    // ── Estado interno (persiste entre chamadas do timer) ─────────────────
-    /// <summary>filialId → estava Online na última verificação</summary>
     private readonly Dictionary<int, bool> _estadoAnterior = new();
-
-    /// <summary>filialIds que já receberam alerta de caixa fechado hoje</summary>
     private readonly HashSet<int> _alertasCaixaEnviados = new();
-
-    /// <summary>Data em que _alertasCaixaEnviados foi zerado pela última vez</summary>
     private DateTime _ultimaLimpezaDia = DateTime.Today;
 
-    // ── Construtor ────────────────────────────────────────────────────────
-    public AlertaMonitorService(FilialPainelService painelService, WhatsAppService whatsApp)
-    {
-        _painelService = painelService;
-        _whatsApp = whatsApp;
-    }
+    public AlertaMonitorService(IServiceScopeFactory scopeFactory)
+        => _scopeFactory = scopeFactory;
 
-    // ── Método principal ──────────────────────────────────────────────────
-    /// <summary>
-    /// Consulta o status de todas as filiais e envia alertas WhatsApp se necessário.
-    /// Deve ser chamado pelo timer de fundo a cada N minutos.
-    /// </summary>
     public async Task VerificarAsync()
     {
-        if (!AlertasAtivos) return;
-        if (string.IsNullOrWhiteSpace(TelefoneGerente)) return;
-
-        // Limpa alertas de caixa à meia-noite
+        if (!AlertasAtivos || string.IsNullOrWhiteSpace(TelefoneGerente)) return;
         LimparAlertasDoDiaSePreciso();
 
         List<FilialStatus> filiais;
         try
         {
-            filiais = await _painelService.ObterStatusTodasAsync();
+            using var scope = _scopeFactory.CreateScope();
+            var painelService = scope.ServiceProvider.GetRequiredService<FilialPainelService>();
+            filiais = await painelService.ObterStatusTodasAsync();
         }
-        catch
-        {
-            // Falha silenciosa: não derruba o timer por problema momentâneo de rede/DB
-            return;
-        }
+        catch { return; }
 
         var agora = DateTime.Now;
         var horaAtual = agora.TimeOfDay;
 
         foreach (var filial in filiais)
         {
-            // ── Alerta 1: filial ficou offline ──────────────────────────
+            // Alerta 1: filial ficou offline
             var estavaOnline = _estadoAnterior.TryGetValue(filial.Id, out var anterior) && anterior;
             if (estavaOnline && !filial.Online)
-            {
-                var msg = $"⚠️ Filial {NomeFilial(filial)} ficou offline. Verifique a rede. ({agora:HH:mm})";
-                _ = EnviarAlertaAsync(msg);
-            }
+                _ = EnviarAlertaAsync($"⚠️ Filial {NomeFilial(filial)} ficou offline. Verifique a rede. ({agora:HH:mm})");
 
-            // ── Alerta 2: caixa não aberto no horário ───────────────────
-            if (horaAtual >= HorarioCaixaDeveAbrirAte
-                && !filial.CaixaAberto
+            // Alerta 2: caixa não aberto no horário
+            if (horaAtual >= HorarioCaixaDeveAbrirAte && !filial.CaixaAberto
                 && !_alertasCaixaEnviados.Contains(filial.Id))
             {
                 _alertasCaixaEnviados.Add(filial.Id);
-                var horaLimite = HorarioCaixaDeveAbrirAte.ToString(@"hh\:mm");
-                var msg = $"🏧 Caixa da filial {NomeFilial(filial)} não foi aberto até {horaLimite}. Verifique.";
-                _ = EnviarAlertaAsync(msg);
+                var hl = HorarioCaixaDeveAbrirAte.ToString(@"hh\:mm");
+                _ = EnviarAlertaAsync($"🏧 Caixa da filial {NomeFilial(filial)} não foi aberto até {hl}. Verifique.");
             }
 
-            // ── Atualiza estado anterior ────────────────────────────────
             _estadoAnterior[filial.Id] = filial.Online;
         }
     }
 
-    // ── Auxiliares ────────────────────────────────────────────────────────
     private async Task EnviarAlertaAsync(string mensagem)
     {
         try
         {
-            await _whatsApp.EnviarTextoAsync(TelefoneGerente!, mensagem);
+            using var scope = _scopeFactory.CreateScope();
+            var whatsApp = scope.ServiceProvider.GetRequiredService<WhatsAppService>();
+            await whatsApp.EnviarTextoAsync(TelefoneGerente!, mensagem);
         }
-        catch { /* alerta best-effort */ }
+        catch { }
     }
 
-    private static string NomeFilial(FilialStatus f)
-        => f.Apelido ?? f.Nome;
+    private static string NomeFilial(FilialStatus f) => f.Apelido ?? f.Nome;
 
     private void LimparAlertasDoDiaSePreciso()
     {

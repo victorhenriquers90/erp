@@ -21,10 +21,22 @@ public partial class App : System.Windows.Application
         base.OnStartup(e);
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
         EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent, new RoutedEventHandler(AjustarJanelaNaTela));
+
+        // Captura global de erros (confiabilidade / suporte em campo)
         DispatcherUnhandledException += (_, args) =>
         {
-            MessageBox.Show($"Erro inesperado:\n\n{args.Exception.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+            AppLog.Erro("UI", args.Exception);
+            MessageBox.Show(
+                $"Ocorreu um erro inesperado:\n\n{args.Exception.Message}\n\nO erro foi registrado em:\n{AppLog.CaminhoArquivoHoje}",
+                "Projeto ERP", MessageBoxButton.OK, MessageBoxImage.Error);
             args.Handled = true;
+        };
+        AppDomain.CurrentDomain.UnhandledException += (_, args) =>
+            AppLog.Erro("AppDomain", args.ExceptionObject as Exception ?? new Exception("Erro fatal não tratado"));
+        System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (_, args) =>
+        {
+            AppLog.Erro("Task", args.Exception);
+            args.SetObserved();
         };
 
         try
@@ -129,8 +141,9 @@ public partial class App : System.Windows.Application
         }
         catch (Exception ex)
         {
+            AppLog.Erro("Startup", ex);
             MessageBox.Show(
-                $"Erro ao iniciar:\n\n{ex.Message}\n\nDetalhe:\n{ex.InnerException?.Message}",
+                $"Erro ao iniciar:\n\n{ex.Message}\n\nDetalhe:\n{ex.InnerException?.Message}\n\nLog: {AppLog.CaminhoArquivoHoje}",
                 "Erro fatal", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
         }

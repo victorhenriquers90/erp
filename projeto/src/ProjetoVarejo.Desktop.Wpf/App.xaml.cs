@@ -8,6 +8,8 @@ using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Desktop.Wpf.Views;
 using ProjetoVarejo.Infrastructure.Backup;
 using ProjetoVarejo.Infrastructure.Data;
+using ProjetoVarejo.Infrastructure.Reporting;
+using ProjetoVarejo.Infrastructure.WhatsApp;
 using ProjetoVarejo.Infrastructure.Nfce;
 
 namespace ProjetoVarejo.Desktop.Wpf;
@@ -77,6 +79,10 @@ public partial class App : System.Windows.Application
             sc.AddScoped<FinanceiroService>();
             sc.AddScoped<CaixaService>();
             sc.AddScoped<RelatorioService>();
+            sc.AddScoped<RelatorioExporter>();
+            sc.AddSingleton(new WhatsAppConfig());
+            sc.AddScoped<WhatsAppService>();
+            sc.AddScoped<NotificacaoService>();
             sc.AddSingleton<CupomPrinterService>();
             sc.AddScoped<BackupService>();
             sc.AddScoped<DadosDemoService>();

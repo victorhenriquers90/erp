@@ -26,6 +26,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="De" FontWeight="SemiBold" />
@@ -43,16 +45,28 @@
                         Click="Atualizar_Click" />
                 <Button Grid.Column="4"
                         Margin="10,20,0,0"
-                        Width="210"
+                        Width="150"
                         Height="36"
-                        Content="Exportar CSV (aba atual)"
+                        Content="Exportar CSV"
                         Click="Exportar_Click" />
                 <Button Grid.Column="5"
-                        Margin="10,20,0,0"
-                        Width="170"
+                        Margin="6,20,0,0"
+                        Width="150"
                         Height="36"
-                        Content="Detalhes tecnicos"
-                        Click="DetalhesTecnicos_Click" />
+                        Background="{StaticResource Primary}"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Content="Exportar Excel"
+                        Click="ExportarExcel_Click" />
+                <Button Grid.Column="6"
+                        Margin="6,20,0,0"
+                        Width="140"
+                        Height="36"
+                        Background="{StaticResource Primary}"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Content="Exportar PDF"
+                        Click="ExportarPdf_Click" />
             </Grid>
         </Border>
 

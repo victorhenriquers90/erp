@@ -7,12 +7,14 @@ using System.Windows.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 using ProjetoVarejo.Application.Services;
+using ProjetoVarejo.Infrastructure.Reporting;
 
 namespace ProjetoVarejo.Desktop.Wpf.Views;
 
 public partial class RelatoriosWindow : UserControl
 {
     private readonly RelatorioService _relatorioService;
+    private readonly RelatorioExporter _exporter;
     private readonly IServiceProvider _serviceProvider;
     private readonly CultureInfo _ptBr = new("pt-BR");
 
@@ -23,9 +25,10 @@ public partial class RelatoriosWindow : UserControl
     private List<object> _topRows = [];
     private List<object> _fluxoRows = [];
 
-    public RelatoriosWindow(RelatorioService relatorioService, IServiceProvider serviceProvider)
+    public RelatoriosWindow(RelatorioService relatorioService, RelatorioExporter exporter, IServiceProvider serviceProvider)
     {
         _relatorioService = relatorioService;
+        _exporter = exporter;
         _serviceProvider = serviceProvider;
         InitializeComponent();
         DtDe.SelectedDate = DateTime.Today.AddDays(-30);
@@ -123,6 +126,70 @@ public partial class RelatoriosWindow : UserControl
 
         File.WriteAllText(sfd.FileName, GerarCsv(grid), new UTF8Encoding(true));
         MessageBox.Show($"Exportado: {Path.GetFileName(sfd.FileName)}", "Relatorios", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    private void ExportarExcel_Click(object sender, RoutedEventArgs e)
+    {
+        var de = DtDe.SelectedDate ?? DateTime.Today.AddDays(-30);
+        var ate = DtAte.SelectedDate ?? DateTime.Today;
+        var (bytes, nome) = GerarExcel(de, ate);
+        if (bytes == null) { MessageBox.Show("Nada para exportar.", "Relatorios", MessageBoxButton.OK, MessageBoxImage.Information); return; }
+
+        var sfd = new SaveFileDialog
+        {
+            Filter = "Excel (*.xlsx)|*.xlsx",
+            FileName = $"{nome}_{DateTime.Now:yyyyMMdd}.xlsx"
+        };
+        if (sfd.ShowDialog(Window.GetWindow(this)) != true) return;
+        File.WriteAllBytes(sfd.FileName, bytes);
+        MessageBox.Show($"Exportado: {Path.GetFileName(sfd.FileName)}", "Relatorios", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    private void ExportarPdf_Click(object sender, RoutedEventArgs e)
+    {
+        var de = DtDe.SelectedDate ?? DateTime.Today.AddDays(-30);
+        var ate = DtAte.SelectedDate ?? DateTime.Today;
+        var (bytes, nome) = GerarPdf(de, ate);
+        if (bytes == null) { MessageBox.Show("Nada para exportar.", "Relatorios", MessageBoxButton.OK, MessageBoxImage.Information); return; }
+
+        var sfd = new SaveFileDialog
+        {
+            Filter = "PDF (*.pdf)|*.pdf",
+            FileName = $"{nome}_{DateTime.Now:yyyyMMdd}.pdf"
+        };
+        if (sfd.ShowDialog(Window.GetWindow(this)) != true) return;
+        File.WriteAllBytes(sfd.FileName, bytes);
+        MessageBox.Show($"Exportado: {Path.GetFileName(sfd.FileName)}", "Relatorios", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    private (byte[]? bytes, string nome) GerarExcel(DateTime de, DateTime ate)
+    {
+        var aba = (TabsRelatorios.SelectedItem as TabItem)?.Header?.ToString() ?? "";
+        return aba switch
+        {
+            "Vendas por dia" => (_exporter.GerarVendasPorDiaExcel(
+                _diaRows.Select(r => { var t = r.GetType(); return new VendaDiariaDto(DateTime.Parse(t.GetProperty("Dia")!.GetValue(r)!.ToString()!), int.Parse(t.GetProperty("Quantidade")!.GetValue(r)!.ToString()!.Replace(".", "")), decimal.Parse(t.GetProperty("Total")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim())); }).ToList(), de, ate), "Vendas_por_Dia"),
+            "Curva ABC" => (_exporter.GerarCurvaAbcExcel(
+                _abcRows.Select(r => { var t = r.GetType(); return new ProdutoRankingDto(t.GetProperty("Codigo")!.GetValue(r)?.ToString() ?? "", t.GetProperty("Descricao")!.GetValue(r)?.ToString() ?? "", decimal.Parse(t.GetProperty("Qtd")!.GetValue(r)!.ToString()!.Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Faturamento")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), t.GetProperty("Classe")!.GetValue(r)?.ToString() ?? ""); }).ToList(), de, ate), "Curva_ABC"),
+            "Fluxo de caixa" => (_exporter.GerarFluxoCaixaExcel(
+                _fluxoRows.Select(r => { var t = r.GetType(); return new FluxoCaixaDto(DateTime.Parse(t.GetProperty("Dia")!.GetValue(r)!.ToString()!), decimal.Parse(t.GetProperty("Entradas")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Saidas")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Saldo")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim())); }).ToList(), de, ate), "Fluxo_de_Caixa"),
+            _ => (null, "")
+        };
+    }
+
+    private (byte[]? bytes, string nome) GerarPdf(DateTime de, DateTime ate)
+    {
+        var aba = (TabsRelatorios.SelectedItem as TabItem)?.Header?.ToString() ?? "";
+        return aba switch
+        {
+            "Vendas por dia" => (_exporter.GerarVendasPorDiaPdf(
+                _diaRows.Select(r => { var t = r.GetType(); return new VendaDiariaDto(DateTime.Parse(t.GetProperty("Dia")!.GetValue(r)!.ToString()!), int.Parse(t.GetProperty("Quantidade")!.GetValue(r)!.ToString()!.Replace(".", "")), decimal.Parse(t.GetProperty("Total")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim())); }).ToList(), de, ate), "Vendas_por_Dia"),
+            "Curva ABC" => (_exporter.GerarCurvaAbcPdf(
+                _abcRows.Select(r => { var t = r.GetType(); return new ProdutoRankingDto(t.GetProperty("Codigo")!.GetValue(r)?.ToString() ?? "", t.GetProperty("Descricao")!.GetValue(r)?.ToString() ?? "", decimal.Parse(t.GetProperty("Qtd")!.GetValue(r)!.ToString()!.Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Faturamento")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), t.GetProperty("Classe")!.GetValue(r)?.ToString() ?? ""); }).ToList(), de, ate), "Curva_ABC"),
+            "Fluxo de caixa" => (_exporter.GerarFluxoCaixaPdf(
+                _fluxoRows.Select(r => { var t = r.GetType(); return new FluxoCaixaDto(DateTime.Parse(t.GetProperty("Dia")!.GetValue(r)!.ToString()!), decimal.Parse(t.GetProperty("Entradas")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Saidas")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim()), decimal.Parse(t.GetProperty("Saldo")!.GetValue(r)!.ToString()!.Replace("R$", "").Replace(".", "").Replace(",", ".").Trim())); }).ToList(), de, ate), "Fluxo_de_Caixa"),
+            _ => (null, "")
+        };
     }
 
     private void DetalhesTecnicos_Click(object sender, RoutedEventArgs e)

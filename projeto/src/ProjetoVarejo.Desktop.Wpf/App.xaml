@@ -224,21 +224,106 @@
                 <Setter Property="FontSize" Value="13" />
             </Style>
 
+            <!-- Item do ComboBox (tematizado) -->
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="Padding" Value="12,9" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <Border x:Name="b" Background="Transparent" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter TargetName="b" Property="Background" Value="{DynamicResource HeaderGrid}" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="b" Property="Background" Value="{DynamicResource BgSelecao}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="ComboBox">
                 <Setter Property="Background" Value="{DynamicResource BgInput}" />
                 <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeMedium}" />
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Padding" Value="12,10" />
+                <Setter Property="Padding" Value="12,0" />
                 <Setter Property="FontSize" Value="13" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid>
+                                <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="8" />
+                                <ToggleButton Background="Transparent" BorderThickness="0" Focusable="False"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              ClickMode="Press" />
+                                <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  Margin="{TemplateBinding Padding}" VerticalAlignment="Center"
+                                                  HorizontalAlignment="Left" IsHitTestVisible="False"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
+                                <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="10"
+                                           Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center"
+                                           HorizontalAlignment="Right" Margin="0,0,12,0" IsHitTestVisible="False" />
+                                <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True"
+                                       Focusable="False" PopupAnimation="Slide">
+                                    <Border Background="{DynamicResource BgCard}" BorderBrush="{DynamicResource StrokeSoft}"
+                                            BorderThickness="1" CornerRadius="8" Margin="0,4,0,0"
+                                            MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" MaxHeight="280">
+                                        <ScrollViewer>
+                                            <ItemsPresenter />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Campo de texto do DatePicker (tematizado) -->
+            <Style TargetType="DatePickerTextBox">
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DatePickerTextBox">
+                            <Border Background="{TemplateBinding Background}" Padding="8,0">
+                                <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
 
             <Style TargetType="DatePicker">
                 <Setter Property="Background" Value="{DynamicResource BgInput}" />
                 <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeMedium}" />
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Padding" Value="12,10" />
+            </Style>
+
+            <!-- Popup do calendário (tematizado) -->
+            <Style TargetType="Calendar">
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
+            </Style>
+            <Style TargetType="CalendarDayButton">
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+            </Style>
+            <Style TargetType="CalendarButton">
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
             </Style>
 
             <Style TargetType="DataGrid">

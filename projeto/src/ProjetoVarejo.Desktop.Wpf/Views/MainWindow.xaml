@@ -11,7 +11,8 @@
         MinWidth="1220"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource BgApp}">
+        Background="{DynamicResource BgApp}"
+        TextElement.Foreground="{DynamicResource TextStrong}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

@@ -18,6 +18,9 @@ builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<EstoqueService>();
 builder.Services.AddScoped<RelatorioService>();
 builder.Services.AddScoped<AutenticacaoService>();
+builder.Services.AddScoped<VendaService>();
+builder.Services.AddScoped<FinanceiroService>();
+builder.Services.AddScoped<CaixaService>();
 builder.Services.AddSingleton<ApiKeyValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +43,10 @@ ProdutoEndpoints.Map(app);
 EstoqueEndpoints.Map(app);
 ClienteEndpoints.Map(app);
 RelatorioEndpoints.Map(app);
+VendaEndpoints.Map(app);
+FinanceiroEndpoints.Map(app);
+CaixaEndpoints.Map(app);
+UsuarioEndpoints.Map(app);
 
 app.Run();
 

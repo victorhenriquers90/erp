@@ -1,14 +1,13 @@
-; Inno Setup Script para ProjetoVarejo
+; Inno Setup Script para ProjetoVarejo ERP
 ; Compilar com Inno Setup 6+ (download: https://jrsoftware.org/isinfo.php)
-; Antes de compilar:
-;   dotnet publish src/ProjetoVarejo.Desktop -c Release -r win-x64 --self-contained false -o publish/desktop
-;   dotnet publish src/ProjetoVarejo.Api     -c Release -r win-x64 --self-contained false -o publish/api
+; Antes de compilar, rode: powershell -ExecutionPolicy Bypass -File installer\publish.ps1
 
-#define MyAppName "ProjetoVarejo"
+#define MyAppName "Projeto ERP"
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "Sua Empresa Ltda"
 #define MyAppURL "https://example.com"
-#define MyAppExeName "ProjetoVarejo.Desktop.exe"
+#define MyAppExeWpf "ProjetoVarejo.Desktop.Wpf.exe"
+#define MyAppExePdv "ProjetoVarejo.Desktop.exe"
 
 [Setup]
 AppId={{F1A2B3C4-D5E6-7890-1234-56789ABCDEF0}}
@@ -24,7 +23,7 @@ LicenseFile=
 PrivilegesRequired=admin
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=output
-OutputBaseFilename=ProjetoVarejo-Setup-{#MyAppVersion}
+OutputBaseFilename=ProjetoERP-Setup-{#MyAppVersion}
 Compression=lzma2/max
 SolidCompression=yes
 WizardStyle=modern
@@ -35,41 +34,51 @@ ArchitecturesInstallIn64BitMode=x64compatible
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "Criar atalho na área de trabalho"; GroupDescription: "Atalhos adicionais:"; Flags: unchecked
-Name: "instalarapi";  Description: "Instalar API REST como serviço (para apps mobile)"; GroupDescription: "Componentes opcionais:"; Flags: unchecked
+Name: "desktopicon";  Description: "Criar atalho na área de trabalho";             GroupDescription: "Atalhos adicionais:"; Flags: unchecked
+Name: "instalarpdv";  Description: "Instalar PDV (frente de caixa WinForms)";      GroupDescription: "Componentes opcionais:"; Flags: unchecked
+Name: "instalarapi";  Description: "Instalar API REST (apps mobile / integrações)"; GroupDescription: "Componentes opcionais:"; Flags: unchecked
 
 [Files]
-; Aplicação Desktop (PDV)
-Source: "..\publish\desktop\*"; DestDir: "{app}\desktop"; Flags: ignoreversion recursesubdirs createallsubdirs
-; API REST (opcional)
-Source: "..\publish\api\*";     DestDir: "{app}\api";     Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: instalarapi
-; Documentação
-Source: "..\README.md";          DestDir: "{app}"; Flags: ignoreversion
-Source: "..\docs\INSTALL.md";    DestDir: "{app}\docs"; Flags: ignoreversion
-Source: "..\docs\USER_MANUAL.md"; DestDir: "{app}\docs"; Flags: ignoreversion
-Source: "..\docs\NFCE_SETUP.md"; DestDir: "{app}\docs"; Flags: ignoreversion
+; ── Aplicação principal WPF (ERP / gestão)
+Source: "..\publish\wpf\*"; DestDir: "{app}\wpf"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; ── PDV WinForms (opcional)
+Source: "..\publish\desktop\*"; DestDir: "{app}\desktop"; Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: instalarpdv
+
+; ── API REST (opcional)
+Source: "..\publish\api\*"; DestDir: "{app}\api"; Flags: ignoreversion recursesubdirs createallsubdirs; Tasks: instalarapi
+
+; ── Documentação
+Source: "..\README.md";           DestDir: "{app}";        Flags: ignoreversion
+Source: "..\docs\INSTALL.md";     DestDir: "{app}\docs";   Flags: ignoreversion
+Source: "..\docs\USER_MANUAL.md"; DestDir: "{app}\docs";   Flags: ignoreversion
+Source: "..\docs\NFCE_SETUP.md";  DestDir: "{app}\docs";   Flags: ignoreversion
 
 [Dirs]
-Name: "{app}\desktop\Backups";   Permissions: users-modify
-Name: "{commonappdata}\{#MyAppName}\Logs"; Permissions: users-modify
+Name: "{app}\wpf\Backups";                         Permissions: users-modify
+Name: "{commonappdata}\{#MyAppName}\Logs";          Permissions: users-modify
+Name: "{commonappdata}\{#MyAppName}\Certificados";  Permissions: users-modify
 
 [Icons]
-Name: "{group}\{#MyAppName}";         Filename: "{app}\desktop\{#MyAppExeName}"
-Name: "{group}\Manual do Usuário";   Filename: "{app}\docs\USER_MANUAL.md"
-Name: "{group}\Setup NFC-e";          Filename: "{app}\docs\NFCE_SETUP.md"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\{#MyAppName}";   Filename: "{app}\desktop\{#MyAppExeName}"; Tasks: desktopicon
+; ERP WPF — ícone principal
+Name: "{group}\{#MyAppName}";                        Filename: "{app}\wpf\{#MyAppExeWpf}"
+Name: "{autodesktop}\{#MyAppName}";                  Filename: "{app}\wpf\{#MyAppExeWpf}"; Tasks: desktopicon
+
+; PDV (se instalado)
+Name: "{group}\{#MyAppName} — PDV (Caixa)";          Filename: "{app}\desktop\{#MyAppExePdv}"; Tasks: instalarpdv
+
+; Documentação
+Name: "{group}\Manual do Usuário";                   Filename: "{app}\docs\USER_MANUAL.md"
+Name: "{group}\Configurar NFC-e";                    Filename: "{app}\docs\NFCE_SETUP.md"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}";  Filename: "{uninstallexe}"
 
 [Run]
-; Verificar/instalar .NET 8 Desktop Runtime se não houver
-Filename: "{cmd}"; Parameters: "/c dotnet --list-runtimes | findstr ""Microsoft.WindowsDesktop.App 8."""; Flags: runhidden; StatusMsg: "Verificando .NET 8 Desktop Runtime..."; Check: NetRuntimeAusente
-; Inicia o app após instalação
-Filename: "{app}\desktop\{#MyAppExeName}"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\wpf\{#MyAppExeWpf}"; Description: "Abrir {#MyAppName} agora"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{app}\desktop\Backups"
-Type: filesandordirs; Name: "{app}\desktop\backup.cfg"
-Type: filesandordirs; Name: "{app}\desktop\backup.last"
+Type: filesandordirs; Name: "{app}\wpf\Backups"
+Type: filesandordirs; Name: "{app}\wpf\backup.cfg"
+Type: filesandordirs; Name: "{app}\wpf\backup.last"
 
 [Code]
 function NetRuntimeAusente: Boolean;

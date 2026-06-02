@@ -38,9 +38,12 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Width="32" Height="32" Background="{StaticResource Primary}" CornerRadius="4" Opacity="0.9" />
+                        <Border Width="32" Height="32" Background="{StaticResource Primary}" CornerRadius="6">
+                            <TextBlock Text="&#xE719;" FontFamily="Segoe MDL2 Assets" FontSize="17" Foreground="White"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
                         <StackPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="ProjetoVarejo" Foreground="White" FontSize="14" FontWeight="Bold" />
+                            <TextBlock Text="Projeto ERP" Foreground="White" FontSize="14" FontWeight="Bold" />
                             <TextBlock Text="Enterprise" Foreground="#9DB5D3" FontSize="10" Margin="0,2,0,0" />
                         </StackPanel>
                     </Grid>
@@ -75,8 +78,8 @@
                         <!-- SALES & COMMERCE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● VENDAS" />
-                        <Button Content="PDV (Ponto de Venda)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
-                        <Button Content="Caixa" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Comercial (Sistema Gestão)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
+                        <Button Content="Caixa Comercial (Sistema Gestão)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
                         <Button Content="E-Commerce" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Ecommerce_Click" />
                         <Button Content="Marketing" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Marketing_Click" />
 
@@ -101,7 +104,7 @@
                         <!-- COMPLIANCE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● ADMINISTRAÇÃO" />
-                        <Button Content="Fiscal / NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Fiscal / NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fiscal_Click" />
                         <Button Content="Auditoria" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Auditoria_Click" />
                         <Button Content="Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
                     </StackPanel>
@@ -155,7 +158,7 @@
                     </StackPanel>
 
                     <!-- Busca global -->
-                    <Border Grid.Column="1" Background="#F1F3F7" CornerRadius="18" Height="36" MaxWidth="440"
+                    <Border Grid.Column="1" Background="#F1F3F7" CornerRadius="18" Height="36" Width="340"
                             HorizontalAlignment="Left" Margin="32,0,0,0">
                         <Grid Margin="14,0">
                             <Grid.ColumnDefinitions>
@@ -338,7 +341,7 @@
                     <TextBlock x:Name="LblStatusEmpresa" Text="Empresa" Foreground="#C5D5E8" FontSize="11" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <TextBlock Grid.Column="1" Text="ProjetoVarejo ERP" Foreground="#7E9BBD" FontSize="11"
+                <TextBlock Grid.Column="1" Text="Projeto ERP" Foreground="#7E9BBD" FontSize="11"
                            HorizontalAlignment="Center" VerticalAlignment="Center" />
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">

@@ -50,9 +50,9 @@
 
             <Style TargetType="Button">
                 <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
-                <Setter Property="Background" Value="#F3F4F6" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="#FFFFFF" />
+                <Setter Property="BorderBrush" Value="{StaticResource StrokeMedium}" />
+                <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="12,8" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontSize" Value="13" />
@@ -124,10 +124,27 @@
             </Style>
 
             <Style x:Key="PrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Background" Value="{StaticResource Primary}" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#2A78DA" Offset="0" />
+                            <GradientStop Color="#0052B4" Offset="0.55" />
+                            <GradientStop Color="#003C8C" Offset="1" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="16,10" />
+            </Style>
+
+            <!-- Botao de acao destrutiva (Excluir) -->
+            <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Background" Value="#FFFFFF" />
+                <Setter Property="Foreground" Value="#DC2626" />
+                <Setter Property="BorderBrush" Value="#F3B4B4" />
+                <Setter Property="BorderThickness" Value="1" />
             </Style>
 
             <Style x:Key="SidebarButtonStyle" TargetType="Button">

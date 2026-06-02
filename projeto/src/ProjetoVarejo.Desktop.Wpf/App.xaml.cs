@@ -92,15 +92,6 @@ public partial class App : System.Windows.Application
             sc.AddTransient<EcommerceWindow>();
             sc.AddTransient<MarketingWindow>();
             sc.AddTransient<FiscalWindow>();
-            sc.AddTransient<CaixaWindow>();
-            sc.AddTransient<CaixaAberturaWindow>();
-            sc.AddTransient<CaixaMovimentoWindow>();
-            sc.AddTransient<CaixaFechamentoWindow>();
-            sc.AddTransient<PdvWindow>();
-            sc.AddTransient<PagamentoVendaWindow>();
-            sc.AddTransient<ValorPromptWindow>();
-            sc.AddTransient<ProdutoBuscaWindow>();
-            sc.AddTransient<SupervisorAutorizacaoWindow>();
 
             Services = sc.BuildServiceProvider();
 

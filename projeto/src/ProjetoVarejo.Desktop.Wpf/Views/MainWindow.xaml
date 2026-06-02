@@ -360,6 +360,15 @@
                         </Border>
                     </Grid>
 
+                    <!-- Top produtos em estoque -->
+                    <Border Style="{StaticResource CardStyle}" Padding="20" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Top produtos em estoque" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                            <TextBlock Text="Maiores saldos de estoque atualmente" Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,0" />
+                            <StackPanel x:Name="ListaProdutos" Margin="0,16,0,0" />
+                        </StackPanel>
+                    </Border>
+
                     <!-- Atalhos + Atividade -->
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>

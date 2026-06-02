@@ -150,6 +150,83 @@ public partial class MainWindow : Window
 
         DesenharBarras();
         DesenharDonut();
+        await CarregarProdutosChartAsync(db);
+    }
+
+    private async Task CarregarProdutosChartAsync(AppDbContext db)
+    {
+        var tops = await db.Produtos.AsNoTracking()
+            .Where(p => p.Ativo)
+            .OrderByDescending(p => p.Estoque)
+            .Take(6)
+            .Select(p => new { p.Descricao, p.Estoque })
+            .ToListAsync();
+
+        ListaProdutos.Children.Clear();
+        if (tops.Count == 0)
+        {
+            ListaProdutos.Children.Add(new TextBlock
+            {
+                Text = "Nenhum produto cadastrado.",
+                FontSize = 13,
+                Foreground = Pincel("TextSoft")
+            });
+            return;
+        }
+
+        double max = (double)Math.Max(1m, tops.Max(t => t.Estoque));
+        foreach (var t in tops)
+            ListaProdutos.Children.Add(BarraHorizontal(t.Descricao, (double)t.Estoque, max));
+    }
+
+    private Grid BarraHorizontal(string nome, double valor, double max)
+    {
+        var row = new Grid { Margin = new Thickness(0, 0, 0, 10) };
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(180) });
+        row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        var lbl = new TextBlock
+        {
+            Text = nome,
+            FontSize = 13,
+            Foreground = Pincel("TextStrong"),
+            VerticalAlignment = VerticalAlignment.Center,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Margin = new Thickness(0, 0, 12, 0)
+        };
+        Grid.SetColumn(lbl, 0);
+        row.Children.Add(lbl);
+
+        var track = new Grid();
+        track.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Math.Max(0.0001, valor), GridUnitType.Star) });
+        track.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Math.Max(0.0001, max - valor), GridUnitType.Star) });
+
+        var bar = new Border
+        {
+            Height = 22,
+            MinWidth = 4,
+            CornerRadius = new CornerRadius(6),
+            Background = new LinearGradientBrush(Color.FromRgb(0x4D, 0x94, 0xFF), Color.FromRgb(0x00, 0x52, 0xB4), new Point(0, 0), new Point(1, 0))
+        };
+        Grid.SetColumn(bar, 0);
+        track.Children.Add(bar);
+
+        var valTxt = new TextBlock
+        {
+            Text = valor.ToString("N0", _ptBr),
+            FontSize = 12,
+            FontWeight = FontWeights.SemiBold,
+            Foreground = Pincel("TextSoft"),
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            Margin = new Thickness(0, 0, 4, 0)
+        };
+        Grid.SetColumnSpan(valTxt, 2);
+        track.Children.Add(valTxt);
+
+        Grid.SetColumn(track, 1);
+        row.Children.Add(track);
+        return row;
     }
 
     private void DesenharBarras()

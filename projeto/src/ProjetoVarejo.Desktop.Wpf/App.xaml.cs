@@ -56,17 +56,44 @@ public partial class App : System.Windows.Application
                 }
             }
 
+            // ── Wizard de primeiro uso (modo Servidor / Cliente) ──
+            var modo = ModoSistema.Carregar();
+            if (!modo.EstaConfigurado)
+            {
+                var wizard = new SetupWizardWindow();
+                if (wizard.ShowDialog() != true)
+                {
+                    Shutdown();
+                    return;
+                }
+                modo = ModoSistema.Carregar(); // recarrega após o wizard salvar
+            }
+
+            // Expor o modo globalmente (diagnóstico, UI informativa)
+            Current.Resources["ModoSistema"] = modo;
+            var apiClient = modo.EhCliente ? new ApiClient(modo.UrlApi!) : null;
+            if (apiClient != null)
+                Current.Resources["ApiClient"] = apiClient;
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)
                 .Build();
 
+            // No modo Servidor usa a connection string configurada pelo wizard;
+            // no modo Cliente usa a da API (o banco não é acessado diretamente).
+            var connStr = modo.EhServidor && !string.IsNullOrWhiteSpace(modo.ConnectionString)
+                ? modo.ConnectionString
+                : config.GetConnectionString("Default")!;
+
             var sc = new ServiceCollection();
             sc.AddSingleton<IConfiguration>(config);
+            sc.AddSingleton(modo);
+            if (apiClient != null) sc.AddSingleton(apiClient);
             sc.AddSingleton<SessaoApp>();
             sc.AddScoped<AuditSaveChangesInterceptor>();
             sc.AddDbContext<AppDbContext>((sp, opt) =>
-                opt.UseSqlServer(config.GetConnectionString("Default"))
+                opt.UseSqlServer(connStr)
                     .AddInterceptors(sp.GetRequiredService<AuditSaveChangesInterceptor>()));
 
             sc.AddScoped<AutenticacaoService>();

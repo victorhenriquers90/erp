@@ -26,6 +26,7 @@
             <!-- Borders e Strokes -->
             <SolidColorBrush x:Key="StrokeSoft" Color="#E5E7EB" />
             <SolidColorBrush x:Key="StrokeMedium" Color="#D1D5DB" />
+            <SolidColorBrush x:Key="BgSelecao" Color="#EAF1FB" />
 
             <!-- Acentos Semânticos -->
             <SolidColorBrush x:Key="Success" Color="#10B981" />
@@ -247,7 +248,7 @@
                 <Setter Property="RowHeight" Value="40" />
                 <Setter Property="HeadersVisibility" Value="Column" />
                 <Setter Property="GridLinesVisibility" Value="Horizontal" />
-                <Setter Property="RowBackground" Value="White" />
+                <Setter Property="RowBackground" Value="{DynamicResource BgCard}" />
             </Style>
 
             <Style TargetType="DataGridColumnHeader">
@@ -262,15 +263,16 @@
 
             <Style TargetType="DataGridRow">
                 <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
-                <Setter Property="Background" Value="White" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="0,0,0,1" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#F9FAFB" />
+                        <Setter Property="Background" Value="{DynamicResource HeaderGrid}" />
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#EFF6FF" />
+                        <Setter Property="Background" Value="{DynamicResource BgSelecao}" />
+                        <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

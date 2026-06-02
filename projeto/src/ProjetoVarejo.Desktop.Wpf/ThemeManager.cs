@@ -20,6 +20,7 @@ public static class ThemeManager
         ["BgApp"] = "#F5F6FA", ["BgCard"] = "#FFFFFF", ["BgInput"] = "#FFFFFF",
         ["HeaderGrid"] = "#F0F2F7", ["TextStrong"] = "#0A1428", ["TextSoft"] = "#555A66",
         ["TextPlaceholder"] = "#8B92A3", ["StrokeSoft"] = "#E5E7EB", ["StrokeMedium"] = "#D1D5DB",
+        ["BgSelecao"] = "#EAF1FB",
     };
 
     private static readonly Dictionary<string, string> Escuro = new()
@@ -27,6 +28,7 @@ public static class ThemeManager
         ["BgApp"] = "#0F1729", ["BgCard"] = "#1B2536", ["BgInput"] = "#232F42",
         ["HeaderGrid"] = "#232F42", ["TextStrong"] = "#E8EEF6", ["TextSoft"] = "#9AA7B8",
         ["TextPlaceholder"] = "#6B7686", ["StrokeSoft"] = "#2E3B4E", ["StrokeMedium"] = "#3C4A60",
+        ["BgSelecao"] = "#28415F",
     };
 
     public static void AplicarTemaSalvo()

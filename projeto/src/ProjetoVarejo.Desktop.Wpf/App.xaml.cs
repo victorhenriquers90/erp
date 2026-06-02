@@ -151,6 +151,8 @@ public partial class App : System.Windows.Application
             MainWindow = shell;
             ShutdownMode = ShutdownMode.OnMainWindowClose;
             shell.Show();
+
+            IniciarBackupDiarioEmBackground();
         }
         catch (Exception ex)
         {
@@ -160,6 +162,39 @@ public partial class App : System.Windows.Application
                 "Erro fatal", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
         }
+    }
+
+    /// <summary>
+    /// Backup automático diário (best-effort, em segundo plano). Só executa se ainda não
+    /// houver um .bak criado hoje. Falhas são apenas registradas no log, sem incomodar o usuário.
+    /// </summary>
+    private void IniciarBackupDiarioEmBackground()
+    {
+        _ = System.Threading.Tasks.Task.Run(async () =>
+        {
+            try
+            {
+                var pasta = System.IO.Path.Combine(AppContext.BaseDirectory, "Backups");
+                if (System.IO.Directory.Exists(pasta))
+                {
+                    var temBackupHoje = new System.IO.DirectoryInfo(pasta)
+                        .GetFiles("*.bak")
+                        .Any(f => f.CreationTime.Date == DateTime.Today);
+                    if (temBackupHoje) return;
+                }
+
+                await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(8)); // deixa a UI subir
+                using var scope = Services.CreateScope();
+                var backup = scope.ServiceProvider.GetRequiredService<BackupService>();
+                var r = await backup.ExecutarAsync();
+                if (!r.Sucesso)
+                    AppLog.Erro("BackupAuto", new Exception(r.Erro ?? "Falha no backup automático."));
+            }
+            catch (Exception ex)
+            {
+                AppLog.Erro("BackupAuto", ex);
+            }
+        });
     }
 
     private static void AjustarJanelaNaTela(object sender, RoutedEventArgs e)

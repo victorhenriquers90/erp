@@ -42,10 +42,7 @@
         </UniformGrid>
 
         <Border Grid.Row="2"
-                Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource StrokeSoft}"
-                BorderThickness="1"
-                CornerRadius="8"
+                Style="{StaticResource Card3DStyle}"
                 Padding="14">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -100,10 +97,7 @@
 
         <Border Grid.Row="3"
                 Margin="0,12,0,0"
-                Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource StrokeSoft}"
-                BorderThickness="1"
-                CornerRadius="8"
+                Style="{StaticResource Card3DStyle}"
                 Padding="8">
             <DataGrid x:Name="DgFinanceiro"
                       AutoGenerateColumns="False"

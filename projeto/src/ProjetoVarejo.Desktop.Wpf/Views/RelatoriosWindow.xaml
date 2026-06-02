@@ -16,10 +16,7 @@
 
         <Border Grid.Row="1"
                 Margin="0,16,0,12"
-                Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource StrokeSoft}"
-                BorderThickness="1"
-                CornerRadius="8"
+                Style="{StaticResource Card3DStyle}"
                 Padding="14">
             <Grid>
                 <Grid.ColumnDefinitions>

@@ -78,8 +78,8 @@
                         <!-- SALES & COMMERCE -->
                         <Separator Style="{StaticResource MenuSeparatorStyle}" Margin="12,12,12,12" />
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● VENDAS" />
-                        <Button Content="Comercial (Sistema Gestão)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
-                        <Button Content="Caixa Comercial (Sistema Gestão)" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
+                        <Button Content="Comercial (Sistema Gestão)" Tag="nonav" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
+                        <Button Content="Caixa Comercial (Sistema Gestão)" Tag="nonav" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="ComercialExterno_Click" />
                         <Button Content="E-Commerce" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Ecommerce_Click" />
                         <Button Content="Marketing" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Marketing_Click" />
 

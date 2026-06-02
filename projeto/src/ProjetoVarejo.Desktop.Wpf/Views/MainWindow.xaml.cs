@@ -68,7 +68,9 @@ public partial class MainWindow : Window
 
     private void OnMenuButtonClick(object sender, RoutedEventArgs e)
     {
-        if (e.Source is Button b)
+        // Itens marcados como "nonav" (ex.: links para o sistema comercial) não navegam,
+        // então não devem receber o realce de item ativo.
+        if (e.Source is Button b && (b.Tag as string) != "nonav")
             MarcarMenuAtivo(b);
     }
 

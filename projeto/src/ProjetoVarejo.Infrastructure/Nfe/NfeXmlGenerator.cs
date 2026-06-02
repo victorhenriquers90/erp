@@ -124,11 +124,19 @@ public class NfeXmlGenerator
                 new XElement(Ns + "vUnTrib", F(item.PrecoUnitario, 4)),
                 new XElement(Ns + "indTot", "1"));
 
+            // O grupo de ICMS depende do CRT: Simples Nacional (1/2) usa CSOSN;
+            // Regime Normal (3) usa CST. Mantém ICMS zerado (consistente com os totais);
+            // a tributação real exige o cadastro fiscal do produto por regime.
+            var icmsGrupo = empresa.RegimeTributario == "3"
+                ? new XElement(Ns + "ICMS40",
+                    new XElement(Ns + "orig", item.Produto.Origem),
+                    new XElement(Ns + "CST", "41"))   // 41 = não tributada
+                : new XElement(Ns + "ICMSSN102",
+                    new XElement(Ns + "orig", item.Produto.Origem),
+                    new XElement(Ns + "CSOSN", "102"));
+
             var imposto = new XElement(Ns + "imposto",
-                new XElement(Ns + "ICMS",
-                    new XElement(Ns + "ICMSSN102",
-                        new XElement(Ns + "orig", item.Produto.Origem),
-                        new XElement(Ns + "CSOSN", "102"))),
+                new XElement(Ns + "ICMS", icmsGrupo),
                 new XElement(Ns + "PIS", new XElement(Ns + "PISNT", new XElement(Ns + "CST", "49"))),
                 new XElement(Ns + "COFINS", new XElement(Ns + "COFINSNT", new XElement(Ns + "CST", "49"))));
 
@@ -177,10 +185,20 @@ public class NfeXmlGenerator
                     new XElement(Ns + "vPag", "0.00")));
         }
 
+        // Responsável Técnico (obrigatório na NF-e 4.0 em SP). Idealmente são os dados
+        // da SOFTWARE HOUSE (fornecedor do ERP); usa o emitente como fallback enquanto
+        // não houver cadastro próprio.
+        var foneResp = ChaveAcessoNfce.SoNumeros(string.IsNullOrWhiteSpace(empresa.Telefone) ? "1130000000" : empresa.Telefone);
+        var infRespTec = new XElement(Ns + "infRespTec",
+            new XElement(Ns + "CNPJ", ChaveAcessoNfce.SoNumeros(empresa.Cnpj)),
+            new XElement(Ns + "xContato", "Suporte Tecnico"),
+            new XElement(Ns + "email", string.IsNullOrWhiteSpace(empresa.Email) ? "suporte@exemplo.com.br" : empresa.Email),
+            new XElement(Ns + "fone", foneResp));
+
         var infNFe = new XElement(Ns + "infNFe",
             new XAttribute("Id", idTag),
             new XAttribute("versao", "4.00"),
-            ide, emit, dest, dets, total, transp, pag);
+            ide, emit, dest, dets, total, transp, pag, infRespTec);
 
         var nfe = new XElement(Ns + "NFe", infNFe);
         var docXml = new XDocument(new XDeclaration("1.0", "UTF-8", null), nfe);

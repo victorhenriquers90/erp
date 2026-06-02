@@ -127,7 +127,10 @@ public partial class FaturamentoWindow : UserControl
             }
             else
             {
-                MostrarResultado(false, emis.Erro!);
+                // NF-e não autorizada: reverte o faturamento (cancela a venda e restaura o estoque)
+                // para não deixar venda finalizada + baixa de estoque sem nota fiscal.
+                await _vendaService.CancelarAsync(venda.Id, "NF-e não autorizada — faturamento revertido.");
+                MostrarResultado(false, emis.Erro! + "\n\nO faturamento foi revertido e o estoque restaurado.");
             }
         }
         catch (Exception ex)

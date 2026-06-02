@@ -31,6 +31,7 @@ public partial class ClienteEditorWindow : Window
         TxtBairro.Text = cliente.Bairro ?? string.Empty;
         TxtCidade.Text = cliente.Cidade ?? string.Empty;
         TxtUf.Text = cliente.Uf ?? string.Empty;
+        TxtCodMunicipio.Text = cliente.CodigoMunicipioIbge ?? string.Empty;
         TxtLimiteCredito.Text = cliente.LimiteCredito.ToString("N2");
         TxtComplemento.Text = cliente.Complemento ?? string.Empty;
         TxtObservacao.Text = cliente.Observacao ?? string.Empty;
@@ -66,6 +67,7 @@ public partial class ClienteEditorWindow : Window
             _clienteAtual.Bairro = TxtBairro.Text.Trim();
             _clienteAtual.Cidade = TxtCidade.Text.Trim();
             _clienteAtual.Uf = TxtUf.Text.Trim().ToUpperInvariant();
+            _clienteAtual.CodigoMunicipioIbge = TxtCodMunicipio.Text.Trim();
             _clienteAtual.LimiteCredito = limite;
             _clienteAtual.Complemento = TxtComplemento.Text.Trim();
             _clienteAtual.Observacao = TxtObservacao.Text.Trim();

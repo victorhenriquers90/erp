@@ -77,6 +77,7 @@
                             Margin="0,12,0,0"
                             Style="{StaticResource Card3DStyle}"
                             Padding="8">
+                      <Grid>
                         <DataGrid x:Name="DgMovimentos"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
@@ -92,6 +93,21 @@
                                 <DataGridTextColumn Header="Usuário" Binding="{Binding Usuario}" Width="1.4*" />
                             </DataGrid.Columns>
                         </DataGrid>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                            <StackPanel.Style>
+                                <Style TargetType="StackPanel">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasItems, ElementName=DgMovimentos}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackPanel.Style>
+                            <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="34" Foreground="#C9D2DE" HorizontalAlignment="Center" />
+                            <TextBlock Text="Nenhuma movimentação no período" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                        </StackPanel>
+                      </Grid>
                     </Border>
                 </Grid>
             </TabItem>
@@ -100,6 +116,7 @@
                 <Border Margin="0,10,0,0"
                         Style="{StaticResource Card3DStyle}"
                         Padding="8">
+                  <Grid>
                     <DataGrid x:Name="DgMinimo"
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
@@ -111,6 +128,21 @@
                             <DataGridTextColumn Header="Mínimo" Binding="{Binding Minimo}" Width="1.4*" />
                         </DataGrid.Columns>
                     </DataGrid>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasItems, ElementName=DgMinimo}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="34" Foreground="#86C99B" HorizontalAlignment="Center" />
+                        <TextBlock Text="Nenhum produto abaixo do estoque mínimo" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                    </StackPanel>
+                  </Grid>
                 </Border>
             </TabItem>
         </TabControl>

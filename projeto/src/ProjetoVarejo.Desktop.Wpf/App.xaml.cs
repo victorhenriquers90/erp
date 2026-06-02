@@ -88,6 +88,8 @@ public partial class App : System.Windows.Application
             sc.AddSingleton<NfceCancelamentoBuilder>();
             sc.AddSingleton<NfceInutilizacaoBuilder>();
             sc.AddScoped<NfceService>();
+            sc.AddSingleton<ProjetoVarejo.Infrastructure.Nfe.NfeXmlGenerator>();
+            sc.AddScoped<NfeService>();
 
             sc.AddTransient<LoginWindow>();
             sc.AddTransient<MainWindow>();

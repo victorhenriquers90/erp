@@ -29,4 +29,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Chave PÚBLICA de licenciamento (verificação). A privada NUNCA entra aqui. -->
+    <EmbeddedResource Include="chave-publica.key" />
+  </ItemGroup>
+
 </Project>

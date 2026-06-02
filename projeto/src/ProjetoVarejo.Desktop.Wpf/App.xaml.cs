@@ -41,6 +41,18 @@ public partial class App : System.Windows.Application
 
         try
         {
+            // ── Gate de licenciamento (anti-pirataria, offline) ──
+            var licenca = Licensing.LicenseService.Validar();
+            if (!licenca.Valida)
+            {
+                var ativacao = new ActivationWindow();
+                if (ativacao.ShowDialog() != true)
+                {
+                    Shutdown();
+                    return;
+                }
+            }
+
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false)

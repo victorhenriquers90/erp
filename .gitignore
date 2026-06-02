@@ -5,6 +5,13 @@ chatgpt-share.html
 node_modules/
 functions/node_modules/
 
+.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+**/settings.local.json
+
 .env
 .env.*
 *.local

@@ -106,7 +106,7 @@
                         <TextBlock Style="{StaticResource MenuSectionHeaderStyle}" Text="● ADMINISTRAÇÃO" />
                         <Button Content="Fiscal / NFC-e" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Fiscal_Click" />
                         <Button Content="Auditoria" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Auditoria_Click" />
-                        <Button Content="Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Indisponivel_Click" />
+                        <Button Content="Configurações" Height="Auto" Style="{StaticResource SidebarButtonStyle}" Click="Configuracoes_Click" />
                     </StackPanel>
                 </ScrollViewer>
 

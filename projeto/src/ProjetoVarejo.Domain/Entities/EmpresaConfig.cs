@@ -39,4 +39,10 @@ public class EmpresaConfig : EntidadeBase
     public string PixChave { get; set; } = string.Empty;
     public string PixNomeRecebedor { get; set; } = string.Empty;
     public string PixCidade { get; set; } = string.Empty;
+
+    /// <summary>URL da API REST desta filial (ex.: http://192.168.1.10:5000). Vazio = filial local.</summary>
+    public string? UrlApi { get; set; }
+
+    /// <summary>Apelido curto para identificação rápida no painel de rede.</summary>
+    public string? Apelido { get; set; }
 }

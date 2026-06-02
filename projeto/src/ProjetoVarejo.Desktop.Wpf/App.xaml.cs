@@ -106,6 +106,7 @@ public partial class App : System.Windows.Application
             sc.AddScoped<FinanceiroService>();
             sc.AddScoped<CaixaService>();
             sc.AddScoped<RelatorioService>();
+            sc.AddScoped<FilialPainelService>();
             sc.AddScoped<RelatorioExporter>();
             sc.AddSingleton(new WhatsAppConfig());
             sc.AddScoped<WhatsAppService>();

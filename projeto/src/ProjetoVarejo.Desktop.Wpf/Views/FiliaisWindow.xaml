@@ -5,96 +5,176 @@
     <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <StackPanel>
-            <TextBlock x:Name="LblResumo"
-                       Margin="0,8,0,0"
-                       Text="0 empresa(s)"
-                       FontSize="14"
-                       Foreground="{DynamicResource TextSoft}" />
-        </StackPanel>
+        <!-- Header com resumo -->
+        <TextBlock x:Name="LblResumo" Margin="0,0,0,16"
+                   Text="0 empresa(s)" FontSize="14"
+                   Foreground="{DynamicResource TextSoft}" />
 
-        <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Margin="0,16,0,16" Padding="12">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+        <!-- TabControl principal -->
+        <TabControl Grid.Row="1" x:Name="TabPrincipal" SelectionChanged="TabPrincipal_SelectionChanged">
 
-                <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8"
-                        Background="{DynamicResource BgInput}" Height="40" Width="360" HorizontalAlignment="Left">
-                    <Grid Margin="12,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
-                                   Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
-                        <TextBox Grid.Column="1" x:Name="TxtBusca" BorderThickness="0" Background="Transparent"
-                                 VerticalContentAlignment="Center" FontSize="14"
-                                 TextChanged="TxtBusca_TextChanged" />
-                    </Grid>
-                </Border>
+            <!-- ═══ ABA 1: CADASTRO ═══ -->
+            <TabItem Header="Cadastro de Empresas / Filiais">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Button Grid.Column="1" Margin="10,0,0,0" Width="120" Height="40"
-                        Style="{StaticResource PrimaryButtonStyle}" Click="Novo_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0" />
-                        <TextBlock Text="Nova" VerticalAlignment="Center" />
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="2" Margin="8,0,0,0" Width="110" Height="40" Click="Editar_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0" />
-                        <TextBlock Text="Editar" VerticalAlignment="Center" />
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="3" Margin="8,0,0,0" Width="44" Height="40" Click="Atualizar_Click" ToolTip="Atualizar">
-                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="15" />
-                </Button>
-            </Grid>
-        </Border>
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,12,0,12" Padding="12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8"
+                                    Background="{DynamicResource BgInput}" Height="40" Width="360" HorizontalAlignment="Left">
+                                <Grid Margin="12,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                               Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1" x:Name="TxtBusca" BorderThickness="0" Background="Transparent"
+                                             VerticalContentAlignment="Center" FontSize="14"
+                                             TextChanged="TxtBusca_TextChanged" />
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Margin="10,0,0,0" Width="120" Height="40"
+                                    Style="{StaticResource PrimaryButtonStyle}" Click="Novo_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE710;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="Nova" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Margin="8,0,0,0" Width="110" Height="40" Click="Editar_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                    <TextBlock Text="Editar" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Margin="8,0,0,0" Width="44" Height="40" Click="Atualizar_Click" ToolTip="Atualizar">
+                                <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="15" />
+                            </Button>
+                        </Grid>
+                    </Border>
 
-        <Border Grid.Row="2" Style="{StaticResource Card3DStyle}" Padding="8">
-            <Grid>
-            <DataGrid x:Name="DgEmpresas"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      SelectionMode="Single"
-                      SelectionUnit="FullRow"
-                      HeadersVisibility="Column"
-                      GridLinesVisibility="Horizontal">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Razão Social" Binding="{Binding RazaoSocial}" Width="2.6*" />
-                    <DataGridTextColumn Header="Nome Fantasia" Binding="{Binding NomeFantasia}" Width="2*" />
-                    <DataGridTextColumn Header="CNPJ" Binding="{Binding Cnpj}" Width="1.6*" />
-                    <DataGridTextColumn Header="Cidade/UF" Binding="{Binding CidadeUf}" Width="1.6*" />
-                    <DataGridTextColumn Header="Ambiente" Binding="{Binding Ambiente}" Width="1.2*" />
-                    <DataGridTextColumn Header="Série" Binding="{Binding Serie}" Width="0.8*" />
-                </DataGrid.Columns>
-            </DataGrid>
+                    <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Padding="8">
+                        <Grid>
+                            <DataGrid x:Name="DgEmpresas" AutoGenerateColumns="False" IsReadOnly="True"
+                                      SelectionMode="Single" SelectionUnit="FullRow"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Apelido" Binding="{Binding Apelido}" Width="1.2*" />
+                                    <DataGridTextColumn Header="Razão Social" Binding="{Binding RazaoSocial}" Width="2.4*" />
+                                    <DataGridTextColumn Header="Nome Fantasia" Binding="{Binding NomeFantasia}" Width="2*" />
+                                    <DataGridTextColumn Header="CNPJ" Binding="{Binding Cnpj}" Width="1.6*" />
+                                    <DataGridTextColumn Header="Cidade/UF" Binding="{Binding CidadeUf}" Width="1.4*" />
+                                    <DataGridTextColumn Header="URL da API" Binding="{Binding UrlApi}" Width="2*" />
+                                    <DataGridTextColumn Header="Ambiente" Binding="{Binding Ambiente}" Width="1.2*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasItems, ElementName=DgEmpresas}" Value="False">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="38" Foreground="#C9D2DE" HorizontalAlignment="Center" />
+                                <TextBlock Text="Nenhuma empresa cadastrada" FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                                <TextBlock Text="Clique em &quot;Nova&quot; para cadastrar a primeira empresa/filial."
+                                           FontSize="12" Foreground="{DynamicResource TextPlaceholder}" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
 
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
-                    <StackPanel.Style>
-                        <Style TargetType="StackPanel">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasItems, ElementName=DgEmpresas}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </StackPanel.Style>
-                    <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="38" Foreground="#C9D2DE" HorizontalAlignment="Center" />
-                    <TextBlock Text="Nenhuma empresa cadastrada" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" Margin="0,12,0,0" />
-                    <TextBlock Text="Clique em &quot;Nova&quot; para cadastrar a primeira empresa/filial." FontSize="12" Foreground="{DynamicResource TextPlaceholder}" HorizontalAlignment="Center" Margin="0,4,0,0" />
-                </StackPanel>
-            </Grid>
-        </Border>
+            <!-- ═══ ABA 2: PAINEL DE REDE ═══ -->
+            <TabItem Header="&#x1F5A7; Painel de Rede">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Toolbar do painel -->
+                    <Border Style="{StaticResource Card3DStyle}" Margin="0,12,0,0" Padding="12">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="LblUltimaConsulta" FontSize="12"
+                                           Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center"
+                                           Text="Clique em &quot;Atualizar&quot; para consultar o status de todas as filiais."/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Width="160" Height="40"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Click="AtualizarPainel_Click" x:Name="BtnAtualizarPainel">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="14"
+                                               VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Atualizar status" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- KPIs consolidados -->
+                    <UniformGrid x:Name="PainelKpisConsolidados" Grid.Row="1" Columns="4"
+                                 Margin="0,12,0,0" Visibility="Collapsed">
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="FILIAIS ONLINE" Foreground="{DynamicResource TextSoft}"
+                                           FontSize="10" FontWeight="Bold"/>
+                                <TextBlock x:Name="LblOnline" Text="—" FontSize="28" FontWeight="Bold" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="VENDAS HOJE (TOTAL)" Foreground="{DynamicResource TextSoft}"
+                                           FontSize="10" FontWeight="Bold"/>
+                                <TextBlock x:Name="LblVendasTotal" Text="—" FontSize="28" FontWeight="Bold" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="CAIXAS ABERTOS" Foreground="{DynamicResource TextSoft}"
+                                           FontSize="10" FontWeight="Bold"/>
+                                <TextBlock x:Name="LblCaixasAbertos" Text="—" FontSize="28" FontWeight="Bold" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Style="{StaticResource Card3DStyle}" Padding="14">
+                            <StackPanel>
+                                <TextBlock Text="CONTAS ATRASADAS" Foreground="{DynamicResource TextSoft}"
+                                           FontSize="10" FontWeight="Bold"/>
+                                <TextBlock x:Name="LblContasAtrasadas" Text="—" FontSize="28" FontWeight="Bold"
+                                           Foreground="#F87171" Margin="0,6,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+
+                    <!-- Cards por filial -->
+                    <ScrollViewer Grid.Row="2" Margin="0,12,0,0" VerticalScrollBarVisibility="Auto">
+                        <WrapPanel x:Name="PainelFiliais" Orientation="Horizontal"/>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

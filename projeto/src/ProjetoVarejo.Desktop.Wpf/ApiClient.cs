@@ -107,6 +107,10 @@ public class ApiClient
         catch { return null; }
     }
 
+    // ── Caixa ────────────────────────────────────────────────────────────────
+
+    public Task<T?> GetCaixaAbertoAsync<T>() => GetAsync<T>("api/caixa/aberto");
+
     // ── Notificações ─────────────────────────────────────────────────────────
 
     public Task<T?> EnviarCobrancasVencidasAsync<T>() =>

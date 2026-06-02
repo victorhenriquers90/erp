@@ -58,6 +58,9 @@
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="UseLayoutRounding" Value="True" />
+                <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+                <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -66,19 +69,53 @@
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
                                     CornerRadius="6"
-                                    Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center" />
+                                    SnapsToDevicePixels="True">
+                                <Border.Effect>
+                                    <DropShadowEffect x:Name="Sh" BlurRadius="7" ShadowDepth="1.5"
+                                                      Direction="270" Opacity="0.25" Color="#2B3A4F" />
+                                </Border.Effect>
+                                <Grid>
+                                    <!-- Brilho superior + bevel inferior (volume 3D) -->
+                                    <Border x:Name="Gloss" CornerRadius="6" IsHitTestVisible="False">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#3CFFFFFF" Offset="0" />
+                                                <GradientStop Color="#10FFFFFF" Offset="0.5" />
+                                                <GradientStop Color="#00FFFFFF" Offset="0.5" />
+                                                <GradientStop Color="#1A000000" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <!-- Camada de estado (hover/clique) preserva a cor base -->
+                                    <Border x:Name="State" CornerRadius="6" Background="Transparent" IsHitTestVisible="False" />
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                      Margin="{TemplateBinding Padding}" />
+                                </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#E5E7EB" />
+                                    <Setter TargetName="State" Property="Background" Value="#26FFFFFF" />
+                                    <Setter TargetName="Bd" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect BlurRadius="12" ShadowDepth="2.5" Direction="270" Opacity="0.34" Color="#2B3A4F" />
+                                        </Setter.Value>
+                                    </Setter>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#D1D5DB" />
+                                    <Setter TargetName="State" Property="Background" Value="#22000000" />
+                                    <Setter TargetName="Bd" Property="Effect">
+                                        <Setter.Value>
+                                            <DropShadowEffect BlurRadius="3" ShadowDepth="0" Direction="270" Opacity="0.16" Color="#2B3A4F" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <!-- Botoes transparentes (links) nao recebem brilho/sombra -->
+                                <Trigger Property="Background" Value="Transparent">
+                                    <Setter TargetName="Gloss" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="Bd" Property="Effect" Value="{x:Null}" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                                    <Setter TargetName="Bd" Property="Opacity" Value="0.45" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

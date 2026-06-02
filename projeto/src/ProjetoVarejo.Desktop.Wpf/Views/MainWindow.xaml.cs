@@ -68,7 +68,7 @@ public partial class MainWindow : Window
 
     private void OnMenuButtonClick(object sender, RoutedEventArgs e)
     {
-        if (e.OriginalSource is Button b)
+        if (e.Source is Button b)
             MarcarMenuAtivo(b);
     }
 
@@ -186,8 +186,20 @@ public partial class MainWindow : Window
     private void Marketing_Click(object sender, RoutedEventArgs e)
         => NavegarModulo<MarketingWindow>("Marketing", "Vendas · Marketing");
 
-    private void Indisponivel_Click(object sender, RoutedEventArgs e)
+    private void Fiscal_Click(object sender, RoutedEventArgs e)
         => NavegarModulo<FiscalWindow>("Fiscal / NFC-e", "Administração · Fiscal");
+
+    private void ComercialExterno_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show(
+            "O PDV e o Caixa Comercial pertencem ao Sistema Gestão (módulo comercial separado).",
+            "Projeto ERP",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void Indisponivel_Click(object sender, RoutedEventArgs e)
+        => AbrirModuloPlanejado("Este módulo");
 
     private void AbrirModuloPlanejado(string nomeModulo)
     {

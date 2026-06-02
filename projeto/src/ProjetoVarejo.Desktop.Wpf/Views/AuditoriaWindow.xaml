@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.AuditoriaWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.AuditoriaWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,7 +10,7 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Trilha de alterações e autorizações de supervisor."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Border Grid.Row="1"

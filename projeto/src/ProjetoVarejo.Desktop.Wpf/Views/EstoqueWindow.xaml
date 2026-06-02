@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.EstoqueWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.EstoqueWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,7 +10,7 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Movimentações de entrada/saída e alertas de estoque mínimo."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,16,0,14">
@@ -105,7 +105,7 @@
                                 </Style>
                             </StackPanel.Style>
                             <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="34" Foreground="#C9D2DE" HorizontalAlignment="Center" />
-                            <TextBlock Text="Nenhuma movimentação no período" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                            <TextBlock Text="Nenhuma movimentação no período" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
                         </StackPanel>
                       </Grid>
                     </Border>
@@ -140,7 +140,7 @@
                             </Style>
                         </StackPanel.Style>
                         <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="34" Foreground="#86C99B" HorizontalAlignment="Center" />
-                        <TextBlock Text="Nenhum produto abaixo do estoque mínimo" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
+                        <TextBlock Text="Nenhum produto abaixo do estoque mínimo" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" Margin="0,10,0,0" />
                     </StackPanel>
                   </Grid>
                 </Border>

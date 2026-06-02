@@ -20,6 +20,7 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
         ShutdownMode = ShutdownMode.OnExplicitShutdown;
+        ThemeManager.AplicarTemaSalvo();
         EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent, new RoutedEventHandler(AjustarJanelaNaTela));
 
         // Captura global de erros (confiabilidade / suporte em campo)

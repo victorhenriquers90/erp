@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ForcaTrabalhoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ForcaTrabalhoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,7 +10,7 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Visão de equipe, perfis de acesso e produtividade operacional."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Grid Grid.Row="1" Margin="0,16,0,12">
@@ -24,25 +24,25 @@
 
             <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Colaboradores ativos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Colaboradores ativos" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblAtivos" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Grid.Column="1" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Gestores" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Gestores" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblGestores" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Grid.Column="2" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Vendas 30 dias" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Vendas 30 dias" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblVendas30" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Grid.Column="3" Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Faturamento 30 dias" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Faturamento 30 dias" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblFaturamento30" Margin="0,6,0,0" FontSize="26" FontWeight="Bold" />
                 </StackPanel>
             </Border>

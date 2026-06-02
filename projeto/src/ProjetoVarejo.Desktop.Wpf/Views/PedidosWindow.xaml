@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.PedidosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.PedidosWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -11,31 +11,31 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Acompanhamento de pedidos com base nas vendas do ERP."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <UniformGrid Grid.Row="1" Columns="4" Margin="0,16,0,12">
             <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Total de pedidos" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Total de pedidos" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblTotalPedidos" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Finalizados" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Finalizados" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblFinalizados" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource Card3DStyle}" Margin="0,0,12,0" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Em aberto" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Em aberto" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblEmAberto" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
                 </StackPanel>
             </Border>
             <Border Style="{StaticResource Card3DStyle}" Padding="12">
                 <StackPanel>
-                    <TextBlock Text="Valor no período" Foreground="{StaticResource TextSoft}" />
+                    <TextBlock Text="Valor no período" Foreground="{DynamicResource TextSoft}" />
                     <TextBlock x:Name="LblValorPeriodo" Margin="0,6,0,0" FontSize="28" FontWeight="Bold" />
                 </StackPanel>
             </Border>

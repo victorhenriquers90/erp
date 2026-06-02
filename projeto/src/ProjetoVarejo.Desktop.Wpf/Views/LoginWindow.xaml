@@ -7,7 +7,7 @@
         MinHeight="560"
         MinWidth="900"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1.2*" />
@@ -65,14 +65,14 @@
             </Grid>
         </Border>
 
-        <Border Grid.Column="1" Background="{StaticResource BgCard}">
+        <Border Grid.Column="1" Background="{DynamicResource BgCard}">
             <StackPanel Width="320" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Bem-vindo de volta" FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                <TextBlock Text="Bem-vindo de volta" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                 <TextBlock Text="Entre com suas credenciais para acessar o sistema."
-                           FontSize="13" Foreground="{StaticResource TextSoft}" Margin="0,6,0,0" TextWrapping="Wrap" />
+                           FontSize="13" Foreground="{DynamicResource TextSoft}" Margin="0,6,0,0" TextWrapping="Wrap" />
 
-                <TextBlock Text="USUARIO" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" Margin="0,28,0,6" />
-                <Border BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{StaticResource BgInput}" Height="46">
+                <TextBlock Text="USUARIO" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" Margin="0,28,0,6" />
+                <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource BgInput}" Height="46">
                     <Grid Margin="12,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
@@ -84,8 +84,8 @@
                     </Grid>
                 </Border>
 
-                <TextBlock Text="SENHA" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" Margin="0,16,0,6" />
-                <Border BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{StaticResource BgInput}" Height="46">
+                <TextBlock Text="SENHA" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" Margin="0,16,0,6" />
+                <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource BgInput}" Height="46">
                     <Grid Margin="12,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="24" />
@@ -119,7 +119,7 @@
                         HorizontalAlignment="Center"
                         Background="Transparent"
                         BorderThickness="0"
-                        Foreground="{StaticResource TextSoft}"
+                        Foreground="{DynamicResource TextSoft}"
                         FontSize="12"
                         Cursor="Hand"
                         Click="Sair_Click" />

@@ -49,9 +49,9 @@
             </Style>
 
             <Style TargetType="Button">
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
-                <Setter Property="Background" Value="#FFFFFF" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeMedium}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeMedium}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="12,8" />
                 <Setter Property="FontWeight" Value="SemiBold" />
@@ -141,7 +141,7 @@
 
             <!-- Botao de acao destrutiva (Excluir) -->
             <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                <Setter Property="Background" Value="#FFFFFF" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
                 <Setter Property="Foreground" Value="#DC2626" />
                 <Setter Property="BorderBrush" Value="#F3B4B4" />
                 <Setter Property="BorderThickness" Value="1" />
@@ -215,34 +215,34 @@
             </Style>
 
             <Style TargetType="TextBox">
-                <Setter Property="Background" Value="{StaticResource BgInput}" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgInput}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="12,10" />
                 <Setter Property="FontSize" Value="13" />
             </Style>
 
             <Style TargetType="ComboBox">
-                <Setter Property="Background" Value="{StaticResource BgInput}" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgInput}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="12,10" />
                 <Setter Property="FontSize" Value="13" />
             </Style>
 
             <Style TargetType="DatePicker">
-                <Setter Property="Background" Value="{StaticResource BgInput}" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgInput}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="12,10" />
             </Style>
 
             <Style TargetType="DataGrid">
-                <Setter Property="Background" Value="{StaticResource BgCard}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="RowHeight" Value="40" />
                 <Setter Property="HeadersVisibility" Value="Column" />
@@ -251,19 +251,19 @@
             </Style>
 
             <Style TargetType="DataGridColumnHeader">
-                <Setter Property="Background" Value="{StaticResource HeaderGrid}" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                <Setter Property="Background" Value="{DynamicResource HeaderGrid}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontSize" Value="12" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="0,0,0,1" />
                 <Setter Property="Padding" Value="12,10" />
             </Style>
 
             <Style TargetType="DataGridRow">
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                 <Setter Property="Background" Value="White" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="0,0,0,1" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
@@ -282,7 +282,7 @@
             </Style>
 
             <Style TargetType="TabItem">
-                <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextSoft}" />
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="Padding" Value="16,12" />
@@ -301,10 +301,10 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Primary}" />
-                                    <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -313,8 +313,8 @@
             </Style>
 
             <Style x:Key="Card3DStyle" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource BgCard}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Effect" Value="{DynamicResource CardShadowSoft}" />
@@ -475,8 +475,8 @@
 
             <!-- Card unificado (raio 8 + sombra) — substitui o caos de raios -->
             <Style x:Key="CardStyle" TargetType="Border">
-                <Setter Property="Background" Value="{StaticResource BgCard}" />
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeSoft}" />
+                <Setter Property="Background" Value="{DynamicResource BgCard}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource StrokeSoft}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="CornerRadius" Value="8" />
                 <Setter Property="Effect" Value="{StaticResource CardShadowSoft}" />
@@ -486,11 +486,11 @@
             <Style x:Key="PageTitleStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20" />
                 <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
             </Style>
             <Style x:Key="PageSubtitleStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="12" />
-                <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextSoft}" />
                 <Setter Property="Margin" Value="0,3,0,0" />
             </Style>
 
@@ -498,12 +498,12 @@
             <Style x:Key="KpiLabelStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="FontWeight" Value="SemiBold" />
-                <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextSoft}" />
             </Style>
             <Style x:Key="KpiValueStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="30" />
                 <Setter Property="FontWeight" Value="Bold" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                 <Setter Property="Margin" Value="0,6,0,0" />
             </Style>
             <Style x:Key="KpiIconStyle" TargetType="TextBlock">
@@ -516,7 +516,7 @@
             <!-- Caixa de busca arredondada (topo) -->
             <Style x:Key="SearchBoxStyle" TargetType="TextBox">
                 <Setter Property="Background" Value="#F1F3F7" />
-                <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
                 <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -536,7 +536,7 @@
             <!-- Botão "fantasma" para topo/toolbars (ícone circular) -->
             <Style x:Key="IconButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextSoft}" />
                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
                 <Setter Property="FontSize" Value="16" />
                 <Setter Property="Cursor" Value="Hand" />

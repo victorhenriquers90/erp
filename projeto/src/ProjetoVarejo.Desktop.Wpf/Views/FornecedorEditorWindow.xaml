@@ -5,15 +5,15 @@
         Height="680"
         Width="920"
         WindowStartupLocation="CenterOwner"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Grid Margin="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Border Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource StrokeSoft}"
+        <Border Background="{DynamicResource BgCard}"
+                BorderBrush="{DynamicResource StrokeSoft}"
                 BorderThickness="1"
                 CornerRadius="14"
                 Padding="16">
@@ -36,7 +36,7 @@
                                Text="Cadastro de fornecedor"
                                FontSize="24"
                                FontWeight="Bold"
-                               Foreground="{StaticResource TextStrong}" />
+                               Foreground="{DynamicResource TextStrong}" />
 
                     <StackPanel Grid.Row="1" Margin="0,14,8,0">
                         <TextBlock Text="Razão social" FontWeight="SemiBold" />

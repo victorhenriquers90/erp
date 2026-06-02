@@ -11,7 +11,7 @@
         MinWidth="1220"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -145,7 +145,7 @@
             </Grid.RowDefinitions>
 
             <!-- TOP BAR -->
-            <Border Grid.Row="0" Background="{StaticResource BgCard}" BorderBrush="#E0E5F1" BorderThickness="0,0,0,1" Height="64">
+            <Border Grid.Row="0" Background="{DynamicResource BgCard}" BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="0,0,0,1" Height="64">
                 <Grid Margin="24,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -159,7 +159,7 @@
                     </StackPanel>
 
                     <!-- Busca global -->
-                    <Border Grid.Column="1" Background="#F1F3F7" CornerRadius="18" Height="36" Width="340"
+                    <Border Grid.Column="1" Background="{DynamicResource HeaderGrid}" CornerRadius="18" Height="36" Width="340"
                             HorizontalAlignment="Left" Margin="32,0,0,0">
                         <Grid Margin="14,0">
                             <Grid.ColumnDefinitions>
@@ -167,7 +167,7 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
-                                       Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                       Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                             <TextBox Grid.Column="1" BorderThickness="0" Background="Transparent"
                                      VerticalContentAlignment="Center" FontSize="13" />
                         </Grid>
@@ -177,14 +177,14 @@
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Style="{StaticResource IconButtonStyle}" Content="&#xE7E7;" ToolTip="Notificações" />
                         <Button Style="{StaticResource IconButtonStyle}" Content="&#xE713;" ToolTip="Configurações" Click="Indisponivel_Click" />
-                        <Border Width="1" Height="28" Background="#E0E5F1" Margin="10,0" />
+                        <Border Width="1" Height="28" Background="{DynamicResource StrokeSoft}" Margin="10,0" />
                         <Border Width="38" Height="38" CornerRadius="19" Background="{StaticResource Primary}">
                             <TextBlock x:Name="LblAvatar" Text="A" Foreground="White" FontWeight="Bold" FontSize="15"
                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
-                            <TextBlock x:Name="LblTopUsuario" Text="Usuário" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
-                            <TextBlock x:Name="LblTopEmpresa" Text="Empresa" FontSize="11" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock x:Name="LblTopUsuario" Text="Usuário" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextStrong}" />
+                            <TextBlock x:Name="LblTopEmpresa" Text="Empresa" FontSize="11" Foreground="{DynamicResource TextSoft}" />
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -197,8 +197,8 @@
 
                     <!-- Saudação -->
                     <StackPanel Margin="0,4,0,20">
-                        <TextBlock x:Name="LblSaudacao" Text="Bem-vindo!" FontSize="22" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
-                        <TextBlock x:Name="LblData" Text="" FontSize="13" Foreground="{StaticResource TextSoft}" Margin="0,4,0,0" />
+                        <TextBlock x:Name="LblSaudacao" Text="Bem-vindo!" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
+                        <TextBlock x:Name="LblData" Text="" FontSize="13" Foreground="{DynamicResource TextSoft}" Margin="0,4,0,0" />
                     </StackPanel>
 
                     <!-- KPIs -->
@@ -312,14 +312,14 @@
                         <!-- Barras: fluxo financeiro -->
                         <Border Style="{StaticResource CardStyle}" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="Fluxo financeiro — próximos meses" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <TextBlock Text="Fluxo financeiro — próximos meses" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                                 <TextBlock Text="Contas a pagar e a receber por mês (em aberto)" Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,0" />
                                 <Canvas x:Name="ChartBarras" Height="210" Margin="0,18,0,0" Background="Transparent" ClipToBounds="False" />
                                 <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                                     <Border Width="12" Height="12" CornerRadius="3" Background="#EF4444" VerticalAlignment="Center" />
-                                    <TextBlock Text="A pagar" Margin="6,0,18,0" FontSize="12" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                    <TextBlock Text="A pagar" Margin="6,0,18,0" FontSize="12" Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                                     <Border Width="12" Height="12" CornerRadius="3" Background="#10B981" VerticalAlignment="Center" />
-                                    <TextBlock Text="A receber" Margin="6,0,0,0" FontSize="12" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                    <TextBlock Text="A receber" Margin="6,0,0,0" FontSize="12" Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -327,13 +327,13 @@
                         <!-- Rosca: contas em aberto -->
                         <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="Contas em aberto" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <TextBlock Text="Contas em aberto" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                                 <Grid Height="190" Margin="0,12,0,0">
                                     <Canvas x:Name="ChartDonut" Width="180" Height="180" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                         <TextBlock x:Name="LblDonutTotal" Text="R$ 0" FontSize="18" FontWeight="Bold"
-                                                   Foreground="{StaticResource TextStrong}" HorizontalAlignment="Center" />
-                                        <TextBlock Text="total" FontSize="11" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" />
+                                                   Foreground="{DynamicResource TextStrong}" HorizontalAlignment="Center" />
+                                        <TextBlock Text="total" FontSize="11" Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" />
                                     </StackPanel>
                                 </Grid>
                                 <Grid Margin="0,12,0,0">
@@ -344,16 +344,16 @@
                                     <StackPanel>
                                         <StackPanel Orientation="Horizontal">
                                             <Border Width="10" Height="10" CornerRadius="3" Background="#EF4444" VerticalAlignment="Center" />
-                                            <TextBlock Text="A pagar" Margin="6,0,0,0" FontSize="11" Foreground="{StaticResource TextSoft}" />
+                                            <TextBlock Text="A pagar" Margin="6,0,0,0" FontSize="11" Foreground="{DynamicResource TextSoft}" />
                                         </StackPanel>
-                                        <TextBlock x:Name="LblDonutPagar" Text="R$ 0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" Margin="16,2,0,0" />
+                                        <TextBlock x:Name="LblDonutPagar" Text="R$ 0" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextStrong}" Margin="16,2,0,0" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="1">
                                         <StackPanel Orientation="Horizontal">
                                             <Border Width="10" Height="10" CornerRadius="3" Background="#10B981" VerticalAlignment="Center" />
-                                            <TextBlock Text="A receber" Margin="6,0,0,0" FontSize="11" Foreground="{StaticResource TextSoft}" />
+                                            <TextBlock Text="A receber" Margin="6,0,0,0" FontSize="11" Foreground="{DynamicResource TextSoft}" />
                                         </StackPanel>
-                                        <TextBlock x:Name="LblDonutReceber" Text="R$ 0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" Margin="16,2,0,0" />
+                                        <TextBlock x:Name="LblDonutReceber" Text="R$ 0" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextStrong}" Margin="16,2,0,0" />
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
@@ -363,7 +363,7 @@
                     <!-- Top produtos em estoque -->
                     <Border Style="{StaticResource CardStyle}" Padding="20" Margin="0,20,0,0">
                         <StackPanel>
-                            <TextBlock Text="Top produtos em estoque" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                            <TextBlock Text="Top produtos em estoque" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                             <TextBlock Text="Maiores saldos de estoque atualmente" Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,0" />
                             <StackPanel x:Name="ListaProdutos" Margin="0,16,0,0" />
                         </StackPanel>
@@ -380,35 +380,35 @@
                         <!-- Atalhos rápidos -->
                         <Border Style="{StaticResource CardStyle}" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="Atalhos rápidos" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <TextBlock Text="Atalhos rápidos" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                                 <TextBlock Text="Acesse os módulos mais usados do dia a dia." Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,16" />
                                 <UniformGrid Columns="2">
                                     <Button Margin="0,0,8,8" Height="80" Click="Clientes_Click"
-                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                            Background="{DynamicResource HeaderGrid}" BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1">
                                         <StackPanel>
                                             <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{StaticResource Primary}" HorizontalAlignment="Center" />
-                                            <TextBlock Text="Clientes" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                            <TextBlock Text="Clientes" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource TextStrong}" />
                                         </StackPanel>
                                     </Button>
                                     <Button Margin="8,0,0,8" Height="80" Click="Produtos_Click"
-                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                            Background="{DynamicResource HeaderGrid}" BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1">
                                         <StackPanel>
                                             <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#10B981" HorizontalAlignment="Center" />
-                                            <TextBlock Text="Produtos" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                            <TextBlock Text="Produtos" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource TextStrong}" />
                                         </StackPanel>
                                     </Button>
                                     <Button Margin="0,8,8,0" Height="80" Click="Estoque_Click"
-                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                            Background="{DynamicResource HeaderGrid}" BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1">
                                         <StackPanel>
                                             <TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#F59E0B" HorizontalAlignment="Center" />
-                                            <TextBlock Text="Estoque" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                            <TextBlock Text="Estoque" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource TextStrong}" />
                                         </StackPanel>
                                     </Button>
                                     <Button Margin="8,8,0,0" Height="80" Click="Relatorios_Click"
-                                            Background="#F8FAFC" BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1">
+                                            Background="{DynamicResource HeaderGrid}" BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1">
                                         <StackPanel>
                                             <TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="#3B82F6" HorizontalAlignment="Center" />
-                                            <TextBlock Text="Relatórios" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{StaticResource TextStrong}" />
+                                            <TextBlock Text="Relatórios" Margin="0,6,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource TextStrong}" />
                                         </StackPanel>
                                     </Button>
                                 </UniformGrid>
@@ -418,28 +418,28 @@
                         <!-- Atividade / status -->
                         <Border Grid.Column="2" Style="{StaticResource CardStyle}" Padding="20">
                             <StackPanel>
-                                <TextBlock Text="Status do sistema" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+                                <TextBlock Text="Status do sistema" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
                                 <StackPanel Margin="0,16,0,0">
                                     <Grid Margin="0,0,0,14">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Border Width="8" Height="8" CornerRadius="4" Background="#10B981" VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="1" Text="Banco de dados conectado" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="Banco de dados conectado" Margin="12,0,0,0" FontSize="13" Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                                     </Grid>
                                     <Grid Margin="0,0,0,14">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Border Width="8" Height="8" CornerRadius="4" Background="#F59E0B" VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="1" Text="NFC-e em homologação" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="NFC-e em homologação" Margin="12,0,0,0" FontSize="13" Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                                     </Grid>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Border Width="8" Height="8" CornerRadius="4" Background="#10B981" VerticalAlignment="Center" />
-                                        <TextBlock Grid.Column="1" Text="Backup ativo" Margin="12,0,0,0" FontSize="13" Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="Backup ativo" Margin="12,0,0,0" FontSize="13" Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                                     </Grid>
                                 </StackPanel>
                             </StackPanel>

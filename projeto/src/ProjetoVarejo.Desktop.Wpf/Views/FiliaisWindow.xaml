@@ -1,7 +1,7 @@
 <UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FiliaisWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,7 +14,7 @@
                        Margin="0,8,0,0"
                        Text="0 empresa(s)"
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Margin="0,16,0,16" Padding="12">
@@ -26,15 +26,15 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Border BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1" CornerRadius="8"
-                        Background="{StaticResource BgInput}" Height="40" Width="360" HorizontalAlignment="Left">
+                <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BgInput}" Height="40" Width="360" HorizontalAlignment="Left">
                     <Grid Margin="12,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14"
-                                   Foreground="{StaticResource TextSoft}" VerticalAlignment="Center" />
+                                   Foreground="{DynamicResource TextSoft}" VerticalAlignment="Center" />
                         <TextBox Grid.Column="1" x:Name="TxtBusca" BorderThickness="0" Background="Transparent"
                                  VerticalContentAlignment="Center" FontSize="14"
                                  TextChanged="TxtBusca_TextChanged" />
@@ -91,8 +91,8 @@
                         </Style>
                     </StackPanel.Style>
                     <TextBlock Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="38" Foreground="#C9D2DE" HorizontalAlignment="Center" />
-                    <TextBlock Text="Nenhuma empresa cadastrada" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TextSoft}" HorizontalAlignment="Center" Margin="0,12,0,0" />
-                    <TextBlock Text="Clique em &quot;Nova&quot; para cadastrar a primeira empresa/filial." FontSize="12" Foreground="{StaticResource TextPlaceholder}" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    <TextBlock Text="Nenhuma empresa cadastrada" FontSize="15" FontWeight="SemiBold" Foreground="{DynamicResource TextSoft}" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                    <TextBlock Text="Clique em &quot;Nova&quot; para cadastrar a primeira empresa/filial." FontSize="12" Foreground="{DynamicResource TextPlaceholder}" HorizontalAlignment="Center" Margin="0,4,0,0" />
                 </StackPanel>
             </Grid>
         </Border>

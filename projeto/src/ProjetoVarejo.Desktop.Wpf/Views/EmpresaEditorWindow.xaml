@@ -5,18 +5,18 @@
         Height="760"
         Width="760"
         WindowStartupLocation="CenterOwner"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Window.Resources>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="FontSize" Value="11" />
             <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{StaticResource TextSoft}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextSoft}" />
             <Setter Property="Margin" Value="0,0,0,5" />
         </Style>
         <Style x:Key="SectionTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Foreground" Value="{StaticResource TextStrong}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextStrong}" />
             <Setter Property="Margin" Value="0,0,0,14" />
         </Style>
     </Window.Resources>
@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Margin="0,0,0,14">
-            <TextBlock Text="Cadastro de Empresa / Filial" FontSize="20" FontWeight="Bold" Foreground="{StaticResource TextStrong}" />
+            <TextBlock Text="Cadastro de Empresa / Filial" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
             <TextBlock Text="Dados cadastrais e configuração fiscal (NFC-e) da empresa." Style="{StaticResource PageSubtitleStyle}" />
         </StackPanel>
 

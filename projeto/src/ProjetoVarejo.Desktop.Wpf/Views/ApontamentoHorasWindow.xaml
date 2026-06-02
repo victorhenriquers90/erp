@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ApontamentoHorasWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ApontamentoHorasWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,7 +10,7 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Consolidação de horas por colaborador a partir das sessões de caixa."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource Card3DStyle}" Padding="12" Margin="0,16,0,12">
@@ -32,19 +32,19 @@
                 <UniformGrid Grid.Column="2" Columns="3" Margin="20,0,0,0">
                     <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="Horas totais" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Horas totais" Foreground="{DynamicResource TextSoft}" />
                             <TextBlock x:Name="LblHorasTotais" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
                     <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="Sessões fechadas" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Sessões fechadas" Foreground="{DynamicResource TextSoft}" />
                             <TextBlock x:Name="LblSessoes" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
                         </StackPanel>
                     </Border>
                     <Border Style="{StaticResource Card3DStyle}" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="Média por colaborador" Foreground="{StaticResource TextSoft}" />
+                            <TextBlock Text="Média por colaborador" Foreground="{DynamicResource TextSoft}" />
                             <TextBlock x:Name="LblMedia" Margin="0,6,0,0" FontSize="22" FontWeight="Bold" />
                         </StackPanel>
                     </Border>

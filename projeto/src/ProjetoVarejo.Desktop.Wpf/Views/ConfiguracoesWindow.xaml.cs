@@ -55,6 +55,10 @@ public partial class ConfiguracoesWindow : UserControl
         }
     }
 
+    private void TemaClaro_Click(object sender, RoutedEventArgs e) => ThemeManager.Alternar(false);
+
+    private void TemaEscuro_Click(object sender, RoutedEventArgs e) => ThemeManager.Alternar(true);
+
     private async void Demo_Click(object sender, RoutedEventArgs e)
     {
         BtnDemo.IsEnabled = false;

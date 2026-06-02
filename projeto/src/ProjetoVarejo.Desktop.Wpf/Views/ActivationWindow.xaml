@@ -6,7 +6,7 @@
         Width="620"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="{StaticResource BgCard}">
+        Background="{DynamicResource BgCard}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -29,13 +29,13 @@
         </Border>
 
         <StackPanel Grid.Row="1" Margin="28,24">
-            <TextBlock Text="1. Envie o código desta máquina ao fornecedor:" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextStrong}" />
+            <TextBlock Text="1. Envie o código desta máquina ao fornecedor:" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextStrong}" />
             <Grid Margin="0,8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Border BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{StaticResource BgInput}" Height="44">
+                <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource BgInput}" Height="44">
                     <TextBox x:Name="TxtFingerprint" BorderThickness="0" Background="Transparent" IsReadOnly="True"
                              VerticalContentAlignment="Center" Margin="12,0" FontSize="15" FontWeight="SemiBold"
                              FontFamily="Consolas" Foreground="{StaticResource Primary}" />
@@ -44,8 +44,8 @@
             </Grid>
 
             <TextBlock Text="2. Cole aqui a chave de licença recebida:" FontSize="13" FontWeight="SemiBold"
-                       Foreground="{StaticResource TextStrong}" Margin="0,22,0,0" />
-            <Border BorderBrush="{StaticResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{StaticResource BgInput}" Margin="0,8,0,0">
+                       Foreground="{DynamicResource TextStrong}" Margin="0,22,0,0" />
+            <Border BorderBrush="{DynamicResource StrokeSoft}" BorderThickness="1" CornerRadius="8" Background="{DynamicResource BgInput}" Margin="0,8,0,0">
                 <TextBox x:Name="TxtChave" BorderThickness="0" Background="Transparent" Height="110"
                          TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                          Padding="12" FontSize="12" FontFamily="Consolas" />

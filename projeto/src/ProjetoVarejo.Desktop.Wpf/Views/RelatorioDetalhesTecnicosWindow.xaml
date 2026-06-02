@@ -7,7 +7,7 @@
         MinHeight="620"
         MinWidth="900"
         WindowStartupLocation="CenterOwner"
-        Background="{StaticResource BgApp}">
+        Background="{DynamicResource BgApp}">
     <Grid Margin="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -20,10 +20,10 @@
             <TextBlock Text="Detalhes tecnicos do relatorio"
                        FontSize="26"
                        FontWeight="Bold"
-                       Foreground="{StaticResource TextStrong}" />
+                       Foreground="{DynamicResource TextStrong}" />
             <TextBlock x:Name="TxtContexto"
                        Margin="0,6,0,0"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Border Grid.Row="1"

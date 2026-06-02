@@ -1,4 +1,4 @@
-<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ProducaoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{StaticResource BgApp}">
+<UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.ProducaoWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="{DynamicResource BgApp}">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,7 +10,7 @@
             <TextBlock Margin="0,8,0,0"
                        Text="Visão operacional de entradas e saídas de produção no período."
                        FontSize="14"
-                       Foreground="{StaticResource TextSoft}" />
+                       Foreground="{DynamicResource TextSoft}" />
         </StackPanel>
 
         <Grid Grid.Row="1" Margin="0,16,0,12">
@@ -39,19 +39,19 @@
             <UniformGrid Grid.Column="3" Columns="3" Margin="20,0,0,0">
                 <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                     <StackPanel>
-                        <TextBlock Text="Ordens em aberto" Foreground="{StaticResource TextSoft}" />
+                        <TextBlock Text="Ordens em aberto" Foreground="{DynamicResource TextSoft}" />
                         <TextBlock x:Name="LblOrdensAbertas" Margin="0,6,0,0" FontSize="24" FontWeight="Bold" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card3DStyle}" Margin="0,0,10,0" Padding="10">
                     <StackPanel>
-                        <TextBlock Text="Entradas (un.)" Foreground="{StaticResource TextSoft}" />
+                        <TextBlock Text="Entradas (un.)" Foreground="{DynamicResource TextSoft}" />
                         <TextBlock x:Name="LblEntradas" Margin="0,6,0,0" FontSize="24" FontWeight="Bold" />
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource Card3DStyle}" Padding="10">
                     <StackPanel>
-                        <TextBlock Text="Saídas (un.)" Foreground="{StaticResource TextSoft}" />
+                        <TextBlock Text="Saídas (un.)" Foreground="{DynamicResource TextSoft}" />
                         <TextBlock x:Name="LblSaidas" Margin="0,6,0,0" FontSize="24" FontWeight="Bold" />
                     </StackPanel>
                 </Border>

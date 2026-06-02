@@ -266,6 +266,7 @@ public partial class MainWindow : Window
         ContentHost.Content = view;
         ContentHost.Visibility = Visibility.Visible;
         DashboardRoot.Visibility = Visibility.Collapsed;
+        FadeIn(ContentHost);
 
         LblPagina.Text = titulo;
         LblBreadcrumb.Text = "Início · " + breadcrumb;
@@ -277,12 +278,30 @@ public partial class MainWindow : Window
         ContentHost.Content = null;
         ContentHost.Visibility = Visibility.Collapsed;
         DashboardRoot.Visibility = Visibility.Visible;
+        FadeIn(DashboardRoot);
         _moduloScope?.Dispose();
         _moduloScope = null;
 
         LblPagina.Text = "Painel";
         LblBreadcrumb.Text = "Início · Visão geral";
         _ = CarregarKpisAsync();
+    }
+
+    /// <summary>Animação sutil de fade + leve subida ao trocar de conteúdo.</summary>
+    private static void FadeIn(UIElement el)
+    {
+        var fade = new System.Windows.Media.Animation.DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180))
+        {
+            EasingFunction = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut }
+        };
+        var slide = new System.Windows.Media.Animation.DoubleAnimation(8, 0, TimeSpan.FromMilliseconds(220))
+        {
+            EasingFunction = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseOut }
+        };
+        var tt = new TranslateTransform();
+        el.RenderTransform = tt;
+        el.BeginAnimation(UIElement.OpacityProperty, fade);
+        tt.BeginAnimation(TranslateTransform.YProperty, slide);
     }
 
     private void Painel_Click(object sender, RoutedEventArgs e) => MostrarDashboard();

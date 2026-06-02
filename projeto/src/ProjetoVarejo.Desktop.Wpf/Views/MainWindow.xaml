@@ -203,40 +203,100 @@
 
                     <!-- KPIs -->
                     <UniformGrid Columns="4">
-                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
+                        <!-- Clientes -->
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="0">
                             <StackPanel>
-                                <Border Width="40" Height="40" CornerRadius="10" Background="#EAF1FB" HorizontalAlignment="Left">
-                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE716;" Foreground="{StaticResource Primary}" />
+                                <Border Height="4" CornerRadius="8,8,0,0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#4D94FF" Offset="0" /><GradientStop Color="#0052B4" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
                                 </Border>
-                                <TextBlock Text="Clientes ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
-                                <TextBlock x:Name="LblKpiClientes" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                <StackPanel Margin="18">
+                                    <Border Width="42" Height="42" CornerRadius="12" HorizontalAlignment="Left">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#EAF1FB" Offset="0" /><GradientStop Color="#D2E3FB" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE716;" Foreground="{StaticResource Primary}" />
+                                    </Border>
+                                    <TextBlock Text="Clientes ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                    <TextBlock x:Name="LblKpiClientes" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                </StackPanel>
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
+                        <!-- Produtos -->
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="0">
                             <StackPanel>
-                                <Border Width="40" Height="40" CornerRadius="10" Background="#E9F7EF" HorizontalAlignment="Left">
-                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE7B8;" Foreground="#10B981" />
+                                <Border Height="4" CornerRadius="8,8,0,0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#34D399" Offset="0" /><GradientStop Color="#10B981" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
                                 </Border>
-                                <TextBlock Text="Produtos ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
-                                <TextBlock x:Name="LblKpiProdutos" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                <StackPanel Margin="18">
+                                    <Border Width="42" Height="42" CornerRadius="12" HorizontalAlignment="Left">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#E9F7EF" Offset="0" /><GradientStop Color="#CFF0E0" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE7B8;" Foreground="#10B981" />
+                                    </Border>
+                                    <TextBlock Text="Produtos ativos" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                    <TextBlock x:Name="LblKpiProdutos" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                </StackPanel>
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="18">
+                        <!-- Fornecedores -->
+                        <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0" Padding="0">
                             <StackPanel>
-                                <Border Width="40" Height="40" CornerRadius="10" Background="#FEF3E2" HorizontalAlignment="Left">
-                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE8D1;" Foreground="#F59E0B" />
+                                <Border Height="4" CornerRadius="8,8,0,0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#FBBF24" Offset="0" /><GradientStop Color="#F59E0B" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
                                 </Border>
-                                <TextBlock Text="Fornecedores" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
-                                <TextBlock x:Name="LblKpiFornecedores" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                <StackPanel Margin="18">
+                                    <Border Width="42" Height="42" CornerRadius="12" HorizontalAlignment="Left">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#FEF3E2" Offset="0" /><GradientStop Color="#FCE6C4" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xE8D1;" Foreground="#F59E0B" />
+                                    </Border>
+                                    <TextBlock Text="Fornecedores" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                    <TextBlock x:Name="LblKpiFornecedores" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                </StackPanel>
                             </StackPanel>
                         </Border>
-                        <Border Style="{StaticResource CardStyle}" Padding="18">
+                        <!-- Financeiro -->
+                        <Border Style="{StaticResource CardStyle}" Padding="0">
                             <StackPanel>
-                                <Border Width="40" Height="40" CornerRadius="10" Background="#FCEBEC" HorizontalAlignment="Left">
-                                    <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xEAFD;" Foreground="#EF4444" />
+                                <Border Height="4" CornerRadius="8,8,0,0">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#F87171" Offset="0" /><GradientStop Color="#EF4444" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
                                 </Border>
-                                <TextBlock Text="Contas em aberto" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
-                                <TextBlock x:Name="LblKpiFinanceiro" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                <StackPanel Margin="18">
+                                    <Border Width="42" Height="42" CornerRadius="12" HorizontalAlignment="Left">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#FCEBEC" Offset="0" /><GradientStop Color="#FAD4D6" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Style="{StaticResource KpiIconStyle}" Text="&#xEAFD;" Foreground="#EF4444" />
+                                    </Border>
+                                    <TextBlock Text="Contas em aberto" Style="{StaticResource KpiLabelStyle}" Margin="0,14,0,0" />
+                                    <TextBlock x:Name="LblKpiFinanceiro" Text="-" Style="{StaticResource KpiValueStyle}" />
+                                </StackPanel>
                             </StackPanel>
                         </Border>
                     </UniformGrid>

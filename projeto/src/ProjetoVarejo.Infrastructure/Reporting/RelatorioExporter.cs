@@ -5,10 +5,21 @@ using QuestPDF.Infrastructure;
 
 namespace ProjetoVarejo.Infrastructure.Reporting;
 
-// DTOs de relatório — independentes do serviço para não violar a direção de dependência
+// DTOs de relatório — independentes dos services para não violar a direção de dependência
 public record VendaDiariaDto(DateTime Dia, int Quantidade, decimal Total);
 public record ProdutoRankingDto(string Codigo, string Descricao, decimal Quantidade, decimal Faturamento, string Classe);
 public record FluxoCaixaDto(DateTime Dia, decimal Entradas, decimal Saidas, decimal Saldo);
+
+/// <summary>DTO de filial para o relatório consolidado — não referencia Application.</summary>
+public record FilialStatusDto(
+    string Nome,
+    bool Online,
+    decimal VendasHoje,
+    int PedidosHoje,
+    bool CaixaAberto,
+    decimal SaldoPrevisto,
+    int ContasAtrasadas,
+    string? UrlApi);
 
 public class RelatorioExporter
 {
@@ -113,6 +124,73 @@ public class RelatorioExporter
         }).GeneratePdf();
     }
 
+    public byte[] GerarConsolidadoPdf(IList<FilialStatusDto> dados)
+    {
+        var agora = DateTime.Now;
+        return Document.Create(doc =>
+        {
+            doc.Page(page =>
+            {
+                page.Size(PageSizes.A4.Landscape());
+                page.Margin(30);
+
+                page.Header().Column(col =>
+                {
+                    col.Item().Text("Relatório Consolidado de Filiais").FontSize(16).Bold();
+                    col.Item().Text($"Período: {agora:dd/MM/yyyy HH:mm}").FontSize(10).FontColor("#6B7280");
+                    col.Item().Height(8);
+                });
+
+                page.Content().Table(t =>
+                {
+                    t.ColumnsDefinition(c =>
+                    {
+                        c.RelativeColumn(2);   // Filial
+                        c.RelativeColumn(1);   // Status
+                        c.RelativeColumn(1.5f); // Vendas Hoje
+                        c.RelativeColumn(1);   // Pedidos
+                        c.RelativeColumn(1);   // Caixa
+                        c.RelativeColumn(1.5f); // Saldo Previsto
+                        c.RelativeColumn(1);   // Atrasadas
+                    });
+
+                    CabecalhoTabela(t, "Filial", "Status", "Vendas Hoje", "Pedidos",
+                                        "Caixa", "Saldo Previsto", "Atrasadas");
+
+                    foreach (var f in dados)
+                    {
+                        var bg = f.Online ? "#ECFDF5" : "#FEF2F2";
+                        t.Cell().Background(bg).Padding(5).Text(f.Nome);
+                        t.Cell().Background(bg).Padding(5).AlignCenter()
+                            .Text(f.Online ? "Online" : "Offline")
+                            .FontColor(f.Online ? "#15803D" : "#DC2626").Bold();
+                        t.Cell().Background(bg).Padding(5).AlignRight().Text(f.VendasHoje.ToString("C2"));
+                        t.Cell().Background(bg).Padding(5).AlignRight().Text(f.PedidosHoje.ToString());
+                        t.Cell().Background(bg).Padding(5).AlignCenter()
+                            .Text(f.CaixaAberto ? "Aberto" : "Fechado");
+                        t.Cell().Background(bg).Padding(5).AlignRight().Text(f.SaldoPrevisto.ToString("C2"));
+                        t.Cell().Background(bg).Padding(5).AlignRight().Text(f.ContasAtrasadas.ToString());
+                    }
+
+                    // linha TOTAL
+                    t.Cell().Background("#E5E7EB").Padding(6).Text("TOTAL").Bold();
+                    t.Cell().Background("#E5E7EB").Padding(6).Text(""); // Status
+                    t.Cell().Background("#E5E7EB").Padding(6).AlignRight()
+                        .Text(dados.Sum(d => d.VendasHoje).ToString("C2")).Bold();
+                    t.Cell().Background("#E5E7EB").Padding(6).AlignRight()
+                        .Text(dados.Sum(d => d.PedidosHoje).ToString()).Bold();
+                    t.Cell().Background("#E5E7EB").Padding(6).Text(""); // Caixa
+                    t.Cell().Background("#E5E7EB").Padding(6).AlignRight()
+                        .Text(dados.Sum(d => d.SaldoPrevisto).ToString("C2")).Bold();
+                    t.Cell().Background("#E5E7EB").Padding(6).AlignRight()
+                        .Text(dados.Sum(d => d.ContasAtrasadas).ToString()).Bold();
+                });
+
+                Rodape(page);
+            });
+        }).GeneratePdf();
+    }
+
     // ─── Excel ──────────────────────────────────────────────────────────────
 
     public byte[] GerarVendasPorDiaExcel(IList<VendaDiariaDto> dados, DateTime de, DateTime ate)
@@ -183,6 +261,58 @@ public class RelatorioExporter
                 ws.Cell(row, 4).Style.Font.FontColor = XLColor.Red;
             row++;
         }
+        ws.Columns().AdjustToContents();
+        return ToBytes(wb);
+    }
+
+    public byte[] GerarConsolidadoExcel(IList<FilialStatusDto> dados)
+    {
+        var agora = DateTime.Now;
+        using var wb = new XLWorkbook();
+        var ws = wb.Worksheets.Add("Consolidado");
+
+        // Título
+        ws.Cell(1, 1).Value = "Relatório Consolidado de Filiais";
+        ws.Cell(1, 1).Style.Font.Bold = true;
+        ws.Cell(1, 1).Style.Font.FontSize = 14;
+        ws.Cell(2, 1).Value = $"Gerado em: {agora:dd/MM/yyyy HH:mm}";
+        ws.Cell(2, 1).Style.Font.FontColor = XLColor.Gray;
+
+        // Cabeçalho da tabela
+        var headers = new[] { "Filial", "Status", "Vendas Hoje", "Pedidos", "Caixa", "Saldo Previsto", "Atrasadas" };
+        EscreverCabecalhoTabela(ws, 3, headers);
+
+        int row = 4;
+        foreach (var f in dados)
+        {
+            ws.Cell(row, 1).Value = f.Nome;
+            ws.Cell(row, 2).Value = f.Online ? "Online" : "Offline";
+            ws.Cell(row, 3).Value = f.VendasHoje;
+            ws.Cell(row, 3).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 4).Value = f.PedidosHoje;
+            ws.Cell(row, 5).Value = f.CaixaAberto ? "Aberto" : "Fechado";
+            ws.Cell(row, 6).Value = f.SaldoPrevisto;
+            ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
+            ws.Cell(row, 7).Value = f.ContasAtrasadas;
+
+            var corFundo = f.Online ? XLColor.FromHtml("#ECFDF5") : XLColor.FromHtml("#FEF2F2");
+            ws.Range(row, 1, row, headers.Length).Style.Fill.BackgroundColor = corFundo;
+            ws.Cell(row, 2).Style.Font.FontColor = f.Online ? XLColor.FromHtml("#15803D") : XLColor.FromHtml("#DC2626");
+
+            row++;
+        }
+
+        // Linha de total em negrito
+        ws.Cell(row, 1).Value = "TOTAL";
+        ws.Cell(row, 3).Value = dados.Sum(d => d.VendasHoje);
+        ws.Cell(row, 3).Style.NumberFormat.Format = "#,##0.00";
+        ws.Cell(row, 4).Value = dados.Sum(d => d.PedidosHoje);
+        ws.Cell(row, 6).Value = dados.Sum(d => d.SaldoPrevisto);
+        ws.Cell(row, 6).Style.NumberFormat.Format = "#,##0.00";
+        ws.Cell(row, 7).Value = dados.Sum(d => d.ContasAtrasadas);
+        ws.Range(row, 1, row, headers.Length).Style.Fill.BackgroundColor = XLColor.LightGray;
+        ws.Range(row, 1, row, headers.Length).Style.Font.Bold = true;
+
         ws.Columns().AdjustToContents();
         return ToBytes(wb);
     }

@@ -85,6 +85,79 @@
                 </StackPanel>
             </Border>
 
+            <!-- ALERTAS WHATSAPP -->
+            <Border Style="{StaticResource Card3DStyle}" Padding="20" Margin="0,16,0,0">
+                <StackPanel>
+                    <TextBlock Text="Alertas WhatsApp" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource TextStrong}" />
+                    <TextBlock Text="Receba notificações automáticas no WhatsApp quando uma filial ficar offline ou o caixa não for aberto no horário."
+                               Style="{StaticResource PageSubtitleStyle}" Margin="0,4,0,16" />
+
+                    <CheckBox x:Name="ChkAlertasAtivos" Content="Ativar alertas automáticos" Margin="0,0,0,14"
+                              Foreground="{DynamicResource TextStrong}" />
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="260" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Telefone do gerente:" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,12,0"
+                                   Foreground="{DynamicResource TextNormal}" />
+                        <TextBox x:Name="TxtTelefoneGerente" Grid.Column="1" Height="36"
+                                 Text="+55 11 99999-9999" />
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Caixa deve abrir até:" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,12,0"
+                                   Foreground="{DynamicResource TextNormal}" />
+                        <TextBox x:Name="TxtHoraCaixa" Grid.Column="1" Height="36"
+                                 Text="9" />
+                        <TextBlock Text=":00" Grid.Column="2"
+                                   VerticalAlignment="Center" Margin="4,0,0,0"
+                                   Foreground="{DynamicResource TextNormal}" />
+                    </Grid>
+
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Verificar a cada:" Grid.Column="0"
+                                   VerticalAlignment="Center" Margin="0,0,12,0"
+                                   Foreground="{DynamicResource TextNormal}" />
+                        <TextBox x:Name="TxtIntervalo" Grid.Column="1" Height="36"
+                                 Text="15" />
+                        <TextBlock Text="minutos" Grid.Column="2"
+                                   VerticalAlignment="Center" Margin="4,0,0,0"
+                                   Foreground="{DynamicResource TextNormal}" />
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="BtnSalvarAlertas" Content="Salvar configuração de alertas"
+                                Width="240" Height="42"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="SalvarAlertas_Click" />
+                    </StackPanel>
+
+                    <Border x:Name="AlertasBox" Margin="0,14,0,0" Background="#ECFDF5" BorderBrush="#A7F3D0"
+                            BorderThickness="1" CornerRadius="8" Padding="12" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" Foreground="#047857"
+                                       FontSize="14" VerticalAlignment="Top" Margin="0,1,8,0" />
+                            <TextBlock x:Name="LblAlertas" Foreground="#065F46" FontSize="12"
+                                       TextWrapping="Wrap" MaxWidth="640" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
             <!-- DADOS DE DEMONSTRAÇÃO -->
             <Border Style="{StaticResource Card3DStyle}" Padding="20" Margin="0,16,0,0">
                 <StackPanel>

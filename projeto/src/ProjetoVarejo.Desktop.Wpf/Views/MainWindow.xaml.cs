@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Application.Sessao;
 using ProjetoVarejo.Infrastructure.Data;
 using ProjetoVarejo.Shared;
@@ -110,6 +111,11 @@ public partial class MainWindow : Window
             LblKpiFinanceiro.Text = contasAbertas.ToString("N0");
 
             await CarregarGraficosAsync(db);
+
+            // Exibir seção de filiais se houver filiais remotas cadastradas
+            var temFiliais = await db.EmpresaConfigs.AnyAsync(e => e.Ativo && e.UrlApi != null && e.UrlApi != "");
+            SecaoFiliais.Visibility = temFiliais ? Visibility.Visible : Visibility.Collapsed;
+            if (temFiliais) _ = CarregarMiniFiliais();
         }
         catch
         {
@@ -118,6 +124,106 @@ public partial class MainWindow : Window
             LblKpiFornecedores.Text = "-";
             LblKpiFinanceiro.Text = "-";
         }
+    }
+
+    // ───────────── Painel de Rede da Matriz ─────────────
+
+    private async Task CarregarMiniFiliais()
+    {
+        try
+        {
+            using var scope = _services.CreateScope();
+            var painelSvc = scope.ServiceProvider.GetRequiredService<FilialPainelService>();
+            var status = await painelSvc.ObterStatusTodasAsync();
+            RenderizarMiniFiliais(status);
+        }
+        catch { /* não bloqueia o dashboard se falhar */ }
+    }
+
+    private async void AtualizarFiliais_Click(object sender, RoutedEventArgs e)
+    {
+        BtnAtualizarFiliais.IsEnabled = false;
+        BtnAtualizarFiliais.Content = "Consultando...";
+        try { await CarregarMiniFiliais(); }
+        finally
+        {
+            BtnAtualizarFiliais.IsEnabled = true;
+            BtnAtualizarFiliais.Content = "↻ Atualizar";
+        }
+    }
+
+    private void RenderizarMiniFiliais(List<FilialStatus> filiais)
+    {
+        PainelMiniFiliais.Children.Clear();
+        var online = filiais.Count(f => f.Online);
+        var totalVendas = filiais.Sum(f => f.VendasHoje);
+        LblFiliaisResumo.Text = $"{online}/{filiais.Count} online  •  Vendas: {totalVendas.ToString("C0", _ptBr)}";
+
+        foreach (var f in filiais)
+        {
+            var corBorda = f.Online ? Color.FromRgb(0x2A, 0x78, 0xDA) : Color.FromRgb(0xF8, 0x71, 0x71);
+            var card = new Border
+            {
+                Width = 200, Height = 110,
+                Margin = new Thickness(0, 0, 12, 0),
+                CornerRadius = new CornerRadius(10),
+                Background = (Brush)FindResource("BgCard"),
+                BorderBrush = new SolidColorBrush(corBorda),
+                BorderThickness = new Thickness(1.5),
+                Padding = new Thickness(14, 12, 14, 12)
+            };
+            var p = new StackPanel();
+
+            // Status dot + nome
+            var cab = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 6) };
+            cab.Children.Add(new Border
+            {
+                Width = 8, Height = 8, CornerRadius = new CornerRadius(4),
+                Background = new SolidColorBrush(f.Online ? Color.FromRgb(0x4A, 0xDE, 0x80) : Color.FromRgb(0xF8, 0x71, 0x71)),
+                Margin = new Thickness(0, 0, 6, 0), VerticalAlignment = VerticalAlignment.Center
+            });
+            cab.Children.Add(new TextBlock
+            {
+                Text = f.Apelido ?? f.Nome,
+                FontSize = 13, FontWeight = FontWeights.Bold,
+                Foreground = (Brush)FindResource("TextStrong"),
+                TextTrimming = TextTrimming.CharacterEllipsis
+            });
+            p.Children.Add(cab);
+
+            if (f.Online)
+            {
+                p.Children.Add(MiniKpi("💰", f.VendasHoje.ToString("C0", _ptBr)));
+                p.Children.Add(MiniKpi("🛒", $"{f.PedidosHoje} pedidos"));
+                p.Children.Add(MiniKpi("🏧", f.CaixaAberto ? "Caixa aberto" : "Caixa fechado",
+                    f.CaixaAberto ? Color.FromRgb(0x4A, 0xDE, 0x80) : Color.FromRgb(0xFB, 0xBF, 0x24)));
+            }
+            else
+            {
+                p.Children.Add(new TextBlock
+                {
+                    Text = "OFFLINE", FontSize = 13, FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xF8, 0x71, 0x71))
+                });
+            }
+
+            card.Child = p;
+            PainelMiniFiliais.Children.Add(card);
+        }
+    }
+
+    private static StackPanel MiniKpi(string emoji, string valor, Color? cor = null)
+    {
+        var s = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 0) };
+        s.Children.Add(new TextBlock { Text = $"{emoji} ", FontSize = 11 });
+        s.Children.Add(new TextBlock
+        {
+            Text = valor, FontSize = 11,
+            Foreground = cor.HasValue
+                ? new SolidColorBrush(cor.Value)
+                : new SolidColorBrush(Color.FromRgb(0xC8, 0xD8, 0xE8))
+        });
+        return s;
     }
 
     // ───────────── Gráficos do dashboard ─────────────

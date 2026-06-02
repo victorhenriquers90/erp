@@ -1,9 +1,12 @@
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.Win32;
 using ProjetoVarejo.Application.Services;
 using ProjetoVarejo.Domain.Entities;
+using ProjetoVarejo.Infrastructure.Reporting;
 
 namespace ProjetoVarejo.Desktop.Wpf.Views;
 
@@ -12,15 +15,19 @@ public partial class FiliaisWindow : UserControl
     private readonly NfceService _nfceService;
     private readonly FilialPainelService _painelService;
     private readonly EmpresaEditorWindow _empresaEditorWindow;
+    private readonly RelatorioExporter _relatorioExporter;
     private readonly CultureInfo _ptBr = new("pt-BR");
     private List<EmpresaConfig> _empresas = [];
+    private List<FilialStatus>? _ultimoStatus;
 
     public FiliaisWindow(NfceService nfceService, FilialPainelService painelService,
-                         EmpresaEditorWindow empresaEditorWindow)
+                         EmpresaEditorWindow empresaEditorWindow,
+                         RelatorioExporter relatorioExporter)
     {
         _nfceService = nfceService;
         _painelService = painelService;
         _empresaEditorWindow = empresaEditorWindow;
+        _relatorioExporter = relatorioExporter;
         InitializeComponent();
         Loaded += async (_, _) => await CarregarAsync();
     }
@@ -98,8 +105,11 @@ public partial class FiliaisWindow : UserControl
         try
         {
             var status = await _painelService.ObterStatusTodasAsync();
+            _ultimoStatus = status;
             RenderizarPainel(status);
             LblUltimaConsulta.Text = $"Atualizado em {DateTime.Now:HH:mm:ss}  •  {status.Count} filial(is) consultada(s)";
+            BtnExportarPdf.IsEnabled = true;
+            BtnExportarExcel.IsEnabled = true;
         }
         catch (Exception ex)
         {
@@ -109,6 +119,58 @@ public partial class FiliaisWindow : UserControl
         {
             BtnAtualizarPainel.IsEnabled = true;
             BtnAtualizarPainel.Content = "↻  Atualizar status";
+        }
+    }
+
+    private void ExportarPdf_Click(object sender, RoutedEventArgs e)
+    {
+        if (_ultimoStatus == null) return;
+
+        var dlg = new SaveFileDialog
+        {
+            Title = "Salvar Relatório Consolidado",
+            Filter = "PDF (*.pdf)|*.pdf",
+            FileName = $"Consolidado_Filiais_{DateTime.Now:yyyyMMdd_HHmm}.pdf"
+        };
+        if (dlg.ShowDialog() != true) return;
+
+        try
+        {
+            var bytes = _relatorioExporter.GerarConsolidadoPdf(MapearParaDto(_ultimoStatus));
+            File.WriteAllBytes(dlg.FileName, bytes);
+            MessageBox.Show($"PDF salvo em:\n{dlg.FileName}", "Exportar PDF",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro ao gerar PDF:\n{ex.Message}", "Exportar PDF",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void ExportarExcel_Click(object sender, RoutedEventArgs e)
+    {
+        if (_ultimoStatus == null) return;
+
+        var dlg = new SaveFileDialog
+        {
+            Title = "Salvar Relatório Consolidado",
+            Filter = "Excel (*.xlsx)|*.xlsx",
+            FileName = $"Consolidado_Filiais_{DateTime.Now:yyyyMMdd_HHmm}.xlsx"
+        };
+        if (dlg.ShowDialog() != true) return;
+
+        try
+        {
+            var bytes = _relatorioExporter.GerarConsolidadoExcel(MapearParaDto(_ultimoStatus));
+            File.WriteAllBytes(dlg.FileName, bytes);
+            MessageBox.Show($"Excel salvo em:\n{dlg.FileName}", "Exportar Excel",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erro ao gerar Excel:\n{ex.Message}", "Exportar Excel",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -233,6 +295,17 @@ public partial class FiliaisWindow : UserControl
         });
         return s;
     }
+
+    private static IList<FilialStatusDto> MapearParaDto(List<FilialStatus> filiais) =>
+        filiais.Select(f => new FilialStatusDto(
+            f.Apelido ?? f.Nome,
+            f.Online,
+            f.VendasHoje,
+            f.PedidosHoje,
+            f.CaixaAberto,
+            f.SaldoPrevisto,
+            f.ContasAtrasadas,
+            f.UrlApi)).ToList();
 }
 
 public sealed record EmpresaLinhaUi(

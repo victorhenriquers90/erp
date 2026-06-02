@@ -111,6 +111,7 @@ public partial class App : System.Windows.Application
             sc.AddSingleton(new WhatsAppConfig());
             sc.AddScoped<WhatsAppService>();
             sc.AddScoped<NotificacaoService>();
+            sc.AddSingleton<AlertaMonitorService>();
             sc.AddSingleton<CupomPrinterService>();
             sc.AddScoped<BackupService>();
             sc.AddScoped<DadosDemoService>();
@@ -191,6 +192,7 @@ public partial class App : System.Windows.Application
             shell.Show();
 
             IniciarBackupDiarioEmBackground();
+            IniciarTimerAlertasWhatsApp();
         }
         catch (Exception ex)
         {
@@ -233,6 +235,36 @@ public partial class App : System.Windows.Application
                 AppLog.Erro("BackupAuto", ex);
             }
         });
+    }
+
+    /// <summary>
+    /// Inicia o timer de alertas WhatsApp com base na configuração salva em disco.
+    /// Só ativa o timer se AlertaConfig.Ativo == true; o intervalo é recarregado do arquivo.
+    /// </summary>
+    private void IniciarTimerAlertasWhatsApp()
+    {
+        var cfg = ProjetoVarejo.Application.Services.AlertaConfig.Carregar();
+        if (!cfg.Ativo) return;
+
+        var monitor = Services.GetRequiredService<ProjetoVarejo.Application.Services.AlertaMonitorService>();
+        monitor.AlertasAtivos = cfg.Ativo;
+        monitor.TelefoneGerente = cfg.TelefoneGerente;
+        monitor.HorarioCaixaDeveAbrirAte = TimeSpan.FromHours(cfg.HoraCaixaDeveAbrir);
+
+        var intervalo = TimeSpan.FromMinutes(Math.Max(1, cfg.IntervaloVerificacaoMinutos));
+        var timer = new System.Timers.Timer(intervalo.TotalMilliseconds) { AutoReset = true };
+        timer.Elapsed += async (_, _) =>
+        {
+            try
+            {
+                await monitor.VerificarAsync();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Erro("AlertaTimer", ex);
+            }
+        };
+        timer.Start();
     }
 
     private static void AjustarJanelaNaTela(object sender, RoutedEventArgs e)

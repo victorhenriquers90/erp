@@ -25,7 +25,7 @@ public class Produto : EntidadeBase
     public decimal AliquotaIcms { get; set; }
     public string CstPisCofins { get; set; } = "49";
 
-    public byte[] RowVersion { get; set; } = [];
+    public byte[]? RowVersion { get; set; }
 
     public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
     public ICollection<MovimentoEstoque> Movimentos { get; set; } = new List<MovimentoEstoque>();

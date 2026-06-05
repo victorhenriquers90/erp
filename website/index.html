@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SR Energia — Especialistas em energia solar fotovoltaica para residências, comércios e indústrias. Economize até 95% na conta de luz. Orçamento grátis!" />
+  <meta name="keywords" content="energia solar, painéis solares, fotovoltaico, SR Energia, economizar energia, instalação solar" />
+  <meta name="author" content="SR Energia" />
+  <meta property="og:title" content="SR Energia — Energia Solar Fotovoltaica" />
+  <meta property="og:description" content="Economize até 95% na sua conta de luz com sistemas fotovoltaicos de qualidade." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#FF6B00" />
+
+  <title>SR Energia | Energia Solar Fotovoltaica</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uu0qcPxh4Plh7eqjy08yCmzEfQrs/0maqJxrEKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Favicon inline SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23FF6B00'/><text y='75' x='50' text-anchor='middle' font-size='65' font-family='sans-serif' fill='white'>☀</text></svg>" />
+</head>
+
+<body>
+
+  <!-- ============================================
+       LOADING SCREEN
+       ============================================ -->
+  <div class="loading-screen" id="loading-screen" aria-hidden="true">
+    <div class="loading-logo">
+      <i class="fas fa-solar-panel"></i>
+      <span>SR Energia</span>
+    </div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       NAVBAR
+       ============================================ -->
+  <nav id="navbar" role="navigation" aria-label="Navegação principal">
+    <div class="nav-container">
+
+      <!-- Logo -->
+      <a href="#inicio" class="nav-logo" aria-label="SR Energia - Início">
+        <div class="logo-icon" aria-hidden="true">
+          <i class="fas fa-solar-panel"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">SR Energia</span>
+          <span class="logo-tagline">Energia Solar</span>
+        </div>
+      </a>
+
+      <!-- Desktop Menu -->
+      <ul class="nav-menu" role="list">
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+
+      <!-- Desktop CTA -->
+      <div class="nav-cta">
+        <a href="#contato" class="btn btn-primary">
+          <i class="fas fa-sun" aria-hidden="true"></i>
+          Orçamento Grátis
+        </a>
+      </div>
+
+      <!-- Hamburger -->
+      <button class="hamburger" aria-label="Abrir menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" aria-hidden="true"></div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação" aria-modal="true">
+    <button class="mobile-menu-close" aria-label="Fechar menu">
+      <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+
+    <nav class="mobile-nav" aria-label="Menu móvel">
+      <a href="#inicio"><i class="fas fa-home" aria-hidden="true"></i>Início</a>
+      <a href="#sobre"><i class="fas fa-info-circle" aria-hidden="true"></i>Sobre</a>
+      <a href="#servicos"><i class="fas fa-solar-panel" aria-hidden="true"></i>Serviços</a>
+      <a href="#projetos"><i class="fas fa-project-diagram" aria-hidden="true"></i>Projetos</a>
+      <a href="#depoimentos"><i class="fas fa-star" aria-hidden="true"></i>Depoimentos</a>
+      <a href="#faq"><i class="fas fa-question-circle" aria-hidden="true"></i>FAQ</a>
+      <a href="#contato"><i class="fas fa-envelope" aria-hidden="true"></i>Contato</a>
+    </nav>
+
+    <a href="#contato" class="btn btn-primary w-full" style="justify-content:center;">
+      <i class="fas fa-sun" aria-hidden="true"></i>
+      Orçamento Grátis
+    </a>
+  </div>
+
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section id="inicio" aria-label="Início">
+    <div id="hero">
+      <!-- Background layers -->
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="solar-grid" aria-hidden="true">
+        <div class="solar-grid-inner"></div>
+      </div>
+
+      <!-- Canvas particles -->
+      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;" aria-hidden="true"></canvas>
+
+      <div class="container" style="position:relative;z-index:1;width:100%;padding-top:60px;">
+        <div class="hero-content">
+
+          <div class="hero-badge fade-in">
+            <i class="fas fa-bolt" aria-hidden="true"></i>
+            Especialistas em Energia Solar desde 2015
+          </div>
+
+          <h1 class="hero-title fade-in delay-1">
+            Energia Solar <span>Fotovoltaica</span><br>
+            para sua Casa<br>ou Empresa
+          </h1>
+
+          <p class="hero-subtitle fade-in delay-2">
+            Economize até <strong style="color:var(--primary);">95%</strong> na sua conta de luz com sistemas
+            fotovoltaicos de alta qualidade. Instalação profissional, garantia de 25 anos e suporte completo.
+          </p>
+
+          <div class="hero-buttons fade-in delay-3">
+            <a href="#contato" class="btn btn-primary">
+              <i class="fas fa-sun" aria-hidden="true"></i>
+              Solicitar Orçamento Grátis
+            </a>
+            <a href="#sobre" class="btn btn-outline">
+              <i class="fas fa-play-circle" aria-hidden="true"></i>
+              Saiba Mais
+            </a>
+          </div>
+
+          <div class="hero-stats fade-in delay-4" aria-label="Estatísticas">
+            <div class="hero-stat">
+              <span class="stat-number">+500</span>
+              <span class="stat-label">Projetos<br>instalados</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-number">+2 MW</span>
+              <span class="stat-label">Potência<br>instalada</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-number">98%</span>
+              <span class="stat-label">Clientes<br>satisfeitos</span>
+            </div>
+            <div class="hero-stat">
+              <span class="stat-number">10+</span>
+              <span class="stat-label">Anos de<br>experiência</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Role para baixo</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       STATS BAR
+       ============================================ -->
+  <section id="stats-bar" aria-label="Estatísticas da empresa">
+    <div class="container">
+      <div class="stats-grid">
+
+        <div class="stat-item" role="img" aria-label="Mais de 500 projetos instalados">
+          <span class="number counter" data-target="500" data-prefix="+" data-suffix="">500</span>
+          <span class="label">Projetos Instalados</span>
+        </div>
+
+        <div class="stat-item" role="img" aria-label="Mais de 2 megawatts de potência">
+          <span class="number counter" data-target="2" data-suffix=" MW" data-decimal="false">2 MW</span>
+          <span class="label">de Potência Instalada</span>
+        </div>
+
+        <div class="stat-item" role="img" aria-label="98% de clientes satisfeitos">
+          <span class="number counter" data-target="98" data-suffix="%">98%</span>
+          <span class="label">Clientes Satisfeitos</span>
+        </div>
+
+        <div class="stat-item" role="img" aria-label="Desde 2015">
+          <span class="number">2015</span>
+          <span class="label">Fundada em</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       ABOUT SECTION
+       ============================================ -->
+  <section id="sobre" class="section-padding" aria-labelledby="sobre-title">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Image -->
+        <div class="about-image-wrap fade-in-left">
+          <div class="about-image-placeholder" role="img" aria-label="Instalação de painéis solares SR Energia">
+            <i class="fas fa-solar-panel" aria-hidden="true"></i>
+            <span>Instalação Profissional</span>
+          </div>
+          <div class="about-badge" aria-hidden="true">
+            <span class="years">10+</span>
+            <span class="years-label">Anos no<br>mercado</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="about-content fade-in-right">
+          <span class="title-line" aria-hidden="true"></span>
+          <h2 class="section-title" id="sobre-title">Sobre a SR Energia</h2>
+          <p class="about-text">
+            Desde 2015, a <strong>SR Energia</strong> transforma a forma como residências, comércios e
+            indústrias consomem energia elétrica. Somos especialistas em projetos fotovoltaicos
+            personalizados, atendendo cada cliente com soluções sob medida para suas necessidades.
+          </p>
+          <p class="about-text">
+            Nossa equipe de engenheiros e técnicos certificados garante instalações de alta qualidade,
+            sempre utilizando equipamentos premium com as melhores garantias do mercado. Do projeto
+            à manutenção, estamos ao seu lado em cada etapa.
+          </p>
+
+          <div class="about-benefits" role="list">
+
+            <div class="benefit-item" role="listitem">
+              <div class="benefit-icon" aria-hidden="true">
+                <i class="fas fa-certificate"></i>
+              </div>
+              <div class="benefit-text">
+                <h4>Qualidade garantida</h4>
+                <p>Equipamentos certificados pelo INMETRO</p>
+              </div>
+            </div>
+
+            <div class="benefit-item" role="listitem">
+              <div class="benefit-icon" aria-hidden="true">
+                <i class="fas fa-users-cog"></i>
+              </div>
+              <div class="benefit-text">
+                <h4>Equipe especializada</h4>
+                <p>Engenheiros e técnicos certificados</p>
+              </div>
+            </div>
+
+            <div class="benefit-item" role="listitem">
+              <div class="benefit-icon" aria-hidden="true">
+                <i class="fas fa-headset"></i>
+              </div>
+              <div class="benefit-text">
+                <h4>Suporte completo</h4>
+                <p>Atendimento pós-venda dedicado</p>
+              </div>
+            </div>
+
+            <div class="benefit-item" role="listitem">
+              <div class="benefit-icon" aria-hidden="true">
+                <i class="fas fa-hand-holding-usd"></i>
+              </div>
+              <div class="benefit-text">
+                <h4>Melhor custo-benefício</h4>
+                <p>Retorno do investimento em até 4 anos</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="display:flex;gap:16px;flex-wrap:wrap;">
+            <a href="#contato" class="btn btn-primary">
+              <i class="fas fa-sun" aria-hidden="true"></i>
+              Solicitar Orçamento
+            </a>
+            <a href="#servicos" class="btn btn-secondary">
+              <i class="fas fa-arrow-right" aria-hidden="true"></i>
+              Nossos Serviços
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       SERVICES SECTION
+       ============================================ -->
+  <section id="servicos" class="section-padding" aria-labelledby="servicos-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="servicos-title">Nossas Soluções</h2>
+        <p class="section-subtitle">
+          Oferecemos sistemas fotovoltaicos para todos os portes de consumo,
+          com projetos personalizados e equipamentos premium.
+        </p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- Residencial -->
+        <article class="service-card fade-in delay-1">
+          <div class="service-card-header">
+            <div class="service-icon" aria-hidden="true">
+              <i class="fas fa-home"></i>
+            </div>
+            <h3>Residencial</h3>
+            <span class="service-power">3 kWp – 15 kWp</span>
+          </div>
+          <div class="service-card-body">
+            <p>
+              Ideal para casas e apartamentos que desejam reduzir drasticamente a conta de
+              energia e valorizar o imóvel ao mesmo tempo.
+            </p>
+            <ul class="service-features" role="list">
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Projeto personalizado</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Aprovação na concessionária</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Monitoramento via app</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Garantia de 25 anos nos painéis</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Financiamento até 84x</li>
+            </ul>
+            <div class="service-price">
+              <span class="price-label">Investimento a partir de</span>
+              <span class="price-range">R$ 18.000</span>
+            </div>
+            <a href="#contato" class="btn btn-primary w-full service-learn-more" style="justify-content:center;">
+              Solicitar Orçamento
+            </a>
+          </div>
+        </article>
+
+        <!-- Comercial -->
+        <article class="service-card fade-in delay-2" style="transform:translateY(-10px);">
+          <div class="service-card-header" style="position:relative;">
+            <div style="position:absolute;top:14px;right:14px;background:var(--primary);color:white;font-size:0.7rem;font-weight:700;padding:4px 12px;border-radius:50px;letter-spacing:0.5px;text-transform:uppercase;z-index:2;">
+              Mais Popular
+            </div>
+            <div class="service-icon" aria-hidden="true">
+              <i class="fas fa-building"></i>
+            </div>
+            <h3>Comercial</h3>
+            <span class="service-power">15 kWp – 75 kWp</span>
+          </div>
+          <div class="service-card-body">
+            <p>
+              Perfeito para pequenas e médias empresas, escritórios e estabelecimentos
+              comerciais que buscam reduzir custos operacionais.
+            </p>
+            <ul class="service-features" role="list">
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Análise de viabilidade gratuita</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Projeto elétrico completo</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Instalação certificada</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Relatórios de desempenho</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Suporte técnico dedicado</li>
+            </ul>
+            <div class="service-price">
+              <span class="price-label">Investimento a partir de</span>
+              <span class="price-range">R$ 60.000</span>
+            </div>
+            <a href="#contato" class="btn btn-primary w-full service-learn-more" style="justify-content:center;">
+              Solicitar Orçamento
+            </a>
+          </div>
+        </article>
+
+        <!-- Industrial -->
+        <article class="service-card fade-in delay-3">
+          <div class="service-card-header">
+            <div class="service-icon" aria-hidden="true">
+              <i class="fas fa-industry"></i>
+            </div>
+            <h3>Industrial</h3>
+            <span class="service-power">75+ kWp</span>
+          </div>
+          <div class="service-card-body">
+            <p>
+              Soluções robustas para grandes indústrias e condomínios com alto
+              consumo energético, maximizando o retorno sobre o investimento.
+            </p>
+            <ul class="service-features" role="list">
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Estudo de viabilidade completo</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Engenharia especializada</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Painéis bifaciais premium</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Monitoramento 24/7</li>
+              <li><i class="fas fa-check-circle" aria-hidden="true"></i>Contrato de manutenção</li>
+            </ul>
+            <div class="service-price">
+              <span class="price-label">Investimento</span>
+              <span class="price-range">Sob consulta</span>
+            </div>
+            <a href="#contato" class="btn btn-primary w-full service-learn-more" style="justify-content:center;">
+              Solicitar Orçamento
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       HOW IT WORKS
+       ============================================ -->
+  <section id="como-funciona" class="section-padding" aria-labelledby="como-funciona-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="como-funciona-title">Como Funciona</h2>
+        <p class="section-subtitle">
+          Um processo simples e transparente do início ao fim.
+          Nossa equipe cuida de tudo para você.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+
+        <div class="step-item">
+          <div class="step-number" aria-hidden="true">
+            <span class="num">01</span>
+            <i class="fas fa-clipboard-list"></i>
+          </div>
+          <div class="step-content">
+            <h3>Análise e Projeto</h3>
+            <p>Avaliamos seu consumo e elaboramos um projeto fotovoltaico personalizado, dimensionado para a sua necessidade e telhado.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number" aria-hidden="true">
+            <span class="num">02</span>
+            <i class="fas fa-file-signature"></i>
+          </div>
+          <div class="step-content">
+            <h3>Aprovação na Concessionária</h3>
+            <p>Cuidamos de toda a burocracia e documentação junto à concessionária de energia para aprovação do sistema.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number" aria-hidden="true">
+            <span class="num">03</span>
+            <i class="fas fa-tools"></i>
+          </div>
+          <div class="step-content">
+            <h3>Instalação Profissional</h3>
+            <p>Nossa equipe técnica realiza a instalação com segurança e agilidade, seguindo todas as normas da ABNT.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number" aria-hidden="true">
+            <span class="num">04</span>
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="step-content">
+            <h3>Monitoramento e Suporte</h3>
+            <p>Acompanhe a produção em tempo real pelo app e conte com suporte técnico sempre que precisar.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PROJECTS / GALERIA (placeholder section)
+       ============================================ -->
+  <section id="projetos" class="section-padding" aria-labelledby="projetos-title" style="background:var(--white);">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="projetos-title">Nossos Projetos</h2>
+        <p class="section-subtitle">
+          Veja alguns dos projetos que já realizamos em todo o Brasil.
+          Cada instalação é um passo rumo a um futuro mais sustentável.
+        </p>
+      </div>
+
+      <!-- Projects grid -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px;" class="fade-in">
+
+        <!-- Project cards -->
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Projeto residencial 6kWp - São Paulo">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-solar-panel" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Residencial — 6 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">São Paulo, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:var(--primary);color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Residencial</div>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Projeto comercial 45kWp - Campinas">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-building" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Comercial — 45 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">Campinas, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:#3b82f6;color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Comercial</div>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Projeto industrial 120kWp - Guarulhos">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-industry" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Industrial — 120 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">Guarulhos, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:#8b5cf6;color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Industrial</div>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Projeto residencial 10kWp - Santo André">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-home" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Residencial — 10 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">Santo André, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:var(--primary);color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Residencial</div>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Condomínio 80kWp - Osasco">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-city" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Condomínio — 80 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">Osasco, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:#22c55e;color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Condomínio</div>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:var(--radius);overflow:hidden;position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer;transition:var(--transition);"
+             onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+             role="img" aria-label="Projeto Comercial 30kWp - Barueri">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,0,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,0,0.08) 1px,transparent 1px);background-size:50px 50px;"></div>
+          <i class="fas fa-store" style="font-size:3rem;color:var(--primary);opacity:0.7;position:relative;z-index:1;" aria-hidden="true"></i>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.7));z-index:2;">
+            <p style="color:white;font-weight:700;font-size:0.9rem;margin:0;">Comercial — 30 kWp</p>
+            <p style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin:0;">Barueri, SP</p>
+          </div>
+          <div style="position:absolute;top:12px;right:12px;background:#3b82f6;color:white;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Comercial</div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;">
+        <a href="#contato" class="btn btn-primary">
+          <i class="fas fa-sun" aria-hidden="true"></i>
+          Quero um Projeto Assim
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       WHY CHOOSE US
+       ============================================ -->
+  <section id="por-que-nos" class="section-padding" aria-labelledby="porque-title" style="background:var(--light-bg);">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="porque-title">Por que nos escolher?</h2>
+        <p class="section-subtitle">
+          Qualidade, confiança e tecnologia de ponta em cada projeto.
+          Descubra o que nos diferencia no mercado solar.
+        </p>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-microchip"></i>
+          </div>
+          <h3>Microinversores de Qualidade</h3>
+          <p>Utilizamos microinversores e inversores string das melhores marcas do mercado, com eficiência acima de 98% e monitoramento individual.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-solar-panel"></i>
+          </div>
+          <h3>Painéis Solares Premium</h3>
+          <p>Trabalhamos com painéis monocristalinos de alta eficiência, selecionando apenas os melhores fabricantes com rastreabilidade garantida.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Garantia de 25 Anos</h3>
+          <p>Nossos painéis possuem garantia de performance por 25 anos e garantia de produto por 12 anos. Invista com tranquilidade total.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-hard-hat"></i>
+          </div>
+          <h3>Instalação Certificada</h3>
+          <p>Todos os projetos seguem as normas ABNT NBR 16690 e são executados por eletricistas com certificação NR10 e NR35.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <h3>Monitoramento Online</h3>
+          <p>Acompanhe a produção do seu sistema em tempo real pelo nosso aplicativo disponível para Android e iOS, 24 horas por dia.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-card-icon" aria-hidden="true">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <h3>Financiamento Facilitado</h3>
+          <p>Parceiros com as principais linhas de crédito do mercado, incluindo financiamento pela Caixa Econômica Federal e bancos privados.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       TESTIMONIALS
+       ============================================ -->
+  <section id="depoimentos" class="section-padding" aria-labelledby="depoimentos-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="depoimentos-title">O que nossos clientes dizem</h2>
+        <p class="section-subtitle">
+          A satisfação dos nossos clientes é o nosso maior reconhecimento.
+          Veja o que eles falam sobre a SR Energia.
+        </p>
+      </div>
+
+      <div class="testimonials-wrapper">
+        <div class="testimonials-track" role="list">
+
+          <article class="testimonial-card" role="listitem">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">MR</div>
+              <div class="testimonial-info">
+                <h4>Marcos Ribeiro</h4>
+                <span>São Paulo, SP</span>
+              </div>
+            </div>
+            <div class="stars" aria-label="5 de 5 estrelas">
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+            </div>
+            <p class="testimonial-text">
+              Instalei um sistema de 8 kWp com a SR Energia e a minha conta de luz caiu de R$ 850
+              para apenas R$ 45 mensais. A equipe foi super profissional e o atendimento pós-instalação é excelente!
+            </p>
+            <span class="testimonial-tag">
+              <i class="fas fa-home" aria-hidden="true"></i>
+              Residencial 8 kWp
+            </span>
+          </article>
+
+          <article class="testimonial-card" role="listitem">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">AC</div>
+              <div class="testimonial-info">
+                <h4>Ana Costa</h4>
+                <span>Campinas, SP</span>
+              </div>
+            </div>
+            <div class="stars" aria-label="5 de 5 estrelas">
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+            </div>
+            <p class="testimonial-text">
+              Nossa empresa reduziu em 80% os custos com energia elétrica. O projeto foi entregue
+              dentro do prazo e o suporte técnico é ágil e eficiente. Recomendo muito!
+            </p>
+            <span class="testimonial-tag">
+              <i class="fas fa-building" aria-hidden="true"></i>
+              Comercial 35 kWp
+            </span>
+          </article>
+
+          <article class="testimonial-card" role="listitem">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">JP</div>
+              <div class="testimonial-info">
+                <h4>João Paulo Silva</h4>
+                <span>Guarulhos, SP</span>
+              </div>
+            </div>
+            <div class="stars" aria-label="5 de 5 estrelas">
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+            </div>
+            <p class="testimonial-text">
+              Investimento que se pagou em menos de 4 anos! A SR Energia cuidou de tudo,
+              desde a aprovação na concessionária até o monitoramento online. Equipe de primeira!
+            </p>
+            <span class="testimonial-tag">
+              <i class="fas fa-industry" aria-hidden="true"></i>
+              Industrial 90 kWp
+            </span>
+          </article>
+
+          <article class="testimonial-card" role="listitem">
+            <div class="testimonial-header">
+              <div class="testimonial-avatar" aria-hidden="true">FL</div>
+              <div class="testimonial-info">
+                <h4>Fernanda Lima</h4>
+                <span>Santo André, SP</span>
+              </div>
+            </div>
+            <div class="stars" aria-label="5 de 5 estrelas">
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+              <i class="fas fa-star" aria-hidden="true"></i>
+            </div>
+            <p class="testimonial-text">
+              Processo muito tranquilo do início ao fim. Eles cuidam de toda a documentação
+              e aprovação. Agora monitoro tudo pelo aplicativo. Muito satisfeita com o resultado!
+            </p>
+            <span class="testimonial-tag">
+              <i class="fas fa-home" aria-hidden="true"></i>
+              Residencial 5 kWp
+            </span>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="testimonials-controls">
+        <button class="slider-btn prev" aria-label="Depoimento anterior">
+          <i class="fas fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="testimonials-dots" role="tablist" aria-label="Selecionar depoimento">
+          <button class="dot active" role="tab" aria-label="Depoimento 1" aria-selected="true"></button>
+          <button class="dot" role="tab" aria-label="Depoimento 2" aria-selected="false"></button>
+        </div>
+        <button class="slider-btn next" aria-label="Próximo depoimento">
+          <i class="fas fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       CTA BANNER
+       ============================================ -->
+  <div class="cta-banner" aria-label="Chamada para ação">
+    <div class="container">
+      <h2 class="fade-in">Pronto para economizar na sua conta de luz?</h2>
+      <p class="fade-in delay-1">
+        Solicite agora mesmo uma análise gratuita e descubra quanto você pode economizar com energia solar.
+      </p>
+      <div class="btn-group fade-in delay-2">
+        <a href="#contato" class="btn btn-white">
+          <i class="fas fa-sun" aria-hidden="true"></i>
+          Orçamento Grátis
+        </a>
+        <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20energia%20solar." class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
+          Falar no WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       FAQ SECTION
+       ============================================ -->
+  <section id="faq" class="section-padding" aria-labelledby="faq-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="faq-title">Perguntas Frequentes</h2>
+        <p class="section-subtitle">
+          Tire suas principais dúvidas sobre energia solar fotovoltaica
+          e o processo de instalação da SR Energia.
+        </p>
+      </div>
+
+      <div class="faq-grid">
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>Quanto tempo leva para instalar o sistema solar?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              O processo completo leva em média de 30 a 60 dias, incluindo o projeto elétrico, aprovação junto à
+              concessionária de energia e a instalação em si. A instalação física geralmente dura de 1 a 3 dias,
+              dependendo do porte do sistema.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>Qual a economia na conta de luz?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Dependendo do dimensionamento do sistema, é possível reduzir a conta de energia em até 95%.
+              Sistemas bem dimensionados podem eliminar quase totalmente o custo com energia, mantendo
+              apenas a taxa mínima de disponibilidade da concessionária.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>Preciso de manutenção no sistema solar?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Sistemas fotovoltaicos são de baixa manutenção. Recomenda-se a limpeza dos painéis a cada
+              6 meses e uma revisão elétrica anual. Oferecemos planos de manutenção preventiva para
+              garantir o máximo desempenho do seu sistema ao longo dos anos.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>Qual a garantia dos equipamentos?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Os painéis solares possuem garantia de performance de 25 anos (mínimo de 80% da potência nominal)
+              e garantia de produto de 10 a 12 anos. Os inversores têm garantia de 5 a 10 anos,
+              dependendo do fabricante. Oferecemos também garantia de serviço de instalação de 5 anos.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>Como funciona o financiamento?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Trabalhamos com diversas linhas de financiamento, incluindo o Programa Casa Verde e Amarela
+              da Caixa Econômica Federal, BNB FNE Verde, e bancos privados como Santander, Itaú e Bradesco.
+              As parcelas podem ser menores que o valor economizado na conta de luz desde o primeiro mês.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" aria-expanded="false">
+            <span>O sistema funciona em dias nublados?</span>
+            <div class="faq-icon" aria-hidden="true"><i class="fas fa-plus"></i></div>
+          </div>
+          <div class="faq-answer" role="region">
+            <div class="faq-answer-inner">
+              Sim! Os painéis solares funcionam com luz difusa (não apenas luz solar direta). Em dias nublados,
+              a produção é reduzida, mas o sistema continua funcionando — geralmente produzindo entre 20% e 50%
+              da capacidade máxima. O dimensionamento do projeto leva em conta os padrões climáticos da sua região.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       CONTACT SECTION
+       ============================================ -->
+  <section id="contato" class="section-padding" aria-labelledby="contato-title">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="title-line title-line-center" aria-hidden="true"></span>
+        <h2 class="section-title" id="contato-title">Entre em Contato</h2>
+        <p class="section-subtitle">
+          Solicite seu orçamento gratuito ou tire suas dúvidas.
+          Nossa equipe responde em até 2 horas!
+        </p>
+      </div>
+
+      <div class="contact-grid">
+
+        <!-- Contact Info -->
+        <div>
+          <h3 class="contact-info-title">Fale conosco</h3>
+          <p class="contact-info-text">
+            Estamos prontos para ajudá-lo a dar o primeiro passo para a independência energética.
+            Entre em contato pelos canais abaixo ou preencha o formulário.
+          </p>
+
+          <div class="contact-items">
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <i class="fab fa-whatsapp"></i>
+              </div>
+              <div class="contact-item-text">
+                <h4>WhatsApp</h4>
+                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+                  (11) 99999-9999
+                </a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-item-text">
+                <h4>Telefone</h4>
+                <a href="tel:+551133334444">(11) 3333-4444</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-item-text">
+                <h4>E-mail</h4>
+                <a href="mailto:contato@srenergia.com.br">contato@srenergia.com.br</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-item-text">
+                <h4>Endereço</h4>
+                <p>Rua das Energias Renováveis, 100<br>São Paulo - SP, 01310-100</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-item-icon" aria-hidden="true">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-item-text">
+                <h4>Horário de Atendimento</h4>
+                <p>Seg–Sex: 8h às 18h<br>Sábado: 9h às 13h</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Map placeholder -->
+          <div class="map-placeholder" role="img" aria-label="Mapa de localização SR Energia">
+            <i class="fas fa-map-marked-alt" aria-hidden="true"></i>
+            <span>Localização — São Paulo, SP</span>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-card fade-in-right">
+          <h3 class="form-title">Solicite seu orçamento grátis</h3>
+          <p class="form-subtitle">Preencha o formulário e retornamos em até 2 horas úteis</p>
+
+          <form id="contact-form" novalidate>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nome">Nome completo *</label>
+                <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail *</label>
+                <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Telefone / WhatsApp *</label>
+                <input type="tel" id="phone" name="phone" placeholder="(11) 99999-9999" required autocomplete="tel" />
+              </div>
+              <div class="form-group">
+                <label for="tipo">Tipo de instalação *</label>
+                <select id="tipo" name="tipo" required>
+                  <option value="" disabled selected>Selecione...</option>
+                  <option value="residencial">Residencial (3–15 kWp)</option>
+                  <option value="comercial">Comercial (15–75 kWp)</option>
+                  <option value="industrial">Industrial (75+ kWp)</option>
+                  <option value="condominio">Condomínio</option>
+                  <option value="rural">Rural / Agronegócio</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="cidade">Cidade / Estado *</label>
+              <input type="text" id="cidade" name="cidade" placeholder="Ex: São Paulo - SP" required />
+            </div>
+
+            <div class="form-group">
+              <label for="mensagem">Mensagem</label>
+              <textarea id="mensagem" name="mensagem" placeholder="Descreva sua necessidade, valor atual da conta de luz, etc."></textarea>
+            </div>
+
+            <!-- Honeypot anti-spam -->
+            <div style="display:none;" aria-hidden="true">
+              <input type="text" name="_honey" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <button type="submit" class="btn btn-primary form-submit">
+              <i class="fas fa-paper-plane" aria-hidden="true"></i>
+              Enviar Solicitação
+            </button>
+
+          </form>
+
+          <!-- Success message -->
+          <div class="form-success" role="alert" aria-live="polite">
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+            <h3>Solicitação enviada!</h3>
+            <p>Recebemos sua mensagem e retornaremos em breve.<br>Obrigado pelo interesse na SR Energia!</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+          <a href="#inicio" class="nav-logo" aria-label="SR Energia - Início">
+            <div class="logo-icon" aria-hidden="true">
+              <i class="fas fa-solar-panel"></i>
+            </div>
+            <div class="logo-text">
+              <span class="logo-name">SR Energia</span>
+              <span class="logo-tagline">Energia Solar</span>
+            </div>
+          </a>
+          <p>
+            Especialistas em energia solar fotovoltaica desde 2015.
+            Transformamos a energia do sol em economia real para você.
+          </p>
+          <div class="social-links" role="list">
+            <a href="#" class="social-link" aria-label="Facebook" role="listitem">
+              <i class="fab fa-facebook-f" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram" role="listitem">
+              <i class="fab fa-instagram" aria-hidden="true"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube" role="listitem">
+              <i class="fab fa-youtube" aria-hidden="true"></i>
+            </a>
+            <a href="https://wa.me/5511999999999" class="social-link" aria-label="WhatsApp" role="listitem" target="_blank" rel="noopener noreferrer">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-col">
+          <h4>Links Rápidos</h4>
+          <ul class="footer-links" role="list">
+            <li><a href="#inicio">Início</a></li>
+            <li><a href="#sobre">Sobre Nós</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#projetos">Projetos</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </div>
+
+        <!-- Services Links -->
+        <div class="footer-col">
+          <h4>Soluções</h4>
+          <ul class="footer-links" role="list">
+            <li><a href="#servicos">Residencial</a></li>
+            <li><a href="#servicos">Comercial</a></li>
+            <li><a href="#servicos">Industrial</a></li>
+            <li><a href="#servicos">Condomínios</a></li>
+            <li><a href="#servicos">Rural / Agro</a></li>
+            <li><a href="#contato">Orçamento Grátis</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <div class="footer-contact-items">
+            <div class="footer-contact-item">
+              <i class="fab fa-whatsapp" aria-hidden="true"></i>
+              <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">(11) 99999-9999</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-phone" aria-hidden="true"></i>
+              <a href="tel:+551133334444">(11) 3333-4444</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-envelope" aria-hidden="true"></i>
+              <a href="mailto:contato@srenergia.com.br">contato@srenergia.com.br</a>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+              <span>Rua das Energias Renováveis, 100<br>São Paulo - SP</span>
+            </div>
+            <div class="footer-contact-item">
+              <i class="fas fa-clock" aria-hidden="true"></i>
+              <span>Seg–Sex: 8h–18h | Sáb: 9h–13h</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>
+          &copy; <span id="year"></span> SR Energia. Todos os direitos reservados.
+          CNPJ: 00.000.000/0001-00
+        </p>
+        <div class="footer-bottom-links">
+          <a href="#">Política de Privacidade</a>
+          <a href="#">Termos de Uso</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- ============================================
+       FLOATING WHATSAPP BUTTON
+       ============================================ -->
+  <div class="whatsapp-float" role="complementary" aria-label="Contato WhatsApp">
+    <span class="whatsapp-tooltip">Fale conosco agora!</span>
+    <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20energia%20solar%20da%20SR%20Energia."
+       class="whatsapp-btn"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Contato via WhatsApp">
+      <span class="whatsapp-pulse" aria-hidden="true"></span>
+      <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    </a>
+  </div>
+
+
+  <!-- ============================================
+       SCROLL TO TOP BUTTON
+       ============================================ -->
+  <button class="scroll-top" aria-label="Voltar ao topo">
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+  </button>
+
+
+  <!-- ============================================
+       INLINE SCRIPTS
+       ============================================ -->
+  <script>
+    // Set current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Main JS -->
+  <script src="js/main.js" defer></script>
+
+</body>
+</html>

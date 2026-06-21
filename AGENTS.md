@@ -64,3 +64,5 @@ Then: web app at `http://localhost:5094/`, Swagger at `/swagger`, status at `/ap
   - Some unit tests fail independently of the environment: `TokenServiceTests` (JWT claim-type
     mapping/expiry behavior under `System.IdentityModel.Tokens.Jwt` 8.x) and `EstoqueServiceTests`
     (Moq cannot mock the non-virtual `SessaoApp.UsuarioLogado`).
+  - Web login UX quirk: after submitting the login form the main content can render blank for a
+    moment; a single page refresh (F5) renders the authenticated dashboard. Login itself works.

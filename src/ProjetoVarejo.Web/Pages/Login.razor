@@ -1,0 +1,86 @@
+@page "/login"
+@layout ProjetoVarejo.Web.Layout.LoginLayout
+@attribute [AllowAnonymous]
+@inject ProjetoVarejoApi Api
+@inject JwtAuthStateProvider Auth
+@inject NavigationManager Nav
+
+<PageTitle>Entrar | ProjetoVarejo</PageTitle>
+
+<div class="login-card">
+    <div class="login-brand">
+        <div class="brand-mark">PV</div>
+        <div>
+            <div class="brand-name">ProjetoVarejo</div>
+            <div class="brand-caption">ERP web</div>
+        </div>
+    </div>
+
+    <h1 class="login-title">Entrar no sistema</h1>
+    <p class="login-sub">Use seu usuário e senha do ERP.</p>
+
+    @if (!string.IsNullOrWhiteSpace(_erro))
+    {
+        <div class="alert-state" role="alert">@_erro</div>
+    }
+
+    <div class="field-group">
+        <label class="field-label" for="login">Usuário</label>
+        <input id="login" class="field-input" type="text" autocomplete="username"
+               @bind="_usuario" @bind:event="oninput"
+               @onkeydown="AoTeclar" placeholder="login" disabled="@_carregando" />
+    </div>
+
+    <div class="field-group">
+        <label class="field-label" for="senha">Senha</label>
+        <input id="senha" class="field-input" type="password" autocomplete="current-password"
+               @bind="_senha" @bind:event="oninput"
+               @onkeydown="AoTeclar" placeholder="••••••••" disabled="@_carregando" />
+    </div>
+
+    <button class="btn login-btn" @onclick="EntrarAsync" disabled="@(_carregando || string.IsNullOrWhiteSpace(_usuario))">
+        @if (_carregando) { <span>Verificando...</span> } else { <span>Entrar</span> }
+    </button>
+</div>
+
+@code {
+    private string _usuario = "";
+    private string _senha = "";
+    private bool _carregando;
+    private string? _erro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Se já estiver autenticado, redireciona para o painel
+        var state = await Auth.GetAuthenticationStateAsync();
+        if (state.User.Identity?.IsAuthenticated == true)
+            Nav.NavigateTo("/");
+    }
+
+    private async Task EntrarAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_usuario) || string.IsNullOrWhiteSpace(_senha)) return;
+
+        _carregando = true;
+        _erro = null;
+
+        var resultado = await Api.LoginAsync(_usuario.Trim(), _senha);
+
+        if (!resultado.Sucesso)
+        {
+            _erro = resultado.Erro;
+            _senha = "";
+            _carregando = false;
+            return;
+        }
+
+        var dados = resultado.Dados!;
+        await Auth.LoginAsync(dados.Token, dados.UsuarioNome, dados.UsuarioPerfil);
+        Nav.NavigateTo("/");
+    }
+
+    private async Task AoTeclar(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await EntrarAsync();
+    }
+}

@@ -1,0 +1,201 @@
+@namespace ProjetoVarejo.Web.Shared.Components
+@typeparam TItem
+
+<div class="table-container">
+    <table class="table">
+        <thead class="table-head">
+            <tr>
+                @foreach (var header in Headers)
+                {
+                    <th class="table-header" style="width: @header.Width">
+                        <div class="header-content">
+                            @header.Title
+                            @if (header.Sortable && SortColumn == header.Key)
+                            {
+                                <span class="sort-indicator">@(SortDescending ? "▼" : "▲")</span>
+                            }
+                        </div>
+                    </th>
+                }
+                @if (ShowActions)
+                {
+                    <th class="table-header actions-header" style="width: 80px">Ações</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (Items != null && Items.Any())
+            {
+                var index = 0;
+                @foreach (var item in Items)
+                {
+                    var rowClass = index % 2 == 0 ? "table-row even" : "table-row odd";
+                    <tr class="@rowClass" @onclick="() => OnRowClick(item)">
+                        @foreach (var header in Headers)
+                        {
+                            <td class="table-cell">
+                                @if (header.Template != null)
+                                {
+                                    @header.Template(item)
+                                }
+                                else
+                                {
+                                    @(GetPropertyValue(item, header.Key))
+                                }
+                            </td>
+                        }
+                        @if (ShowActions)
+                        {
+                            <td class="table-cell actions-cell">
+                                @ActionsTemplate(item)
+                            </td>
+                        }
+                    </tr>
+                    index++;
+                }
+            }
+            else
+            {
+                <tr class="table-empty">
+                    <td colspan="@(Headers.Count + (ShowActions ? 1 : 0))" class="empty-message">
+                        Nenhum registro encontrado
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .table-container {
+        overflow-x: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Segoe UI", sans-serif;
+        font-size: 13px;
+    }
+
+    .table-head {
+        background-color: #f5f5f5;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .table-header {
+        padding: 12px 16px;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+        user-select: none;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sort-indicator {
+        font-size: 10px;
+        opacity: 0.6;
+    }
+
+    .actions-header {
+        text-align: center;
+    }
+
+    .table-body {
+    }
+
+    .table-row {
+        border-bottom: 1px solid #e0e0e0;
+        transition: background-color 0.2s;
+        cursor: pointer;
+    }
+
+    .table-row.even {
+        background-color: #ffffff;
+    }
+
+    .table-row.odd {
+        background-color: #fafafa;
+    }
+
+    .table-row:hover {
+        background-color: #f0f0f0;
+    }
+
+    .table-cell {
+        padding: 12px 16px;
+        color: #666;
+        word-break: break-word;
+    }
+
+    .actions-cell {
+        text-align: center;
+    }
+
+    .table-empty {
+        background-color: #fafafa;
+    }
+
+    .empty-message {
+        padding: 40px 16px;
+        text-align: center;
+        color: #999;
+        font-style: italic;
+    }
+
+    @@media (max-width: 768px) {
+        .table {
+            font-size: 12px;
+        }
+
+        .table-header,
+        .table-cell {
+            padding: 8px 12px;
+        }
+    }
+</style>
+
+@code {
+    public class TableHeader
+    {
+        public string Key { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Width { get; set; } = "*";
+        public bool Sortable { get; set; }
+        public RenderFragment<TItem>? Template { get; set; }
+    }
+
+    [Parameter] public IEnumerable<TItem> Items { get; set; } = new List<TItem>();
+    [Parameter] public List<TableHeader> Headers { get; set; } = new();
+    [Parameter] public RenderFragment<TItem> ActionsTemplate { get; set; } = null!;
+    [Parameter] public bool ShowActions { get; set; }
+    [Parameter] public string? SortColumn { get; set; }
+    [Parameter] public bool SortDescending { get; set; }
+    [Parameter] public EventCallback<TItem> RowClicked { get; set; }
+
+    private async Task OnRowClick(TItem item)
+    {
+        await RowClicked.InvokeAsync(item);
+    }
+
+    private string? GetPropertyValue(TItem item, string propertyName)
+    {
+        if (item == null) return null;
+
+        var property = typeof(TItem).GetProperty(propertyName,
+            System.Reflection.BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public);
+
+        if (property == null) return null;
+
+        var value = property.GetValue(item);
+
+        return value?.ToString();
+    }
+}

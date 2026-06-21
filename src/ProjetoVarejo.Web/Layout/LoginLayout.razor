@@ -1,0 +1,21 @@
+@inherits LayoutComponentBase
+@inject IJSRuntime JS
+
+<div class="login-page">
+    <div class="login-container">
+        @Body
+    </div>
+    <div class="login-brand-footer">
+        <p>ProjetoVarejo ERP • Sistema de Gestão para Varejo</p>
+        <p style="font-size: 12px; margin-top: 8px;">© 2026 • Todos os direitos reservados</p>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Desabilita zoom no mobile (force viewport)
+        await JS.InvokeVoidAsync("eval",
+            "document.querySelector('meta[name=viewport]')?.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')");
+    }
+}

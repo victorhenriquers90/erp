@@ -84,9 +84,22 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task AbrirCaixaAsync()
+    private void AbrirCaixa()
     {
-        await AbrirAsync<CaixaViewModel>("Caixa", vm => vm.CarregarCommand.ExecuteAsync(null));
+        try
+        {
+            Erro = string.Empty;
+            PaginaTitulo = "Caixa";
+            var vm = _sp.GetRequiredService<CaixaViewModel>();
+            PaginaAtual = vm;
+
+            _ = vm.CarregarCommand.ExecuteAsync(null);
+        }
+        catch (Exception ex)
+        {
+            Erro = $"Erro ao abrir Caixa: {ex.Message}";
+            System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirCaixa] ERRO: {ex}");
+        }
     }
 
     [RelayCommand]
@@ -150,6 +163,7 @@ public partial class MainViewModel : BaseViewModel
     {
         try
         {
+            Erro = string.Empty;
             System.Diagnostics.Trace.WriteLine($"[MainViewModel.AbrirAsync] Abrindo {titulo}...");
             SetBusy(true, $"Carregando {titulo}...");
 

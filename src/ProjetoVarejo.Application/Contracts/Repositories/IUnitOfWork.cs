@@ -28,6 +28,8 @@ public interface IUnitOfWork : IDisposable
     IRepository<NotaFiscal> NotasFiscais { get; }
     IRepository<ConfiguracaoNegocio> ConfiguracoesNegocio { get; }
     IRepository<Filial> Filiais { get; }
+    IRepository<PedidoCompra> PedidosCompra { get; }
+    IRepository<ItemPedidoCompra> ItensPedidoCompra { get; }
 
     /// <summary>
     /// Salva todas as mudanças pendentes no banco de dados

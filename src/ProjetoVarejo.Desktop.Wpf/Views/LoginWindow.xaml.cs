@@ -13,6 +13,7 @@ public partial class LoginWindow : Window
     {
         _vm = vm;
         InitializeComponent();
+        DataContext = _vm;
     }
 
     private async void BtnEntrar_Click(object sender, RoutedEventArgs e)
@@ -25,10 +26,11 @@ public partial class LoginWindow : Window
 
     private async Task EntrarAsync()
     {
-        TxtErro.Visibility      = Visibility.Collapsed;
-        BtnEntrar.IsEnabled     = false;
-        PbLoading.Visibility    = Visibility.Visible;
+        PnlErro.Visibility   = Visibility.Collapsed;
+        BtnEntrar.IsEnabled  = false;
+        PbLoading.Visibility = Visibility.Visible;
 
+        _vm.Login = TxtLogin.Text.Trim();
         var senha = TxtSenha.Password;
         await _vm.EntrarCommand.ExecuteAsync(senha);
 
@@ -39,6 +41,7 @@ public partial class LoginWindow : Window
             {
                 var main = App.Services.GetRequiredService<MainWindow>();
                 System.Diagnostics.Trace.WriteLine("[LoginWindow] MainWindow obtida, chamando Show()...");
+                System.Windows.Application.Current.MainWindow = main;
                 main.Show();
                 System.Diagnostics.Trace.WriteLine("[LoginWindow] MainWindow mostrada, fechando LoginWindow...");
                 Close();
@@ -47,14 +50,14 @@ public partial class LoginWindow : Window
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine($"[LoginWindow] ERRO ao abrir MainWindow: {ex}");
-                TxtErro.Text = $"Erro ao abrir painel: {ex.Message}";
-                TxtErro.Visibility = Visibility.Visible;
+                TxtErro.Text       = $"Erro ao abrir painel: {ex.Message}";
+                PnlErro.Visibility = Visibility.Visible;
             }
         }
         else
         {
             TxtErro.Text       = _vm.Erro;
-            TxtErro.Visibility = Visibility.Visible;
+            PnlErro.Visibility = Visibility.Visible;
         }
 
         BtnEntrar.IsEnabled  = true;

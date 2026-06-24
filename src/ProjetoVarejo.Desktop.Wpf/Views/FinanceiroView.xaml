@@ -1,7 +1,7 @@
 <UserControl x:Class="ProjetoVarejo.Desktop.Wpf.Views.FinanceiroView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -12,14 +12,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <DockPanel Grid.Row="0" Margin="0,0,0,20">
             <Button DockPanel.Dock="Right" Command="{Binding CarregarCommand}"
-                    Style="{StaticResource MaterialDesignOutlinedButton}" Height="40">
+                    Style="{StaticResource SecondaryButtonStyle}" Height="40">
                 <StackPanel Orientation="Horizontal">
-                    <md:PackIcon Kind="Refresh" Width="18" Height="18"/>
-                    <TextBlock Text="Atualizar" Margin="8,0,0,0"/>
+                    <ui:SymbolIcon Symbol="ArrowClockwise24" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="Atualizar" Margin="8,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
             <StackPanel>
@@ -27,37 +29,84 @@
                 <TextBlock Text="Contas em aberto e saldo previsto" Style="{StaticResource SectionSubtitleStyle}"/>
             </StackPanel>
         </DockPanel>
-        <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,20">
-            <md:Card Margin="0,0,12,0" Padding="20" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+
+        <!-- KPI Cards -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,20">
+            <Border Margin="0,0,12,0" Padding="20" Style="{StaticResource CardStyle}">
                 <StackPanel>
                     <TextBlock Text="A RECEBER" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
-                    <TextBlock Text="{Binding TotalReceber, StringFormat=C2}" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TotalReceber, StringFormat=C2}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" Foreground="#258C58"/>
                 </StackPanel>
-            </md:Card>
-            <md:Card Margin="0,0,12,0" Padding="20" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+            </Border>
+            <Border Margin="0,0,12,0" Padding="20" Style="{StaticResource CardStyle}">
                 <StackPanel>
                     <TextBlock Text="A PAGAR" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
-                    <TextBlock Text="{Binding TotalPagar, StringFormat=C2}" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding TotalPagar, StringFormat=C2}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" Foreground="#BB2B2B"/>
                 </StackPanel>
-            </md:Card>
-            <md:Card Padding="20" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
+            </Border>
+            <Border Margin="0,0,12,0" Padding="20" Style="{StaticResource CardStyle}">
                 <StackPanel>
                     <TextBlock Text="SALDO PREVISTO" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
-                    <TextBlock Text="{Binding SaldoPrevisto, StringFormat=C2}" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding SaldoPrevisto, StringFormat=C2}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" Foreground="{StaticResource AppTextDarkBrush}"/>
                 </StackPanel>
-            </md:Card>
+            </Border>
+            <Border Padding="20" Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="MOVIMENTACOES" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
+                    <TextBlock Text="{Binding Movimentacoes}" FontSize="24" FontWeight="Bold" Margin="0,6,0,0" Foreground="{StaticResource AppTextDarkBrush}"/>
+                </StackPanel>
+            </Border>
         </UniformGrid>
-        <md:Card Grid.Row="2" Padding="0" UniformCornerRadius="12" md:ElevationAssist.Elevation="Dp1">
-            <DataGrid ItemsSource="{Binding Contas}" AutoGenerateColumns="False" IsReadOnly="True"
-                      CanUserAddRows="False" BorderThickness="0" Style="{StaticResource MaterialDesignDataGrid}">
+
+        <!-- Filtros -->
+        <Border Grid.Row="2" Margin="0,0,0,20" Padding="16" Style="{StaticResource CardStyle}">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Width="160" Margin="0,0,16,0">
+                    <TextBlock Text="TIPO" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
+                    <ComboBox Margin="0,4,0,0" Style="{StaticResource Win11ComboBoxStyle}"
+                              ItemsSource="{Binding TiposFiltro}"
+                              SelectedItem="{Binding TipoSelecionado}"
+                              DisplayMemberPath="Nome"/>
+                </StackPanel>
+                <StackPanel Width="180" Margin="0,0,16,0">
+                    <TextBlock Text="STATUS" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
+                    <ComboBox Margin="0,4,0,0" Style="{StaticResource Win11ComboBoxStyle}"
+                              ItemsSource="{Binding StatusFiltro}"
+                              SelectedItem="{Binding StatusSelecionado}"
+                              DisplayMemberPath="Nome"/>
+                </StackPanel>
+                <StackPanel Width="150" Margin="0,0,16,0">
+                    <TextBlock Text="DE" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
+                    <DatePicker Margin="0,4,0,0" SelectedDate="{Binding De}"/>
+                </StackPanel>
+                <StackPanel Width="150" Margin="0,0,16,0">
+                    <TextBlock Text="ATE" FontSize="10" FontWeight="Bold" Foreground="{StaticResource AppTextMediumBrush}"/>
+                    <DatePicker Margin="0,4,0,0" SelectedDate="{Binding Ate}"/>
+                </StackPanel>
+                <Button VerticalAlignment="Bottom" Command="{Binding CarregarCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}" Height="40">
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Filter24" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="Filtrar" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- Tabela -->
+        <Border Grid.Row="3" Style="{StaticResource CardStyle}" Padding="0">
+            <DataGrid ItemsSource="{Binding Contas}"
+                      Style="{StaticResource Win11DataGridStyle}"
+                      IsReadOnly="True" BorderThickness="0" Background="Transparent">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="110"/>
-                    <DataGridTextColumn Header="Descricao" Binding="{Binding Descricao}" Width="*" MinWidth="260"/>
-                    <DataGridTextColumn Header="Vencimento" Binding="{Binding DataVencimento, StringFormat=dd/MM/yyyy}" Width="130"/>
-                    <DataGridTextColumn Header="Valor" Binding="{Binding Valor, StringFormat=C2}" Width="120"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                    <DataGridTextColumn Header="Tipo"        Binding="{Binding Tipo}"                                          Width="110"/>
+                    <DataGridTextColumn Header="Descricao"   Binding="{Binding Descricao}"                                     Width="*" MinWidth="260"/>
+                    <DataGridTextColumn Header="Vencimento"  Binding="{Binding DataVencimento, StringFormat=dd/MM/yyyy}"       Width="130"/>
+                    <DataGridTextColumn Header="Valor"       Binding="{Binding Valor, StringFormat=C2}"                        Width="120"/>
+                    <DataGridTextColumn Header="Pago"        Binding="{Binding ValorPago, StringFormat=C2}"                    Width="120"/>
+                    <DataGridTextColumn Header="Status"      Binding="{Binding Status}"                                        Width="120"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </md:Card>
+        </Border>
     </Grid>
 </UserControl>

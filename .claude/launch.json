@@ -6,6 +6,24 @@
       "runtimeExecutable": "dotnet",
       "runtimeArgs": ["run", "--project", "src/ProjetoVarejo.Api", "--launch-profile", "http"],
       "port": 5094
+    },
+    {
+      "name": "ProjetoVarejo.Web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--no-build", "--project", "C:\\Users\\victo\\Documents\\New project\\projeto\\src\\ProjetoVarejo.Web\\ProjetoVarejo.Web.csproj"],
+      "port": 5051
+    }
+    ,{
+      "name": "pdv-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "C:\\Users\\victo\\Documents\\pdv-web", "run", "dev"],
+      "port": 5173
+    }
+    ,{
+      "name": "professors-aide",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
+      "port": 8080
     }
   ]
 }

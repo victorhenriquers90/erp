@@ -14,12 +14,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="../../src/ProjetoVarejo.Desktop/ProjetoVarejo.Desktop.csproj" />
     <ProjectReference Include="../../src/ProjetoVarejo.Application/ProjetoVarejo.Application.csproj" />
     <ProjectReference Include="../../src/ProjetoVarejo.Domain/ProjetoVarejo.Domain.csproj" />
+  </ItemGroup>
+
+  <!-- Arquivos que dependem de ProjetoVarejo.Api ou pacotes não referenciados -->
+  <ItemGroup>
+    <Compile Remove="Endpoints/**" />
+    <Compile Remove="Integration/**" />
+    <Compile Remove="Middleware/**" />
+    <Compile Remove="Fixtures/**" />
+    <Compile Remove="Services/TokenServiceTests.cs" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,7 @@
+<Application x:Class="ProjetoVarejo.Desktop.Erp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ProjetoVarejo.Desktop.Erp">
+    <Application.Resources>
+    </Application.Resources>
+</Application>

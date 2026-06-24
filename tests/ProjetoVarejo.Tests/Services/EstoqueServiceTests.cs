@@ -16,14 +16,14 @@ namespace ProjetoVarejo.Tests.Services;
 public class EstoqueServiceTests
 {
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
-    private readonly Mock<SessaoApp> _mockSessao;
+    private readonly SessaoApp _sessao;
     private readonly EstoqueService _estoqueService;
 
     public EstoqueServiceTests()
     {
         _mockUnitOfWork = new Mock<IUnitOfWork>();
-        _mockSessao = new Mock<SessaoApp>();
-        _estoqueService = new EstoqueService(_mockUnitOfWork.Object, _mockSessao.Object);
+        _sessao = new SessaoApp();
+        _estoqueService = new EstoqueService(_mockUnitOfWork.Object, _sessao);
     }
 
     #region RegistrarMovimentoAsync Tests
@@ -39,7 +39,7 @@ public class EstoqueServiceTests
         var documento = "NF123";
         var observacao = "Entrada de estoque";
 
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockMovimentos = new Mock<IRepository<MovimentoEstoque>>();
         mockMovimentos.Setup(r => r.InsertAsync(It.IsAny<MovimentoEstoque>()))
@@ -82,7 +82,7 @@ public class EstoqueServiceTests
         var vendaId = 100;
         var observacao = "Saída por venda";
 
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockMovimentos = new Mock<IRepository<MovimentoEstoque>>();
         mockMovimentos.Setup(r => r.InsertAsync(It.IsAny<MovimentoEstoque>()))
@@ -123,7 +123,7 @@ public class EstoqueServiceTests
         var quantidade = 15m; // Request more than available
         var estoque = 5m;
 
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockProdutos = new Mock<IRepository<Produto>>();
         var produto = new ProdutoBuilder().WithId(produtoId).WithEstoque(estoque).WithControlaEstoque(true).Build();
@@ -153,7 +153,7 @@ public class EstoqueServiceTests
     {
         // Arrange
         var usuario = UsuarioBuilder.CreateAdmin(1);
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockProdutos = new Mock<IRepository<Produto>>();
         mockProdutos.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Produto?)null);
@@ -179,7 +179,7 @@ public class EstoqueServiceTests
     {
         // Arrange
         var usuario = UsuarioBuilder.CreateAdmin(1);
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockProdutos = new Mock<IRepository<Produto>>();
         var produto = new ProdutoBuilder().WithId(1).Build();
@@ -206,7 +206,7 @@ public class EstoqueServiceTests
     {
         // Arrange
         var usuario = UsuarioBuilder.CreateAdmin(1);
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns(usuario);
+        _sessao.DefinirUsuario(usuario);
 
         var mockProdutos = new Mock<IRepository<Produto>>();
         var produto = new ProdutoBuilder().WithId(1).Build();
@@ -230,8 +230,7 @@ public class EstoqueServiceTests
     [Fact]
     public async Task RegistrarMovimentoAsync_UnauthenticatedUser_ReturnsFail()
     {
-        // Arrange
-        _mockSessao.Setup(s => s.UsuarioLogado).Returns((Usuario?)null);
+        // Arrange — _sessao.UsuarioLogado is null by default
 
         // Act
         var resultado = await _estoqueService.RegistrarMovimentoAsync(

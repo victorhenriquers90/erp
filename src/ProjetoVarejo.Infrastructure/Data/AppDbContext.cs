@@ -26,6 +26,8 @@ public class AppDbContext : DbContext
     public DbSet<EmpresaConfig> EmpresaConfigs => Set<EmpresaConfig>();
     public DbSet<ConfiguracaoNegocio> ConfiguracaoNegocio => Set<ConfiguracaoNegocio>();
     public DbSet<Filial> Filiais => Set<Filial>();
+    public DbSet<PedidoCompra> PedidosCompra => Set<PedidoCompra>();
+    public DbSet<ItemPedidoCompra> ItensPedidoCompra => Set<ItemPedidoCompra>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -178,6 +180,25 @@ public class AppDbContext : DbContext
             e.Property(x => x.Versao).HasDefaultValue(1);
             e.Property(x => x.ModulosAtivos).IsRequired();
             e.Property(x => x.DataAtualizacao).HasDefaultValueSql("GETUTCDATE()");
+        });
+
+        b.Entity<PedidoCompra>(e =>
+        {
+            e.Property(x => x.Numero).HasMaxLength(30).IsRequired();
+            e.Property(x => x.Status).HasMaxLength(30).IsRequired();
+            e.Property(x => x.Observacao).HasMaxLength(500);
+            e.HasIndex(x => x.Numero).IsUnique();
+            e.HasOne(x => x.Fornecedor).WithMany()
+                .HasForeignKey(x => x.FornecedorId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        b.Entity<ItemPedidoCompra>(e =>
+        {
+            e.Property(x => x.Descricao).HasMaxLength(200).IsRequired();
+            e.HasOne(x => x.PedidoCompra).WithMany(p => p.Itens)
+                .HasForeignKey(x => x.PedidoCompraId).OnDelete(DeleteBehavior.Cascade);
+            e.HasOne(x => x.Produto).WithMany()
+                .HasForeignKey(x => x.ProdutoId).OnDelete(DeleteBehavior.SetNull);
         });
     }
 
